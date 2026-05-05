@@ -5,6 +5,8 @@
 > `git submodule update --init corpus` after cloning. See the root
 > [`CONTRIBUTING.md`](../CONTRIBUTING.md).
 
+**Legal (private repo):** see [`LEGAL.md`](LEGAL.md).
+
 A reproducibility kit for the parity claim in the project README.
 For each of **162 reference strategies**, this directory ships:
 
