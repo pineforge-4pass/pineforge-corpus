@@ -110,9 +110,13 @@ Pick a strategy and diff the two CSVs visually — you should see TV's exit and
 entry rows match PineForge's exit and entry rows by `Trade #`, side, time, and
 price within the parity thresholds.
 
-For a programmatic check, see [`scripts/verify_corpus.py`](../scripts/verify_corpus.py)
-in the repo root. It reads both CSVs, aligns trades by trade number, and
-reports the largest entry-price / exit-price / P&L deviations:
+For a quick programmatic inspection, see
+[`scripts/verify_corpus.py`](../scripts/verify_corpus.py) in the repo root. It
+reads both CSVs, aligns trades by entry time + direction, and reports the
+largest entry-price / exit-price / P&L deviations. This helper is **not** the
+canonical parity sweep; it intentionally omits edge-bar trimming and
+per-strategy threshold profiles, so it may report drift for strategies included
+in the headline canonical counts.
 
 ```bash
 python scripts/verify_corpus.py corpus/basic/greedy
@@ -159,8 +163,9 @@ That script:
 3. Loads each `strategy.so` through `scripts/run_strategy.py`, runs it
    against `corpus/data/ohlcv_ETH-USDT-USDT_15m.csv`, and writes the
    resulting trade list to `corpus/<cat>/<name>/engine_trades.csv`.
-4. Calls `scripts/verify_corpus.py --all` to compare every regenerated
-   `engine_trades.csv` against its `tv_trades.csv`.
+4. Calls `scripts/verify_corpus.py --all --quiet` as a lightweight inspection
+   summary. Drift from that helper is warned but does not fail the 162-strategy
+   reproducibility run.
 
 Subcommands for finer control:
 
