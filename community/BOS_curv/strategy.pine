@@ -1,0 +1,547 @@
+//@version=6
+strategy("BOS Waves Curved - Strategy", overlay=true, use_bar_magnifier=false, initial_capital=1000000, currency=currency.USD, process_orders_on_close=false, pyramiding=1, commission_type=strategy.commission.percent, commission_value=0, slippage=0, default_qty_type=strategy.fixed, default_qty_value=1)
+
+// Settings
+atrLength = input.int(14, "ATR Length", minval=1, group="Supertrend Settings",
+     tooltip="Number of bars for ATR calculation. Higher = smoother, Lower = more responsive.")
+
+atrMult = input.float(2.0, "ATR Multiplier", minval=0.1, group="Supertrend Settings",
+     tooltip="Distance of bands from price. Higher = wider bands, fewer signals.")
+
+// Curve Settings
+radiusStrength = input.float(0.002, "Radius Strength", 
+     minval=0.001, maxval=0.3, step=0.001, group="Curve Settings",
+     tooltip="Controls curve acceleration strength.\n\n" +
+              "Lower = Tighter curves (responsive)\n" +
+              "Higher = Wider curves (smoother)")
+
+smoothness = input.int(5, "Smoothness", minval=1, maxval=20, group="Curve Settings",
+     tooltip="Smoothing applied to curved band. Higher = smoother curves, less noise.")
+
+// Color Settings
+upColor = input.color(color.green, "Up Trend", group="Color Settings",
+     tooltip="Color for uptrend band and signals.")
+
+dnColor = input.color(color.red, "Down Trend", group="Color Settings",
+     tooltip="Color for downtrend band and signals.")
+
+// ============================================================================
+// Supertrend Calculation
+// ============================================================================
+atr = ta.atr(atrLength)
+src = hl2
+
+upperBand = src + (atrMult * atr)
+lowerBand = src - (atrMult * atr)
+
+var float supertrend = na
+var int direction = 1
+
+// Initialize
+if na(supertrend)
+    supertrend := lowerBand
+    direction := 1
+
+// Standard supertrend logic
+float prevSupertrend = supertrend
+
+if direction == 1
+    supertrend := close < prevSupertrend ? upperBand : math.max(lowerBand, prevSupertrend)
+else
+    supertrend := close > prevSupertrend ? lowerBand : math.min(upperBand, prevSupertrend)
+
+int prevDirection = direction
+if close < supertrend
+    direction := -1
+if close > supertrend
+    direction := 1
+
+// ============================================================================
+// Trading Tracking Variables
+// ============================================================================
+// 追蹤進場點位和平倉點位
+var float entryPrice = na
+var float exitPrice = na
+var bool positionActive = false
+var int currentDirection = 0  // 1 = 做多, -1 = 做空, 0 = 無方向
+
+// 記錄前5筆交易盈虧
+var array<float> profitHistory = array.new<float>(0)
+
+// ============================================================================
+// 變盤點位檢測
+// ============================================================================
+// 變盤點位相關變數
+var array<float> pivotLevels = array.new<float>(0)
+var array<int> pivotBars = array.new<int>(0)
+var float lastPivotHigh = na
+var float lastPivotLow = na
+var int pivotLength = 5
+
+// 檢測高點和低點
+pivotHigh = ta.pivothigh(high, pivotLength, pivotLength)
+pivotLow = ta.pivotlow(low, pivotLength, pivotLength)
+
+// 記錄變盤點位
+if not na(pivotHigh)
+    array.unshift(pivotLevels, pivotHigh)
+    array.unshift(pivotBars, bar_index - pivotLength)
+    lastPivotHigh := pivotHigh
+    if array.size(pivotLevels) > 10
+        array.pop(pivotLevels)
+        array.pop(pivotBars)
+
+if not na(pivotLow)
+    array.unshift(pivotLevels, pivotLow)
+    array.unshift(pivotBars, bar_index - pivotLength)
+    lastPivotLow := pivotLow
+    if array.size(pivotLevels) > 10
+        array.pop(pivotLevels)
+        array.pop(pivotBars)
+
+// 計算關鍵變盤點位
+var float keyResistance = na
+var float keySupport = na
+var float nearbyResistance = na
+var float nearbySupport = na
+
+// 更新關鍵支撐阻力位
+if not na(lastPivotHigh) and not na(lastPivotLow)
+    if direction == 1  // 多頭趨勢
+        keySupport := lastPivotLow
+        keyResistance := lastPivotHigh
+    else  // 空頭趨勢
+        keyResistance := lastPivotHigh
+        keySupport := lastPivotLow
+
+// 尋找當前價格附近的重要水平位
+// 檢查過去20根K棒的高低點作為就近變盤點位
+var float recentHigh = na
+var float recentLow = na
+lookback = 20
+
+recentHigh := ta.highest(high, lookback)
+recentLow := ta.lowest(low, lookback)
+
+// 計算當前價格附近的阻力支撐
+priceRange = ta.atr(14) * 3
+currentPrice = close
+
+// 就近阻力位：找最接近當前價格上方的重要高點
+if not na(recentHigh) and recentHigh > currentPrice and recentHigh - currentPrice < priceRange * 2
+    nearbyResistance := recentHigh
+
+// 就近支撐位：找最接近當前價格下方的重要低點  
+if not na(recentLow) and recentLow < currentPrice and currentPrice - recentLow < priceRange * 2
+    nearbySupport := recentLow
+
+// 優先使用就近點位，如果沒有則使用傳統pivot點位
+finalResistance = not na(nearbyResistance) ? nearbyResistance : keyResistance
+finalSupport = not na(nearbySupport) ? nearbySupport : keySupport
+
+// 變盤信號檢測
+bool breakoutSignal = false
+bool breakdownSignal = false
+bool approachingResistance = false
+bool approachingSupport = false
+
+// 突破跌破信号
+if not na(finalResistance) and close > finalResistance and close[1] <= finalResistance
+    breakoutSignal := true
+
+if not na(finalSupport) and close < finalSupport and close[1] >= finalSupport
+    breakdownSignal := true
+
+// 预警范围设置 - 使用ATR的0.5倍作为预警距离
+warningDistance = ta.atr(14) * 0.5
+
+// 接近阻力位预警
+if not na(finalResistance) and close < finalResistance
+    distanceToResistance = finalResistance - close
+    if distanceToResistance <= warningDistance and distanceToResistance > 0
+        approachingResistance := true
+
+// 接近支撑位预警  
+if not na(finalSupport) and close > finalSupport
+    distanceToSupport = close - finalSupport
+    if distanceToSupport <= warningDistance and distanceToSupport > 0
+        approachingSupport := true
+
+// ============================================================================
+// Curved Radius Implementation
+// ============================================================================
+var float anchorPrice = na
+var int anchorBar = na
+var float velocity = 0.0
+var int barCount = 0
+
+// Detect trend change - set new anchor
+bool trendChanged = direction != prevDirection
+
+if trendChanged
+    anchorPrice := supertrend
+    anchorBar := bar_index
+    velocity := 0.0
+    barCount := 0
+    
+    // 處理交易記錄
+    if positionActive and not na(entryPrice)
+        // 計算並記錄盈虧
+        var float profit = na
+        if currentDirection == 1  // 平多倉
+            profit := close[1] - entryPrice
+        else if currentDirection == -1  // 平空倉
+            profit := entryPrice - close[1]
+        
+        if not na(profit)
+            array.unshift(profitHistory, profit)
+            if array.size(profitHistory) > 5
+                array.pop(profitHistory)
+        
+        positionActive := false
+        exitPrice := close[1]
+    
+    // 開新倉位
+    if direction == 1 or direction == -1
+        entryPrice := close
+        positionActive := true
+        currentDirection := direction
+        exitPrice := na
+
+// Increment bar counter
+barCount := barCount + 1
+
+// Calculate curved offset using acceleration creating a parabolic curve
+if not na(anchorPrice)
+    // Acceleration increases with each bar (quadratic growth)
+    velocity := velocity + (radiusStrength * barCount)
+    
+    // Apply velocity in direction of trend
+    if direction == 1
+        // Uptrend - curve upward with acceleration
+        supertrend := anchorPrice + velocity
+    else
+        // Downtrend - curve downward with acceleration  
+        supertrend := anchorPrice - velocity
+
+// Apply smoothing to create flowing curves
+curvedBand = ta.sma(supertrend, smoothness)
+
+// ============================================================================
+// Visualization
+// ============================================================================
+trendColor = direction == 1 ? upColor : dnColor
+
+// Plot the curved band
+plot(curvedBand, "Curved Radius Band", 
+     color=trendColor, 
+     linewidth=3)
+
+// Fill between price and band
+basePlot = plot(close, display=display.none)
+bandPlot = plot(curvedBand, display=display.none)
+fill(basePlot, bandPlot, color.new(trendColor, 85))
+
+// Plot smoother outer envelope
+outerBand = direction == 1 ? curvedBand + atr : curvedBand - atr
+plot(outerBand, "Outer Band", 
+     color=color.new(trendColor, 70), 
+     linewidth=1,
+     style=plot.style_circles)
+
+// Plot candle coloring based on trend
+barcolor(direction == 1 ? upColor : dnColor, title="Trend Candle Color")
+
+// ============================================================================
+// Information Table
+// ============================================================================
+bool showTable = input.bool(false, title = "顯示智能提示")
+
+var table infoTable = table.new(position.middle_right, 2, 8, bgcolor = color.new(color.gray, 70), border_width = 2)
+var table alertTable = table.new(position.bottom_right, 1, 1, bgcolor = color.new(color.red, 75), border_width = 2)
+var table reminderWindow = table.new(position.top_right, 1, 6, bgcolor = color.new(color.purple, 70), border_width = 2)
+
+if (barstate.islast or barstate.isconfirmed) and showTable
+    // 趨勢狀態
+    trendStatusText = direction == 1 ? "多空 ●" : direction == -1 ? "多空 ●" : "無趨勢"
+    trendStatusColor = direction == 1 ? color.green : direction == -1 ? color.red : color.gray
+    
+    // 收斂狀態 - 基於ATR變化
+    atrChange = ta.change(atr, 5)
+    convergenceText = atrChange < 0 ? "正常 ■" : "擴散"
+    convergenceColor = atrChange < 0 ? color.green : color.orange
+    
+    // 發散狀態 - 基於價格與趨勢線距離
+    priceDistance = math.abs(close - curvedBand)
+    avgDistance = ta.sma(priceDistance, 20)
+    divergenceText = priceDistance > avgDistance * 1.5 ? "發散" : "收斂"
+    divergenceColor = priceDistance > avgDistance * 1.5 ? color.red : color.gray
+    
+    // 風險評估
+    riskText = "注意 ▲"
+    riskColor = color.orange
+    if positionActive and not na(entryPrice)
+        var float currentProfit = na
+        if currentDirection == 1
+            currentProfit := close - entryPrice
+        else if currentDirection == -1
+            currentProfit := entryPrice - close
+        if not na(currentProfit) and currentProfit < -50
+            riskText := "高風險 ▲"
+            riskColor := color.red
+        else if not na(currentProfit) and currentProfit > 0
+            riskText := "良好 ●"
+            riskColor := color.green
+    
+    // 建議狀態
+    suggestionText = direction != 0 ? "良好時機 ✓" : "等待信號"
+    suggestionColor = direction != 0 ? color.green : color.gray
+    
+    // 學習點 - 基於最近交易表現
+    historySize = array.size(profitHistory)
+    learningText = "無標示"
+    learningColor = color.gray
+    if historySize >= 3
+        recentProfit = 0.0
+        for i = 0 to 2
+            if i < historySize
+                recentProfit += array.get(profitHistory, i)
+        if recentProfit > 0
+            learningText := "表現良好"
+            learningColor := color.green
+        else
+            learningText := "需要調整"
+            learningColor := color.orange
+    
+    // 填充狀態表
+    table.cell(infoTable, 0, 0, "趨勢", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 0, trendStatusText, text_color = trendStatusColor, bgcolor = color.new(color.gray, 80))
+    
+    table.cell(infoTable, 0, 1, "收斂", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 1, convergenceText, text_color = convergenceColor, bgcolor = color.new(color.gray, 80))
+    
+    table.cell(infoTable, 0, 2, "發散", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 2, divergenceText, text_color = divergenceColor, bgcolor = color.new(color.gray, 80))
+    
+    table.cell(infoTable, 0, 3, "風險", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 3, riskText, text_color = riskColor, bgcolor = color.new(color.gray, 80))
+    
+    table.cell(infoTable, 0, 4, "建議", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 4, suggestionText, text_color = suggestionColor, bgcolor = color.new(color.gray, 80))
+    
+    table.cell(infoTable, 0, 5, "學習點", text_color = color.white, bgcolor = color.new(color.gray, 80))
+    table.cell(infoTable, 1, 5, learningText, text_color = learningColor, bgcolor = color.new(color.gray, 80))
+    
+    // 當前交易資訊
+    if positionActive and not na(entryPrice)
+        var float currentProfit = na
+        if currentDirection == 1
+            currentProfit := close - entryPrice
+        else if currentDirection == -1
+            currentProfit := entryPrice - close
+        
+        table.cell(infoTable, 0, 6, "進場價", text_color = color.white, bgcolor = color.new(color.gray, 80))
+        table.cell(infoTable, 1, 6, str.tostring(entryPrice, "#.##"), text_color = color.yellow, bgcolor = color.new(color.gray, 80))
+        
+        currentProfitText = not na(currentProfit) ? (currentProfit > 0 ? "+" + str.tostring(currentProfit, "#.##") : str.tostring(currentProfit, "#.##")) : "-"
+        currentProfitColor = not na(currentProfit) ? (currentProfit > 0 ? color.green : currentProfit < 0 ? color.red : color.gray) : color.gray
+        table.cell(infoTable, 0, 7, "當前點數", text_color = color.white, bgcolor = color.new(color.gray, 80))
+        table.cell(infoTable, 1, 7, currentProfitText, text_color = currentProfitColor, bgcolor = color.new(color.gray, 80))
+    
+    // 警告訊息 - 當趨勢發生逆轉時顯示
+    if trendChanged and positionActive
+        table.cell(alertTable, 0, 0, "⚠ 發現異常 平倉下單\n依據指導方向\n黃金反方向", 
+                  text_color = color.white, bgcolor = color.new(color.red, 80), text_size = size.normal)
+    
+    // 提醒視窗
+    reminderTitle = "💡 智能交易提醒"
+    table.cell(reminderWindow, 0, 0, reminderTitle, text_color = color.white, bgcolor = color.new(color.fuchsia, 70), text_size = size.large)
+    
+    // 市場狀態提醒
+    marketStatus = ""
+    if direction == 1
+        marketStatus := "📈 當前多頭趨勢\n建議關注支撐位"
+    else if direction == -1
+        marketStatus := "📉 當前空頭趨勢\n建議關注阻力位"
+    else
+        marketStatus := "⏸️ 趨勢不明確\n建議等待突破"
+    table.cell(reminderWindow, 0, 1, marketStatus, text_color = color.white, bgcolor = color.new(color.purple, 75), text_size = size.normal)
+    
+    // 風險管理提醒
+    riskReminder = ""
+    if positionActive and not na(entryPrice)
+        var float currentProfit = na
+        if currentDirection == 1
+            currentProfit := close - entryPrice
+        else if currentDirection == -1
+            currentProfit := entryPrice - close
+        
+        if not na(currentProfit)
+            if currentProfit < -30
+                riskReminder := "⚠️ 虧損擴大中\n考慮止損退場"
+            else if currentProfit > 50
+                riskReminder := "✅ 獲利中\n可考慮部分獲利"
+            else
+                riskReminder := "📊 持倉中\n密切觀察走勢"
+    else
+        riskReminder := "💤 目前無持倉\n等待進場機會"
+    
+    table.cell(reminderWindow, 0, 2, riskReminder, text_color = color.white, bgcolor = color.new(color.purple, 75), text_size = size.normal)
+    
+    // 操作建議
+    operationAdvice = ""
+    volatility = ta.atr(14) / close * 100
+    if volatility > 2.0
+        operationAdvice := "⚡ 市場波動大\n減少倉位操作"
+    else if volatility < 0.5
+        operationAdvice := "😴 市場平靜\n可考慮區間操作"
+    else
+        operationAdvice := "⚖️ 正常波動\n按計劃執行"
+    
+    table.cell(reminderWindow, 0, 3, operationAdvice, text_color = color.white, bgcolor = color.new(color.purple, 75), text_size = size.normal)
+    
+    // 当前盈利点数
+    currentProfitInfo = ""
+    if positionActive and not na(entryPrice)
+        var float currentProfit = na
+        if currentDirection == 1
+            currentProfit := close - entryPrice
+        else if currentDirection == -1
+            currentProfit := entryPrice - close
+        
+        if not na(currentProfit)
+            profitText = currentProfit > 0 ? "+" + str.tostring(currentProfit, "#.##") : str.tostring(currentProfit, "#.##")
+            currentProfitInfo := "💰 目前" + (currentProfit >= 0 ? "賺" : "虧") + "：" + profitText + " 點"
+        else
+            currentProfitInfo := "💰 目前盈虧：計算中"
+    else
+        currentProfitInfo := "💤 目前無持倉"
+    
+    table.cell(reminderWindow, 0, 4, currentProfitInfo, text_color = color.white, bgcolor = color.new(color.purple, 75), text_size = size.normal)
+    
+    // 變盤點位資訊
+    pivotInfo = ""
+    warningText = ""
+    
+    // 检查是否接近变盘点位
+    if approachingResistance and not na(finalResistance)
+        warningText := "⚠️ 接近阻力 " + str.tostring(finalResistance - close, "#.##")
+    else if approachingSupport and not na(finalSupport)
+        warningText := "⚠️ 接近支撑 " + str.tostring(close - finalSupport, "#.##")
+    
+    if not na(finalResistance) and not na(finalSupport)
+        baseInfo = "🎯 阻力: " + str.tostring(finalResistance, "#.##") + "\n🛡️ 支撐: " + str.tostring(finalSupport, "#.##")
+        pivotInfo := warningText != "" ? baseInfo + "\n" + warningText : baseInfo
+    else if not na(finalResistance)
+        baseInfo = "🎯 阻力: " + str.tostring(finalResistance, "#.##") + "\n🛡️ 支撐: 待確認"
+        pivotInfo := warningText != "" ? baseInfo + "\n" + warningText : baseInfo
+    else if not na(finalSupport)
+        baseInfo = "🎯 阻力: 待確認\n🛡️ 支撐: " + str.tostring(finalSupport, "#.##")
+        pivotInfo := warningText != "" ? baseInfo + "\n" + warningText : baseInfo
+    else
+        pivotInfo := "🎯 阻力: 待確認\n🛡️ 支撐: 待確認"
+    
+    table.cell(reminderWindow, 0, 5, pivotInfo, text_color = color.white, bgcolor = color.new(color.purple, 75), text_size = size.normal)
+
+// ============================================================================
+// Signals
+// ============================================================================
+
+tp_alert_enabled = input.bool(false, title = "啟用盈利通知", group = "客製化通知")
+tp_alert = input.int(0, title = "盈利通知間距", group = "客製化通知")
+
+tp_enabled = input.bool(false, title = "啟用自動停利出場", group = "客製化出場")
+tp_distance = input.int(100, title = "自動停利價格", group = "客製化出場")
+
+sl_enabled = input.bool(false, title = "啟用自動停損出場", group = "客製化出場")
+sl_distance = input.int(100, title = "自動停損價格", group = "客製化出場")
+
+tpsl_percentage = input.int(50, minval = 0, maxval = 100, title = "自動停利停損百分比(%)")
+
+buySignal = trendChanged and direction == 1
+sellSignal = trendChanged and direction == -1
+
+var float last_alert_price = 0
+var float accumulated_profit = 0.0
+
+if buySignal and strategy.position_size <= 0
+    strategy.entry("Buy", strategy.long, alert_message = "long_entry")
+    last_alert_price := close
+    accumulated_profit := 0.0  // Reset on new entry
+    if tp_enabled or sl_enabled
+        tp_price = tp_enabled ? close + tp_distance : na
+        sl_price = sl_enabled ? close - sl_distance : na
+        strategy.exit("Exit Long", "Buy", limit = tp_price, stop = sl_price, alert_message = "long_exit", qty_percent = tpsl_percentage)
+
+
+if sellSignal and strategy.position_size >= 0
+    strategy.entry("Sell", strategy.short, alert_message = "short_entry")
+    last_alert_price := close
+    accumulated_profit := 0.0  // Reset on new entry
+    if tp_enabled or sl_enabled
+        tp_price = tp_enabled ? close - tp_distance : na
+        sl_price = sl_enabled ? close + sl_distance : na
+        strategy.exit("Exit Short", "Sell", limit = tp_price, stop = sl_price, alert_message = "short_exit", qty_percent = tpsl_percentage)
+
+
+// Reset when position closes
+if strategy.position_size == 0 and not na(last_alert_price)
+    last_alert_price := na
+
+// Incremental profit alert
+alert_now = false
+current_increment = 0.0
+
+if strategy.position_size > 0 and tp_alert_enabled and not na(last_alert_price)
+    if close - last_alert_price >= tp_alert
+        current_increment := close - last_alert_price
+        accumulated_profit += current_increment  // Accumulate
+        alert_now := true
+        last_alert_price := close
+
+if strategy.position_size < 0 and tp_alert_enabled and not na(last_alert_price)
+    if last_alert_price - close >= tp_alert
+        current_increment := last_alert_price - close
+        accumulated_profit += current_increment  // Accumulate
+        alert_now := true
+        last_alert_price := close
+
+if alert_now
+    alert("本次盈利增加: $" + str.tostring(current_increment) +
+          " | 累積盈利: $" + str.tostring(accumulated_profit) +
+          " | 當前價格: " + str.tostring(close))
+
+
+// plotshape(alert_now, "盈利通知", location = location.abovebar)
+
+// alertcondition(alert_now, "盈利通知", "盈利已達新間距！")
+
+// plot(strategy.position_size == 0 ? na : last_alert_point, title = "上次提醒價格", force_overlay = false)
+// plot(strategy.position_size == 0 ? na : strategy.position_size > 0 ? last_alert_point + tp_alert : last_alert_point - tp_alert, title = "下次提醒價格", force_overlay = false)
+
+// ============================================================================
+// Alerts
+// ============================================================================
+// 只在價格接近 buySignal/sellSignal 30點內時發送快訊
+alertDistance = 30.0
+
+// 多頭快訊條件：即將觸發 buySignal 且距離30點內
+bool nearBuySignal = false
+if not buySignal and direction == 1 and math.abs(close - curvedBand) <= alertDistance
+    nearBuySignal := true
+
+// 空頭快訊條件：即將觸發 sellSignal 且距離30點內
+bool nearSellSignal = false
+if not sellSignal and direction == -1 and math.abs(close - curvedBand) <= alertDistance
+    nearSellSignal := true
+
+// 發送快訊內容
+// if nearBuySignal
+//     alert("【多頭接近信號】\n🔵 方向：多頭進場\n💰 價格：" + str.tostring(close, "#.####") + "\n📅 時間：" + str.tostring(year) + "-" + str.tostring(month, "00") + "-" + str.tostring(dayofmonth, "00") + " " + str.tostring(hour, "00") + ":" + str.tostring(minute, "00") + "\n📈 曲線趨勢：" + str.tostring(curvedBand, "#.####") + "\n\n💡 提醒：若持續獲利，需繳交1%系統維護費\n\n🏦 付款資訊：\n銀行：中國信託822\n帳號：3585 3271 0905\n戶名：吳明翰")
+
+// if nearSellSignal
+//     alert("【空頭接近信號】\n🔴 方向：空頭進場\n💰 價格：" + str.tostring(close, "#.####") + "\n📅 時間：" + str.tostring(year) + "-" + str.tostring(month, "00") + "-" + str.tostring(dayofmonth, "00") + " " + str.tostring(hour, "00") + ":" + str.tostring(minute, "00") + "\n📉 曲線趨勢：" + str.tostring(curvedBand, "#.####") + "\n\n💡 提醒：若持續獲利，需繳交1%系統維護費\n\n🏦 付款資訊：\n銀行：中國信託822\n帳號：3585 3271 0905\n戶名：吳明翰")
+
+// // 只保留接近信號的警報條件
+// alertcondition(nearBuySignal, "接近多頭信號", "價格接近多頭進場信號30點內")
+// alertcondition(nearSellSignal, "接近空頭信號", "價格接近空頭進場信號30點內")

@@ -1,0 +1,152 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © ChartPrime (Modified for Trading Strategy)
+
+//@version=6
+strategy("Market Shift Levels + 152MA Strategy - v2", overlay=true, use_bar_magnifier=false, initial_capital=1000000, currency=currency.USD, process_orders_on_close=false, pyramiding=1, commission_type=strategy.commission.percent, commission_value=0, slippage=0, default_qty_type=strategy.fixed, default_qty_value=1)
+
+// --------------------------------------------------------------------------------------------------------------------}
+// 📌 USER INPUTS
+// --------------------------------------------------------------------------------------------------------------------{
+// Market Shift Levels Parameters
+int    length        = input.int(55, "Market Shift Length")
+bool   lbl_data      = input.string("Volume", "Label Data: ", ["Volume", "Price"]) == "Volume"
+color  color_shiftUp = input.color(color.rgb(36, 213, 128), "Shift Up Color", inline = "col")
+color  color_shiftDn = input.color(color.rgb(225, 43, 43), "Shift Down Color", inline = "col")
+
+// Moving Average Parameter
+// int    ma_period     = input.int(152, "SMA Period")
+int ma_period = 152
+
+// Position Management
+bool   allow_overnight = input.bool(false, "Allow Overnight Position")
+// int    close_hour    = input.int(4, "Daily Close Hour", minval = 0, maxval = 23)
+// int    close_minute  = input.int(55, "Daily Close Minute", minval = 0, maxval = 59)
+
+close_hour = 4
+close_minute = 55
+
+// Get the symbol with exchange prefix
+able_to_trade = true //ticker.standard() == 'TAIFEX_DLY:MXF1!'
+
+// --------------------------------------------------------------------------------------------------------------------}
+// 📌 INDICATOR CALCULATIONS
+// --------------------------------------------------------------------------------------------------------------------{
+// Market Shift Levels
+var level       = float(na)
+float hma1      = ta.hma(close, length)
+float hma2      = hma1[5]
+float vol_sum   = (volume[2] + volume[1] + volume[0])
+
+if ta.crossover(hma1, hma2)
+    level := low
+if ta.crossunder(hma1, hma2)
+    level := high
+
+// Bar Colors (Green when close > level, Red when close < level)
+var bool is_green_bar = false
+var bool is_red_bar   = false
+var bool is_below_sma = false
+var bool is_above_sma = false
+
+// 152 SMA
+float sma152 = ta.sma(close, ma_period)
+
+is_red_bar := close < level
+is_green_bar := not is_red_bar
+
+is_below_sma := close < sma152
+is_above_sma := not is_below_sma
+
+color shift_col   = is_red_bar ? color_shiftDn : color_shiftUp
+// --------------------------------------------------------------------------------------------------------------------}
+// 📌 TRADING LOGIC
+// --------------------------------------------------------------------------------------------------------------------{
+
+// Time-based exit condition (Daily close at specified time)
+bool is_close_time = false
+if not allow_overnight
+    is_close_time := (hour == close_hour and minute >= close_minute)
+
+// Close all positions at daily close time
+if is_close_time and strategy.position_size != 0
+    if strategy.position_size > 0
+        strategy.close("Long", comment = "Daily Close", alert_message = "long_exit")
+    else if strategy.position_size < 0
+        strategy.close("Short", comment = "Daily Close", alert_message = "short_exit")
+
+// LONG EXIT CONDITIONS
+if strategy.position_size > 0 and is_red_bar and close < strategy.position_avg_price
+    strategy.close("Long", comment = "紅棒且低於入場價", alert_message = "long_exit")
+    
+if strategy.position_size > 0 and is_red_bar and is_below_sma
+    strategy.close("Long", comment = "紅棒且低於SMA152", alert_message = "long_exit")
+
+if strategy.position_size > 0
+    if is_green_bar[1] and is_green_bar[2] and close[1] < sma152[1]
+        if is_red_bar
+            strategy.close("Long", comment = "連續綠棒且低於SMA152，且紅棒", alert_message = "long_exit")
+
+// SHORT EXIT CONDITIONS  
+if strategy.position_size < 0 and is_green_bar and close > strategy.position_avg_price
+    strategy.close("Short", comment = "綠棒且高於入場價", alert_message = "short_exit")
+
+if strategy.position_size < 0 and is_green_bar and is_above_sma
+    strategy.close("Short", comment = "綠棒且高於SMA152", alert_message = "short_exit")
+
+if strategy.position_size < 0
+    if is_red_bar and is_red_bar[1] and close[1] > sma152[1]
+        if is_green_bar
+            strategy.close("Short", comment = "連續紅棒且高於SMA152，且綠棒", alert_message = "short_exit")
+
+// LONG ENTRY CONDITION
+// Green bar close > 152MA AND not equal to 152MA AND below 152MA don't buy with green bar
+bool long_entry = is_green_bar and is_above_sma
+if long_entry and strategy.position_size <= 0
+    if strategy.position_size < 0
+        strategy.close("Short", alert_message = "short_exit")
+    strategy.entry("Long", strategy.long, alert_message = "long_entry")
+
+// SHORT ENTRY CONDITION  
+// Red bar close < 152MA AND not equal to 152MA AND above 152MA don't short with red bar
+bool short_entry = is_red_bar and is_below_sma
+if short_entry and strategy.position_size >= 0
+    if strategy.position_size > 0
+        strategy.close("Long", alert_message = "long_exit")
+    strategy.entry("Short", strategy.short, alert_message = "short_entry")
+
+
+// --------------------------------------------------------------------------------------------------------------------}
+// 📌 VISUALIZATION
+// --------------------------------------------------------------------------------------------------------------------{
+
+// Plot Market Shift Levels
+// plot(level != level[1] ? na : level, "Market Shift Levels", color = bar_index % 2 == 0 ? color(na) : chart.fg_color, style = plot.style_linebr)
+
+plot(level, "Market Shift Levels", color = chart.fg_color, style = plot.style_linebr)
+
+// Plot 152 SMA
+plot(sma152, "SMA 152", color = color.yellow, linewidth = 2)
+
+// Possible Reversals Labels
+if high[2] < level and high < level and high[1] > level
+    label.new(bar_index-1, high[1]
+             , str.tostring(lbl_data ? vol_sum : high[1], lbl_data ? format.volume : "#,####.###") + "\n⬙"
+             , color = color(na)
+             , textcolor = color.red
+             , style = label.style_label_down)
+
+if low[2] > level and low[1] < level and low > level 
+    label.new(bar_index-1, low[1]
+             ,  "⬘\n" + str.tostring(lbl_data ? vol_sum : low[1], lbl_data ? format.volume : "#,####.###")
+             , color = color(na)
+             , textcolor = color.lime
+             , style = label.style_label_up)
+
+// Candles Color
+barcolor(shift_col, title = "Bar Color")
+plotcandle(open, high, low, close, title='Candles Color', color = shift_col, wickcolor=shift_col, bordercolor = shift_col, force_overlay = true)
+
+// Entry Price Line
+plot(strategy.position_size != 0 ? strategy.position_avg_price : na, "Entry Price", color = color.white, linewidth = 1, style = plot.style_linebr)
+
+// --------------------------------------------------------------------------------------------------------------------}
