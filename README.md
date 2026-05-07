@@ -64,13 +64,20 @@ corpus/
 
 ## Where the numbers come from
 
-The headline parity figure — **excellent=160, strong=2 across 162 strategies** — is
-produced by comparing each `engine_trades.csv` against its `tv_trades.csv` under
-the threshold profile documented in the parent project's
-`reports/validation_detailed.md`:
+The headline parity figure — **excellent=159, strong=2, moderate=1 across 162
+strategies** — is produced by comparing each `engine_trades.csv` against its
+`tv_trades.csv` under a single STRICT threshold (documented in the parent
+project's `reports/validation_detailed.md`):
 
-- **Strict profile** (used by 154 of 162 strategies): trade-count delta < 1.0%, entry-price p90 delta < 0.01%, exit-price p90 delta < 0.01%, P&L p90 delta < 1.0%.
-- **Production profile** (used by trail-heavy / path-dependent strategies): count delta < 2.0%, entry p90 < 0.01%, exit p90 < 0.05%, and P&L p90 < 100%.
+- **Strict profile** (the only profile, applied to all 162 strategies):
+  trade-count delta < 1.0%, entry-price p90 delta < 0.01%, exit-price p90
+  delta < 0.01%, P&L p90 delta < 1.0%.
+- The two `strong` strategies (`community/VCP`, `community/scalping-wunder-bots`)
+  fail strict on trade-count delta only; entry/exit/PnL still pass strict on
+  every matched trade.
+- The one `moderate` strategy (`community/IES`) passes count + entry + exit
+  strict but fails per-trade PnL p90 (~3%), an MTF qty-feedback artefact
+  tracked in the parent project's parity sweep notes.
 
 A trade is counted as "matched" when the engine and TV agree on direction and
 their entry and exit times fall within a 1-hour gating window (with a $3 entry-
