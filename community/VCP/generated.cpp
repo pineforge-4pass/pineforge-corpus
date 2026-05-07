@@ -970,6 +970,11 @@ public:
             trace(std::string("prev_swing_low"), (double)((is_na(prevSwingLow) ? 0.0 : prevSwingLow)));
             trace(std::string("pivot_high"), (double)((is_na(pivotHigh) ? 0.0 : pivotHigh)));
             trace(std::string("pivot_low"), (double)((is_na(pivotLow) ? 0.0 : pivotLow)));
+            trace(std::string("vcp_longEntry"), (double)(longEntry));
+            trace(std::string("vcp_shortEntry"), (double)(shortEntry));
+            trace(std::string("vcp_tradeInPosition"), (double)(trade.inPosition));
+            trace(std::string("vcp_positionSize"), (double)(signed_position_size()));
+            trace(std::string("vcp_trailStop"), (double)(trade.trailStop));
         }
     }
 

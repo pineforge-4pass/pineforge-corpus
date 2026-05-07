@@ -105,6 +105,15 @@ public:
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), long_position_size, std::string("dyn qty long"), "", 0, -1);
             strategy_exit(std::string("LX"), std::string("L"), entryTP, entryStop, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket"));
         }
+        if (trace_enabled_) {
+            trace(std::string("ies_equity"), (double)((current_equity() + open_profit(current_bar_.close))));
+            trace(std::string("ies_accountRisk"), (double)(account_risk));
+            trace(std::string("ies_longRisk"), (double)(long_risk));
+            trace(std::string("ies_qty"), (double)(long_position_size));
+            trace(std::string("ies_longEntry"), (double)(long_entry));
+            trace(std::string("ies_atr"), (double)(atr_val));
+            trace(std::string("ies_adx"), (double)(adx_val));
+        }
     }
 
 };

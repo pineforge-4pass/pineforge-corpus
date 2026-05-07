@@ -706,6 +706,12 @@ if strategy.position_size == 0 and trade.inPosition
     trade.takeProfit := na
     trade.trailStop := na
 
+// @pf-trace vcp_longEntry=longEntry
+// @pf-trace vcp_shortEntry=shortEntry
+// @pf-trace vcp_tradeInPosition=trade.inPosition
+// @pf-trace vcp_positionSize=strategy.position_size
+// @pf-trace vcp_trailStop=trade.trailStop
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PLOTTING - ENTRY SIGNALS
 // ─────────────────────────────────────────────────────────────────────────────

@@ -81,3 +81,11 @@ if long_entry
     entryTP   := close + atr_val * i_atr_tp_mult
     strategy.entry("L", strategy.long, qty=long_position_size, comment="dyn qty long")
     strategy.exit("LX", "L", stop=entryStop, limit=entryTP, comment="bracket")
+
+// @pf-trace ies_equity=strategy.equity
+// @pf-trace ies_accountRisk=account_risk
+// @pf-trace ies_longRisk=long_risk
+// @pf-trace ies_qty=long_position_size
+// @pf-trace ies_longEntry=long_entry
+// @pf-trace ies_atr=atr_val
+// @pf-trace ies_adx=adx_val

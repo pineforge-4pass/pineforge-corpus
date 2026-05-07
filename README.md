@@ -3,22 +3,29 @@
 > **Open-source checkout:** this tree is **omitted** in public `git clone`
 > unless you have access to the private submodule. Maintainers run
 > `git submodule update --init corpus` after cloning. See the root
-> [`CONTRIBUTING.md`](../CONTRIBUTING.md).
+> `[CONTRIBUTING.md](../CONTRIBUTING.md)`.
 
-**Legal (private repo):** see [`LEGAL.md`](LEGAL.md).
+**Legal (private repo):** see `[LEGAL.md](LEGAL.md)`.
 
 A reproducibility kit for the parity claim in the project README.
 For each of **162 reference strategies**, this directory ships:
 
-| File | Source | Role |
-| --- | --- | --- |
-| `strategy.pine` | hand-written | The PineScript v6 source the strategy is defined by |
-| `tv_trades.csv` | TradingView export | The "List of Trades" CSV TradingView's broker emulator produced for `strategy.pine` running on the reference OHLCV |
-| `generated.cpp` | PineForge transpiler | The raw C++ source the closed-source transpiler produced for `strategy.pine`. Compiles standalone against `libpineforge.a`. |
-| `engine_trades.csv` | PineForge | The trade list PineForge's compiled `.so` produced for the same script + same OHLCV, in TradingView's row-and-column format for direct line-by-line comparison |
 
-The reference OHLCV — **ETH/USDT-USDT 15-minute, 36,361 bars** — lives at
-[`data/ohlcv_ETH-USDT-USDT_15m.csv`](data/ohlcv_ETH-USDT-USDT_15m.csv).
+| File                | Source               | Role                                                                                                                                                           |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `strategy.pine`     | hand-written         | The PineScript v6 source the strategy is defined by                                                                                                            |
+| `tv_trades.csv`     | TradingView export   | The "List of Trades" CSV TradingView's broker emulator produced for `strategy.pine` running on the reference OHLCV                                             |
+| `generated.cpp`     | PineForge transpiler | The raw C++ source the closed-source transpiler produced for `strategy.pine`. Compiles standalone against `libpineforge.a`.                                    |
+| `engine_trades.csv` | PineForge            | The trade list PineForge's compiled `.so` produced for the same script + same OHLCV, in TradingView's row-and-column format for direct line-by-line comparison |
+
+
+The comparison OHLCV — **ETH/USDT-USDT 15-minute, 36,361 bars** — lives at
+`[data/ohlcv_ETH-USDT-USDT_15m.csv](data/ohlcv_ETH-USDT-USDT_15m.csv)`.
+The default harness uses
+`[data/ohlcv_ETH-USDT-USDT_15m_warmup6m.csv](data/ohlcv_ETH-USDT-USDT_15m_warmup6m.csv)`
+when present, adding six months of Binance USDT-M futures warmup bars before
+the comparison window so TA, pivot, MTF, and equity-feedback state starts
+closer to TradingView's chart state.
 
 ## Layout
 
@@ -63,7 +70,7 @@ the threshold profile documented in the parent project's
 `reports/validation_detailed.md`:
 
 - **Strict profile** (used by 154 of 162 strategies): trade-count delta < 1.0%, entry-price p90 delta < 0.01%, exit-price p90 delta < 0.01%, P&L p90 delta < 1.0%.
-- **Production profile** (used by 8 trail-using strategies): same count and entry thresholds, but exit p90 < 0.05% and P&L p90 < 100% (trail-driven exits intrinsically have wider tolerance because they're path-dependent).
+- **Production profile** (used by trail-heavy / path-dependent strategies): count delta < 2.0%, entry p90 < 0.01%, exit p90 < 0.05%, and P&L p90 < 100%.
 
 A trade is counted as "matched" when the engine and TV agree on direction and
 their entry and exit times fall within a 1-hour gating window (with a $3 entry-
@@ -77,9 +84,12 @@ non-strict tolerances).
 Both `tv_trades.csv` and `engine_trades.csv` use TradingView's row layout:
 
 - **Two rows per trade**, sharing the same `Trade #`. The exit row is emitted
-  before the entry row (TV convention, kept by PineForge for direct diff).
+before the entry row (TV convention, kept by PineForge for direct diff).
 - **Reverse-chronological by trade number** (newest first).
-- **Time format**: `YYYY-MM-DD HH:MM` UTC.
+- **Time format**: `YYYY-MM-DD HH:MM`. PineForge engine CSVs are UTC.
+TradingView exports use the chart's wall-clock timezone; this corpus
+defaults to UTC+8 unless a strategy `inputs.json` overrides
+`tv_trades_csv_tz`.
 
 `tv_trades.csv` (TradingView's actual export):
 
@@ -110,13 +120,11 @@ Pick a strategy and diff the two CSVs visually — you should see TV's exit and
 entry rows match PineForge's exit and entry rows by `Trade #`, side, time, and
 price within the parity thresholds.
 
-For a quick programmatic inspection, see
-[`scripts/verify_corpus.py`](../scripts/verify_corpus.py) in the repo root. It
-reads both CSVs, aligns trades by entry time + direction, and reports the
-largest entry-price / exit-price / P&L deviations. This helper is **not** the
-canonical parity sweep; it intentionally omits edge-bar trimming and
-per-strategy threshold profiles, so it may report drift for strategies included
-in the headline canonical counts.
+For programmatic inspection, see
+`[scripts/verify_corpus.py](../scripts/verify_corpus.py)` in the repo root. It
+reads both CSVs, aligns trades by entry time + direction, applies common-window
+edge trimming, honors strategy metadata such as alternate `tv_trades_csv`
+files, and reports the canonical five-tier labels.
 
 ```bash
 python scripts/verify_corpus.py corpus/basic/greedy
@@ -158,13 +166,13 @@ That script:
 
 1. Configures CMake with `-DPINEFORGE_BUILD_CORPUS_STRATEGIES=ON`.
 2. Builds `libpineforge.a` plus 162 `strategy.so` files (one per
-   `corpus/<cat>/<name>/generated.cpp`), in parallel via
+  `corpus/<cat>/<name>/generated.cpp`), in parallel via
    `cmake --build build --target corpus_strategies`.
 3. Loads each `strategy.so` through `scripts/run_strategy.py`, runs it
-   against `corpus/data/ohlcv_ETH-USDT-USDT_15m.csv`, and writes the
+  against `corpus/data/ohlcv_ETH-USDT-USDT_15m.csv`, and writes the
    resulting trade list to `corpus/<cat>/<name>/engine_trades.csv`.
 4. Calls `scripts/verify_corpus.py --all --quiet` as a lightweight inspection
-   summary. Drift from that helper is warned but does not fail the 162-strategy
+  summary. Drift from that helper is warned but does not fail the 162-strategy
    reproducibility run.
 
 Subcommands for finer control:
@@ -193,21 +201,22 @@ disagrees with the committed CSV, that is a bug — please open an issue.
 
 ## Provenance and licensing
 
-- **`strategy.pine` files** are the hand-written contributions of the
-  PineForge maintainers and are distributed under Apache 2.0 along with
-  the rest of this repository. The `community/*` strategies are
-  re-implementations of common public PineScript patterns; if you
-  recognise yours and want attribution, please open an issue.
-- **`tv_trades.csv` files** are exports of running the corresponding
-  `strategy.pine` on TradingView. The trade lists are derived from
-  the user's own backtest activity on the platform and are included
-  here as factual records for parity verification, not as redistributions
-  of TradingView intellectual property.
-- **`generated.cpp` files** are mechanically produced from the
-  corresponding `strategy.pine` by the PineForge transpiler. They are
-  derivative works of the user-authored PineScripts in this repo and
-  are distributed under Apache 2.0.
-- **`engine_trades.csv` files** are computed by PineForge from the
-  PineScripts and OHLCV in this repository. Apache 2.0.
+- `**strategy.pine` files** are the hand-written contributions of the
+PineForge maintainers and are distributed under Apache 2.0 along with
+the rest of this repository. The `community/`* strategies are
+re-implementations of common public PineScript patterns; if you
+recognise yours and want attribution, please open an issue.
+- `**tv_trades.csv` files** are exports of running the corresponding
+`strategy.pine` on TradingView. The trade lists are derived from
+the user's own backtest activity on the platform and are included
+here as factual records for parity verification, not as redistributions
+of TradingView intellectual property.
+- `**generated.cpp` files** are mechanically produced from the
+corresponding `strategy.pine` by the PineForge transpiler. They are
+derivative works of the user-authored PineScripts in this repo and
+are distributed under Apache 2.0.
+- `**engine_trades.csv` files** are computed by PineForge from the
+PineScripts and OHLCV in this repository. Apache 2.0.
 - **OHLCV** is public market data from a USDT perpetual ETH futures
-  feed. Public market data is not copyrightable in the US/EU.
+feed. Public market data is not copyrightable in the US/EU.
+
