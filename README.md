@@ -64,7 +64,7 @@ corpus/
 
 ## Where the numbers come from
 
-The headline parity figure — **excellent=158, strong=4 across 162 strategies** — is
+The headline parity figure — **excellent=160, strong=2 across 162 strategies** — is
 produced by comparing each `engine_trades.csv` against its `tv_trades.csv` under
 the threshold profile documented in the parent project's
 `reports/validation_detailed.md`:
