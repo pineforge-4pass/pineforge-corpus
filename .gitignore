@@ -1,0 +1,5 @@
+# Build artifacts produced by the engine's CMake corpus_strategies target.
+# These are regenerated on every `cmake --build` and never committed.
+*.dylib
+*.so
+*.dll
