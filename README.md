@@ -8,7 +8,8 @@
 **Legal (private repo):** see `[LEGAL.md](LEGAL.md)`.
 
 A reproducibility kit for the parity claim in the project README.
-For each of **162 reference strategies**, this directory ships:
+For each of **168 strategies** (162 reference + 5 parity probes + 1
+TV-side anomaly probe), this directory ships:
 
 
 | File                | Source               | Role                                                                                                                                                           |
@@ -54,30 +55,55 @@ corpus/
 │   ├── scalping-strategy/
 │   ├── scalping-wunder-bots/
 │   └── trendmaster/                   multi-timeframe, edge case
-└── validation/                        142 probes — narrowly scoped semantic tests
-    ├── 01-macd-histogram/             ... 96-multi-cycle-pooc-cross-bar/
-    ├── ies-probe-01-…/                8 probes shaking out IES regressions
-    ├── mtf-probe-01-…/                11 probes for request.security() flows
-    ├── udt-method-probe-01-…/         21 probes for UDT method semantics
-    └── vcp-probe-01-…/                7 probes shaking out VCP regressions
+├── validation/                        147 probes — narrowly scoped semantic tests
+│   ├── 01-macd-histogram/             ... 96-multi-cycle-pooc-cross-bar/
+│   ├── ies-probe-01-…/                8 probes shaking out IES regressions
+│   ├── mtf-probe-01-…/                11 probes for request.security() flows
+│   ├── udt-method-probe-01-…/         21 probes for UDT method semantics
+│   ├── vcp-probe-01-…/                7 probes shaking out VCP regressions
+│   └── parity-probe-01,02,04,05,06/   5 probes isolating divergence patterns
+│                                      (stop/limit timing, CHoCH/BOS,
+│                                      %-of-equity, small fraction, 50%
+│                                      sizing) — see parity-anomalies/
+│                                      in pineforge-utils for the write-ups
+└── parity-anomalies/                   1 probe — TV-side non-determinism docs
+    └── equity-mirror/                  the former parity-probe-03; engine
+                                        is correct, TV's broker-emulator
+                                        margin check is non-deterministic
+                                        at the exact 1× equity boundary.
+                                        Excluded from the headline parity
+                                        sweep so it doesn't mask as a
+                                        regression. See
+                                        parity-anomalies/tv-margin-boundary.md
+                                        in pineforge-utils for the full
+                                        write-up.
 ```
 
 ## Where the numbers come from
 
-The headline parity figure — **excellent=159, strong=2, moderate=1 across 162
-strategies** — is produced by comparing each `engine_trades.csv` against its
-`tv_trades.csv` under a single STRICT threshold (documented in the parent
-project's `reports/validation_detailed.md`):
+The headline parity figure — **excellent=165, strong=2 across 167
+reference strategies (basic/ + community/ + validation/)** — is produced
+by comparing each `engine_trades.csv` against its `tv_trades.csv` under
+a single STRICT threshold:
 
-- **Strict profile** (the only profile, applied to all 162 strategies):
-  trade-count delta < 1.0%, entry-price p90 delta < 0.01%, exit-price p90
-  delta < 0.01%, P&L p90 delta < 1.0%.
+- **Strict profile** (the only profile, applied uniformly):
+trade-count delta < 1.0%, entry-price p90 delta < 0.01%, exit-price p90
+delta < 0.01%, P&L p90 delta < 1.0%.
 - The two `strong` strategies (`community/VCP`, `community/scalping-wunder-bots`)
-  fail strict on trade-count delta only; entry/exit/PnL still pass strict on
-  every matched trade.
-- The one `moderate` strategy (`community/IES`) passes count + entry + exit
-  strict but fails per-trade PnL p90 (~3%), an MTF qty-feedback artefact
-  tracked in the parent project's parity sweep notes.
+fail strict on trade-count delta only; entry/exit/PnL still pass strict on
+every matched trade.
+- One additional probe — `parity-anomalies/equity-mirror` (the former
+`validation/parity-probe-03-equity-mirror`) — lives in a separate
+`parity-anomalies/` directory and is **excluded from the headline figure
+by default**. It is a deliberate stress test of TV's broker-emulator
+margin behaviour at the 1× equity boundary, where TV exhibits
+non-deterministic accept/reject behaviour that cannot be matched by a
+deterministic engine. See `parity-anomalies/tv-margin-boundary.md` in
+the `pineforge-utils` repo for the full write-up, and
+[`parity-anomalies/README.md`](parity-anomalies/README.md) here for the
+local index. The fix that came out of this probe (moving the engine's
+margin check from fill time to signal time) promoted `community/IES`
+from moderate to excellent.
 
 A trade is counted as "matched" when the engine and TV agree on direction and
 their entry and exit times fall within a 1-hour gating window (with a $3 entry-
@@ -150,10 +176,17 @@ basic/greedy
   -> excellent (Y/Y/Y/Y)
 ```
 
-To run all 162 strategies:
+To run all 167 reference strategies:
 
 ```bash
 python scripts/verify_corpus.py --all
+```
+
+To also fold in the `parity-anomalies/` probes (will degrade the headline
+tier counts; see [`parity-anomalies/README.md`](parity-anomalies/README.md)):
+
+```bash
+python scripts/verify_corpus.py --all --include-anomalies
 ```
 
 ## Reproducing the engine output
@@ -172,14 +205,14 @@ bash scripts/run_corpus.sh
 That script:
 
 1. Configures CMake with `-DPINEFORGE_BUILD_CORPUS_STRATEGIES=ON`.
-2. Builds `libpineforge.a` plus 162 `strategy.so` files (one per
+2. Builds `libpineforge.a` plus 168 `strategy.so` files (one per
   `corpus/<cat>/<name>/generated.cpp`), in parallel via
    `cmake --build build --target corpus_strategies`.
 3. Loads each `strategy.so` through `scripts/run_strategy.py`, runs it
   against `corpus/data/ohlcv_ETH-USDT-USDT_15m.csv`, and writes the
    resulting trade list to `corpus/<cat>/<name>/engine_trades.csv`.
 4. Calls `scripts/verify_corpus.py --all --quiet` as a lightweight inspection
-  summary. Drift from that helper is warned but does not fail the 162-strategy
+  summary. Drift from that helper is warned but does not fail the 168-strategy
    reproducibility run.
 
 Subcommands for finer control:
