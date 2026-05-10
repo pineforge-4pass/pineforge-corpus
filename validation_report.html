@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Corpus parity validation report</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body{font-family:-apple-system,system-ui,sans-serif;max-width:1100px;margin:2em auto;padding:0 1em;color:#1f2328;font-size:13px;line-height:1.5}
+table{border-collapse:collapse;font-size:11px;width:100%;margin:1em 0}
+th,td{border:1px solid #d0d7de;padding:3px 6px}
+th{background:#f6f8fa;text-align:left}
+code{background:#eff1f3;padding:1px 4px;border-radius:3px;font-size:90%;font-family:ui-monospace,Menlo,monospace}
+pre{background:#f6f8fa;padding:8px;border-radius:5px;font-size:11px;overflow-x:auto}
+pre code{background:none;padding:0}
+h1{border-bottom:2px solid #d0d7de;padding-bottom:6px}
+h2{border-bottom:1px solid #d0d7de;padding-bottom:4px;margin-top:2em}
+h3{margin-top:1.5em}
+strong{color:#cf222e}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Corpus parity validation report</h1>
+</header>
+<h1 id="corpus-parity-validation-report">Corpus parity validation
+report</h1>
+<ul>
+<li><strong>Generated</strong>: <code>2026-05-11T00:00:00Z</code></li>
+<li><strong>Host</strong>: Darwin arm64 (16 cores), Python 3.14.3</li>
+<li><strong>pineforge-engine</strong>: <code>3ed7f8f</code></li>
+<li><strong>pineforge-codegen</strong>: <code>9fa3c60</code></li>
+<li><strong>corpus submodule</strong>: <code>50813bc</code></li>
+<li><strong>OHLCV feed</strong>:
+<code>corpus/data/ohlcv_ETH-USDT-USDT_15m_warmup6m.csv</code> (6-month
+warmup)</li>
+<li><strong>Pipeline</strong>: <code>xargs -P16 run_strategy.py</code> →
+<code>verify_corpus.py --all --include-anomalies</code></li>
+<li><strong>Strategies</strong>: 168 total (167 reference + 1 anomaly
+probe). All have TV trades; none skipped.</li>
+</ul>
+<h2 id="headline-167-reference-strategies">Headline (167 reference
+strategies)</h2>
+<p>Reference tiers: <code>basic/</code>, <code>community/</code>,
+<code>validation/</code>. <code>parity-anomalies/</code> excluded — see
+anomaly section.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Count</th>
+<th>Δ vs prev</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>excellent</td>
+<td>165</td>
+<td>—</td>
+</tr>
+<tr>
+<td>strong</td>
+<td>2</td>
+<td>—</td>
+</tr>
+<tr>
+<td>moderate</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>weak</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>minimal</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>missing</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>total</strong></td>
+<td><strong>167</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Reproduce:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> corpus <span class="at">-mindepth</span> 2 <span class="at">-maxdepth</span> 2 <span class="at">-type</span> d <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-P16</span> <span class="at">-I{}</span> python3 scripts/run_strategy.py {}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> scripts/verify_corpus.py <span class="at">--all</span> <span class="at">--include-anomalies</span></span></code></pre></div>
+<h2 id="standards">Standards</h2>
+<p>Two tiers of thresholds applied to four dimensions per strategy.
+Source: <code>scripts/verify_corpus.py:43-51</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>strict (<code>excellent</code>)</th>
+<th>strong (relaxed)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trade-count delta</td>
+<td>&lt; <strong>1.0%</strong></td>
+<td>&lt; <strong>5.0%</strong></td>
+</tr>
+<tr>
+<td>entry-price p90 delta</td>
+<td>&lt; <strong>0.01%</strong></td>
+<td>&lt; <strong>0.1%</strong></td>
+</tr>
+<tr>
+<td>exit-price p90 delta</td>
+<td>&lt; <strong>0.01%</strong></td>
+<td>&lt; <strong>0.5%</strong></td>
+</tr>
+<tr>
+<td>per-trade PnL p90 delta</td>
+<td>&lt; <strong>1.0%</strong></td>
+<td>&lt; <strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Strict thresholds match
+<code>pineforge-utils/validator/validate.py::DEFAULT_PARITY_STRICT</code>
+exactly — no production override; pass here ⇔ pass there.</p>
+<p>Label rules:</p>
+<ul>
+<li><strong>excellent</strong>: all four dimensions pass strict.</li>
+<li><strong>strong</strong>: matched/TV ≥ 99% AND all four pass the
+relaxed tier (typical case: count delta ≤ a few trades, prices/PnL still
+strict).</li>
+<li><strong>moderate</strong>: matched/TV ≥ 90%.</li>
+<li><strong>weak</strong>: at least one trade matched but &lt; 90%.</li>
+<li><strong>minimal</strong>: zero matches with non-empty inputs.</li>
+<li><strong>missing</strong>: <code>engine_trades.csv</code>
+absent.</li>
+</ul>
+<h3 id="boundary-effect-count-delta-on-the-strict-edge">Boundary effect
+(count delta on the strict edge)</h3>
+<p>A strategy that matches every TV trade trade-by-trade with
+<code>entry/exit/PnL</code> all passing strict, but emits 1–N extra (or
+fewer) trades near the warmup/terminal edge, falls into
+<strong>strong</strong> purely because the count delta crosses the 1.0%
+strict gate. This is a <strong>boundary effect</strong>, not a parity
+regression:</p>
+<ul>
+<li>Trades inside the common window match exactly.</li>
+<li>Extras live outside the mutually trimmed window or land on the
+warmup boundary where TV’s bootstrap and the engine’s bootstrap differ
+by a single bar.</li>
+<li>Per-trade economics (entry/exit/PnL) stay inside strict on every
+matched trade.</li>
+</ul>
+<p>Both <code>strong</code> cases below are boundary effects: prices and
+PnL pass strict, only count crosses 1.0%.</p>
+<h2 id="strong-tier-detail"><code>strong</code> tier detail</h2>
+<h3 id="communityvcp-strong-boundary-effect"><code>community/VCP</code>
+→ <strong>strong</strong> <em>(boundary effect)</em></h3>
+<pre><code>  Profile:       strict
+  TV trades:     71
+  Engine trades: 72
+  Matched:       71 (100.0% of TV)
+  Count delta:            1.3889%  (X — boundary)
+  Entry-price p90 delta:  0.0000%  (OK)
+  Exit-price  p90 delta:  0.0005%  (OK)
+  PnL         p90 delta:  0.1026%  (OK)</code></pre>
+<h3 id="communityscalping-wunder-bots-strong-boundary-effect"><code>community/scalping-wunder-bots</code>
+→ <strong>strong</strong> <em>(boundary effect)</em></h3>
+<pre><code>  Profile:       strict
+  TV trades:     419
+  Engine trades: 424
+  Matched:       417 (99.5% of TV)
+  Count delta:            1.1792%  (X — boundary)
+  Entry-price p90 delta:  0.0000%  (OK)
+  Exit-price  p90 delta:  0.0005%  (OK)
+  PnL         p90 delta:  0.1235%  (OK)</code></pre>
+<h2 id="anomaly-probes-excluded-from-headline">Anomaly probes (excluded
+from headline)</h2>
+<p>Probes that <em>deliberately</em> surface TV-side non-determinism.
+Engine is correct; divergence is documented in
+<code>pineforge-utils/parity-anomalies/</code>. Excluded from headline
+so they don’t mask as regressions.</p>
+<h3 id="parity-anomaliesequity-mirror-weak-documented-anomaly-expected"><code>parity-anomalies/equity-mirror</code>
+→ <strong>weak</strong> <em>(documented anomaly, expected)</em></h3>
+<pre><code>  Profile:       strict
+  TV trades:     24
+  Engine trades: 25
+  Matched:       13 (54.2% of TV)
+  Count delta:            4.0000%
+  Entry-price p90 delta:  0.0000%
+  Exit-price  p90 delta:  0.0000%
+  PnL         p90 delta:  2.3202%
+  -&gt; weak</code></pre>
+<h2 id="per-strategy-detail-4-dimensions-all-168">Per-strategy detail (4
+dimensions, all 168)</h2>
+<p>Columns: TV/eng trade count, matched ratio, then the four parity
+dimensions as percent deltas. <strong>Bold</strong> = fails strict on
+that dimension.</p>
+<h3 id="basic"><code>basic/</code></h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">eng</th>
+<th style="text-align: right;">match%</th>
+<th style="text-align: right;">count Δ%</th>
+<th style="text-align: right;">entry p90 Δ%</th>
+<th style="text-align: right;">exit p90 Δ%</th>
+<th style="text-align: right;">PnL p90 Δ%</th>
+<th style="text-align: left;">label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>greedy</code></td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>inside-bar</code></td>
+<td style="text-align: right;">3332</td>
+<td style="text-align: right;">3332</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0785</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>keltner</code></td>
+<td style="text-align: right;">314</td>
+<td style="text-align: right;">314</td>
+<td style="text-align: right;">99.7</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.1123</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ma-cros</code></td>
+<td style="text-align: right;">2315</td>
+<td style="text-align: right;">2315</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0799</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parabolic-asr</code></td>
+<td style="text-align: right;">3082</td>
+<td style="text-align: right;">3082</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0824</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>pivot-ext</code></td>
+<td style="text-align: right;">4890</td>
+<td style="text-align: right;">4890</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0775</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>stochastic-slow</code></td>
+<td style="text-align: right;">690</td>
+<td style="text-align: right;">690</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0816</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>supertrend</code></td>
+<td style="text-align: right;">760</td>
+<td style="text-align: right;">760</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0776</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>volty-expan</code></td>
+<td style="text-align: right;">7235</td>
+<td style="text-align: right;">7299</td>
+<td style="text-align: right;">98.6</td>
+<td style="text-align: right;">0.8768</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1160</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="community"><code>community/</code></h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">eng</th>
+<th style="text-align: right;">match%</th>
+<th style="text-align: right;">count Δ%</th>
+<th style="text-align: right;">entry p90 Δ%</th>
+<th style="text-align: right;">exit p90 Δ%</th>
+<th style="text-align: right;">PnL p90 Δ%</th>
+<th style="text-align: left;">label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>4ema_rsi</code></td>
+<td style="text-align: right;">809</td>
+<td style="text-align: right;">809</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0921</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>BOS_curv</code></td>
+<td style="text-align: right;">262</td>
+<td style="text-align: right;">262</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0770</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>IES</code></td>
+<td style="text-align: right;">2668</td>
+<td style="text-align: right;">2643</td>
+<td style="text-align: right;">98.1</td>
+<td style="text-align: right;">0.9370</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.7809</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>KKB</code></td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0787</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>LiquitySweep</code></td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0966</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>MarketShift</code></td>
+<td style="text-align: right;">1152</td>
+<td style="text-align: right;">1152</td>
+<td style="text-align: right;">99.7</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0771</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>VCP</code></td>
+<td style="text-align: right;">71</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;"><strong>1.3889</strong></td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1026</td>
+<td style="text-align: left;">strong</td>
+</tr>
+<tr>
+<td><code>kanuck</code></td>
+<td style="text-align: right;">875</td>
+<td style="text-align: right;">875</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0845</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>scalping-strategy</code></td>
+<td style="text-align: right;">468</td>
+<td style="text-align: right;">468</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>scalping-wunder-bots</code></td>
+<td style="text-align: right;">419</td>
+<td style="text-align: right;">424</td>
+<td style="text-align: right;">99.5</td>
+<td style="text-align: right;"><strong>1.1792</strong></td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1235</td>
+<td style="text-align: left;">strong</td>
+</tr>
+<tr>
+<td><code>trendmaster</code></td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1368</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="validation"><code>validation/</code></h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">eng</th>
+<th style="text-align: right;">match%</th>
+<th style="text-align: right;">count Δ%</th>
+<th style="text-align: right;">entry p90 Δ%</th>
+<th style="text-align: right;">exit p90 Δ%</th>
+<th style="text-align: right;">PnL p90 Δ%</th>
+<th style="text-align: left;">label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-macd-histogram</code></td>
+<td style="text-align: right;">2813</td>
+<td style="text-align: right;">2813</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0884</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>02-bb-squeeze</code></td>
+<td style="text-align: right;">813</td>
+<td style="text-align: right;">813</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0863</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>03-dmi-adx-trend</code></td>
+<td style="text-align: right;">2747</td>
+<td style="text-align: right;">2743</td>
+<td style="text-align: right;">99.8</td>
+<td style="text-align: right;">0.1456</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0779</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>04-stoch-rsi</code></td>
+<td style="text-align: right;">1337</td>
+<td style="text-align: right;">1337</td>
+<td style="text-align: right;">97.6</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1152</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>05-hma-cross</code></td>
+<td style="text-align: right;">4713</td>
+<td style="text-align: right;">4713</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0821</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>06-cci-momentum</code></td>
+<td style="text-align: right;">2462</td>
+<td style="text-align: right;">2462</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0719</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>07-tsi-signal</code></td>
+<td style="text-align: right;">846</td>
+<td style="text-align: right;">846</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0823</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>08-linreg-channel</code></td>
+<td style="text-align: right;">248</td>
+<td style="text-align: right;">248</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0942</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>09-aroon-oscillator</code></td>
+<td style="text-align: right;">1585</td>
+<td style="text-align: right;">1585</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0834</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>10-donchian-breakout</code></td>
+<td style="text-align: right;">1002</td>
+<td style="text-align: right;">1002</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0793</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>11-elder-ray</code></td>
+<td style="text-align: right;">2483</td>
+<td style="text-align: right;">2483</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0786</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>12-chandelier-exit</code></td>
+<td style="text-align: right;">1603</td>
+<td style="text-align: right;">1603</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0827</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>13-atr-trailing-stop</code></td>
+<td style="text-align: right;">5073</td>
+<td style="text-align: right;">5072</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0197</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0786</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>14-vwma-divergence</code></td>
+<td style="text-align: right;">2574</td>
+<td style="text-align: right;">2574</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0800</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>15-momentum-roc</code></td>
+<td style="text-align: right;">5690</td>
+<td style="text-align: right;">5690</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0782</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>16-mean-reversion-bb</code></td>
+<td style="text-align: right;">495</td>
+<td style="text-align: right;">495</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0819</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>17-dual-ma-switch</code></td>
+<td style="text-align: right;">1238</td>
+<td style="text-align: right;">1238</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0888</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>18-ema-ribbon-loop</code></td>
+<td style="text-align: right;">626</td>
+<td style="text-align: right;">626</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0796</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>19-pivot-array-breakout</code></td>
+<td style="text-align: right;">829</td>
+<td style="text-align: right;">829</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0893</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>20-range-filter-while</code></td>
+<td style="text-align: right;">401</td>
+<td style="text-align: right;">401</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0788</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>21-adaptive-ma-func</code></td>
+<td style="text-align: right;">4598</td>
+<td style="text-align: right;">4600</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0435</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0772</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>22-candle-pattern</code></td>
+<td style="text-align: right;">826</td>
+<td style="text-align: right;">826</td>
+<td style="text-align: right;">99.9</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0791</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>23-dual-thrust</code></td>
+<td style="text-align: right;">2870</td>
+<td style="text-align: right;">2870</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0784</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>25-percent-rank-revert</code></td>
+<td style="text-align: right;">363</td>
+<td style="text-align: right;">362</td>
+<td style="text-align: right;">99.7</td>
+<td style="text-align: right;">0.2755</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0714</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>26-volume-breakout</code></td>
+<td style="text-align: right;">1778</td>
+<td style="text-align: right;">1778</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0829</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>27-ma-stack-array</code></td>
+<td style="text-align: right;">1406</td>
+<td style="text-align: right;">1406</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0796</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>28-swing-pivot-atr</code></td>
+<td style="text-align: right;">1618</td>
+<td style="text-align: right;">1619</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0618</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1264</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>29-median-cross</code></td>
+<td style="text-align: right;">2837</td>
+<td style="text-align: right;">2837</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0826</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>30-multi-indicator-score</code></td>
+<td style="text-align: right;">3910</td>
+<td style="text-align: right;">3911</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0256</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0830</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>31-rsi-bands</code></td>
+<td style="text-align: right;">350</td>
+<td style="text-align: right;">350</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0802</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>32-supertrend-adx-filter</code></td>
+<td style="text-align: right;">455</td>
+<td style="text-align: right;">455</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0768</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>33-matrix-eigen-pca</code></td>
+<td style="text-align: right;">2850</td>
+<td style="text-align: right;">2850</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0778</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>34-map-regime-tracker</code></td>
+<td style="text-align: right;">801</td>
+<td style="text-align: right;">801</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0783</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>35-advanced-trade-metrics</code></td>
+<td style="text-align: right;">751</td>
+<td style="text-align: right;">751</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1214</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>36-mtf-array-stats</code></td>
+<td style="text-align: right;">362</td>
+<td style="text-align: right;">362</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0961</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>37-regex-string-filter</code></td>
+<td style="text-align: right;">1777</td>
+<td style="text-align: right;">1777</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0812</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>38-udt-regime-stack</code></td>
+<td style="text-align: right;">3910</td>
+<td style="text-align: right;">3911</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0256</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0830</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>39-request-security-parity</code></td>
+<td style="text-align: right;">8775</td>
+<td style="text-align: right;">8775</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0672</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>40-bracket-exit-tp-sl</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1255</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>41-partial-exit-qty-percent</code></td>
+<td style="text-align: right;">725</td>
+<td style="text-align: right;">725</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.1321</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>42-close-immediate-vs-next-bar</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0794</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>43-close-all-cancel-all</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.4543</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>44-oca-reduce-orders</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1287</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>45-commission-and-sizing</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0014</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>46-risk-gates</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0726</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>47-request-security-gaps-on</code></td>
+<td style="text-align: right;">2247</td>
+<td style="text-align: right;">2247</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0736</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>48-session-time-filter</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0698</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>49-na-nz-history-chain</code></td>
+<td style="text-align: right;">3093</td>
+<td style="text-align: right;">3093</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0756</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>50-exit-stop-limit-trail-same-bar</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0934</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>51-trail-points-without-offset</code></td>
+<td style="text-align: right;">710</td>
+<td style="text-align: right;">710</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0934</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>52-stop-entry-cancel-opposite</code></td>
+<td style="text-align: right;">1738</td>
+<td style="text-align: right;">1738</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0843</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>53-stop-entry-touch-boundary</code></td>
+<td style="text-align: right;">548</td>
+<td style="text-align: right;">548</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1220</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>54-mtf-roll-state-minimal</code></td>
+<td style="text-align: right;">2938</td>
+<td style="text-align: right;">2948</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.3392</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0676</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>55-entry-reversal-implicit-exit</code></td>
+<td style="text-align: right;">1098</td>
+<td style="text-align: right;">1098</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0766</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>56-trailing-offset-activation-path</code></td>
+<td style="text-align: right;">671</td>
+<td style="text-align: right;">671</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0918</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>57-stop-entry-reversal-grouping</code></td>
+<td style="text-align: right;">1464</td>
+<td style="text-align: right;">1464</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0748</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>58-same-id-stop-modification</code></td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1438</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>59-market-close-fill-basis</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0773</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>60-pyramiding-close-id-grouping</code></td>
+<td style="text-align: right;">2196</td>
+<td style="text-align: right;">2196</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0804</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>61-same-id-stop-raise-only</code></td>
+<td style="text-align: right;">666</td>
+<td style="text-align: right;">666</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1471</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>62-same-id-stop-cross-before-modify</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0849</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>63-dual-stop-cancel-rotation</code></td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1258</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>64-same-id-market-entry-repeat</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0782</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>65-same-id-entry-close-same-bar</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0656</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>67-same-id-exit-replace</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.1609</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>68-cross-entry-close-same-pass</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0828</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>69-cross-entry-cancel-same-pass</code></td>
+<td style="text-align: right;">495</td>
+<td style="text-align: right;">495</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1485</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>70-cross-exit-close-same-pass</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0675</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>71-cross-entry-exit-same-pass</code></td>
+<td style="text-align: right;">728</td>
+<td style="text-align: right;">728</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1248</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>72-cross-opposite-entry-close</code></td>
+<td style="text-align: right;">843</td>
+<td style="text-align: right;">843</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1132</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>73-same-id-stop-minute-zero-only</code></td>
+<td style="text-align: right;">578</td>
+<td style="text-align: right;">578</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1488</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>74-same-id-stop-window-four-bars</code></td>
+<td style="text-align: right;">349</td>
+<td style="text-align: right;">349</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1318</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>75-same-id-stop-after-flat</code></td>
+<td style="text-align: right;">703</td>
+<td style="text-align: right;">703</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1479</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>76-dual-side-same-id-stop-window-no-cancel</code></td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">689</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1438</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>77-dual-side-stop-window-with-close-no-cancel</code></td>
+<td style="text-align: right;">572</td>
+<td style="text-align: right;">572</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1498</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>78-dual-side-four-bar-stop-window-no-close</code></td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1057</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>79-one-side-four-bar-with-far-opposite</code></td>
+<td style="text-align: right;">349</td>
+<td style="text-align: right;">349</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1318</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>80-dual-stop-both-touch-priority</code></td>
+<td style="text-align: right;">757</td>
+<td style="text-align: right;">758</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.1319</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0953</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>81-dual-stop-near-only</code></td>
+<td style="text-align: right;">365</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.2732</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1100</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>82-dual-stop-far-only</code></td>
+<td style="text-align: right;">364</td>
+<td style="text-align: right;">365</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.2740</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0951</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>83-dual-stop-open-tie</code></td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">732</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>84-dual-stop-source-order-long-first</code></td>
+<td style="text-align: right;">365</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.2732</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1100</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>85-dual-stop-source-order-short-first</code></td>
+<td style="text-align: right;">365</td>
+<td style="text-align: right;">366</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.2732</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0871</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>86-dual-stop-open-proximity-low-first</code></td>
+<td style="text-align: right;">188</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.5291</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1113</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>87-dual-stop-open-proximity-high-first</code></td>
+<td style="text-align: right;">216</td>
+<td style="text-align: right;">217</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.4608</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1142</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>88-exit-three-way-set-once-at-entry</code></td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>89-trail-points-only-no-offset-explicit</code></td>
+<td style="text-align: right;">782</td>
+<td style="text-align: right;">782</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>90-narrow-stop-limit-with-trail</code></td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>91-atr-trail-fixed-entry</code></td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>92-flip-stop-no-paired-close</code></td>
+<td style="text-align: right;">724</td>
+<td style="text-align: right;">724</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.2511</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>93-flip-stop-pyramiding-2</code></td>
+<td style="text-align: right;">843</td>
+<td style="text-align: right;">843</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0004</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1132</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>94-stop-entry-cancel-no-regime-close</code></td>
+<td style="text-align: right;">1610</td>
+<td style="text-align: right;">1610</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0938</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>95-multi-cycle-open-guaranteed-stops</code></td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">792</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0779</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>96-multi-cycle-pooc-cross-bar</code></td>
+<td style="text-align: right;">791</td>
+<td style="text-align: right;">791</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1441</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-01-adx-regime-classify</code></td>
+<td style="text-align: right;">682</td>
+<td style="text-align: right;">683</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.1464</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0769</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-02-three-ema-bias</code></td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">717</td>
+<td style="text-align: right;">99.9</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0771</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-03-rsi-macd-momentum</code></td>
+<td style="text-align: right;">4798</td>
+<td style="text-align: right;">4798</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0821</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-04-pressure-gauge</code></td>
+<td style="text-align: right;">2207</td>
+<td style="text-align: right;">2207</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0786</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-05-bb-kc-squeeze</code></td>
+<td style="text-align: right;">902</td>
+<td style="text-align: right;">902</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0799</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-06-swing-pivot-sweep</code></td>
+<td style="text-align: right;">706</td>
+<td style="text-align: right;">706</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0786</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-07-bars-since-trade-cooldown</code></td>
+<td style="text-align: right;">727</td>
+<td style="text-align: right;">727</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0838</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>ies-probe-08-equity-feedback-sizing</code></td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0925</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-01-htf-close-roll</code></td>
+<td style="text-align: right;">8775</td>
+<td style="text-align: right;">8775</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0653</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-02-dual-tf-closes</code></td>
+<td style="text-align: right;">736</td>
+<td style="text-align: right;">736</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0652</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-03-htf-sma</code></td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0767</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-04-daily-prev-high</code></td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0687</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-05-htf-rsi</code></td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0778</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-06-htf-volume-sum</code></td>
+<td style="text-align: right;">584</td>
+<td style="text-align: right;">584</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0885</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-07-triple-tf-close-confluence</code></td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0910</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-08-triple-tf-macd-hist-confluence</code></td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">95.8</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1662</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-09-htf-daily-ema-warmup</code></td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0883</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-10-htf-bracket-static</code></td>
+<td style="text-align: right;">283</td>
+<td style="text-align: right;">283</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0919</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>mtf-probe-11-htf-bracket-manual-trail</code></td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1579</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parity-probe-01-stop-limit-timing</code></td>
+<td style="text-align: right;">778</td>
+<td style="text-align: right;">778</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1337</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parity-probe-02-choch-bos-isolator</code></td>
+<td style="text-align: right;">1026</td>
+<td style="text-align: right;">1026</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0705</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parity-probe-04-percent-of-equity-sizing</code></td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0006</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parity-probe-05-small-equity-fraction</code></td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0698</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>parity-probe-06-edge-margin-sizing</code></td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0700</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>pineforge-analyzer</code></td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0687</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-01-scalar-return</code></td>
+<td style="text-align: right;">507</td>
+<td style="text-align: right;">507</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0848</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-02-mutating-self</code></td>
+<td style="text-align: right;">2293</td>
+<td style="text-align: right;">2293</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0623</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-03-extra-args</code></td>
+<td style="text-align: right;">2504</td>
+<td style="text-align: right;">2504</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-04-default-param</code></td>
+<td style="text-align: right;">417</td>
+<td style="text-align: right;">417</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0874</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-05-in-conditional</code></td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0812</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-06-in-switch</code></td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">402</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0812</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-07-in-for-loop</code></td>
+<td style="text-align: right;">1660</td>
+<td style="text-align: right;">1660</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0755</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-08-in-while-loop</code></td>
+<td style="text-align: right;">306</td>
+<td style="text-align: right;">306</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0845</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-09-uses-math-funcs</code></td>
+<td style="text-align: right;">789</td>
+<td style="text-align: right;">789</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0845</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-10-uses-na-nz</code></td>
+<td style="text-align: right;">695</td>
+<td style="text-align: right;">695</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0828</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-11-uses-history-of-globals</code></td>
+<td style="text-align: right;">131</td>
+<td style="text-align: right;">131</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.1028</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-12-receives-ta-result</code></td>
+<td style="text-align: right;">2676</td>
+<td style="text-align: right;">2676</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0753</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-13-reads-strategy-state</code></td>
+<td style="text-align: right;">705</td>
+<td style="text-align: right;">705</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0848</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-14-drives-strategy-entry</code></td>
+<td style="text-align: right;">1635</td>
+<td style="text-align: right;">1635</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0828</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-15-computes-exit-prices</code></td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">704</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1084</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-16-var-instance-streak</code></td>
+<td style="text-align: right;">1007</td>
+<td style="text-align: right;">1007</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0557</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-17-tuple-return-destructure</code></td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">1095</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1076</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-18-method-calls-method</code></td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0713</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-19-array-of-udt-method</code></td>
+<td style="text-align: right;">868</td>
+<td style="text-align: right;">868</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0828</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-20-udt-return-from-func</code></td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0705</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>udt-method-probe-21-windowed-method-chain</code></td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0713</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-01-pivot-strength-5</code></td>
+<td style="text-align: right;">1937</td>
+<td style="text-align: right;">1937</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0773</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-02-fvg-zones</code></td>
+<td style="text-align: right;">11800</td>
+<td style="text-align: right;">11851</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.4303</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0584</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-03-rsi-smooth-divergence</code></td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0807</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-04-vol-zscore-anomaly</code></td>
+<td style="text-align: right;">591</td>
+<td style="text-align: right;">591</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0739</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-05-cumulative-volume-delta</code></td>
+<td style="text-align: right;">3119</td>
+<td style="text-align: right;">3119</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0761</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-06-adx-volatility-regime</code></td>
+<td style="text-align: right;">636</td>
+<td style="text-align: right;">637</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.1570</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0793</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+<tr>
+<td><code>vcp-probe-07-session-tz-newyork</code></td>
+<td style="text-align: right;">396</td>
+<td style="text-align: right;">396</td>
+<td style="text-align: right;">100.0</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0752</td>
+<td style="text-align: left;">excellent</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parity-anomalies"><code>parity-anomalies/</code></h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 4%" />
+<col style="width: 4%" />
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategy</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">eng</th>
+<th style="text-align: right;">match%</th>
+<th style="text-align: right;">count Δ%</th>
+<th style="text-align: right;">entry p90 Δ%</th>
+<th style="text-align: right;">exit p90 Δ%</th>
+<th style="text-align: right;">PnL p90 Δ%</th>
+<th style="text-align: left;">label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>equity-mirror</code></td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">54.2</td>
+<td style="text-align: right;"><strong>4.0000</strong></td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;"><strong>2.3202</strong></td>
+<td style="text-align: left;">weak</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
