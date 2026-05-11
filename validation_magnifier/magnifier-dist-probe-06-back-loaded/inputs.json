@@ -2,5 +2,9 @@
   "runtime_overrides": {
     "bar_magnifier": true,
     "magnifier_distribution": "BACK_LOADED"
+  },
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "engine BACK_LOADED distribution; TV uses ENDPOINTS only"
   }
 }

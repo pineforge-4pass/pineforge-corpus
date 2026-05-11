@@ -1,0 +1,6 @@
+{
+  "validation_overrides": {
+    "expect_reject": true,
+    "expected_reject_message": "is not an integer divisor of script timeframe"
+  }
+}

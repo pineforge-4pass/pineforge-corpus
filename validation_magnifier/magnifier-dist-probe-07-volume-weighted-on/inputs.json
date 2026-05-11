@@ -3,5 +3,9 @@
     "bar_magnifier": true,
     "magnifier_distribution": "ENDPOINTS",
     "magnifier_volume_weighted": true
+  },
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "engine volume_weighted=true; TV exposes only unweighted ENDPOINTS"
   }
 }
