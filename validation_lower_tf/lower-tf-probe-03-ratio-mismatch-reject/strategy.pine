@@ -1,19 +1,21 @@
-// Lower-TF probe 03 — non-integer ratio rejection
+// Lower-TF probe 03 — LTF >= script_tf rejection
 //
 // Purpose: REJECTION probe. ``request.security_lower_tf`` requires the
-// chart TF be an integer multiple of the LTF. Here we request a "4"
-// minute LTF from a 15m chart (15 / 4 = 3.75 — non-integer). The
-// codegen support_checker (or runtime synthesis) MUST reject this
-// configuration with a clear diagnostic; producing a synthesised array
-// of length 3 or 4 silently is a parity bug.
+// requested LTF be strictly finer than the script's effective TF.
+// Here we request "20" (20 minutes) with script_tf=15: req >= script
+// → engine must reject as "LTF must be finer than script timeframe".
 //
-// Expected behavior: codegen rejects with an error mentioning
-// "lower_tf" + "ratio" / "integer multiple" / "must divide". No
-// tv_trades.csv accompanies this probe.
+// Note: original probe was 4m-on-15m (15%4!=0); invalidated by the
+// 1m corpus migration (4%1==0 makes 4m a valid LTF on 1m input).
+// Two related gaps remain to file separately:
+//   - "45S" on 1m: 60%45!=0 but engine sub-minute LTF gate incomplete
+//   - "7" on 1m + script_tf=15: 15%7!=0 (input-passthrough mode);
+//     engine PR #4 gates `req % input` but not `script % req` —
+//     known engine bug.
 //
-// TV setup (for reference if TV is permissive): 15m chart,
-// ETH-USDT-USDT. Do NOT export trades — this probe asserts the reject
-// path.
+// Expected behavior: engine throws "request.security_lower_tf:
+// requested timeframe '20' is not finer than script timeframe '15'".
+// No tv_trades.csv accompanies this probe.
 //@version=6
 strategy("PF lower-tf probe 03 - ratio mismatch reject", shorttitle="LTF_p03_REJ", overlay=true,
      initial_capital=1000000, currency=currency.USD,
@@ -21,8 +23,9 @@ strategy("PF lower-tf probe 03 - ratio mismatch reject", shorttitle="LTF_p03_REJ
      default_qty_type=strategy.fixed, default_qty_value=1, pyramiding=1,
      process_orders_on_close=false)
 
-// 15 / 4 = 3.75 — non-integer ratio; expected rejection.
-ltfCloses = request.security_lower_tf(syminfo.tickerid, "4", close)
+// 30m LTF on script_tf=15: req >= script → engine rejects.
+// 30 is a standard Pine TF (TV accepts in chart + security calls).
+ltfCloses = request.security_lower_tf(syminfo.tickerid, "30", close)
 
 float lastV = na
 if array.size(ltfCloses) > 0

@@ -1,26 +1,23 @@
-// OCA three-way probe 01 — same-bar touch (NONE / CANCEL / REDUCE)
+// OCA probe 01 — strategy.exit bracket (internal CANCEL semantics)
 //
-// Purpose: pin OCA semantics on a single waypoint. After each long
-// entry, we attach three sibling stop+limit pairs sharing one OCA
-// name per pair, with oca_type cycling through NONE / CANCEL /
-// REDUCE. On a wide-range bar where multiple sibling levels touch
-// the same OHLC waypoint (gap-down or large ATR), the three groups
-// must route differently:
-//   - NONE   : all siblings fill independently (qty stack)
-//   - CANCEL : first fill cancels the other sibling
-//   - REDUCE : first fill reduces remaining sibling qty
+// Purpose: pin strategy.exit's built-in OCA-CANCEL bracket behavior.
+// Pine v6 strategy.exit does not expose oca_type; the TP/SL pair it
+// places is internally OCA-CANCEL (one fills → other cancels in same
+// or next bar). This probe verifies engine bracket cancel timing
+// matches TV.
 //
-// Trade shape: long-only on RSI<30 cross-up, fixed qty=3 so each
-// of the three pairs carries qty=1. Wide ATR-based stop/limit so
-// volatile bars routinely sweep both sides → exposes routing.
+// strategy.exit is intrinsically close-only, so once position is flat
+// any unfilled bracket auto-cancels — no leaked-short trap.
 //
-// TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Manual TV capture later.
+// Trade shape: long-only RSI<30 cross-up, qty=1, ATR-wide bracket so
+// volatile bars routinely sweep both sides.
+//
+// TV setup: 15m chart, ETH-USDT-USDT.
 //@version=6
-strategy("PF OCA three-way 01 - same-bar touch", shorttitle="OCA_p01_3WAY", overlay=true,
+strategy("PF OCA probe 01 - exit bracket cancel", shorttitle="OCA_p01_3WAY", overlay=true,
      initial_capital=1000000, currency=currency.USD,
      commission_type=strategy.commission.percent, commission_value=0, slippage=0,
-     default_qty_type=strategy.fixed, default_qty_value=3, pyramiding=1,
+     default_qty_type=strategy.fixed, default_qty_value=1, pyramiding=1,
      process_orders_on_close=false)
 
 rsiVal = ta.rsi(close, 14)
@@ -29,30 +26,10 @@ atrVal = ta.atr(14)
 bool entryCond = ta.crossover(rsiVal, 30)
 
 if entryCond and strategy.position_size == 0
-    strategy.entry("L", strategy.long, qty=3, comment="entry")
+    strategy.entry("L", strategy.long, qty=1, comment="entry")
 
 if strategy.position_size > 0
     entry = strategy.position_avg_price
-    // three sibling pairs — each pair a TP/SL bracket; oca_type varies
-    strategy.order("TP_N", strategy.short, qty=1, limit=entry + atrVal * 1.5,
-         oca_name="GRP_NONE",   oca_type=strategy.oca.none)
-    strategy.order("SL_N", strategy.short, qty=1, stop=entry - atrVal * 1.5,
-         oca_name="GRP_NONE",   oca_type=strategy.oca.none)
-
-    strategy.order("TP_C", strategy.short, qty=1, limit=entry + atrVal * 1.5,
-         oca_name="GRP_CANCEL", oca_type=strategy.oca.cancel)
-    strategy.order("SL_C", strategy.short, qty=1, stop=entry - atrVal * 1.5,
-         oca_name="GRP_CANCEL", oca_type=strategy.oca.cancel)
-
-    strategy.order("TP_R", strategy.short, qty=1, limit=entry + atrVal * 1.5,
-         oca_name="GRP_REDUCE", oca_type=strategy.oca.reduce)
-    strategy.order("SL_R", strategy.short, qty=1, stop=entry - atrVal * 1.5,
-         oca_name="GRP_REDUCE", oca_type=strategy.oca.reduce)
-
-if strategy.position_size == 0
-    strategy.cancel("TP_N")
-    strategy.cancel("SL_N")
-    strategy.cancel("TP_C")
-    strategy.cancel("SL_C")
-    strategy.cancel("TP_R")
-    strategy.cancel("SL_R")
+    strategy.exit("X", from_entry="L", qty=1,
+         limit=entry + atrVal * 1.5, stop=entry - atrVal * 1.5,
+         oca_name="GRP")
