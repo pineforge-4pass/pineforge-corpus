@@ -1,0 +1,38 @@
+// Lower-TF probe 04 — tuple/UDT element type rejection
+//
+// Purpose: REJECTION probe. ``request.security_lower_tf`` only
+// supports scalar element types (int/float/bool/color/string). Calling
+// it with a UDT instance or tuple expression must be rejected at
+// codegen — silent acceptance would corrupt array element layout and
+// crash the runtime.
+//
+// Expected behavior: codegen rejects with an error mentioning
+// "lower_tf" + "unsupported element type" / "scalar" / "UDT". No
+// tv_trades.csv accompanies this probe.
+//
+// TV setup (reference only): 15m chart, ETH-USDT-USDT. Do NOT export
+// trades — this probe asserts the reject path.
+//@version=6
+strategy("PF lower-tf probe 04 - tuple element reject", shorttitle="LTF_p04_REJ", overlay=true,
+     initial_capital=1000000, currency=currency.USD,
+     commission_type=strategy.commission.percent, commission_value=0, slippage=0,
+     default_qty_type=strategy.fixed, default_qty_value=1, pyramiding=1,
+     process_orders_on_close=false)
+
+type Bar
+    float o = 0.0
+    float c = 0.0
+
+mkBar() =>
+    Bar.new(open, close)
+
+// UDT element type — expected rejection.
+ltfBars = request.security_lower_tf(syminfo.tickerid, "1", mkBar())
+
+int n = array.size(ltfBars)
+if n > 0 and strategy.position_size == 0
+    Bar last = array.get(ltfBars, n - 1)
+    if last.c > last.o
+        strategy.entry("L", strategy.long, qty=1)
+if strategy.position_size > 0 and close < ta.ema(close, 21)
+    strategy.close("L")

@@ -1,0 +1,34 @@
+// Lower-TF probe 03 — non-integer ratio rejection
+//
+// Purpose: REJECTION probe. ``request.security_lower_tf`` requires the
+// chart TF be an integer multiple of the LTF. Here we request a "4"
+// minute LTF from a 15m chart (15 / 4 = 3.75 — non-integer). The
+// codegen support_checker (or runtime synthesis) MUST reject this
+// configuration with a clear diagnostic; producing a synthesised array
+// of length 3 or 4 silently is a parity bug.
+//
+// Expected behavior: codegen rejects with an error mentioning
+// "lower_tf" + "ratio" / "integer multiple" / "must divide". No
+// tv_trades.csv accompanies this probe.
+//
+// TV setup (for reference if TV is permissive): 15m chart,
+// ETH-USDT-USDT. Do NOT export trades — this probe asserts the reject
+// path.
+//@version=6
+strategy("PF lower-tf probe 03 - ratio mismatch reject", shorttitle="LTF_p03_REJ", overlay=true,
+     initial_capital=1000000, currency=currency.USD,
+     commission_type=strategy.commission.percent, commission_value=0, slippage=0,
+     default_qty_type=strategy.fixed, default_qty_value=1, pyramiding=1,
+     process_orders_on_close=false)
+
+// 15 / 4 = 3.75 — non-integer ratio; expected rejection.
+ltfCloses = request.security_lower_tf(syminfo.tickerid, "4", close)
+
+float lastV = na
+if array.size(ltfCloses) > 0
+    lastV := array.get(ltfCloses, array.size(ltfCloses) - 1)
+
+if not na(lastV) and lastV > close and strategy.position_size == 0
+    strategy.entry("L", strategy.long, qty=1)
+if strategy.position_size > 0 and close < ta.ema(close, 21)
+    strategy.close("L")

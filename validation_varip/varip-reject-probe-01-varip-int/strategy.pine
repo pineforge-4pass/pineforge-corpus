@@ -1,0 +1,26 @@
+// varip-reject probe 01 — varip int (REJECTION)
+//
+// Purpose: assert that the support_checker / codegen rejects `varip`
+// strategy-scope state. PineForge does not (currently) support `varip`
+// intra-bar mutation semantics; silent acceptance would corrupt every
+// downstream order. This probe declares `varip int x = 0` mutated each
+// bar and expects the transpile pipeline to RAISE.
+//
+// Expected behavior: codegen error referencing `varip` (e.g.
+// "unsupported declaration: varip" or similar checker rejection).
+//
+// TV setup: not applicable — this is a build-time rejection probe.
+//@version=6
+strategy("PF varip-reject probe 01 - varip int", shorttitle="VRIP_p01_INT", overlay=true,
+     initial_capital=1000000, currency=currency.USD,
+     commission_type=strategy.commission.percent, commission_value=0, slippage=0,
+     default_qty_type=strategy.fixed, default_qty_value=1, pyramiding=1,
+     process_orders_on_close=false)
+
+varip int x = 0
+x := x + 1
+
+if x > 100 and strategy.position_size == 0
+    strategy.entry("L", strategy.long, qty=1)
+if x > 200 and strategy.position_size > 0
+    strategy.close("L")

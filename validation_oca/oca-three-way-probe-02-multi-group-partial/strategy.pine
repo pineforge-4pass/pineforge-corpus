@@ -1,0 +1,51 @@
+// OCA three-way probe 02 — multi-group partial fill
+//
+// Purpose: two OCA groups × two siblings each, with partial-fill
+// scenario where one group's CANCEL sibling fires while the other
+// group's REDUCE sibling adjusts qty. Tests cross-group isolation
+// and same-bar partial accounting.
+//
+// Trade shape: long-only entry size=4. Group A (CANCEL) holds 2
+// siblings at tighter ATR; Group B (REDUCE) holds 2 siblings at
+// wider ATR. Volatile bars hit Group A first → A cancels its
+// sibling; later in same bar Group B's first sibling partial-fills
+// → B reduces other sibling qty. ATR-based widths ensure ≥10 cycles
+// over 36k bars.
+//
+// TV setup: 15m chart, ETH-USDT-USDT, same window as
+// data/ohlcv_ETH-USDT-USDT_15m.csv. Manual TV capture later.
+//@version=6
+strategy("PF OCA three-way 02 - multi-group partial", shorttitle="OCA_p02_MGP", overlay=true,
+     initial_capital=1000000, currency=currency.USD,
+     commission_type=strategy.commission.percent, commission_value=0, slippage=0,
+     default_qty_type=strategy.fixed, default_qty_value=4, pyramiding=1,
+     process_orders_on_close=false)
+
+rsiVal  = ta.rsi(close, 14)
+atrVal  = ta.atr(14)
+emaFast = ta.ema(close, 9)
+emaSlow = ta.ema(close, 21)
+
+bool entryCond = ta.crossover(emaFast, emaSlow) and rsiVal < 60
+
+if entryCond and strategy.position_size == 0
+    strategy.entry("L", strategy.long, qty=4, comment="entry")
+
+if strategy.position_size > 0
+    entry = strategy.position_avg_price
+    // Group A: CANCEL siblings, tighter ATR (hits first)
+    strategy.order("A_TP", strategy.short, qty=2, limit=entry + atrVal * 1.0,
+         oca_name="GRP_A", oca_type=strategy.oca.cancel)
+    strategy.order("A_SL", strategy.short, qty=2, stop=entry - atrVal * 1.0,
+         oca_name="GRP_A", oca_type=strategy.oca.cancel)
+    // Group B: REDUCE siblings, wider ATR (partial fills, qty adjusts)
+    strategy.order("B_TP", strategy.short, qty=2, limit=entry + atrVal * 2.0,
+         oca_name="GRP_B", oca_type=strategy.oca.reduce)
+    strategy.order("B_SL", strategy.short, qty=2, stop=entry - atrVal * 2.0,
+         oca_name="GRP_B", oca_type=strategy.oca.reduce)
+
+if strategy.position_size == 0
+    strategy.cancel("A_TP")
+    strategy.cancel("A_SL")
+    strategy.cancel("B_TP")
+    strategy.cancel("B_SL")
