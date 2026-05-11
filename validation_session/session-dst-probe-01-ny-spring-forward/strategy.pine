@@ -24,10 +24,8 @@ strategy("PF session-dst probe 01 - NY spring forward", shorttitle="SDST_p01_NY"
      process_orders_on_close=false)
 
 int sessId    = time(timeframe.period, "0930-1600", "America/New_York")
-int prevSess  = sessId[1]
-
-bool inSess     = not na(sessId)
-bool wasInSess  = not na(prevSess)
+bool inSess    = not na(sessId)
+bool wasInSess = not na(sessId[1])
 
 bool sessOpen  = inSess and not wasInSess
 bool sessClose = wasInSess and not inSess
