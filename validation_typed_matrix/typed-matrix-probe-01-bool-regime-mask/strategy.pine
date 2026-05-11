@@ -34,9 +34,13 @@ int d = dayofweek(time) - 1  // 0..6
 if not na(rsiVal) and rsiVal > 60.0 and h >= 0 and h < 24 and d >= 0 and d < 7
     matrix.set(mask, h, d, true)
 
-// Round-trip transpose (24x7 -> 7x24 -> 24x7) to exercise dispatch
-matrix<bool> mT  = matrix.transpose(mask)
-matrix<bool> mTT = matrix.transpose(mT)
+// Round-trip transpose (24x7 -> 7x24 -> 24x7) to exercise dispatch.
+// Use var + := so the LHS spec is set once via matrix.new<bool> at init,
+// then reassignment each bar carries the correct PineGenericMatrix<bool> type.
+var matrix<bool> mT  = matrix.new<bool>(7, 24, false)
+var matrix<bool> mTT = matrix.new<bool>(24, 7, false)
+mT  := matrix.transpose(mask)
+mTT := matrix.transpose(mT)
 
 // Read-back parity check via get
 bool sample = matrix.get(mTT, h < 24 ? h : 0, d >= 0 and d < 7 ? d : 0)
