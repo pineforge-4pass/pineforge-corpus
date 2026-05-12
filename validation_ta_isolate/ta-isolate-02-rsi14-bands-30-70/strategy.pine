@@ -20,7 +20,3 @@ if ta.crossover(rsi, 30.0)
     strategy.entry("L", strategy.long, comment="rsi cross up 30")
 if ta.crossunder(rsi, 70.0)
     strategy.entry("S", strategy.short, comment="rsi cross dn 70")
-
-plot(rsi, "RSI(14)", color=color.purple)
-hline(30.0, "oversold", color=color.green)
-hline(70.0, "overbought", color=color.red)

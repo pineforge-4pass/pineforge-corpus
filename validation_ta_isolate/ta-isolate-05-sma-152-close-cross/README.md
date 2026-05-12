@@ -1,23 +1,18 @@
 # ta-isolate-05-sma-152-close-cross
 
 ## Purpose
-Isolate `ta.sma(close, 152)` over a long window (~38 hours on 15m TF). Tests engine sliding-window sum precision. Naive running-sum has ULP drift `~1.5e-13` per update; over 30k bars that compounds to ~1e-9 — measurable at threshold crossings.
+Isolate `ta.sma(close, 152)` over a long window (~38h on 15m TF). Tests engine sliding-window sum precision. Naive running-sum has ULP drift `~1.5e-13` per update; over 30k bars that compounds to ~1e-9 — measurable at threshold crossings.
 
-Targets gap probe `community/MarketShift` which uses SMA(close, 152).
+Targets gap probe `community/MarketShift` SMA path.
 
-## Chart setup (TV)
-- Symbol: **ETH-USDT-USDT**
-- Exchange: same feed as probes 01-04 (per first-bar OHLC check)
-- Timeframe: **15m**
-- Range: full shipped warmup6m window
-
-## TV export
-1. Apply `strategy.pine`.
-2. `Strategy Tester → List of Trades → Export → CSV` → `tv_trades.csv`.
+## Setup + export
+See `../README.md`. Quick reference:
+- Symbol/TF: ETH-USDT-USDT 15m, full warmup6m window
+- Apply `strategy.pine` → Strategy Tester → List of Trades → CSV → `tv_trades.csv` next to this README
 
 ## Diagnostic interpretation
 | Result | Conclusion |
 |---|---|
-| `excellent` | Engine SMA sliding-sum is bit-exact at length 152. MarketShift SMA path is fine — combined with probe 04 result, isolates the MarketShift bug to its non-TA logic OR to OHLCV input. |
+| `excellent` | Engine SMA sliding-sum bit-exact at length 152. MarketShift SMA path fine — combined with probe 04, isolates the MarketShift gap to its non-TA logic OR OHLCV input. |
 | `strong/moderate` 1-3 trades | Sliding-sum running-error at threshold boundary. Consider engine periodic-recompute every N bars to bound drift. |
-| `moderate/weak` significant drift | Algorithmic difference: TV may use full N-bar resum each bar (slow but bit-exact); engine may use running-sum (fast but drifty). Switch engine to per-bar resum at long lengths. |
+| `moderate/weak` significant drift | Algorithmic difference: TV may use full N-bar resum each bar (slow but bit-exact); engine may use running-sum (fast but drifty). Switch engine to per-bar resum at long lengths. **SMA(152) is NOT in tv_ta_basic_helper.pine** — extend with `float t_sma152 = ta.sma(close, 152)` and re-publish, or fork as `tv_ta_isolate_helper.pine`, then per-bar diff. |

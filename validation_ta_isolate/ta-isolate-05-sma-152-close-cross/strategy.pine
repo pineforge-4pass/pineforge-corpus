@@ -20,5 +20,3 @@ if ta.crossover(close, s)
     strategy.entry("L", strategy.long, comment="close cross up SMA152")
 if ta.crossunder(close, s)
     strategy.entry("S", strategy.short, comment="close cross dn SMA152")
-
-plot(s, "SMA(152)", color=color.red, linewidth=2)

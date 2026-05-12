@@ -6,21 +6,16 @@ Isolate `ta.hma(close, 55)`. HMA = `wma(2*wma(src, n/2) - wma(src, n), sqrt(n))`
 - Nested WMA composition with intermediate negative weights via `2*wma_half - wma_full`
 - `sqrt(n)` rounding: `sqrt(55) = 7.416...` → Pine floors to **7**; verify engine matches
 
-Targets gap probe `community/MarketShift` which uses HMA(close, 55).
+Targets gap probe `community/MarketShift` HMA path.
 
-## Chart setup (TV)
-- Symbol: **ETH-USDT-USDT**
-- Exchange: same feed as probes 01-03 (per first-bar OHLC check)
-- Timeframe: **15m**
-- Range: full shipped warmup6m window
-
-## TV export
-1. Apply `strategy.pine`.
-2. `Strategy Tester → List of Trades → Export → CSV` → `tv_trades.csv`.
+## Setup + export
+See `../README.md`. Quick reference:
+- Symbol/TF: ETH-USDT-USDT 15m, full warmup6m window
+- Apply `strategy.pine` → Strategy Tester → List of Trades → CSV → `tv_trades.csv` next to this README
 
 ## Diagnostic interpretation
 | Result | Conclusion |
 |---|---|
-| `excellent` | Engine HMA(55) is bit-exact. MarketShift HMA path not at fault — check its SMA(152) (probe 05). |
-| `strong/moderate` 1-3 trade drift | Threshold-equality at `close == hma` ULP boundaries. Inspect engine `crossover` for boundary equality semantics. |
-| `moderate/weak` significant drift | Engine HMA math drifts. Likely candidates: WMA seed bar index, `sqrt(n)` rounding (must match Pine `math.floor(math.sqrt(n))`), or nested-WMA weight chain. |
+| `excellent` | Engine HMA(55) bit-exact. MarketShift HMA path not at fault — check probe 05 SMA(152) and the strategy's composition logic. |
+| `strong/moderate` 1-3 trades | Threshold-equality at `close == hma` ULP boundaries. Inspect engine `crossover` boundary semantics. |
+| `moderate/weak` significant drift | Engine HMA math drifts. Likely candidates: WMA seed bar index, `sqrt(n)` rounding (must match Pine `math.floor(math.sqrt(n))`), nested-WMA weight chain. **HMA(55) is NOT in tv_ta_basic_helper.pine** — extend that helper with `float t_hma55 = ta.hma(close, 55)` and re-publish, or fork as `tv_ta_isolate_helper.pine`, then per-bar diff. |

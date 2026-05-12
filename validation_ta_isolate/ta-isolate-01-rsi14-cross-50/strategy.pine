@@ -21,6 +21,3 @@ if ta.crossover(rsi, 50.0)
     strategy.entry("L", strategy.long, comment="rsi cross up 50")
 if ta.crossunder(rsi, 50.0)
     strategy.entry("S", strategy.short, comment="rsi cross dn 50")
-
-plot(rsi, "RSI(14)", color=color.purple)
-hline(50.0, "mid", color=color.gray)
