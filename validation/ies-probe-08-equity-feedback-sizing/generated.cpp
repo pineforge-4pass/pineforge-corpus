@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -103,7 +104,7 @@ public:
             entryStop = (current_bar_.close - (atr_val * i_atr_stop_mult));
             entryTP = (current_bar_.close + (atr_val * i_atr_tp_mult));
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), long_position_size, std::string("dyn qty long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), entryTP, entryStop, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket"));
+            strategy_exit(std::string("LX"), std::string("L"), entryTP, entryStop, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket"), na<double>(), "");
         }
         if (trace_enabled_) {
             trace(std::string("ies_equity"), (double)((current_equity() + open_profit(current_bar_.close))));

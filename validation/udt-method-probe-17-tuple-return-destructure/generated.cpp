@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -92,12 +93,12 @@ public:
         if (((is_first_tick_ ? _ta_crossover_4.compute(emaFast, emaSlow) : _ta_crossover_4.recompute(emaFast, emaSlow)) && (signed_position_size() == 0))) {
             auto [stopL, limitL, qtyL] = _udt_Bracket_levels(br, current_bar_.close, atrVal, true);
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), qtyL, std::string("entry long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), limitL, stopL, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket long"));
+            strategy_exit(std::string("LX"), std::string("L"), limitL, stopL, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket long"), na<double>(), "");
         }
         if (((is_first_tick_ ? _ta_crossunder_5.compute(emaFast, emaSlow) : _ta_crossunder_5.recompute(emaFast, emaSlow)) && (signed_position_size() == 0))) {
             auto [stopS, limitS, qtyS] = _udt_Bracket_levels(br, current_bar_.close, atrVal, false);
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), qtyS, std::string("entry short"), "", 0, -1);
-            strategy_exit(std::string("SX"), std::string("S"), limitS, stopS, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket short"));
+            strategy_exit(std::string("SX"), std::string("S"), limitS, stopS, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket short"), na<double>(), "");
         }
     }
 

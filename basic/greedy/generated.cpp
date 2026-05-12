@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>

@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -85,7 +86,7 @@ public:
         downOff = _udt_Cfg_offset(cfg, 5, 0.1, true);
         if (((is_first_tick_ ? _ta_crossover_2.compute(current_bar_.close, (is_first_tick_ ? _ta_sma_1.compute(current_bar_.close) : _ta_sma_1.recompute(current_bar_.close))) : _ta_crossover_2.recompute(current_bar_.close, (is_first_tick_ ? _ta_sma_1.compute(current_bar_.close) : _ta_sma_1.recompute(current_bar_.close)))) && (signed_position_size() == 0))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), upOff, downOff, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket long"));
+            strategy_exit(std::string("LX"), std::string("L"), upOff, downOff, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket long"), na<double>(), "");
         }
     }
 

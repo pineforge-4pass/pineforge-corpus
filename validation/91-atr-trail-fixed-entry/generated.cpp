@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -73,13 +74,13 @@ public:
             longStop = (current_bar_.close - (atr * 1.2));
             longLimit = (current_bar_.close + ((current_bar_.close - longStop) * 2));
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), longLimit, longStop, atr, na<double>(), na<double>(), 100.0, std::string("atr trail long"));
+            strategy_exit(std::string("LX"), std::string("L"), longLimit, longStop, atr, na<double>(), na<double>(), 100.0, std::string("atr trail long"), na<double>(), "");
         }
         if ((((_bar_hour() == 20) && (_bar_minute() == 0)) && (signed_position_size() == 0))) {
             shortStop = (current_bar_.close + (atr * 1.2));
             shortLimit = (current_bar_.close - ((shortStop - current_bar_.close) * 2));
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("entry short"), "", 0, -1);
-            strategy_exit(std::string("SX"), std::string("S"), shortLimit, shortStop, atr, na<double>(), na<double>(), 100.0, std::string("atr trail short"));
+            strategy_exit(std::string("SX"), std::string("S"), shortLimit, shortStop, atr, na<double>(), na<double>(), 100.0, std::string("atr trail short"), na<double>(), "");
         }
     }
 

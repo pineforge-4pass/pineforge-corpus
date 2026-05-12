@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -558,7 +559,7 @@ public:
         if (((_strat_position_size[1] <= 0) && (signed_position_size() > 0))) {
             longEntry = entryPrice;
             longTP = ((useTP) ? (_tp(position_entry_price_, signed_position_size(), longSL, rrRatio)) : (na<double>()));
-            strategy_exit(std::string("Long Exit"), std::string("Long Entry"), ((useTP) ? (longTP) : (na<double>())), ((useSL) ? (longSL) : (na<double>())), na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Long Exit"), std::string("Long Entry"), ((useTP) ? (longTP) : (na<double>())), ((useSL) ? (longSL) : (na<double>())), na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if (((((signed_position_size() == 0) || (signed_position_size() > 0)) && shortEntrySignal) && canGoShort())) {
             if ((signed_position_size() > 0)) {
@@ -574,7 +575,7 @@ public:
         if (((_strat_position_size[1] >= 0) && (signed_position_size() < 0))) {
             shortEntry = entryPrice;
             shortTP = ((useTP) ? (_tp(position_entry_price_, signed_position_size(), shortSL, rrRatio)) : (na<double>()));
-            strategy_exit(std::string("Short Exit"), std::string("Short Entry"), ((useTP) ? (shortTP) : (na<double>())), ((useSL) ? (shortSL) : (na<double>())), na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Short Exit"), std::string("Short Entry"), ((useTP) ? (shortTP) : (na<double>())), ((useSL) ? (shortSL) : (na<double>())), na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if (((signed_position_size() > 0) && longExitSignal)) {
             strategy_close(std::string("Long Entry"), std::string("Close Position Long"), na<double>(), na<double>(), true);

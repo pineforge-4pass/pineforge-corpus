@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -483,7 +484,7 @@ public:
             if ((tp_enabled || sl_enabled)) {
                 tp_price = ((tp_enabled) ? ((current_bar_.close + tp_distance)) : (na<double>()));
                 sl_price = ((sl_enabled) ? ((current_bar_.close - sl_distance)) : (na<double>()));
-                strategy_exit(std::string("Exit Long"), std::string("Buy"), tp_price, sl_price, na<double>(), na<double>(), na<double>(), tpsl_percentage, "");
+                strategy_exit(std::string("Exit Long"), std::string("Buy"), tp_price, sl_price, na<double>(), na<double>(), na<double>(), tpsl_percentage, "", na<double>(), "");
             }
         }
         if ((sellSignal && (signed_position_size() >= 0))) {
@@ -493,7 +494,7 @@ public:
             if ((tp_enabled || sl_enabled)) {
                 tp_price = ((tp_enabled) ? ((current_bar_.close - tp_distance)) : (na<double>()));
                 sl_price = ((sl_enabled) ? ((current_bar_.close + sl_distance)) : (na<double>()));
-                strategy_exit(std::string("Exit Short"), std::string("Sell"), tp_price, sl_price, na<double>(), na<double>(), na<double>(), tpsl_percentage, "");
+                strategy_exit(std::string("Exit Short"), std::string("Sell"), tp_price, sl_price, na<double>(), na<double>(), na<double>(), tpsl_percentage, "", na<double>(), "");
             }
         }
         if (((signed_position_size() == 0) && !(is_na(last_alert_price)))) {

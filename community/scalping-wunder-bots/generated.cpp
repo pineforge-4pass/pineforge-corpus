@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -68,7 +69,7 @@ public:
     int testStartYear = 0;
     int testStartMonth = 0;
     int testStartDay = 0;
-    int testPeriodStart = 0;
+    int64_t testPeriodStart = 0.0;
     double pivot_high = 0.0;
     double pivot_low = 0.0;
     double sr_zone = 0.0;
@@ -277,7 +278,7 @@ public:
                 trade_id = (std::string("Long_") + std::to_string(trade_counter));
                 if ((qty_contracts > 0)) {
                     strategy_entry(trade_id, true, na<double>(), na<double>(), qty_contracts, "", "", 0, -1);
-                    strategy_exit((std::string("Exit_") + std::to_string(trade_counter)), trade_id, take_val, stop_val, na<double>(), na<double>(), na<double>(), 100.0, "");
+                    strategy_exit((std::string("Exit_") + std::to_string(trade_counter)), trade_id, take_val, stop_val, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
                     bars_since_entry = 0;
                 }
             }
@@ -292,7 +293,7 @@ public:
                 trade_id = (std::string("Short_") + std::to_string(trade_counter));
                 if ((qty_contracts > 0)) {
                     strategy_entry(trade_id, false, na<double>(), na<double>(), qty_contracts, "", "", 0, -1);
-                    strategy_exit((std::string("Exit_") + std::to_string(trade_counter)), trade_id, take_val, stop_val, na<double>(), na<double>(), na<double>(), 100.0, "");
+                    strategy_exit((std::string("Exit_") + std::to_string(trade_counter)), trade_id, take_val, stop_val, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
                     bars_since_entry = 0;
                 }
             }

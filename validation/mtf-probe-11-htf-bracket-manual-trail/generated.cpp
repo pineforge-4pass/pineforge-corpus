@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -131,7 +132,7 @@ public:
             if ((!(is_na(trailStop)) && (candidate > trailStop))) {
                 trailStop = candidate;
             }
-            strategy_exit(std::string("LX"), std::string("L"), entryTP, trailStop, na<double>(), na<double>(), na<double>(), 100.0, std::string("manual trail"));
+            strategy_exit(std::string("LX"), std::string("L"), entryTP, trailStop, na<double>(), na<double>(), na<double>(), 100.0, std::string("manual trail"), na<double>(), "");
         }
     }
 

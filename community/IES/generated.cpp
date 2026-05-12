@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -900,15 +901,15 @@ public:
         }
         if ((signed_position_size() > 0)) {
             if (i_scale_out) {
-                strategy_exit(std::string("Long TP1"), std::string("Long"), long_tp1, na<double>(), na<double>(), na<double>(), na<double>(), i_scale_pct, "");
+                strategy_exit(std::string("Long TP1"), std::string("Long"), long_tp1, na<double>(), na<double>(), na<double>(), na<double>(), i_scale_pct, "", na<double>(), "");
             }
-            strategy_exit(std::string("Long Exit"), std::string("Long"), long_tp2, trailing_stop, na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Long Exit"), std::string("Long"), long_tp2, trailing_stop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if ((signed_position_size() < 0)) {
             if (i_scale_out) {
-                strategy_exit(std::string("Short TP1"), std::string("Short"), short_tp1, na<double>(), na<double>(), na<double>(), na<double>(), i_scale_pct, "");
+                strategy_exit(std::string("Short TP1"), std::string("Short"), short_tp1, na<double>(), na<double>(), na<double>(), na<double>(), i_scale_pct, "", na<double>(), "");
             }
-            strategy_exit(std::string("Short Exit"), std::string("Short"), short_tp2, trailing_stop, na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Short Exit"), std::string("Short"), short_tp2, trailing_stop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if ((signed_position_size() == 0)) {
             entry_price = na<double>();

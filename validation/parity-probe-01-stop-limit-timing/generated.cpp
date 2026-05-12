@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -81,7 +82,7 @@ public:
             stop_lvl = (current_bar_.close - (atr_val * i_stop_x));
             tp_lvl = (current_bar_.close + (atr_val * i_tp_x));
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), std::string("periodic entry"));
-            strategy_exit(std::string("X"), std::string("L"), tp_lvl, stop_lvl, na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("X"), std::string("L"), tp_lvl, stop_lvl, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
     }
 

@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -95,7 +96,7 @@ public:
             br.entry_px = current_bar_.close;
             br.entry_atr = atrVal;
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), _udt_Bracket_limitPrice(br), _udt_Bracket_stopPrice(br), na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket from method"));
+            strategy_exit(std::string("LX"), std::string("L"), _udt_Bracket_limitPrice(br), _udt_Bracket_stopPrice(br), na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket from method"), na<double>(), "");
         }
     }
 

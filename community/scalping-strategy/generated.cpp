@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -135,11 +136,11 @@ public:
         shortTP = (current_bar_.close - ((shortStop - current_bar_.close) * 2));
         if (longCondition) {
             strategy_entry(std::string("BUY"), true, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("TP/SL BUY"), std::string("BUY"), longTP, longStop, atr, na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("TP/SL BUY"), std::string("BUY"), longTP, longStop, atr, na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if (shortCondition) {
             strategy_entry(std::string("SELL"), false, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("TP/SL SELL"), std::string("SELL"), shortTP, shortStop, atr, na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("TP/SL SELL"), std::string("SELL"), shortTP, shortStop, atr, na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
     }
 

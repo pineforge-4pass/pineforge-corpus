@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -39,7 +40,7 @@ public:
     explicit GeneratedStrategy() : _ta_rsi_1(14), _ta_atr_2(14), _ta_ema_3(9), _ta_ema_4(21) {
         initial_capital_ = 1000000.0;
         default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 4.0;
+        default_qty_value_ = 2.0;
         pyramiding_ = 1;
         commission_type_ = CommissionType::PERCENT;
         commission_value_ = 0.0;
@@ -75,20 +76,12 @@ public:
         emaSlow = (is_first_tick_ ? _ta_ema_4.compute(current_bar_.close) : _ta_ema_4.recompute(current_bar_.close));
         entryCond = ((is_first_tick_ ? _ta_crossover_5.compute(emaFast, emaSlow) : _ta_crossover_5.recompute(emaFast, emaSlow)) && (rsiVal < 60));
         if ((entryCond && (signed_position_size() == 0))) {
-            strategy_entry(std::string("L"), true, na<double>(), na<double>(), 4, std::string("entry"), "", 0, -1);
+            strategy_entry(std::string("L"), true, na<double>(), na<double>(), 2, std::string("entry"), "", 0, -1);
         }
         if ((signed_position_size() > 0)) {
             entry = position_entry_price_;
-            strategy_order(std::string("A_TP"), false, 2, (entry + (atrVal * 1.0)), na<double>(), std::string("GRP_A"), 1);
-            strategy_order(std::string("A_SL"), false, 2, na<double>(), (entry - (atrVal * 1.0)), std::string("GRP_A"), 1);
-            strategy_order(std::string("B_TP"), false, 2, (entry + (atrVal * 2.0)), na<double>(), std::string("GRP_B"), 2);
-            strategy_order(std::string("B_SL"), false, 2, na<double>(), (entry - (atrVal * 2.0)), std::string("GRP_B"), 2);
-        }
-        if ((signed_position_size() == 0)) {
-            strategy_cancel(std::string("A_TP"));
-            strategy_cancel(std::string("A_SL"));
-            strategy_cancel(std::string("B_TP"));
-            strategy_cancel(std::string("B_SL"));
+            strategy_exit(std::string("X_A"), std::string("L"), (entry + (atrVal * 1.0)), (entry - (atrVal * 1.0)), na<double>(), na<double>(), na<double>(), 100.0, "", 1, std::string("GRP_A"));
+            strategy_exit(std::string("X_B"), std::string("L"), (entry + (atrVal * 2.0)), (entry - (atrVal * 2.0)), na<double>(), na<double>(), na<double>(), 100.0, "", 1, std::string("GRP_B"));
         }
     }
 

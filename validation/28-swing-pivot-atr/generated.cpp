@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -103,11 +104,11 @@ public:
         shortCond = ((!(is_na(lastPvtL)) && (current_bar_.close < lastPvtL)) && (_s_close[1] >= lastPvtL));
         if (longCond) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("XL"), std::string("Long"), (current_bar_.close + (atrVal * tpMult)), (current_bar_.close - (atrVal * atrMult)), na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("XL"), std::string("Long"), (current_bar_.close + (atrVal * tpMult)), (current_bar_.close - (atrVal * atrMult)), na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if (shortCond) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("XS"), std::string("Short"), (current_bar_.close - (atrVal * tpMult)), (current_bar_.close + (atrVal * atrMult)), na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("XS"), std::string("Short"), (current_bar_.close - (atrVal * tpMult)), (current_bar_.close + (atrVal * atrMult)), na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
     }
 

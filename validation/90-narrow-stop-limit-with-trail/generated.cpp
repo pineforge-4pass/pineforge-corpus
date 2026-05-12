@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -65,11 +66,11 @@ public:
         limitDist = 20.0;
         if ((((_bar_hour() == 8) && (_bar_minute() == 0)) && (signed_position_size() == 0))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
-            strategy_exit(std::string("LX"), std::string("L"), (current_bar_.close + 20.0), (current_bar_.close - 10.0), 8, na<double>(), na<double>(), 100.0, std::string("narrow stop/limit + trail8"));
+            strategy_exit(std::string("LX"), std::string("L"), (current_bar_.close + 20.0), (current_bar_.close - 10.0), 8, na<double>(), na<double>(), 100.0, std::string("narrow stop/limit + trail8"), na<double>(), "");
         }
         if ((((_bar_hour() == 20) && (_bar_minute() == 0)) && (signed_position_size() == 0))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("entry short"), "", 0, -1);
-            strategy_exit(std::string("SX"), std::string("S"), (current_bar_.close - 20.0), (current_bar_.close + 10.0), 8, na<double>(), na<double>(), 100.0, std::string("narrow stop/limit + trail8"));
+            strategy_exit(std::string("SX"), std::string("S"), (current_bar_.close - 20.0), (current_bar_.close + 10.0), 8, na<double>(), na<double>(), 100.0, std::string("narrow stop/limit + trail8"), na<double>(), "");
         }
     }
 

@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -64,7 +65,7 @@ public:
         }
         if ((((_bar_hour() == 0) && (_bar_minute() == 45)) && (signed_position_size() > 0))) {
             entry = position_entry_price_;
-            strategy_exit(std::string("X"), std::string("L"), (entry * 1.02), (entry * 0.98), na<double>(), na<double>(), na<double>(), 100.0, std::string("exit first"));
+            strategy_exit(std::string("X"), std::string("L"), (entry * 1.02), (entry * 0.98), na<double>(), na<double>(), na<double>(), 100.0, std::string("exit first"), na<double>(), "");
             strategy_close(std::string("L"), std::string("close second"), na<double>(), na<double>(), false);
         }
         if ((((_bar_hour() == 6) && (_bar_minute() == 15)) && (signed_position_size() == 0))) {
@@ -73,7 +74,7 @@ public:
         if ((((_bar_hour() == 6) && (_bar_minute() == 45)) && (signed_position_size() > 0))) {
             entry = position_entry_price_;
             strategy_close(std::string("L2"), std::string("close first"), na<double>(), na<double>(), false);
-            strategy_exit(std::string("X2"), std::string("L2"), (entry * 1.02), (entry * 0.98), na<double>(), na<double>(), na<double>(), 100.0, std::string("exit second"));
+            strategy_exit(std::string("X2"), std::string("L2"), (entry * 1.02), (entry * 0.98), na<double>(), na<double>(), na<double>(), 100.0, std::string("exit second"), na<double>(), "");
         }
     }
 

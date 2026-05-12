@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -69,10 +70,10 @@ public:
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("trail path short"), "", 0, -1);
         }
         if ((signed_position_size() > 0)) {
-            strategy_exit(std::string("LX"), std::string("L"), na<double>(), na<double>(), trailPts, trailOff, na<double>(), 100.0, std::string("trail path long"));
+            strategy_exit(std::string("LX"), std::string("L"), na<double>(), na<double>(), trailPts, trailOff, na<double>(), 100.0, std::string("trail path long"), na<double>(), "");
         }
         if ((signed_position_size() < 0)) {
-            strategy_exit(std::string("SX"), std::string("S"), na<double>(), na<double>(), trailPts, trailOff, na<double>(), 100.0, std::string("trail path short"));
+            strategy_exit(std::string("SX"), std::string("S"), na<double>(), na<double>(), trailPts, trailOff, na<double>(), 100.0, std::string("trail path short"), na<double>(), "");
         }
         if ((((signed_position_size() != 0) && (_bar_hour() == 23)) && (_bar_minute() == 45))) {
             strategy_close_all();

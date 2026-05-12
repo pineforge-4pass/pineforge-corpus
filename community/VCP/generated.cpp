@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -836,7 +837,7 @@ public:
             trade.trailStop = sl;
             trade.entryBar = bar_index_;
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("Long Exit"), std::string("Long"), tp, sl, na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Long Exit"), std::string("Long"), tp, sl, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if (shortEntry) {
             sl = calcStopLoss(false);
@@ -849,7 +850,7 @@ public:
             trade.trailStop = sl;
             trade.entryBar = bar_index_;
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
-            strategy_exit(std::string("Short Exit"), std::string("Short"), tp, sl, na<double>(), na<double>(), na<double>(), 100.0, "");
+            strategy_exit(std::string("Short Exit"), std::string("Short"), tp, sl, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
         if ((useTrailStop && (signed_position_size() != 0))) {
             trailDistance = (atrVal * trailATRMult);
@@ -857,14 +858,14 @@ public:
                 newTrail = (current_bar_.high - trailDistance);
                 if ((newTrail > trade.trailStop)) {
                     trade.trailStop = newTrail;
-                    strategy_exit(std::string("Long Exit"), std::string("Long"), trade.takeProfit, trade.trailStop, na<double>(), na<double>(), na<double>(), 100.0, "");
+                    strategy_exit(std::string("Long Exit"), std::string("Long"), trade.takeProfit, trade.trailStop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
                 }
             }
             if ((signed_position_size() < 0)) {
                 newTrail = (current_bar_.low + trailDistance);
                 if ((newTrail < trade.trailStop)) {
                     trade.trailStop = newTrail;
-                    strategy_exit(std::string("Short Exit"), std::string("Short"), trade.takeProfit, trade.trailStop, na<double>(), na<double>(), na<double>(), 100.0, "");
+                    strategy_exit(std::string("Short Exit"), std::string("Short"), trade.takeProfit, trade.trailStop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
                 }
             }
         }

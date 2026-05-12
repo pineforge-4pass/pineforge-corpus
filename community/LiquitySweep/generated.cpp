@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -123,8 +124,8 @@ public:
         longTake = (position_entry_price_ + ((atrValue * atrMult) * rr));
         shortStop = (position_entry_price_ + (atrValue * atrMult));
         shortTake = (position_entry_price_ - ((atrValue * atrMult) * rr));
-        strategy_exit(std::string("Exit Long"), std::string("Long"), longTake, longStop, na<double>(), na<double>(), na<double>(), 100.0, "");
-        strategy_exit(std::string("Exit Short"), std::string("Short"), shortTake, shortStop, na<double>(), na<double>(), na<double>(), 100.0, "");
+        strategy_exit(std::string("Exit Long"), std::string("Long"), longTake, longStop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
+        strategy_exit(std::string("Exit Short"), std::string("Short"), shortTake, shortStop, na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
     }
 
 };

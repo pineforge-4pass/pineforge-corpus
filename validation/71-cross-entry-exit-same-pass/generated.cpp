@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -60,11 +61,11 @@ public:
     void on_bar(const Bar& bar) override {
         if ((((_bar_hour() == 8) && (_bar_minute() == 15)) && (signed_position_size() == 0))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry with bracket"), "", 0, -1);
-            strategy_exit(std::string("X"), std::string("L"), (current_bar_.close * 1.005), (current_bar_.close * 0.995), na<double>(), na<double>(), na<double>(), 100.0, std::string("same-pass bracket"));
+            strategy_exit(std::string("X"), std::string("L"), (current_bar_.close * 1.005), (current_bar_.close * 0.995), na<double>(), na<double>(), na<double>(), 100.0, std::string("same-pass bracket"), na<double>(), "");
         }
         if ((((_bar_hour() == 16) && (_bar_minute() == 15)) && (signed_position_size() == 0))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("short entry with bracket"), "", 0, -1);
-            strategy_exit(std::string("XS"), std::string("S"), (current_bar_.close * 0.995), (current_bar_.close * 1.005), na<double>(), na<double>(), na<double>(), 100.0, std::string("same-pass short bracket"));
+            strategy_exit(std::string("XS"), std::string("S"), (current_bar_.close * 0.995), (current_bar_.close * 1.005), na<double>(), na<double>(), na<double>(), 100.0, std::string("same-pass short bracket"), na<double>(), "");
         }
         if ((((signed_position_size() != 0) && (_bar_hour() == 23)) && (_bar_minute() == 45))) {
             strategy_close_all();

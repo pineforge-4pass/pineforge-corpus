@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -35,7 +36,7 @@ public:
     explicit GeneratedStrategy() : _ta_rsi_1(14), _ta_atr_2(14) {
         initial_capital_ = 1000000.0;
         default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 3.0;
+        default_qty_value_ = 1.0;
         pyramiding_ = 1;
         commission_type_ = CommissionType::PERCENT;
         commission_value_ = 0.0;
@@ -69,24 +70,11 @@ public:
         atrVal = (is_first_tick_ ? _ta_atr_2.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_2.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
         entryCond = (is_first_tick_ ? _ta_crossover_3.compute(rsiVal, 30) : _ta_crossover_3.recompute(rsiVal, 30));
         if ((entryCond && (signed_position_size() == 0))) {
-            strategy_entry(std::string("L"), true, na<double>(), na<double>(), 3, std::string("entry"), "", 0, -1);
+            strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry"), "", 0, -1);
         }
         if ((signed_position_size() > 0)) {
             entry = position_entry_price_;
-            strategy_order(std::string("TP_N"), false, 1, (entry + (atrVal * 1.5)), na<double>(), std::string("GRP_NONE"), 0);
-            strategy_order(std::string("SL_N"), false, 1, na<double>(), (entry - (atrVal * 1.5)), std::string("GRP_NONE"), 0);
-            strategy_order(std::string("TP_C"), false, 1, (entry + (atrVal * 1.5)), na<double>(), std::string("GRP_CANCEL"), 1);
-            strategy_order(std::string("SL_C"), false, 1, na<double>(), (entry - (atrVal * 1.5)), std::string("GRP_CANCEL"), 1);
-            strategy_order(std::string("TP_R"), false, 1, (entry + (atrVal * 1.5)), na<double>(), std::string("GRP_REDUCE"), 2);
-            strategy_order(std::string("SL_R"), false, 1, na<double>(), (entry - (atrVal * 1.5)), std::string("GRP_REDUCE"), 2);
-        }
-        if ((signed_position_size() == 0)) {
-            strategy_cancel(std::string("TP_N"));
-            strategy_cancel(std::string("SL_N"));
-            strategy_cancel(std::string("TP_C"));
-            strategy_cancel(std::string("SL_C"));
-            strategy_cancel(std::string("TP_R"));
-            strategy_cancel(std::string("SL_R"));
+            strategy_exit(std::string("X"), std::string("L"), (entry + (atrVal * 1.5)), (entry - (atrVal * 1.5)), na<double>(), na<double>(), na<double>(), 100.0, "", 1, std::string("GRP"));
         }
     }
 

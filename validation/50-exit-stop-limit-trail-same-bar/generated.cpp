@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -79,12 +80,12 @@ public:
         if ((signed_position_size() > 0)) {
             longStop = (position_entry_price_ - (atr * 0.8));
             longLimit = (position_entry_price_ + (atr * 1.6));
-            strategy_exit(std::string("LX"), std::string("L"), longLimit, longStop, atr, na<double>(), na<double>(), 100.0, std::string("triple exit long"));
+            strategy_exit(std::string("LX"), std::string("L"), longLimit, longStop, atr, na<double>(), na<double>(), 100.0, std::string("triple exit long"), na<double>(), "");
         }
         if ((signed_position_size() < 0)) {
             shortStop = (position_entry_price_ + (atr * 0.8));
             shortLimit = (position_entry_price_ - (atr * 1.6));
-            strategy_exit(std::string("SX"), std::string("S"), shortLimit, shortStop, atr, na<double>(), na<double>(), 100.0, std::string("triple exit short"));
+            strategy_exit(std::string("SX"), std::string("S"), shortLimit, shortStop, atr, na<double>(), na<double>(), 100.0, std::string("triple exit short"), na<double>(), "");
         }
         if ((((signed_position_size() != 0) && (_bar_hour() == 23)) && (_bar_minute() == 45))) {
             strategy_close_all();

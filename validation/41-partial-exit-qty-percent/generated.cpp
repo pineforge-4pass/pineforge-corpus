@@ -12,6 +12,7 @@
 #include <vector>
 #include <tuple>
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 #include <unordered_map>
 #include <pineforge/color.hpp>
@@ -66,8 +67,8 @@ public:
         }
         if ((signed_position_size() > 0)) {
             entry = position_entry_price_;
-            strategy_exit(std::string("HALF_TP"), std::string("L"), (entry * 1.003), na<double>(), na<double>(), na<double>(), na<double>(), 50, std::string("half tp"));
-            strategy_exit(std::string("REST_SL"), std::string("L"), na<double>(), (entry * 0.994), na<double>(), na<double>(), na<double>(), 100.0, std::string("rest stop"));
+            strategy_exit(std::string("HALF_TP"), std::string("L"), (entry * 1.003), na<double>(), na<double>(), na<double>(), na<double>(), 50, std::string("half tp"), na<double>(), "");
+            strategy_exit(std::string("REST_SL"), std::string("L"), na<double>(), (entry * 0.994), na<double>(), na<double>(), na<double>(), 100.0, std::string("rest stop"), na<double>(), "");
         }
         if ((((signed_position_size() > 0) && (_bar_hour() == 9)) && (_bar_minute() == 15))) {
             strategy_close(std::string("L"), std::string("timeout"), na<double>(), na<double>(), false);
