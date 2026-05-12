@@ -20,6 +20,3 @@ if ta.crossover(macd, sig)
     strategy.entry("L", strategy.long, comment="macd cross up")
 if ta.crossunder(macd, sig)
     strategy.entry("S", strategy.short, comment="macd cross dn")
-
-plot(macd, "MACD", color=color.blue)
-plot(sig,  "Signal", color=color.orange)
