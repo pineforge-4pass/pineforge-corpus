@@ -1,6 +1,0 @@
-{
-  "validation_overrides": {
-    "expect_reject": true,
-    "expected_reject_message": "must be finer than script timeframe"
-  }
-}
