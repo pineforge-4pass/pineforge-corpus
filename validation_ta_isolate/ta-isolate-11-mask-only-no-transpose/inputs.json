@@ -1,1 +1,4 @@
-{"_comment": "Defaults to corpus data/ohlcv_ETH-USDT-USDT_15m_warmup6m.csv."}
+{
+  "_comment": "Mask warmup depth must match user's TV chart history. Trim to 2025-03-31 00:00 UTC.",
+  "ohlcv_start_ms": 1743379200000
+}
