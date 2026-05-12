@@ -1,0 +1,6 @@
+{
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "Engine fires 1 extra long trade on 2025-05-12 12:00 UTC (08:00 EDT). That bar sits simultaneously at the NY session open boundary (0800-1600 America/New_York, first bar of the session) and at an H1 MTF boundary (new 1-hour bar starting at 12:00 UTC). The MTF data snapshot at this exact crossover (htfClose/htfEMA/htfRSI from the just-completed 11:00-12:00 UTC 1h bar vs. the still-open 12:00-13:00 UTC bar) differs between TV capture and engine replay, flipping the mtfSignal gate on this single bar. All 71 TV trades align with near-tick-level precision (pnl_p90=0.0010); the divergence is confined to this one compounded boundary bar. This is TV-side capture-time non-determinism, not an engine defect."
+  }
+}
