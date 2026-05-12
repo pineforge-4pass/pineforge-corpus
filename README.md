@@ -9,7 +9,10 @@
 
 A reproducibility kit for the parity claim in the project README.
 For each of **168 strategies** (162 reference + 5 parity probes + 1
-TV-side anomaly probe), this directory ships:
+TV-side anomaly probe), this directory ships the four-file tuple below.
+An additional **38 supplemental probes** live in `validation_ta_isolate/`
+and the other `validation_*/` categories; they exercise specific engine
+sub-systems and are excluded from the headline parity figure.
 
 
 | File                | Source               | Role                                                                                                                                                           |
@@ -66,17 +69,29 @@ corpus/
 │                                      %-of-equity, small fraction, 50%
 │                                      sizing) — see parity-anomalies/
 │                                      in pineforge-utils for the write-ups
-└── parity-anomalies/                   1 probe — TV-side non-determinism docs
-    └── equity-mirror/                  the former parity-probe-03; engine
-                                        is correct, TV's broker-emulator
-                                        margin check is non-deterministic
-                                        at the exact 1× equity boundary.
-                                        Excluded from the headline parity
-                                        sweep so it doesn't mask as a
-                                        regression. See
-                                        parity-anomalies/tv-margin-boundary.md
-                                        in pineforge-utils for the full
-                                        write-up.
+├── parity-anomalies/                   1 probe — TV-side non-determinism docs
+│   └── equity-mirror/                  the former parity-probe-03; engine
+│                                       is correct, TV's broker-emulator
+│                                       margin check is non-deterministic
+│                                       at the exact 1× equity boundary.
+│                                       Excluded from the headline parity
+│                                       sweep so it doesn't mask as a
+│                                       regression. See
+│                                       parity-anomalies/tv-margin-boundary.md
+│                                       in pineforge-utils for the full
+│                                       write-up.
+└── validation_ta_isolate/              12 probes — TA-only isolation suite
+    ├── ta-isolate-01…05/               Tier 1: pure TA math (RSI, MACD, HMA,
+    │                                   SMA) — all 5 excellent (bit-exact)
+    ├── ta-isolate-06…09/               Tier 2: compositional patterns
+    │                                   (continuous-state value-cmp,
+    │                                   AND-combination) — all 4 excellent;
+    │                                   gap-probe drift localized to str.match()
+    │                                   and matrix bool dispatch
+    └── ta-isolate-10…12/               Tier 3: typed-matrix root-cause
+                                        (TZ pinning, transpose, hotCount) —
+                                        all 3 excellent; bug interaction
+                                        between transpose + hotCount.
 ```
 
 ## Where the numbers come from
