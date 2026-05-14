@@ -1,4 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 04 — Daily high[1] vs 15m close (classic “HTF level” gate)
+// Purpose: parity test for `request.security(..., "D", high[1], lookahead_off)`
+// — the `[1]` history reference INSIDE the security call must resolve on the
+// HTF bar, not the LTF chart bar.
+//
 // request.security(..., "D", high[1])
 //
 // Strict TV↔engine parity checklist:

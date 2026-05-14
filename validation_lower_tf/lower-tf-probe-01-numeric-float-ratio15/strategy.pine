@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Lower-TF probe 01 — numeric float array, ratio=15 (15m -> 1m)
 //
 // Purpose: smallest acceptance probe for ``request.security_lower_tf``

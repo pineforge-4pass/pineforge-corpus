@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 02 — mutating self (Box& reference semantics)
 //
 // Purpose: a method that uses ``self.field := ...`` must mutate the

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 69 - entry and cancel same pass
 //
 // Purpose: compare source-order behavior for strategy.entry(... stop=...) and

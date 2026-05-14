@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 95 - multi-cycle deferred-flip growth, sub-bar-precision-free
 //
 // Purpose: isolate whether the residual probes 52/63 PnL divergence is

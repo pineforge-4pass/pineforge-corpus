@@ -1,14 +1,19 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 08 — triple HTF MACD histogram via user-defined function
 //
-// Purpose: replicate the community/IES bias pattern in the smallest possible
-// strategy. IES wraps MACD histogram in `f_macd_hist(src, fast, slow, sig)`
-// and calls it inside three request.security feeds (60m, 240m, D), then
-// counts how many HTF buckets are bullish/bearish for entry. This combines
-// "user-defined function inside request.security" + "three concurrent HTFs"
-// + "ta.ema chain". MTF probes 03/05 cover ta.* inside security at a single
-// HTF; probe 07 covers three HTFs with a flat expression. probe 08 covers
-// the full IES shape so the engine vs TV gap can be attributed to one of
-// these specific axes.
+// Purpose: replicate the IES integration probe family's bias pattern in the
+// smallest possible strategy. That family wraps MACD histogram in
+// `f_macd_hist(src, fast, slow, sig)` and calls it inside three
+// request.security feeds (60m, 240m, D), then counts how many HTF buckets
+// are bullish/bearish for entry. This combines "user-defined function
+// inside request.security" + "three concurrent HTFs" + "ta.ema chain".
+// MTF probes 03/05 cover ta.* inside security at a single HTF; probe 07
+// covers three HTFs with a flat expression. probe 08 covers the full
+// triple-HTF user-function shape so the engine vs TV gap can be attributed
+// to one of these specific axes.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
 // Export TradingView "List of trades" to trades.csv in this folder.

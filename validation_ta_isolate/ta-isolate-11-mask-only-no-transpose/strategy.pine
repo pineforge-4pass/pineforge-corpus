@@ -1,3 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF TA-isolate probe 11 — matrix.new<bool>(24,7) mask without transpose
+// Purpose: parity test for `var matrix.new<bool>(24, 7, false)` cell mutation
+// (`matrix.set(mask, h, d, true)`) and a 24×7 nested-loop `matrix.get`
+// hot-count, with NO matrix.transpose() in the path.
+//
 //@version=6
 strategy("PF TA isolate 11 - mask only no transpose", shorttitle="TAI_11_MASK", overlay=true,
      initial_capital=1000000, currency=currency.USD,

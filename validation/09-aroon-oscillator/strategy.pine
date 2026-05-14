@@ -1,3 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF probe 09 — highest/lowest breakout (was Aroon)
+// Purpose: parity test for ta.highestbars / ta.lowestbars offset semantics
+// (negative-offset == 0 marks current bar as the new extreme) plus EMA gate.
+//
 //@version=6
 strategy("Highest Lowest Breakout", overlay=true, initial_capital=1000000, currency=currency.USD, process_orders_on_close=false, pyramiding=1, commission_type=strategy.commission.percent, commission_value=0, slippage=0, default_qty_type=strategy.fixed, default_qty_value=1)
 

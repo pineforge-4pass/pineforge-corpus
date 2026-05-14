@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 68 - entry and close same pass
 //
 // Purpose: compare source-order behavior when strategy.entry and strategy.close

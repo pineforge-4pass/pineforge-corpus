@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 70 - exit and close same pass
 //
 // Purpose: compare source-order behavior when a price-based strategy.exit and

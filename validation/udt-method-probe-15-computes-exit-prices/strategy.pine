@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 15 — method outputs feed strategy.exit prices
 //
 // Purpose: ``strategy.exit(stop=, limit=)`` must accept the result of

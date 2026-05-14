@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 94 — re-issued stop entry + paired cancel, NO regime close
 //
 // Purpose: probe 52 reproduces TV's |old|+qty growth quirk and adds

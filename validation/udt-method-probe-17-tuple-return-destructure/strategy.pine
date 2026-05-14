@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 17 — method returns tuple, caller destructures
 //
 // **EXPECTED-FAIL probe (C++ runtime gap)**: tuple-return inference

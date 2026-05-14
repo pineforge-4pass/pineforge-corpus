@@ -1,4 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 21 — bounded-window method-calls-method
+// Purpose: parity test for nested UDT-method dispatch (a method body invokes
+// a sibling method on `self`) where the underlying numeric chain is bounded
+// (ta.sma + ta.stdev), so the trade list is reproducible from the OHLCV CSV
+// alone — drift here isolates dispatch semantics, not history coverage.
 //
 // Companion / replacement coverage for probe 18. Probe 18 also tests
 // "method body invokes a sibling method on ``self``", but it does so

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TV golden 47 - request.security gaps_on
 //
 // Purpose: isolate barmerge.gaps_on with lookahead_off on a 15m chart requesting 60m data.

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Parity probe 05 — explicit qty at small fraction of equity (no margin pressure)
 //
 // Purpose: parity-probe-03 has qty = strategy.equity / close (≈100% of

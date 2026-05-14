@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 11 — HTF confluence gate with MANUAL TRAILING stop
 //
 // Purpose: companion to mtf-probe-10. Keeps the exact same HTF confluence

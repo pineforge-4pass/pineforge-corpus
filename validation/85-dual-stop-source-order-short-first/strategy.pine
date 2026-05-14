@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 85 - dual stop source order, short first
 //
 // Purpose: test whether source order affects dual stop priority when both

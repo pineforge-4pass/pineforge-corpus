@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 59 - market close fill basis
 //
 // Purpose: isolate strategy.close(id) fill timing with process_orders_on_close=false.

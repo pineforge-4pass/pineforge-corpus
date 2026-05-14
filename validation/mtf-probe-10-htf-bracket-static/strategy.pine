@@ -1,8 +1,13 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 10 — HTF confluence gate with STATIC bracket exit
 //
-// Purpose: isolate the MTF-state half of the community/VCP failure mode.
-// VCP gates entries on 1H htf trend confluence (request.security) and
-// also re-issues a trailing stop every bar via repeated strategy.exit
+// Purpose: isolate the MTF-state half of the VCP integration probe family's
+// failure mode. That family gates entries on 1H htf trend confluence
+// (request.security) and also re-issues a trailing stop every bar via
+// repeated strategy.exit
 // calls. This probe keeps ONLY the HTF confluence half — the bracket
 // exit is set ONCE at entry and never touched again — so any TV/engine
 // drift here is attributable to MTF state evaluation timing alone.

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 01 — RSI(14) crosses 50
 //
 // Purpose: isolate ta.rsi(close, 14) seed + Wilder smoothing. No other indicators,

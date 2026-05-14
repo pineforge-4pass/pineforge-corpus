@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 60 - pyramiding close by id grouping
 //
 // Purpose: isolate how strategy.close(id) reports trades when multiple entries

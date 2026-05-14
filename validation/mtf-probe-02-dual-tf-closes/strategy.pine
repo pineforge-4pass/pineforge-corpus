@@ -1,5 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 02 — two HTF closes (60m + 240m); long only when both close > prior bar close
-// Isolates alignment of multiple request.security series.
+// Purpose: parity test for alignment of two parallel `request.security` series
+// at distinct HTFs and the AND of their `[1]`-history rising checks.
+//
 //@version=6
 strategy("PF MTF probe 02 — dual TF closes", shorttitle="MTF_p02", overlay=true,
      initial_capital=1000000, currency=currency.USD,

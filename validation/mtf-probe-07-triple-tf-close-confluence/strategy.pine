@@ -1,9 +1,14 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 07 — triple HTF close confluence (60m + 240m + D)
 //
 // Purpose: isolate alignment of THREE simultaneous request.security feeds.
 // Existing MTF probes cover one HTF feed (03/04/05/06) or a single dual-TF
-// pair (02). community/IES queries three different HTFs at once and produced
-// ~2x trades vs TradingView; this probe escalates to three TFs with the
+// pair (02). The IES integration probe family queries three different HTFs
+// at once and produced ~2x trades vs TradingView; this probe escalates to
+// three TFs with the
 // simplest possible expression (`close`) so any divergence here points to
 // the multi-feed layout itself rather than to a derived TA expression.
 //

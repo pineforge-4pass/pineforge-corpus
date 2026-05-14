@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 07 — MACD line > signal continuous-state pattern
 //
 // Purpose: contrast vs probe 03 (ta.crossover MACD vs signal — event trigger).

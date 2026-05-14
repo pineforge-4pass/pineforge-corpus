@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Magnifier distribution probe 08b — UNIFORM, RSI-cross entry
 //
 // Purpose: companion to 08a (ENDPOINTS). Identical Pine source; the

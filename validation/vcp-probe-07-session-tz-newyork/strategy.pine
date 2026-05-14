@@ -1,6 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 07 — session/timezone gate (America/New_York 0800-1600)
 //
-// Purpose: isolate the session-filter half of community/VCP. VCP gates
+// Purpose: isolate the session-filter half of the VCP integration probe
+// family. That family gates
 // every entry on ``inActiveSession = not na(time(timeframe.period,
 // "0800-1600", "America/New_York"))``. That single ``time()`` call
 // folds two independent sources of TV/engine drift into one boolean:

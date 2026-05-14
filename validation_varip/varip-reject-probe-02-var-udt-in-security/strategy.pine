@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // varip-reject probe 02 — var UDT mutated inside request.security (POSITIVE)
 //
 // Purpose: companion to varip-reject probe 01. This is the *positive*

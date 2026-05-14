@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 71 - entry and exit same pass
 //
 // Purpose: determine whether a price-based strategy.exit can attach to a

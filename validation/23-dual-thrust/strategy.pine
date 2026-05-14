@@ -1,3 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF probe 23 — Dual-Thrust open-anchored range breakout
+// Purpose: parity test for max-of-(hh-lc, hc-ll) range computation anchored
+// to the bar's `open` to derive intraday upper/lower bounds.
+//
 //@version=6
 strategy("Dual Thrust Breakout", overlay=true, initial_capital=1000000, currency=currency.USD, process_orders_on_close=false, pyramiding=1, commission_type=strategy.commission.percent, commission_value=0, slippage=0, default_qty_type=strategy.fixed, default_qty_value=1)
 

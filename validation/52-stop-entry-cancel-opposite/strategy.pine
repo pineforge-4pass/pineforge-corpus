@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 52 - stop entry plus opposite cancel
 //
 // Purpose: isolate the Parabolic SAR pattern of placing one stop entry and

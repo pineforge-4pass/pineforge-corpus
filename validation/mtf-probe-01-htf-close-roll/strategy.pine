@@ -1,5 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 01 — HTF close roll (60m) on 15m chart
-// Compare: trade times when ta.change(htfClose) != 0 vs PineForge backtest.
+// Purpose: parity test for `request.security(..., "60", close, lookahead_off)`
+// + `ta.change(htfClose) != 0` as the entry trigger; trade per-HTF-bar-close.
+//
 //@version=6
 strategy("PF MTF probe 01 — 60m close roll", shorttitle="MTF_p01", overlay=true,
      initial_capital=1000000, currency=currency.USD,

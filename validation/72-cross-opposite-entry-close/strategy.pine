@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 72 - opposite entry and close same pass
 //
 // Purpose: isolate source-order behavior when an opposite strategy.entry and

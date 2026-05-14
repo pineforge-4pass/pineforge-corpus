@@ -1,18 +1,23 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 91 - atr-based trail_points with fixed-time entries
 //
-// Purpose: isolate whether the residual ~80 community/scalping-strategy
-// drifts (after the trail_points-ceil fix in commit 9e838c0) come from
-// the atr-based variable trail_points, or from scalping's specific
-// momentum-based entry pattern.
+// Purpose: isolate whether the residual ~80 drifts from a community-style
+// scalping strategy (after the trail_points-ceil fix in commit 9e838c0)
+// come from the atr-based variable trail_points, or from that strategy's
+// specific momentum-based entry pattern.
 //
 // Probes 88/89/90 all passed 100% with CONSTANT trail_points (8 or 20).
 // This probe keeps everything else the same as probe 90 but switches
-// trail_points to `atr` (series, varies per entry) — exactly like scalping.
-// Stop and limit also become atr-based (atrMult=1.2 short stop, *2 limit)
-// to fully mirror the scalping shape.
+// trail_points to `atr` (series, varies per entry) — exactly like the
+// scalping shape. Stop and limit also become atr-based (atrMult=1.2 short
+// stop, *2 limit) to fully mirror the scalping shape.
 //
 // If probe 91 matches TV: the atr-based trail is fine, and trade-23-style
-// drifts are tied to scalping's entry timing (post-strong-bull-candle).
+// drifts are tied to the scalping shape's entry timing
+// (post-strong-bull-candle).
 // If probe 91 diverges: there's a bug in how engine handles a series-int
 // trail_points compared to a constant — most likely the timing of the
 // atr capture inside strategy.exit.

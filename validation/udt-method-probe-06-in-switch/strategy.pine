@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 06 — method called inside switch arms
 //
 // Purpose: switch arms must dispatch to the correct UDT method call

@@ -1,14 +1,18 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Parity probe 01 — strategy.exit stop/limit fill-bar timing
 //
 // Purpose: isolate the bar-boundary semantics of strategy.exit's stop=
-// and limit= orders. community/scalping-wunder-bots shows a consistent
-// pattern where the engine fires Exit-{long,short} ONE 15m bar earlier
-// than TV across ~9 of its 14 mismatched exits (e.g. engine 18:00 vs TV
-// 18:15 on 2025-05-03). The hypothesis is that the engine evaluates the
-// stop / limit on the SAME bar as the entry (intra-bar trigger using
-// that bar's high/low), while TV defers evaluation to the NEXT bar's
-// open onward. Without an isolator, the signal-side cascade in
-// scalping-wunder-bots makes it impossible to attribute the drift.
+// and limit= orders. A community-style reverse-on-signal scalper shows a
+// consistent pattern where the engine fires Exit-{long,short} ONE 15m bar
+// earlier than TV across ~9 of its 14 mismatched exits (e.g. engine 18:00
+// vs TV 18:15 on 2025-05-03). The hypothesis is that the engine evaluates
+// the stop / limit on the SAME bar as the entry (intra-bar trigger using
+// that bar's high/low), while TV defers evaluation to the NEXT bar's open
+// onward. Without an isolator, the signal-side cascade in that strategy
+// makes it impossible to attribute the drift.
 //
 // This probe routes a deterministic entry every i_period bars with an
 // ATR-derived stop and limit, then lets strategy.exit handle both. No

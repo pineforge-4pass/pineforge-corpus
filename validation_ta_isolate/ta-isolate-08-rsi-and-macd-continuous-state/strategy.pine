@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 08 — RSI > 50 AND MACD > sig (37-regex without str.match)
 //
 // Purpose: this is `validation/37-regex-string-filter` with str.match REMOVED.

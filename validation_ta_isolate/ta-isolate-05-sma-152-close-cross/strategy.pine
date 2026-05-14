@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 05 — close crosses SMA(152)
 //
 // Purpose: isolate ta.sma(close, 152) at a long-window length (152 ≈ ~38h on
@@ -6,7 +10,8 @@
 // of bars). Pine's TV runtime maintains a deque + recompute periodicity that
 // engine must match to stay bit-exact.
 //
-// Targets gap probe `community/MarketShift` which uses SMA(close, 152).
+// Targets gap probe in a community-style market-structure-shift strategy
+// which uses SMA(close, 152).
 //@version=6
 strategy("PF TA isolate 05 - close x SMA(152)", shorttitle="TAI_05_SMA152",
      overlay=true, initial_capital=1000000, currency=currency.USD,

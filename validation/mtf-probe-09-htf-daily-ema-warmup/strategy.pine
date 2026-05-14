@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 09 — daily HTF EMA(26) warmup behaviour
 //
 // Purpose: pin down the HTF TA-chain warmup discrepancy spotted in probe 08.

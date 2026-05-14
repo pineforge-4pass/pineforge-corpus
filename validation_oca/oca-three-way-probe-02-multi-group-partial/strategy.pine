@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // OCA probe 02 — multi-bracket via strategy.exit (internal CANCEL)
 //
 // Purpose: two strategy.exit brackets attached to same long entry,

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // session-dst probe 01 — NY spring-forward weekend
 //
 // Purpose: pin session-time + DST behavior. The NY equity session

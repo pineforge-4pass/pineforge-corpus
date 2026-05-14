@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TV golden 42 - close immediately vs next-bar market close
 //
 // Purpose: compare strategy.close(..., immediately=true) with ordinary strategy.close().

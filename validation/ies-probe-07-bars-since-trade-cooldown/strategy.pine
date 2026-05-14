@@ -1,9 +1,14 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 07 — `var int` cooldown counter + daily-trade-limit reset
 //
-// Purpose: isolate community/IES's two trade-frequency state machines.
-// IES uses a `var int bars_since_trade = 999` counter that increments
-// every bar and resets to 0 on entry, gated against `i_cooldown`. It
-// also keeps a `var int daily_trades = 0` cap reset on every new day:
+// Purpose: isolate the IES integration probe family's two trade-frequency
+// state machines. That family uses a `var int bars_since_trade = 999`
+// counter that increments every bar and resets to 0 on entry, gated
+// against `i_cooldown`. It also keeps a `var int daily_trades = 0` cap
+// reset on every new day:
 //
 //   var int bars_since_trade = 999
 //   bars_since_trade := bars_since_trade + 1

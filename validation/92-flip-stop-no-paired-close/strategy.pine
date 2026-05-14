@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 92 — flip via stop entry, NO paired strategy.close
 //
 // Purpose: probe 72 reproduces TV's |old|+qty growth quirk. Probe 72 places

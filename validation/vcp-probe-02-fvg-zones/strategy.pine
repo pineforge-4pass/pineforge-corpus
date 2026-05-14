@@ -1,13 +1,17 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 02 — Fair Value Gap detection + active-zone iteration
 //
-// Purpose: isolate the FVG half of community/VCP. VCP defines an FVG
-// as a 3-bar imbalance gated by an ATR-fraction minimum size, then
-// keeps every active gap in a parallel ``array<float>`` / ``array<bool>``
-// triple (tops / bottoms / bullish flag) capped at 30. On every bar
-// it iterates ALL active zones to compute ``inBullFVG`` / ``inBearFVG``
-// for the current candle. That zone iteration is what gates VCP's
-// structure-confluence bonus (``+1`` to structScore when in zone +
-// matching structureDirection).
+// Purpose: isolate the FVG half of the VCP integration probe family. That
+// family defines an FVG as a 3-bar imbalance gated by an ATR-fraction
+// minimum size, then keeps every active gap in a parallel
+// ``array<float>`` / ``array<bool>`` triple (tops / bottoms / bullish
+// flag) capped at 30. On every bar it iterates ALL active zones to
+// compute ``inBullFVG`` / ``inBearFVG`` for the current candle. That zone
+// iteration is what gates VCP's structure-confluence bonus (``+1`` to
+// structScore when in zone + matching structureDirection).
 //
 // This probe replicates the FVG state machine VERBATIM — same gap
 // conditions, same ATR multiplier (0.3), same array<float> retention,

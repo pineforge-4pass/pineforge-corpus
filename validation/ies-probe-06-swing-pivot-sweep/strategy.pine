@@ -1,10 +1,15 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 06 — pivot-tracked liquidity sweep detection
 //
-// Purpose: isolate community/IES's structure / sweep layer. IES detects
-// pivots with `ta.pivothigh(high, 10, 5)` and `ta.pivotlow(low, 10, 5)`
-// (left=10, right=5), tracks the most-recent confirmed pivot in
-// `var float last_swing_high / last_swing_low`, then flags a "sweep" when
-// price pierces that pivot intra-bar but closes back the other side:
+// Purpose: isolate the IES integration probe family's structure / sweep
+// layer. That family detects pivots with `ta.pivothigh(high, 10, 5)` and
+// `ta.pivotlow(low, 10, 5)` (left=10, right=5), tracks the most-recent
+// confirmed pivot in `var float last_swing_high / last_swing_low`, then
+// flags a "sweep" when price pierces that pivot intra-bar but closes back
+// the other side:
 //
 //   sweep_high = high  > last_swing_high and close < last_swing_high
 //   sweep_low  = low   < last_swing_low  and close > last_swing_low

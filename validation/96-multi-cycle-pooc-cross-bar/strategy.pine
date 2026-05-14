@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 96 - multi-cycle deferred-flip growth, cross-bar variant
 //
 // Purpose: same diagnostic as probe 95, but with ``process_orders_on_close=true``

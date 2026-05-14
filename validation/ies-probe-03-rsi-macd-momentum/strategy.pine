@@ -1,7 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 03 — RSI(14) + rsi[3] direction + MACD(12,26,9) histogram
 //
-// Purpose: isolate community/IES's momentum layer. IES synthesises a 0-3
-// "momentum score" per side from three terms:
+// Purpose: isolate the IES integration probe family's momentum layer.
+// That family synthesises a 0-3 "momentum score" per side from three terms:
 //
 //   rsi_bullish      = rsi > 55                          (RSI threshold)
 //   rsi_momentum_up  = rsi > rsi[3]                      (RSI 3-bar memory)

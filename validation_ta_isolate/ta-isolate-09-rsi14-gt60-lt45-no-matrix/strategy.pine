@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 09 — typed-matrix-01 trigger MINUS matrix bool ops
 //
 // Purpose: typed-matrix-probe-01 uses RSI(14) > 60 entry and RSI(14) < 45

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 81 - dual stop near only
 //
 // Purpose: isolate near long/short stop competition from probe 80.

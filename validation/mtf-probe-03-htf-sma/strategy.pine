@@ -1,5 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // MTF probe 03 — ta.sma(close,20) computed *inside* 60m context via request.security
-// Tests indicator state on higher timeframe.
+// Purpose: parity test for `ta.sma(close, 20)` evaluated INSIDE
+// `request.security(..., "60", ...)` so SMA state runs on the HTF series, not
+// resampled from LTF.
+//
 //@version=6
 strategy("PF MTF probe 03 — 60m SMA(20)", shorttitle="MTF_p03", overlay=true,
      initial_capital=1000000, currency=currency.USD,

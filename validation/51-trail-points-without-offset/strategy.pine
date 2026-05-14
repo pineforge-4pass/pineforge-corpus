@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 51 - trail_points with trail_offset
 //
 // Purpose: isolate TradingView semantics for the legal trailing-stop pair

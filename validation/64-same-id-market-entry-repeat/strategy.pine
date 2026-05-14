@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 64 - same-id market entry repeat
 //
 // Purpose: determine whether repeated same-id strategy.entry market calls on

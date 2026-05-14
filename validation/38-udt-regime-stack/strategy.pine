@@ -1,3 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF probe 38 — UDT regime-stack stress (mirrors probe 30's score logic)
+// Purpose: parity test for `enum`, flat `type` UDTs, and `var <UDT>` per-field
+// `:=` mutation patterns supported by the engine.
+//
 //@version=6
 // UDT-heavy validation strategy for PineForge.
 //

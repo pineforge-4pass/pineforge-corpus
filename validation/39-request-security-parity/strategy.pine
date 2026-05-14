@@ -1,9 +1,18 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF probe 39 — request.security parity baseline
+// Purpose: parity test for one-trade-per-HTF-close-change pattern using
+// `request.security(..., "60", close, lookahead=barmerge.lookahead_off)` and
+// `ta.change(htfClose) != 0` as the sole entry trigger.
+//
 // ══════════════════════════════════════════════════════════════════════════════
 // Request.security parity — TV export vs PineForge
 // ══════════════════════════════════════════════════════════════════════════════
 //
-// Purpose
-// -------
+// Detail
+// ------
 // One **closed** long per **HTF close change** (15m chart → `request.security` 60m `close`,
 // `lookahead_off`). Compare your TradingView “List of trades” CSV to PineForge’s backtest
 // on the **same** OHLCV window (e.g. `data/ohlcv_ETH-USDT-USDT_15m.csv`).

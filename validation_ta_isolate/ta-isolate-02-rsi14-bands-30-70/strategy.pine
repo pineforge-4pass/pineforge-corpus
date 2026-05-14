@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 02 — RSI(14) bands 30/70
 //
 // Purpose: isolate ta.rsi(close, 14) at threshold extrema (30 oversold, 70

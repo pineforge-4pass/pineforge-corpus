@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Process-orders probe 01 — process_orders_on_close=false (TV default)
 //
 // Purpose: pin TV-default order processing semantics. With

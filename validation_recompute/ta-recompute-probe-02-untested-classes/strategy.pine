@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // TA recompute probe 02 — untested TA classes under magnifier
 //
 // Purpose: exercise three TA classes the C++ gap report flagged as

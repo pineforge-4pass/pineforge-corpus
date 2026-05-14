@@ -1,6 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 04 — volume Z-score anomaly
 //
-// Purpose: isolate the volume-anomaly half of community/VCP. VCP computes
+// Purpose: isolate the volume-anomaly half of the VCP integration probe
+// family. That family computes
 // ``volZScore = (volume - volMA) / volStd`` where ``volMA = ta.sma(volume, 20)``
 // and ``volStd = ta.stdev(volume, 20)``. ``volAnomaly = math.abs(volZScore) > 2``
 // then feeds the volume confluence as a ``+1`` bonus AND multiplies the

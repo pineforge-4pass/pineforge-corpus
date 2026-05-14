@@ -1,12 +1,16 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Parity probe 03 — strategy.equity per-bar mirror
 //
-// Purpose: isolate community/IES's PnL drift (2.54% on the strict
-// thresholds, sole strategy below the strong tier). IES drifts because
-// every entry sizes via ``strategy.equity * i_risk_pct * regime_size_mult
-// * quality_mult / risk_per_unit``, and tiny IIR-warmup deltas in
-// ATR/ADX (engine has 5 months of warmup OHLCV vs TV's full chart
-// history) compound across thousands of trades into a $29k equity gap
-// by 2026-04-21 — at which point per-bar regime and risk match TV
+// Purpose: isolate the IES integration probe family's PnL drift (2.54% on
+// the strict thresholds, sole strategy below the strong tier). The drift
+// occurs because every entry sizes via ``strategy.equity * i_risk_pct *
+// regime_size_mult * quality_mult / risk_per_unit``, and tiny IIR-warmup
+// deltas in ATR/ADX (engine has 5 months of warmup OHLCV vs TV's full
+// chart history) compound across thousands of trades into a $29k equity
+// gap by 2026-04-21 — at which point per-bar regime and risk match TV
 // bit-for-bit but the qty is locked at engine_equity / TV_equity ≈
 // 0.9731. The disagreement therefore lives in strategy.equity itself.
 //

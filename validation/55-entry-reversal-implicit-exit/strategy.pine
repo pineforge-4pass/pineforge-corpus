@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 55 - strategy.entry implicit reversal exit
 //
 // Purpose: isolate TradingView's reversal behavior: an opposite strategy.entry

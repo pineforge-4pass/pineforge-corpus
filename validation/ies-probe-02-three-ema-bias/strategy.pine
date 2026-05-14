@@ -1,6 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 02 — 21/55/200 EMA stack + composite bias score
 //
-// Purpose: isolate community/IES's "bias_score" layer. IES stacks three EMAs
+// Purpose: isolate the IES integration probe family's "bias_score" layer.
+// That family stacks three EMAs
 // (21/55/200) and synthesises a 0-to-100-ish bias score from four binary
 // gates:
 //

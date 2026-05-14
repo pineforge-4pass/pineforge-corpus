@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Typed-matrix probe 02 — Eigen rank-deficient covariance (NaN propagation)
 //
 // Purpose: build a 3x3 covariance matrix from collinear sources

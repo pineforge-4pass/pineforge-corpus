@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 19 (stretch) — array<UDT> push + element method
 //
 // **EXPECTED-FAIL probe (C++ runtime gap)**: validation/38 already

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 73 - same-id stop at minute zero only
 //
 // Purpose: isolate whether setup bars at minute == 0 behave differently from

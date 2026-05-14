@@ -1,7 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 06 — manual ADX regime detection
 //
-// Purpose: isolate the regime-filter half of community/VCP. VCP does NOT
-// use ``ta.dmi`` — it builds DI/ADX BY HAND from ``ta.change(high)`` /
+// Purpose: isolate the regime-filter half of the VCP integration probe
+// family. That family does NOT use ``ta.dmi`` — it builds DI/ADX BY HAND
+// from ``ta.change(high)`` /
 // ``ta.change(low)`` plus a chain of ``ta.rma`` smoothings on plusDM /
 // minusDM / true range / dx. That manual chain is a likely source of
 // TV/engine drift because:

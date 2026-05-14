@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 80 - dual stop both-touch priority
 //
 // Purpose: isolate broker priority when both a long stop and a short stop

@@ -1,12 +1,16 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 03 — smoothed-RSI divergence detection
 //
-// Purpose: isolate the momentum half of community/VCP. VCP smooths
-// RSI through an EMA(3) and then derives both ``momBullish`` /
-// ``momBearish`` regime flags AND a divergence pair ``rsiDivBull`` /
-// ``rsiDivBear`` keyed off ``close[5]`` and ``rsiSmooth[5]``. That
-// 5-bar history-reference of an EMA-of-RSI is the most-likely place
-// for a numerical drift to creep in — even a single epsilon error in
-// the EMA(3) seed shifts every divergence event by a bar.
+// Purpose: isolate the momentum half of the VCP integration probe family.
+// That family smooths RSI through an EMA(3) and then derives both
+// ``momBullish`` / ``momBearish`` regime flags AND a divergence pair
+// ``rsiDivBull`` / ``rsiDivBear`` keyed off ``close[5]`` and
+// ``rsiSmooth[5]``. That 5-bar history-reference of an EMA-of-RSI is the
+// most-likely place for a numerical drift to creep in — even a single
+// epsilon error in the EMA(3) seed shifts every divergence event by a bar.
 //
 // This probe routes a trivial entry/exit through ONLY the smoothed-RSI
 // divergence pair, with the EXACT VCP expressions and the VCP defaults

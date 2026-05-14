@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 86 - dual stop open proximity, low first
 //
 // Purpose: collect natural bars where open is closer to low than high, so the

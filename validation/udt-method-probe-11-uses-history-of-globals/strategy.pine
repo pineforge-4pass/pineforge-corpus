@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 11 — method body uses [] history on globals
 //
 // Purpose: a method that references ``close[N]``, ``high[N]`` etc.

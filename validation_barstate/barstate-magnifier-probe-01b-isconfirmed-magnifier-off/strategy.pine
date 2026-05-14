@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Barstate-magnifier probe 01b — barstate.isconfirmed, magnifier OFF
 //
 // Purpose: baseline counterpart to 01a. Same Pine logic, magnifier

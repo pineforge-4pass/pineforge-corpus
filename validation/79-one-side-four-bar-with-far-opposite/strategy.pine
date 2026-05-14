@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 79 - one-side four-bar stop with far opposite pending
 //
 // Purpose: isolate whether merely having the opposite pending stop present

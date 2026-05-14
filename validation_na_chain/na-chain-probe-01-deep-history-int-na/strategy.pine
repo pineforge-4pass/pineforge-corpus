@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // na-chain probe 01 — deep history + int-NA + na->bool cast
 //
 // Purpose: surface int-NA undefined behavior and `nz` chain truncation.

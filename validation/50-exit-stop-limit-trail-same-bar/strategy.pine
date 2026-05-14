@@ -1,7 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 50 - stop/limit/trail same-bar exit
 //
 // Purpose: isolate one strategy.exit carrying stop, limit, and trail_points at
-// the same time. This is the exit surface used by community/scalping-strategy.
+// the same time. This is the exit surface used by the scalping integration
+// probe family.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
 // Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6

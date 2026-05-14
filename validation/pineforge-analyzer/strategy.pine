@@ -1,3 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// PF probe pineforge-analyzer — multi-mode parity exporter
+// Purpose: parity test for a single strategy that switches among four entry
+// shapes (clock_pulse / htf_60_roll / htf_d_high1 / bar_stair) via an
+// input.string mode selector, used to spot-check engine timing per-shape.
+//
 // PineForge analyzer — run on the SAME symbol + timeframe + date range as repo OHLCV.
 // Export List of trades → compare with scripts/diff_tv_vs_engine.py or validate_detailed_report.py
 //

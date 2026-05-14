@@ -1,11 +1,15 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 08 — equity-feedback dynamic position sizing (rev 2)
 //
-// Purpose: isolate community/IES's equity-feedback sizing loop, which is
-// architecturally distinct from every other IES component because the
-// `qty=` argument depends on `strategy.equity` — itself a function of
-// every prior trade's PnL. Any single drift earlier in the trade tape
-// permanently changes the sequence of qty values from that bar forward,
-// even if the entry/exit boundary decisions agree:
+// Purpose: isolate the IES integration probe family's equity-feedback
+// sizing loop, which is architecturally distinct from every other IES
+// component because the `qty=` argument depends on `strategy.equity` —
+// itself a function of every prior trade's PnL. Any single drift earlier
+// in the trade tape permanently changes the sequence of qty values from
+// that bar forward, even if the entry/exit boundary decisions agree:
 //
 //   account_risk = strategy.equity * (i_risk_pct/100) * regime_size_mult * quality_mult
 //   long_risk    = atr_val * adaptive_stop_mult

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Parity probe 06 — explicit qty at 50% of equity (moderate margin pressure)
 //
 // Purpose: bisect the margin-tolerance regime between parity-probe-03

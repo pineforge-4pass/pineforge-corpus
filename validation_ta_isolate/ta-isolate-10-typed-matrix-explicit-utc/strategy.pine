@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF TA-isolate probe 10 — typed-matrix-01 with explicit hour(time, "UTC")
 //
 // Purpose: typed-matrix-probe-01-bool-regime-mask uses bare `hour(time)` and

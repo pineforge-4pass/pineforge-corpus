@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 03 — extra primitive args (int / float / bool)
 //
 // Purpose: UDT methods can take additional primitive parameters after

@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Barstate-magnifier probe 01a — barstate.isconfirmed, magnifier ON
 //
 // Purpose: barstate.isconfirmed must fire exactly once per chart bar

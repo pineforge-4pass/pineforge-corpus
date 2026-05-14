@@ -1,7 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 04 — candle-position pressure with double-EMA smoothing
 //
-// Purpose: isolate community/IES's "pressure gauge" — a flow proxy built
-// from the candle's close-position-in-range, then double-smoothed:
+// Purpose: isolate the IES integration probe family's "pressure gauge" — a
+// flow proxy built from the candle's close-position-in-range, then
+// double-smoothed:
 //
 //   raw_buy = (high - low) > 0 ? (close - low) / (high - low) : 0.5
 //   pressure_ratio  = ta.ema(raw_buy, 14)

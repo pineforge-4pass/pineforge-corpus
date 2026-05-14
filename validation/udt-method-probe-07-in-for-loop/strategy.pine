@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 07 — method called inside a for loop
 //
 // Purpose: the C++ runtime must dispatch a UDT method once per loop

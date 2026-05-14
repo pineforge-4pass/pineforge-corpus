@@ -1,9 +1,14 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // IES probe 05 — BB / KC squeeze release detection
 //
-// Purpose: isolate community/IES's volatility-squeeze gate. IES computes
-// Bollinger Bands (sma+stdev) and Keltner Channels (ema+atr) at length 20
-// in parallel, then tracks `squeeze_on = bb_lower > kc_lower and bb_upper
-// < kc_upper`. The release event is a one-bar pulse:
+// Purpose: isolate the IES integration probe family's volatility-squeeze
+// gate. That family computes Bollinger Bands (sma+stdev) and Keltner
+// Channels (ema+atr) at length 20 in parallel, then tracks
+// `squeeze_on = bb_lower > kc_lower and bb_upper < kc_upper`. The release
+// event is a one-bar pulse:
 //
 //   squeeze_release = squeeze_on[1] and not squeeze_on
 //

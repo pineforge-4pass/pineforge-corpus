@@ -1,6 +1,11 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 01 — pivot detection at strength 5
 //
-// Purpose: isolate the market-structure half of community/VCP. VCP detects
+// Purpose: isolate the market-structure half of the VCP integration probe
+// family. That family detects
 // swing highs/lows with ``ta.pivothigh(high, pivotStrength, pivotStrength)``
 // and ``ta.pivotlow(low, pivotStrength, pivotStrength)`` at the default
 // ``pivotStrength = 5``. Those pivots seed BOS / CHoCH structure flips,

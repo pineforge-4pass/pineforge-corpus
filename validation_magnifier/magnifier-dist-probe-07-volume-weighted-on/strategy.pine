@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Magnifier distribution probe 07 — volume-weighted ON
 //
 // Purpose: exercise the magnifier volume-weighted code path with a

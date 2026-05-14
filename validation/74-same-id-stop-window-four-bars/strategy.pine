@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // PF probe 74 - same-id stop window four bars
 //
 // Purpose: isolate four consecutive same-id stop modifications in a single

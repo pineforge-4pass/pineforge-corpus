@@ -1,7 +1,12 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // VCP probe 05 — candle-position volume delta + cumulative sum
 //
-// Purpose: isolate the cumulative-volume-delta half of community/VCP.
-// VCP synthesises buy/sell volume from candle position with a tiny
+// Purpose: isolate the cumulative-volume-delta half of the VCP integration
+// probe family. That family synthesises buy/sell volume from candle position
+// with a tiny
 // epsilon in the denominator (``high - low + 0.0001``) to avoid
 // division-by-zero on doji bars, computes the per-bar delta, and
 // then runs a 10-bar rolling ``math.sum`` on top. ``cumDelta`` then

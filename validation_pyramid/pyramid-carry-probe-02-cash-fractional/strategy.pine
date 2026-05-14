@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // Pyramid carry probe 02 — cash sizing + fractional commission
 //
 // Purpose: default_qty_type=cash with cash_per_contract commission

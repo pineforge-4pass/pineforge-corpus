@@ -1,3 +1,7 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
 // UDT method probe 16 — var-instance method calls accumulate across bars
 //
 // Purpose: ``var Counter c = ...`` initializes once on the first bar.
