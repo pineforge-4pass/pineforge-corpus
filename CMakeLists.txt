@@ -15,9 +15,20 @@
 file(GLOB STRATEGY_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
      ${CMAKE_CURRENT_SOURCE_DIR}/basic/*
      ${CMAKE_CURRENT_SOURCE_DIR}/community/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/parity-anomalies/*
      ${CMAKE_CURRENT_SOURCE_DIR}/validation/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_barstate/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_lower_tf/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_magnifier/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_na_chain/*
      ${CMAKE_CURRENT_SOURCE_DIR}/validation_oca/*
-     ${CMAKE_CURRENT_SOURCE_DIR}/parity-anomalies/*)
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_process_orders/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_pyramid/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_recompute/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_session/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_ta_isolate/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_typed_matrix/*
+     ${CMAKE_CURRENT_SOURCE_DIR}/validation_varip/*)
 
 set(_n_strategies 0)
 
