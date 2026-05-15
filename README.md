@@ -217,13 +217,46 @@ mirroring TV's "Favorable / Adverse excursion USD".
 
 ## Parity thresholds
 
-The verifier applies a single STRICT profile uniformly across all 228
-probes: trade-count delta < 1.0%, entry-price p90 delta < 0.01%,
-exit-price p90 delta < 0.01%, P&L p90 delta < 1.0%. A trade is "matched"
-when engine and TV agree on direction and entry/exit times fall within a
-1-hour gating window (with a $3 entry-price gate to defend against
-same-bar duplicates). `excellent` requires all four dimensions to pass
-strict.
+The verifier (`scripts/verify_corpus.py`) applies one of two threshold
+profiles per probe and emits a tier label:
+
+### Profiles
+
+| Dimension                  | STRICT  | PRODUCTION |
+| -------------------------- | ------: | ---------: |
+| Trade-count delta          |   1.0%  |       1.0% |
+| Entry-price p90 delta      |   0.01% |      0.01% |
+| Exit-price p90 delta       |   0.01% |      0.05% |
+| Per-trade P&L p90 delta    |   1.0%  |       1.0% |
+
+PRODUCTION relaxes only the exit-price tolerance (5×) to absorb sub-bar
+broker-side fill drift on probes that use `strategy.exit`. The verifier
+auto-detects `strategy.exit` in `strategy.pine` and selects PRODUCTION
+for those probes; everything else stays on STRICT.
+
+A trade is "matched" when engine and TV agree on direction and entry/
+exit times fall within a 1-hour gating window (plus a $3 entry-price
+gate to defend against same-bar duplicates). The PnL p90 calc applies a
+near-zero filter (`|tv_pnl| > $0.01`) to avoid div-by-near-zero blow-up
+on TV's magnifier zero-PnL trades.
+
+### Tier labels
+
+| Tier          | Meaning |
+| ------------- | ------- |
+| `excellent`   | All four dimensions pass the resolved profile. Bit-for-bit or within strict-profile thresholds. |
+| `strong`      | Dimensions pass a relaxed envelope (5× thresholds) — close but not excellent. Used as a pass-with-caveat tier. |
+| `moderate`    | Some dimensions exceed the strong envelope but trades still align meaningfully. Investigate. |
+| `weak`        | Significant divergence. Real bug or probe-design issue. |
+| `minimal`     | Probe produces zero engine trades or zero TV trades — nothing to compare. |
+| `anomaly`     | Engine output is correct per Pine spec; TV is non-deterministic on this probe. Documented per-probe via `inputs.json::expected_tier: "anomaly"` plus a `notes` field with the deep-analysis write-up. Excluded from headline excellent count. Currently 1 probe (`anomaly-equity-mirror-strategy-equity-01`). |
+| `engine_only` | Engine produces correct trades that intentionally diverge from TV (e.g., engine fires a bar TV's broker emulator silently drops). Documented per-probe via `inputs.json::validation_overrides::expect_tv_match: false` plus an `expect_tv_match_reason` write-up. Currently 0 probes. |
+| `missing`     | Required artefact (TV CSV or engine CSV) absent. Should never appear in committed state. |
+
+The `anomaly` and `engine_only` overrides only fire when the computed
+tier would be below `excellent` — a future engine fix that lifts a
+documented divergence to bit-for-bit match still reports as `excellent`,
+not silently masked.
 
 ## Publishing posture
 
