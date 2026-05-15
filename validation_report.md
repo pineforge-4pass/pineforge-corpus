@@ -1,6 +1,6 @@
 # PineForge Corpus Validation Report
 
-**Generated:** 2026-05-15 (UTC) — engine `0f3faef`, corpus `25e103c`
+**Generated:** 2026-05-15 (UTC) — engine `6db9974`, corpus `dc7f3d6`
 
 All probes live under `corpus/validation/`; categories below are derived
 from each slug's leading hyphen-token (e.g. `ta-...`, `composite-...`).
@@ -56,234 +56,234 @@ Sorted by category, then slug. `count Δ` is `|tv-eng|/max(tv,eng)`;
 `entry/exit/pnl p90` are 90th-percentile relative deltas across matched
 trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 
-| Slug | Category | Tier | TV | Engine | Matched | Count Δ | Entry p90 | Exit p90 | PnL p90 |
-|---|---|---|---:|---:|---:|---:|---:|---:|---:|
-| [`analyzer-parity-choch-bos-isolator-01`](./validation/analyzer-parity-choch-bos-isolator-01/) | `analyzer` | excellent | 1026 | 1026 | 1026 | 0.0000% | 0.0000% | 0.0000% | 0.0705% |
-| [`analyzer-parity-edge-margin-50-pct-01`](./validation/analyzer-parity-edge-margin-50-pct-01/) | `analyzer` | excellent | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0701% |
-| [`analyzer-parity-percent-of-equity-sizing-01`](./validation/analyzer-parity-percent-of-equity-sizing-01/) | `analyzer` | excellent | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0006% |
-| [`analyzer-parity-small-equity-fraction-01`](./validation/analyzer-parity-small-equity-fraction-01/) | `analyzer` | excellent | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0698% |
-| [`analyzer-parity-stop-limit-timing-01`](./validation/analyzer-parity-stop-limit-timing-01/) | `analyzer` | excellent | 778 | 778 | 778 | 0.0000% | 0.0000% | 0.0004% | 0.1008% |
-| [`analyzer-self-test-multi-mode-01`](./validation/analyzer-self-test-multi-mode-01/) | `analyzer` | excellent | 147 | 147 | 147 | 0.0000% | 0.0000% | 0.0000% | 0.0687% |
-| [`anomaly-equity-mirror-strategy-equity-01`](./validation/anomaly-equity-mirror-strategy-equity-01/) | `anomaly` | anomaly | 24 | 25 | 13 | 4.0000% | 0.0000% | 0.0000% | 2.3202% |
-| [`barstate-isconfirmed-magnifier-off-01b`](./validation/barstate-isconfirmed-magnifier-off-01b/) | `barstate` | excellent | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`barstate-isconfirmed-magnifier-on-01a`](./validation/barstate-isconfirmed-magnifier-on-01a/) | `barstate` | excellent | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`bracket-atr-trail-series-int-points-01`](./validation/bracket-atr-trail-series-int-points-01/) | `bracket` | excellent | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`bracket-atr-trailing-stop-state-01`](./validation/bracket-atr-trailing-stop-state-01/) | `bracket` | excellent | 5073 | 5072 | 5072 | 0.0197% | 0.0000% | 0.0000% | 0.0786% |
-| [`bracket-entry-exit-same-pass-attach-01`](./validation/bracket-entry-exit-same-pass-attach-01/) | `bracket` | excellent | 728 | 728 | 728 | 0.0000% | 0.0000% | 0.0005% | 0.1130% |
-| [`bracket-exit-stop-limit-trail-same-bar-01`](./validation/bracket-exit-stop-limit-trail-same-bar-01/) | `bracket` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0755% |
-| [`bracket-exit-three-way-set-once-entry-01`](./validation/bracket-exit-three-way-set-once-entry-01/) | `bracket` | excellent | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`bracket-exit-tp-sl-fixed-01`](./validation/bracket-exit-tp-sl-fixed-01/) | `bracket` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0005% | 0.1320% |
-| [`bracket-narrow-stop-limit-with-trail8-01`](./validation/bracket-narrow-stop-limit-with-trail8-01/) | `bracket` | excellent | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`bracket-partial-exit-qty-percent-01`](./validation/bracket-partial-exit-qty-percent-01/) | `bracket` | excellent | 725 | 725 | 725 | 0.0000% | 0.0000% | 0.0004% | 0.1594% |
-| [`bracket-same-id-exit-replace-01`](./validation/bracket-same-id-exit-replace-01/) | `bracket` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0004% | 0.1584% |
-| [`bracket-tp-sl-oca-reduce-isolate-01`](./validation/bracket-tp-sl-oca-reduce-isolate-01/) | `bracket` | excellent | 2240 | 2240 | 2240 | 0.0000% | 0.0000% | 0.0000% | 0.0561% |
-| [`bracket-trail-points-no-offset-explicit-01`](./validation/bracket-trail-points-no-offset-explicit-01/) | `bracket` | excellent | 782 | 782 | 782 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`bracket-trail-points-with-offset-only-01`](./validation/bracket-trail-points-with-offset-only-01/) | `bracket` | excellent | 710 | 710 | 710 | 0.0000% | 0.0000% | 0.0000% | 0.0935% |
-| [`bracket-trailing-activation-offset-path-01`](./validation/bracket-trailing-activation-offset-path-01/) | `bracket` | excellent | 671 | 671 | 671 | 0.0000% | 0.0000% | 0.0000% | 0.0919% |
-| [`cap-max-intraday-filled-orders-isolate-01`](./validation/cap-max-intraday-filled-orders-isolate-01/) | `cap` | excellent | 1958 | 1958 | 1958 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
-| [`cap-risk-gates-allow-max-intraday-01`](./validation/cap-risk-gates-allow-max-intraday-01/) | `cap` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0726% |
-| [`composite-4emarsi-integration-01`](./validation/composite-4emarsi-integration-01/) | `composite` | excellent | 335 | 335 | 335 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
-| [`composite-4emarsi-quad-ema-stack-01`](./validation/composite-4emarsi-quad-ema-stack-01/) | `composite` | excellent | 224 | 222 | 221 | 0.8929% | 0.0000% | 0.0000% | 0.0650% |
-| [`composite-4emarsi-rsi-pullback-latch-01`](./validation/composite-4emarsi-rsi-pullback-latch-01/) | `composite` | excellent | 816 | 816 | 816 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
-| [`composite-4emarsi-session-window-nbar-exit-01`](./validation/composite-4emarsi-session-window-nbar-exit-01/) | `composite` | excellent | 744 | 744 | 744 | 0.0000% | 0.0000% | 0.0000% | 0.0755% |
-| [`composite-boscurv-integration-01`](./validation/composite-boscurv-integration-01/) | `composite` | excellent | 1026 | 1026 | 1026 | 0.0000% | 0.0000% | 0.0000% | 0.0798% |
-| [`composite-boscurv-linreg-slope-channel-01`](./validation/composite-boscurv-linreg-slope-channel-01/) | `composite` | excellent | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0770% |
-| [`composite-boscurv-pivot-bos-trigger-01`](./validation/composite-boscurv-pivot-bos-trigger-01/) | `composite` | excellent | 906 | 906 | 906 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
-| [`composite-bracket-cap-range-pending-stop-01`](./validation/composite-bracket-cap-range-pending-stop-01/) | `composite` | excellent | 1192 | 1192 | 1192 | 0.0000% | 0.0000% | 0.0000% | 0.0569% |
-| [`composite-ies-adx-regime-classify-01`](./validation/composite-ies-adx-regime-classify-01/) | `composite` | excellent | 682 | 683 | 682 | 0.1464% | 0.0000% | 0.0000% | 0.0770% |
-| [`composite-ies-bb-kc-squeeze-release-01`](./validation/composite-ies-bb-kc-squeeze-release-01/) | `composite` | excellent | 902 | 902 | 902 | 0.0000% | 0.0000% | 0.0000% | 0.0799% |
-| [`composite-ies-cooldown-daily-cap-01`](./validation/composite-ies-cooldown-daily-cap-01/) | `composite` | excellent | 727 | 727 | 727 | 0.0000% | 0.0000% | 0.0000% | 0.0838% |
-| [`composite-ies-equity-feedback-sizing-01`](./validation/composite-ies-equity-feedback-sizing-01/) | `composite` | excellent | 79 | 79 | 79 | 0.0000% | 0.0000% | 0.0005% | 0.0891% |
-| [`composite-ies-integration-01`](./validation/composite-ies-integration-01/) | `composite` | excellent | 537 | 537 | 537 | 0.0000% | 0.0000% | 0.0000% | 0.0771% |
-| [`composite-ies-pivot-liquidity-sweep-01`](./validation/composite-ies-pivot-liquidity-sweep-01/) | `composite` | excellent | 706 | 706 | 706 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
-| [`composite-ies-pressure-gauge-01`](./validation/composite-ies-pressure-gauge-01/) | `composite` | excellent | 2207 | 2207 | 2207 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
-| [`composite-ies-rsi-macd-momentum-01`](./validation/composite-ies-rsi-macd-momentum-01/) | `composite` | excellent | 4798 | 4798 | 4798 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
-| [`composite-ies-three-ema-bias-score-01`](./validation/composite-ies-three-ema-bias-score-01/) | `composite` | excellent | 717 | 717 | 716 | 0.0000% | 0.0000% | 0.0000% | 0.0772% |
-| [`composite-kanuck-calc-on-every-tick-01`](./validation/composite-kanuck-calc-on-every-tick-01/) | `composite` | excellent | 361 | 361 | 361 | 0.0000% | 0.0000% | 0.0000% | 0.0750% |
-| [`composite-kanuck-integration-01`](./validation/composite-kanuck-integration-01/) | `composite` | excellent | 1255 | 1255 | 1255 | 0.0000% | 0.0000% | 0.0000% | 0.0723% |
-| [`composite-kanuck-kama-state-recurrence-01`](./validation/composite-kanuck-kama-state-recurrence-01/) | `composite` | excellent | 4979 | 4977 | 4974 | 0.0402% | 0.0000% | 0.0000% | 0.0750% |
-| [`composite-kanuck-max-bars-back-500-01`](./validation/composite-kanuck-max-bars-back-500-01/) | `composite` | excellent | 833 | 833 | 833 | 0.0000% | 0.0000% | 0.0000% | 0.0577% |
-| [`composite-kkb-ema-atr-breakout-band-01`](./validation/composite-kkb-ema-atr-breakout-band-01/) | `composite` | excellent | 641 | 641 | 641 | 0.0000% | 0.0000% | 0.0000% | 0.0717% |
-| [`composite-kkb-integration-01`](./validation/composite-kkb-integration-01/) | `composite` | excellent | 641 | 641 | 641 | 0.0000% | 0.0000% | 0.0000% | 0.0717% |
-| [`composite-kkb-kalman-filter-1d-01`](./validation/composite-kkb-kalman-filter-1d-01/) | `composite` | excellent | 5487 | 5487 | 5487 | 0.0000% | 0.0000% | 0.0000% | 0.0765% |
-| [`composite-kkb-margin-100-pct-01`](./validation/composite-kkb-margin-100-pct-01/) | `composite` | excellent | 2522 | 2522 | 2522 | 0.0000% | 0.0000% | 0.0000% | 0.0807% |
-| [`composite-liqsweep-integration-01`](./validation/composite-liqsweep-integration-01/) | `composite` | excellent | 355 | 355 | 355 | 0.0000% | 0.0000% | 0.0000% | 0.0877% |
-| [`composite-liqsweep-pivot-hh-ll-01`](./validation/composite-liqsweep-pivot-hh-ll-01/) | `composite` | excellent | 1171 | 1171 | 1171 | 0.0000% | 0.0000% | 0.0000% | 0.0793% |
-| [`composite-liqsweep-wait-one-continuation-01`](./validation/composite-liqsweep-wait-one-continuation-01/) | `composite` | excellent | 628 | 628 | 628 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
-| [`composite-liqsweep-wick-pierce-close-back-01`](./validation/composite-liqsweep-wick-pierce-close-back-01/) | `composite` | excellent | 1015 | 1015 | 1015 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
-| [`composite-marketshift-integration-01`](./validation/composite-marketshift-integration-01/) | `composite` | excellent | 905 | 905 | 905 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
-| [`composite-marketshift-pivot-state-machine-01`](./validation/composite-marketshift-pivot-state-machine-01/) | `composite` | excellent | 906 | 906 | 906 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
-| [`composite-marketshift-rolling-highest-lowest-01`](./validation/composite-marketshift-rolling-highest-lowest-01/) | `composite` | excellent | 374 | 374 | 374 | 0.0000% | 0.0000% | 0.0000% | 0.0725% |
-| [`composite-marketshift-state-edge-detector-01`](./validation/composite-marketshift-state-edge-detector-01/) | `composite` | excellent | 905 | 905 | 905 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
-| [`composite-scalping-fast-ma-cross-trigger-01`](./validation/composite-scalping-fast-ma-cross-trigger-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
-| [`composite-scalping-integration-01`](./validation/composite-scalping-integration-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0579% |
-| [`composite-scalping-tight-tp-sl-points-01`](./validation/composite-scalping-tight-tp-sl-points-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0579% |
-| [`composite-trendmaster-integration-01`](./validation/composite-trendmaster-integration-01/) | `composite` | excellent | 629 | 628 | 628 | 0.1590% | 0.0000% | 0.0000% | 0.0800% |
-| [`composite-trendmaster-line-new-projection-01`](./validation/composite-trendmaster-line-new-projection-01/) | `composite` | excellent | 1592 | 1594 | 1592 | 0.1255% | 0.0000% | 0.0000% | 0.0778% |
-| [`composite-trendmaster-pivot-anchored-bracket-01`](./validation/composite-trendmaster-pivot-anchored-bracket-01/) | `composite` | excellent | 3095 | 3097 | 3095 | 0.0646% | 0.0000% | 0.0000% | 0.0849% |
-| [`composite-trendmaster-three-tier-ema-state-01`](./validation/composite-trendmaster-three-tier-ema-state-01/) | `composite` | excellent | 220 | 220 | 220 | 0.0000% | 0.0000% | 0.0000% | 0.0631% |
-| [`composite-trendmaster-trend-momentum-structure-gate-01`](./validation/composite-trendmaster-trend-momentum-structure-gate-01/) | `composite` | excellent | 362 | 362 | 362 | 0.0000% | 0.0000% | 0.0000% | 0.0727% |
-| [`composite-vcp-cumulative-volume-delta-01`](./validation/composite-vcp-cumulative-volume-delta-01/) | `composite` | excellent | 3119 | 3119 | 3119 | 0.0000% | 0.0000% | 0.0000% | 0.0761% |
-| [`composite-vcp-fvg-active-zones-01`](./validation/composite-vcp-fvg-active-zones-01/) | `composite` | excellent | 11800 | 11851 | 11797 | 0.4303% | 0.0000% | 0.0000% | 0.0586% |
-| [`composite-vcp-integration-01`](./validation/composite-vcp-integration-01/) | `composite` | excellent | 336 | 336 | 335 | 0.0000% | 0.0000% | 0.0000% | 0.0930% |
-| [`composite-vcp-manual-adx-regime-01`](./validation/composite-vcp-manual-adx-regime-01/) | `composite` | excellent | 636 | 637 | 636 | 0.1570% | 0.0000% | 0.0000% | 0.0793% |
-| [`composite-vcp-pivot-strength-5-01`](./validation/composite-vcp-pivot-strength-5-01/) | `composite` | excellent | 1937 | 1937 | 1937 | 0.0000% | 0.0000% | 0.0000% | 0.0773% |
-| [`composite-vcp-rsi-smooth-divergence-01`](./validation/composite-vcp-rsi-smooth-divergence-01/) | `composite` | excellent | 142 | 142 | 142 | 0.0000% | 0.0000% | 0.0000% | 0.0808% |
-| [`composite-vcp-session-tz-newyork-01`](./validation/composite-vcp-session-tz-newyork-01/) | `composite` | excellent | 396 | 396 | 396 | 0.0000% | 0.0000% | 0.0000% | 0.0752% |
-| [`composite-vcp-vol-zscore-anomaly-01`](./validation/composite-vcp-vol-zscore-anomaly-01/) | `composite` | excellent | 591 | 591 | 591 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
-| [`composite-wunderscalper-alert-templates-01`](./validation/composite-wunderscalper-alert-templates-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
-| [`composite-wunderscalper-explicit-reverse-01`](./validation/composite-wunderscalper-explicit-reverse-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
-| [`composite-wunderscalper-integration-01`](./validation/composite-wunderscalper-integration-01/) | `composite` | excellent | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
-| [`ltf-bool-array-bull-majority-01`](./validation/ltf-bool-array-bull-majority-01/) | `ltf` | excellent | 3116 | 3116 | 3116 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
-| [`ltf-numeric-float-ratio15-01`](./validation/ltf-numeric-float-ratio15-01/) | `ltf` | excellent | 820 | 826 | 791 | 0.7264% | 0.0000% | 0.0000% | 0.0867% |
-| [`magnifier-tick-dist-endpoints-01`](./validation/magnifier-tick-dist-endpoints-01/) | `magnifier` | excellent | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
-| [`magnifier-tick-dist-endpoints-rsi-cross-08a`](./validation/magnifier-tick-dist-endpoints-rsi-cross-08a/) | `magnifier` | excellent | 2345 | 2345 | 2345 | 0.0000% | 0.0000% | 0.0000% | 0.0704% |
-| [`magnifier-tick-dist-volume-weighted-on-01`](./validation/magnifier-tick-dist-volume-weighted-on-01/) | `magnifier` | excellent | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
-| [`matrix-bool-mask-explicit-utc-tz-01`](./validation/matrix-bool-mask-explicit-utc-tz-01/) | `matrix` | excellent | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
-| [`matrix-bool-mask-no-transpose-01`](./validation/matrix-bool-mask-no-transpose-01/) | `matrix` | excellent | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
-| [`matrix-bool-mask-transpose-roundtrip-01`](./validation/matrix-bool-mask-transpose-roundtrip-01/) | `matrix` | excellent | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
-| [`matrix-bool-regime-mask-24x7-01`](./validation/matrix-bool-regime-mask-24x7-01/) | `matrix` | excellent | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
-| [`matrix-covariance-eigen-pca-01`](./validation/matrix-covariance-eigen-pca-01/) | `matrix` | excellent | 2850 | 2850 | 2850 | 0.0000% | 0.0000% | 0.0000% | 0.0778% |
-| [`matrix-eigen-rank-deficient-cov-01`](./validation/matrix-eigen-rank-deficient-cov-01/) | `matrix` | excellent | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`mtf-daily-array-median-percentrank-01`](./validation/mtf-daily-array-median-percentrank-01/) | `mtf` | excellent | 362 | 363 | 362 | 0.2755% | 0.0000% | 0.0000% | 0.0961% |
-| [`mtf-daily-ema26-warmup-01`](./validation/mtf-daily-ema26-warmup-01/) | `mtf` | excellent | 31 | 31 | 31 | 0.0000% | 0.0000% | 0.0000% | 0.0884% |
-| [`mtf-daily-prev-high-break-01`](./validation/mtf-daily-prev-high-break-01/) | `mtf` | excellent | 147 | 147 | 147 | 0.0000% | 0.0000% | 0.0000% | 0.0687% |
-| [`mtf-dual-tf-60-240-rising-01`](./validation/mtf-dual-tf-60-240-rising-01/) | `mtf` | excellent | 736 | 736 | 736 | 0.0000% | 0.0000% | 0.0000% | 0.0653% |
-| [`mtf-htf-60-close-change-baseline-01`](./validation/mtf-htf-60-close-change-baseline-01/) | `mtf` | excellent | 8775 | 8775 | 8775 | 0.0000% | 0.0000% | 0.0000% | 0.0673% |
-| [`mtf-htf-60-close-roll-01`](./validation/mtf-htf-60-close-roll-01/) | `mtf` | excellent | 8775 | 8775 | 8775 | 0.0000% | 0.0000% | 0.0000% | 0.0653% |
-| [`mtf-htf-60-gaps-on-roll-01`](./validation/mtf-htf-60-gaps-on-roll-01/) | `mtf` | excellent | 2247 | 2247 | 2247 | 0.0000% | 0.0000% | 0.0000% | 0.0736% |
-| [`mtf-htf-60-rsi14-inside-security-01`](./validation/mtf-htf-60-rsi14-inside-security-01/) | `mtf` | excellent | 496 | 496 | 496 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
-| [`mtf-htf-60-sma20-inside-security-01`](./validation/mtf-htf-60-sma20-inside-security-01/) | `mtf` | excellent | 540 | 540 | 540 | 0.0000% | 0.0000% | 0.0000% | 0.0768% |
-| [`mtf-htf-60-volume-spike-01`](./validation/mtf-htf-60-volume-spike-01/) | `mtf` | excellent | 584 | 584 | 584 | 0.0000% | 0.0000% | 0.0000% | 0.0886% |
-| [`mtf-htf-confluence-manual-trail-01`](./validation/mtf-htf-confluence-manual-trail-01/) | `mtf` | excellent | 345 | 345 | 345 | 0.0000% | 0.0000% | 0.0004% | 0.0814% |
-| [`mtf-htf-confluence-static-bracket-01`](./validation/mtf-htf-confluence-static-bracket-01/) | `mtf` | excellent | 283 | 283 | 283 | 0.0000% | 0.0000% | 0.0004% | 0.0815% |
-| [`mtf-roll-state-60-240-d-minimal-01`](./validation/mtf-roll-state-60-240-d-minimal-01/) | `mtf` | excellent | 2938 | 2948 | 2938 | 0.3392% | 0.0000% | 0.0000% | 0.0677% |
-| [`mtf-triple-tf-close-confluence-01`](./validation/mtf-triple-tf-close-confluence-01/) | `mtf` | excellent | 48 | 48 | 48 | 0.0000% | 0.0000% | 0.0000% | 0.0911% |
-| [`mtf-triple-tf-macd-hist-confluence-01`](./validation/mtf-triple-tf-macd-hist-confluence-01/) | `mtf` | excellent | 24 | 24 | 23 | 0.0000% | 0.0000% | 0.0000% | 0.1662% |
-| [`na-deep-history-int-na-01`](./validation/na-deep-history-int-na-01/) | `na` | excellent | 106 | 106 | 106 | 0.0000% | 0.0000% | 0.0000% | 0.1001% |
-| [`na-nz-fixnan-history-chain-01`](./validation/na-nz-fixnan-history-chain-01/) | `na` | excellent | 3093 | 3093 | 3093 | 0.0000% | 0.0000% | 0.0000% | 0.0756% |
-| [`oca-exit-bracket-internal-cancel-01`](./validation/oca-exit-bracket-internal-cancel-01/) | `oca` | excellent | 421 | 421 | 421 | 0.0000% | 0.0000% | 0.0005% | 0.1087% |
-| [`oca-multi-bracket-isolation-01`](./validation/oca-multi-bracket-isolation-01/) | `oca` | excellent | 1244 | 1244 | 1244 | 0.0000% | 0.0000% | 0.0005% | 0.1362% |
-| [`oca-raw-strategy-order-reduce-01`](./validation/oca-raw-strategy-order-reduce-01/) | `oca` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0005% | 0.1273% |
-| [`order-close-all-cancel-all-01`](./validation/order-close-all-cancel-all-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0005% | 0.4564% |
-| [`order-close-immediate-vs-next-bar-01`](./validation/order-close-immediate-vs-next-bar-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
-| [`order-cross-entry-cancel-same-pass-01`](./validation/order-cross-entry-cancel-same-pass-01/) | `order` | excellent | 495 | 495 | 495 | 0.0000% | 0.0000% | 0.0000% | 0.0836% |
-| [`order-cross-entry-close-same-pass-01`](./validation/order-cross-entry-close-same-pass-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0830% |
-| [`order-cross-exit-close-same-pass-01`](./validation/order-cross-exit-close-same-pass-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0675% |
-| [`order-deferred-flip-guaranteed-gap-stops-01`](./validation/order-deferred-flip-guaranteed-gap-stops-01/) | `order` | excellent | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
-| [`order-deferred-flip-pooc-cross-bar-01`](./validation/order-deferred-flip-pooc-cross-bar-01/) | `order` | excellent | 791 | 791 | 791 | 0.0000% | 0.0005% | 0.0000% | 0.1444% |
-| [`order-dual-four-bar-stop-no-close-01`](./validation/order-dual-four-bar-stop-no-close-01/) | `order` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0817% |
-| [`order-dual-side-same-id-stop-no-cancel-01`](./validation/order-dual-side-same-id-stop-no-cancel-01/) | `order` | excellent | 689 | 689 | 689 | 0.0000% | 0.0000% | 0.0000% | 0.0844% |
-| [`order-dual-stop-both-touch-priority-01`](./validation/order-dual-stop-both-touch-priority-01/) | `order` | excellent | 757 | 757 | 757 | 0.0000% | 0.0000% | 0.0000% | 0.0949% |
-| [`order-dual-stop-cancel-rotation-01`](./validation/order-dual-stop-cancel-rotation-01/) | `order` | excellent | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0788% |
-| [`order-dual-stop-far-only-01`](./validation/order-dual-stop-far-only-01/) | `order` | excellent | 364 | 364 | 364 | 0.0000% | 0.0000% | 0.0000% | 0.0952% |
-| [`order-dual-stop-near-only-01`](./validation/order-dual-stop-near-only-01/) | `order` | excellent | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.1101% |
-| [`order-dual-stop-open-high-first-path-01`](./validation/order-dual-stop-open-high-first-path-01/) | `order` | excellent | 216 | 216 | 216 | 0.0000% | 0.0000% | 0.0000% | 0.1134% |
-| [`order-dual-stop-open-low-first-path-01`](./validation/order-dual-stop-open-low-first-path-01/) | `order` | excellent | 188 | 188 | 188 | 0.0000% | 0.0000% | 0.0000% | 0.1113% |
-| [`order-dual-stop-open-tie-01`](./validation/order-dual-stop-open-tie-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`order-dual-stop-source-order-long-first-01`](./validation/order-dual-stop-source-order-long-first-01/) | `order` | excellent | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.1101% |
-| [`order-dual-stop-source-order-short-first-01`](./validation/order-dual-stop-source-order-short-first-01/) | `order` | excellent | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.0872% |
-| [`order-entry-implicit-reversal-exit-01`](./validation/order-entry-implicit-reversal-exit-01/) | `order` | excellent | 1098 | 1098 | 1098 | 0.0000% | 0.0000% | 0.0000% | 0.0767% |
-| [`order-flip-stop-no-paired-close-01`](./validation/order-flip-stop-no-paired-close-01/) | `order` | excellent | 724 | 724 | 724 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
-| [`order-market-close-fill-basis-01`](./validation/order-market-close-fill-basis-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0773% |
-| [`order-one-side-four-bar-far-opposite-01`](./validation/order-one-side-four-bar-far-opposite-01/) | `order` | excellent | 349 | 349 | 349 | 0.0000% | 0.0000% | 0.0000% | 0.0818% |
-| [`order-opposite-entry-close-same-pass-01`](./validation/order-opposite-entry-close-same-pass-01/) | `order` | excellent | 843 | 843 | 843 | 0.0000% | 0.0000% | 0.0000% | 0.0819% |
-| [`order-percent-equity-cash-commission-01`](./validation/order-percent-equity-cash-commission-01/) | `order` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0014% |
-| [`order-process-on-close-false-01`](./validation/order-process-on-close-false-01/) | `order` | excellent | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`order-process-on-close-true-01`](./validation/order-process-on-close-true-01/) | `order` | excellent | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`order-range-expansion-pending-stop-01`](./validation/order-range-expansion-pending-stop-01/) | `order` | excellent | 2947 | 2947 | 2947 | 0.0000% | 0.0000% | 0.0000% | 0.0798% |
-| [`order-same-id-entry-close-same-bar-01`](./validation/order-same-id-entry-close-same-bar-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0656% |
-| [`order-same-id-market-entry-repeat-01`](./validation/order-same-id-market-entry-repeat-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
-| [`order-same-id-stop-after-flat-01`](./validation/order-same-id-stop-after-flat-01/) | `order` | excellent | 703 | 703 | 703 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
-| [`order-same-id-stop-cross-before-modify-01`](./validation/order-same-id-stop-cross-before-modify-01/) | `order` | excellent | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0815% |
-| [`order-same-id-stop-minute-zero-01`](./validation/order-same-id-stop-minute-zero-01/) | `order` | excellent | 578 | 578 | 578 | 0.0000% | 0.0000% | 0.0000% | 0.0811% |
-| [`order-same-id-stop-modification-01`](./validation/order-same-id-stop-modification-01/) | `order` | excellent | 689 | 689 | 689 | 0.0000% | 0.0000% | 0.0000% | 0.0844% |
-| [`order-same-id-stop-raise-only-01`](./validation/order-same-id-stop-raise-only-01/) | `order` | excellent | 666 | 666 | 666 | 0.0000% | 0.0000% | 0.0000% | 0.0825% |
-| [`order-same-id-stop-window-four-bars-01`](./validation/order-same-id-stop-window-four-bars-01/) | `order` | excellent | 349 | 349 | 349 | 0.0000% | 0.0000% | 0.0000% | 0.0818% |
-| [`order-stale-stop-after-close-no-cancel-01`](./validation/order-stale-stop-after-close-no-cancel-01/) | `order` | excellent | 572 | 572 | 572 | 0.0000% | 0.0000% | 0.0000% | 0.0800% |
-| [`order-stop-cancel-no-regime-close-01`](./validation/order-stop-cancel-no-regime-close-01/) | `order` | excellent | 1610 | 1610 | 1610 | 0.0000% | 0.0000% | 0.0000% | 0.0855% |
-| [`order-stop-entry-cancel-opposite-01`](./validation/order-stop-entry-cancel-opposite-01/) | `order` | excellent | 1738 | 1738 | 1738 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
-| [`order-stop-entry-reversal-grouping-01`](./validation/order-stop-entry-reversal-grouping-01/) | `order` | excellent | 1464 | 1464 | 1464 | 0.0000% | 0.0000% | 0.0000% | 0.0748% |
-| [`order-stop-entry-touch-boundary-01`](./validation/order-stop-entry-touch-boundary-01/) | `order` | excellent | 548 | 548 | 548 | 0.0000% | 0.0000% | 0.0000% | 0.0811% |
-| [`pyramid-cash-fractional-commission-01`](./validation/pyramid-cash-fractional-commission-01/) | `pyramid` | excellent | 790 | 789 | 788 | 0.1266% | 0.0000% | 0.0000% | 0.0370% |
-| [`pyramid-close-id-grouping-01`](./validation/pyramid-close-id-grouping-01/) | `pyramid` | excellent | 2196 | 2196 | 2196 | 0.0000% | 0.0000% | 0.0000% | 0.0805% |
-| [`pyramid-deferred-flip-close-all-01`](./validation/pyramid-deferred-flip-close-all-01/) | `pyramid` | excellent | 2356 | 2378 | 2345 | 0.9251% | 0.0000% | 0.0000% | 0.0855% |
-| [`pyramid-flip-stop-pyramiding-2-01`](./validation/pyramid-flip-stop-pyramiding-2-01/) | `pyramid` | excellent | 843 | 843 | 843 | 0.0000% | 0.0000% | 0.0000% | 0.0819% |
-| [`recompute-alma-sar-corr-magnifier-01`](./validation/recompute-alma-sar-corr-magnifier-01/) | `recompute` | excellent | 582 | 582 | 582 | 0.0000% | 0.0000% | 0.0000% | 0.0795% |
-| [`recompute-mtf-rsi-macd-bb-01`](./validation/recompute-mtf-rsi-macd-bb-01/) | `recompute` | excellent | 286 | 286 | 286 | 0.0000% | 0.0000% | 0.0000% | 0.0700% |
-| [`session-hour-minute-pulse-filter-01`](./validation/session-hour-minute-pulse-filter-01/) | `session` | excellent | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0699% |
-| [`session-ny-spring-forward-dst-01`](./validation/session-ny-spring-forward-dst-01/) | `session` | excellent | 396 | 396 | 396 | 0.0000% | 0.0000% | 0.0000% | 0.0735% |
-| [`ta-bb-kc-squeeze-breakout-01`](./validation/ta-bb-kc-squeeze-breakout-01/) | `ta` | excellent | 813 | 813 | 813 | 0.0000% | 0.0000% | 0.0000% | 0.0863% |
-| [`ta-bb-rsi-mean-reversion-01`](./validation/ta-bb-rsi-mean-reversion-01/) | `ta` | excellent | 495 | 495 | 495 | 0.0000% | 0.0000% | 0.0000% | 0.0820% |
-| [`ta-cci-threshold-cross-01`](./validation/ta-cci-threshold-cross-01/) | `ta` | excellent | 2462 | 2462 | 2462 | 0.0000% | 0.0000% | 0.0000% | 0.0719% |
-| [`ta-chandelier-exit-direction-01`](./validation/ta-chandelier-exit-direction-01/) | `ta` | excellent | 1603 | 1603 | 1603 | 0.0000% | 0.0000% | 0.0000% | 0.0828% |
-| [`ta-closedtrades-risk-introspection-01`](./validation/ta-closedtrades-risk-introspection-01/) | `ta` | excellent | 751 | 751 | 751 | 0.0000% | 0.0000% | 0.0000% | 0.1216% |
-| [`ta-dmi-adx-di-cross-01`](./validation/ta-dmi-adx-di-cross-01/) | `ta` | excellent | 2747 | 2743 | 2741 | 0.1456% | 0.0000% | 0.0000% | 0.0779% |
-| [`ta-donchian-channel-breakout-01`](./validation/ta-donchian-channel-breakout-01/) | `ta` | excellent | 1002 | 1002 | 1002 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
-| [`ta-dual-ma-switch-dispatch-01`](./validation/ta-dual-ma-switch-dispatch-01/) | `ta` | excellent | 1238 | 1238 | 1238 | 0.0000% | 0.0000% | 0.0000% | 0.0888% |
-| [`ta-dual-thrust-open-anchored-range-01`](./validation/ta-dual-thrust-open-anchored-range-01/) | `ta` | excellent | 2870 | 2870 | 2870 | 0.0000% | 0.0000% | 0.0000% | 0.0784% |
-| [`ta-elder-ray-bull-bear-power-01`](./validation/ta-elder-ray-bull-bear-power-01/) | `ta` | excellent | 2483 | 2483 | 2483 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
-| [`ta-ema-ribbon-stack-transition-01`](./validation/ta-ema-ribbon-stack-transition-01/) | `ta` | excellent | 626 | 626 | 626 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
-| [`ta-engulfing-candle-pattern-01`](./validation/ta-engulfing-candle-pattern-01/) | `ta` | excellent | 826 | 826 | 825 | 0.0000% | 0.0000% | 0.0000% | 0.0791% |
-| [`ta-highestbars-lowestbars-breakout-01`](./validation/ta-highestbars-lowestbars-breakout-01/) | `ta` | excellent | 1585 | 1585 | 1585 | 0.0000% | 0.0000% | 0.0000% | 0.0834% |
-| [`ta-hma-55-close-cross-01`](./validation/ta-hma-55-close-cross-01/) | `ta` | excellent | 4839 | 4839 | 4839 | 0.0000% | 0.0000% | 0.0000% | 0.0817% |
-| [`ta-hma-fast-slow-cross-01`](./validation/ta-hma-fast-slow-cross-01/) | `ta` | excellent | 4713 | 4713 | 4713 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
-| [`ta-inside-bar-engulfing-01`](./validation/ta-inside-bar-engulfing-01/) | `ta` | excellent | 3614 | 3614 | 3614 | 0.0000% | 0.0000% | 0.0000% | 0.0764% |
-| [`ta-kama-style-efficiency-ratio-01`](./validation/ta-kama-style-efficiency-ratio-01/) | `ta` | excellent | 4598 | 4600 | 4598 | 0.0435% | 0.0000% | 0.0000% | 0.0772% |
-| [`ta-keltner-channel-break-01`](./validation/ta-keltner-channel-break-01/) | `ta` | excellent | 706 | 706 | 706 | 0.0000% | 0.0000% | 0.0000% | 0.0776% |
-| [`ta-linreg-stdev-channel-revert-01`](./validation/ta-linreg-stdev-channel-revert-01/) | `ta` | excellent | 248 | 248 | 248 | 0.0000% | 0.0000% | 0.0000% | 0.0943% |
-| [`ta-macd-12-26-9-line-signal-cross-01`](./validation/ta-macd-12-26-9-line-signal-cross-01/) | `ta` | excellent | 3022 | 3022 | 3022 | 0.0000% | 0.0000% | 0.0000% | 0.0856% |
-| [`ta-macd-histogram-reversal-01`](./validation/ta-macd-histogram-reversal-01/) | `ta` | excellent | 2813 | 2813 | 2813 | 0.0000% | 0.0000% | 0.0000% | 0.0885% |
-| [`ta-macd-line-gt-signal-continuous-state-01`](./validation/ta-macd-line-gt-signal-continuous-state-01/) | `ta` | excellent | 1511 | 1511 | 1511 | 0.0000% | 0.0000% | 0.0000% | 0.0861% |
-| [`ta-map-regime-threshold-lookup-01`](./validation/ta-map-regime-threshold-lookup-01/) | `ta` | excellent | 801 | 801 | 801 | 0.0000% | 0.0000% | 0.0000% | 0.0783% |
-| [`ta-median-vs-ema-cross-01`](./validation/ta-median-vs-ema-cross-01/) | `ta` | excellent | 2837 | 2837 | 2837 | 0.0000% | 0.0000% | 0.0000% | 0.0827% |
-| [`ta-momentum-roc-zero-cross-01`](./validation/ta-momentum-roc-zero-cross-01/) | `ta` | excellent | 5690 | 5690 | 5690 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
-| [`ta-multi-indicator-score-composite-01`](./validation/ta-multi-indicator-score-composite-01/) | `ta` | excellent | 3910 | 3911 | 3910 | 0.0256% | 0.0000% | 0.0000% | 0.0830% |
-| [`ta-percentrank-mean-reversion-01`](./validation/ta-percentrank-mean-reversion-01/) | `ta` | excellent | 363 | 362 | 362 | 0.2755% | 0.0000% | 0.0000% | 0.0716% |
-| [`ta-pivot-array-unshift-pop-01`](./validation/ta-pivot-array-unshift-pop-01/) | `ta` | excellent | 829 | 829 | 829 | 0.0000% | 0.0000% | 0.0000% | 0.0893% |
-| [`ta-pivot-atr-stop-target-01`](./validation/ta-pivot-atr-stop-target-01/) | `ta` | excellent | 1618 | 1619 | 1618 | 0.0618% | 0.0000% | 0.0005% | 0.1055% |
-| [`ta-pivot-confirmed-break-01`](./validation/ta-pivot-confirmed-break-01/) | `ta` | excellent | 1115 | 1115 | 1115 | 0.0000% | 0.0000% | 0.0000% | 0.0866% |
-| [`ta-range-filter-var-band-01`](./validation/ta-range-filter-var-band-01/) | `ta` | excellent | 401 | 401 | 401 | 0.0000% | 0.0000% | 0.0000% | 0.0789% |
-| [`ta-rsi-bb-self-bands-01`](./validation/ta-rsi-bb-self-bands-01/) | `ta` | excellent | 350 | 351 | 350 | 0.2849% | 0.0000% | 0.0000% | 0.0802% |
-| [`ta-rsi-ema-signal-cross-01`](./validation/ta-rsi-ema-signal-cross-01/) | `ta` | excellent | 846 | 846 | 846 | 0.0000% | 0.0000% | 0.0000% | 0.0824% |
-| [`ta-rsi-macd-and-continuous-state-01`](./validation/ta-rsi-macd-and-continuous-state-01/) | `ta` | excellent | 1916 | 1916 | 1916 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
-| [`ta-rsi14-bands-30-70-01`](./validation/ta-rsi14-bands-30-70-01/) | `ta` | excellent | 256 | 256 | 256 | 0.0000% | 0.0000% | 0.0000% | 0.0814% |
-| [`ta-rsi14-cross-50-01`](./validation/ta-rsi14-cross-50-01/) | `ta` | excellent | 4690 | 4690 | 4690 | 0.0000% | 0.0000% | 0.0000% | 0.0767% |
-| [`ta-rsi14-gt-50-continuous-state-01`](./validation/ta-rsi14-gt-50-continuous-state-01/) | `ta` | excellent | 2345 | 2345 | 2345 | 0.0000% | 0.0000% | 0.0000% | 0.0751% |
-| [`ta-rsi14-gt60-lt45-no-matrix-01`](./validation/ta-rsi14-gt60-lt45-no-matrix-01/) | `ta` | excellent | 785 | 785 | 785 | 0.0000% | 0.0000% | 0.0000% | 0.0840% |
-| [`ta-sar-flip-entry-01`](./validation/ta-sar-flip-entry-01/) | `ta` | excellent | 3082 | 3082 | 3082 | 0.0000% | 0.0000% | 0.0000% | 0.0803% |
-| [`ta-sma-152-close-cross-01`](./validation/ta-sma-152-close-cross-01/) | `ta` | excellent | 1617 | 1617 | 1617 | 0.0000% | 0.0000% | 0.0000% | 0.0699% |
-| [`ta-sma-dual-cross-01`](./validation/ta-sma-dual-cross-01/) | `ta` | excellent | 2150 | 2150 | 2150 | 0.0000% | 0.0000% | 0.0000% | 0.0791% |
-| [`ta-stdev-sma-expansion-break-01`](./validation/ta-stdev-sma-expansion-break-01/) | `ta` | excellent | 878 | 878 | 878 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
-| [`ta-stoch-slow-k-d-cross-01`](./validation/ta-stoch-slow-k-d-cross-01/) | `ta` | excellent | 7585 | 7585 | 7585 | 0.0000% | 0.0000% | 0.0000% | 0.0762% |
-| [`ta-stochastic-rsi-cross-01`](./validation/ta-stochastic-rsi-cross-01/) | `ta` | excellent | 1337 | 1337 | 1305 | 0.0000% | 0.0000% | 0.0000% | 0.1153% |
-| [`ta-str-match-regex-filter-01`](./validation/ta-str-match-regex-filter-01/) | `ta` | excellent | 1916 | 1916 | 1916 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
-| [`ta-supertrend-adx-filter-01`](./validation/ta-supertrend-adx-filter-01/) | `ta` | excellent | 455 | 455 | 455 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
-| [`ta-supertrend-direction-flip-01`](./validation/ta-supertrend-direction-flip-01/) | `ta` | excellent | 819 | 819 | 819 | 0.0000% | 0.0000% | 0.0000% | 0.0757% |
-| [`ta-triple-sma-stack-latch-01`](./validation/ta-triple-sma-stack-latch-01/) | `ta` | excellent | 1406 | 1406 | 1406 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
-| [`ta-volume-spike-atr-breakout-01`](./validation/ta-volume-spike-atr-breakout-01/) | `ta` | excellent | 1778 | 1778 | 1778 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`ta-vwma-vs-sma-divergence-01`](./validation/ta-vwma-vs-sma-divergence-01/) | `ta` | excellent | 2574 | 2574 | 2574 | 0.0000% | 0.0000% | 0.0000% | 0.0801% |
-| [`udt-method-calls-sibling-cumulative-01`](./validation/udt-method-calls-sibling-cumulative-01/) | `udt` | excellent | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
-| [`udt-method-default-param-kwargs-01`](./validation/udt-method-default-param-kwargs-01/) | `udt` | excellent | 417 | 417 | 417 | 0.0000% | 0.0000% | 0.0000% | 0.0875% |
-| [`udt-method-drives-strategy-entry-01`](./validation/udt-method-drives-strategy-entry-01/) | `udt` | excellent | 1635 | 1635 | 1635 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`udt-method-extra-primitive-args-01`](./validation/udt-method-extra-primitive-args-01/) | `udt` | excellent | 2504 | 2504 | 2504 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`udt-method-feeds-strategy-exit-prices-01`](./validation/udt-method-feeds-strategy-exit-prices-01/) | `udt` | excellent | 704 | 704 | 704 | 0.0000% | 0.0000% | 0.0004% | 0.0876% |
-| [`udt-method-in-for-loop-01`](./validation/udt-method-in-for-loop-01/) | `udt` | excellent | 1660 | 1660 | 1660 | 0.0000% | 0.0000% | 0.0000% | 0.0756% |
-| [`udt-method-in-if-else-branch-01`](./validation/udt-method-in-if-else-branch-01/) | `udt` | excellent | 402 | 402 | 402 | 0.0000% | 0.0000% | 0.0000% | 0.0813% |
-| [`udt-method-in-switch-arms-01`](./validation/udt-method-in-switch-arms-01/) | `udt` | excellent | 402 | 402 | 402 | 0.0000% | 0.0000% | 0.0000% | 0.0813% |
-| [`udt-method-in-while-loop-01`](./validation/udt-method-in-while-loop-01/) | `udt` | excellent | 306 | 306 | 306 | 0.0000% | 0.0000% | 0.0000% | 0.0846% |
-| [`udt-method-mutating-self-ref-01`](./validation/udt-method-mutating-self-ref-01/) | `udt` | excellent | 2293 | 2293 | 2293 | 0.0000% | 0.0000% | 0.0000% | 0.0624% |
-| [`udt-method-on-array-element-01`](./validation/udt-method-on-array-element-01/) | `udt` | excellent | 868 | 868 | 868 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`udt-method-reads-strategy-state-01`](./validation/udt-method-reads-strategy-state-01/) | `udt` | excellent | 705 | 705 | 705 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
-| [`udt-method-receives-ta-series-param-01`](./validation/udt-method-receives-ta-series-param-01/) | `udt` | excellent | 2676 | 2676 | 2676 | 0.0000% | 0.0000% | 0.0000% | 0.0754% |
-| [`udt-method-scalar-return-01`](./validation/udt-method-scalar-return-01/) | `udt` | excellent | 507 | 507 | 507 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
-| [`udt-method-tuple-return-destructure-01`](./validation/udt-method-tuple-return-destructure-01/) | `udt` | excellent | 1095 | 1095 | 1095 | 0.0000% | 0.0000% | 0.0004% | 0.0875% |
-| [`udt-method-udt-return-from-func-01`](./validation/udt-method-udt-return-from-func-01/) | `udt` | excellent | 132 | 132 | 132 | 0.0000% | 0.0000% | 0.0000% | 0.0705% |
-| [`udt-method-uses-history-globals-01`](./validation/udt-method-uses-history-globals-01/) | `udt` | excellent | 131 | 131 | 131 | 0.0000% | 0.0000% | 0.0000% | 0.1029% |
-| [`udt-method-uses-math-funcs-01`](./validation/udt-method-uses-math-funcs-01/) | `udt` | excellent | 789 | 789 | 789 | 0.0000% | 0.0000% | 0.0000% | 0.0845% |
-| [`udt-method-uses-na-nz-fixnan-01`](./validation/udt-method-uses-na-nz-fixnan-01/) | `udt` | excellent | 695 | 695 | 695 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
-| [`udt-method-var-instance-streak-01`](./validation/udt-method-var-instance-streak-01/) | `udt` | excellent | 1007 | 1007 | 1007 | 0.0000% | 0.0000% | 0.0000% | 0.0557% |
-| [`udt-method-windowed-method-chain-01`](./validation/udt-method-windowed-method-chain-01/) | `udt` | excellent | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
-| [`udt-regime-stack-stress-01`](./validation/udt-regime-stack-stress-01/) | `udt` | excellent | 3910 | 3911 | 3910 | 0.0256% | 0.0000% | 0.0000% | 0.0830% |
-| [`varip-var-udt-in-security-positive-01`](./validation/varip-var-udt-in-security-positive-01/) | `varip` | excellent | 207 | 207 | 207 | 0.0000% | 0.0000% | 0.0000% | 0.0710% |
+| Slug | Category | Tier | Profile | TV | Engine | Matched | Count Δ | Entry p90 | Exit p90 | PnL p90 |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|
+| [`analyzer-parity-choch-bos-isolator-01`](./validation/analyzer-parity-choch-bos-isolator-01/) | `analyzer` | excellent | `strict` | 1026 | 1026 | 1026 | 0.0000% | 0.0000% | 0.0000% | 0.0705% |
+| [`analyzer-parity-edge-margin-50-pct-01`](./validation/analyzer-parity-edge-margin-50-pct-01/) | `analyzer` | excellent | `strict` | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0701% |
+| [`analyzer-parity-percent-of-equity-sizing-01`](./validation/analyzer-parity-percent-of-equity-sizing-01/) | `analyzer` | excellent | `strict` | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0006% |
+| [`analyzer-parity-small-equity-fraction-01`](./validation/analyzer-parity-small-equity-fraction-01/) | `analyzer` | excellent | `strict` | 57 | 57 | 57 | 0.0000% | 0.0000% | 0.0000% | 0.0698% |
+| [`analyzer-parity-stop-limit-timing-01`](./validation/analyzer-parity-stop-limit-timing-01/) | `analyzer` | excellent | `strict` | 778 | 778 | 778 | 0.0000% | 0.0000% | 0.0004% | 0.1008% |
+| [`analyzer-self-test-multi-mode-01`](./validation/analyzer-self-test-multi-mode-01/) | `analyzer` | excellent | `strict` | 147 | 147 | 147 | 0.0000% | 0.0000% | 0.0000% | 0.0687% |
+| [`anomaly-equity-mirror-strategy-equity-01`](./validation/anomaly-equity-mirror-strategy-equity-01/) | `anomaly` | anomaly | `strict` | 24 | 25 | 13 | 4.0000% | 0.0000% | 0.0000% | 2.3202% |
+| [`barstate-isconfirmed-magnifier-off-01b`](./validation/barstate-isconfirmed-magnifier-off-01b/) | `barstate` | excellent | `strict` | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`barstate-isconfirmed-magnifier-on-01a`](./validation/barstate-isconfirmed-magnifier-on-01a/) | `barstate` | excellent | `strict` | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`bracket-atr-trail-series-int-points-01`](./validation/bracket-atr-trail-series-int-points-01/) | `bracket` | excellent | `production` | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`bracket-atr-trailing-stop-state-01`](./validation/bracket-atr-trailing-stop-state-01/) | `bracket` | excellent | `strict` | 5073 | 5072 | 5072 | 0.0197% | 0.0000% | 0.0000% | 0.0786% |
+| [`bracket-entry-exit-same-pass-attach-01`](./validation/bracket-entry-exit-same-pass-attach-01/) | `bracket` | excellent | `strict` | 728 | 728 | 728 | 0.0000% | 0.0000% | 0.0005% | 0.1130% |
+| [`bracket-exit-stop-limit-trail-same-bar-01`](./validation/bracket-exit-stop-limit-trail-same-bar-01/) | `bracket` | excellent | `production` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0755% |
+| [`bracket-exit-three-way-set-once-entry-01`](./validation/bracket-exit-three-way-set-once-entry-01/) | `bracket` | excellent | `production` | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`bracket-exit-tp-sl-fixed-01`](./validation/bracket-exit-tp-sl-fixed-01/) | `bracket` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0005% | 0.1320% |
+| [`bracket-narrow-stop-limit-with-trail8-01`](./validation/bracket-narrow-stop-limit-with-trail8-01/) | `bracket` | excellent | `production` | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`bracket-partial-exit-qty-percent-01`](./validation/bracket-partial-exit-qty-percent-01/) | `bracket` | excellent | `strict` | 725 | 725 | 725 | 0.0000% | 0.0000% | 0.0004% | 0.1594% |
+| [`bracket-same-id-exit-replace-01`](./validation/bracket-same-id-exit-replace-01/) | `bracket` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0004% | 0.1584% |
+| [`bracket-tp-sl-oca-reduce-isolate-01`](./validation/bracket-tp-sl-oca-reduce-isolate-01/) | `bracket` | excellent | `strict` | 2240 | 2240 | 2240 | 0.0000% | 0.0000% | 0.0000% | 0.0561% |
+| [`bracket-trail-points-no-offset-explicit-01`](./validation/bracket-trail-points-no-offset-explicit-01/) | `bracket` | excellent | `production` | 782 | 782 | 782 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`bracket-trail-points-with-offset-only-01`](./validation/bracket-trail-points-with-offset-only-01/) | `bracket` | excellent | `production` | 710 | 710 | 710 | 0.0000% | 0.0000% | 0.0000% | 0.0935% |
+| [`bracket-trailing-activation-offset-path-01`](./validation/bracket-trailing-activation-offset-path-01/) | `bracket` | excellent | `production` | 671 | 671 | 671 | 0.0000% | 0.0000% | 0.0000% | 0.0919% |
+| [`cap-max-intraday-filled-orders-isolate-01`](./validation/cap-max-intraday-filled-orders-isolate-01/) | `cap` | excellent | `strict` | 1958 | 1958 | 1958 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
+| [`cap-risk-gates-allow-max-intraday-01`](./validation/cap-risk-gates-allow-max-intraday-01/) | `cap` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0726% |
+| [`composite-4emarsi-integration-01`](./validation/composite-4emarsi-integration-01/) | `composite` | excellent | `strict` | 335 | 335 | 335 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
+| [`composite-4emarsi-quad-ema-stack-01`](./validation/composite-4emarsi-quad-ema-stack-01/) | `composite` | excellent | `strict` | 224 | 222 | 221 | 0.8929% | 0.0000% | 0.0000% | 0.0650% |
+| [`composite-4emarsi-rsi-pullback-latch-01`](./validation/composite-4emarsi-rsi-pullback-latch-01/) | `composite` | excellent | `strict` | 816 | 816 | 816 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
+| [`composite-4emarsi-session-window-nbar-exit-01`](./validation/composite-4emarsi-session-window-nbar-exit-01/) | `composite` | excellent | `strict` | 744 | 744 | 744 | 0.0000% | 0.0000% | 0.0000% | 0.0755% |
+| [`composite-boscurv-integration-01`](./validation/composite-boscurv-integration-01/) | `composite` | excellent | `strict` | 1026 | 1026 | 1026 | 0.0000% | 0.0000% | 0.0000% | 0.0798% |
+| [`composite-boscurv-linreg-slope-channel-01`](./validation/composite-boscurv-linreg-slope-channel-01/) | `composite` | excellent | `strict` | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0770% |
+| [`composite-boscurv-pivot-bos-trigger-01`](./validation/composite-boscurv-pivot-bos-trigger-01/) | `composite` | excellent | `strict` | 906 | 906 | 906 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
+| [`composite-bracket-cap-range-pending-stop-01`](./validation/composite-bracket-cap-range-pending-stop-01/) | `composite` | excellent | `strict` | 1192 | 1192 | 1192 | 0.0000% | 0.0000% | 0.0000% | 0.0569% |
+| [`composite-ies-adx-regime-classify-01`](./validation/composite-ies-adx-regime-classify-01/) | `composite` | excellent | `strict` | 682 | 683 | 682 | 0.1464% | 0.0000% | 0.0000% | 0.0770% |
+| [`composite-ies-bb-kc-squeeze-release-01`](./validation/composite-ies-bb-kc-squeeze-release-01/) | `composite` | excellent | `strict` | 902 | 902 | 902 | 0.0000% | 0.0000% | 0.0000% | 0.0799% |
+| [`composite-ies-cooldown-daily-cap-01`](./validation/composite-ies-cooldown-daily-cap-01/) | `composite` | excellent | `strict` | 727 | 727 | 727 | 0.0000% | 0.0000% | 0.0000% | 0.0838% |
+| [`composite-ies-equity-feedback-sizing-01`](./validation/composite-ies-equity-feedback-sizing-01/) | `composite` | excellent | `strict` | 79 | 79 | 79 | 0.0000% | 0.0000% | 0.0005% | 0.0891% |
+| [`composite-ies-integration-01`](./validation/composite-ies-integration-01/) | `composite` | excellent | `strict` | 537 | 537 | 537 | 0.0000% | 0.0000% | 0.0000% | 0.0771% |
+| [`composite-ies-pivot-liquidity-sweep-01`](./validation/composite-ies-pivot-liquidity-sweep-01/) | `composite` | excellent | `strict` | 706 | 706 | 706 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
+| [`composite-ies-pressure-gauge-01`](./validation/composite-ies-pressure-gauge-01/) | `composite` | excellent | `strict` | 2207 | 2207 | 2207 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
+| [`composite-ies-rsi-macd-momentum-01`](./validation/composite-ies-rsi-macd-momentum-01/) | `composite` | excellent | `strict` | 4798 | 4798 | 4798 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
+| [`composite-ies-three-ema-bias-score-01`](./validation/composite-ies-three-ema-bias-score-01/) | `composite` | excellent | `strict` | 717 | 717 | 716 | 0.0000% | 0.0000% | 0.0000% | 0.0772% |
+| [`composite-kanuck-calc-on-every-tick-01`](./validation/composite-kanuck-calc-on-every-tick-01/) | `composite` | excellent | `strict` | 361 | 361 | 361 | 0.0000% | 0.0000% | 0.0000% | 0.0750% |
+| [`composite-kanuck-integration-01`](./validation/composite-kanuck-integration-01/) | `composite` | excellent | `strict` | 1255 | 1255 | 1255 | 0.0000% | 0.0000% | 0.0000% | 0.0723% |
+| [`composite-kanuck-kama-state-recurrence-01`](./validation/composite-kanuck-kama-state-recurrence-01/) | `composite` | excellent | `strict` | 4979 | 4977 | 4974 | 0.0402% | 0.0000% | 0.0000% | 0.0750% |
+| [`composite-kanuck-max-bars-back-500-01`](./validation/composite-kanuck-max-bars-back-500-01/) | `composite` | excellent | `strict` | 833 | 833 | 833 | 0.0000% | 0.0000% | 0.0000% | 0.0577% |
+| [`composite-kkb-ema-atr-breakout-band-01`](./validation/composite-kkb-ema-atr-breakout-band-01/) | `composite` | excellent | `strict` | 641 | 641 | 641 | 0.0000% | 0.0000% | 0.0000% | 0.0717% |
+| [`composite-kkb-integration-01`](./validation/composite-kkb-integration-01/) | `composite` | excellent | `strict` | 641 | 641 | 641 | 0.0000% | 0.0000% | 0.0000% | 0.0717% |
+| [`composite-kkb-kalman-filter-1d-01`](./validation/composite-kkb-kalman-filter-1d-01/) | `composite` | excellent | `strict` | 5487 | 5487 | 5487 | 0.0000% | 0.0000% | 0.0000% | 0.0765% |
+| [`composite-kkb-margin-100-pct-01`](./validation/composite-kkb-margin-100-pct-01/) | `composite` | excellent | `strict` | 2522 | 2522 | 2522 | 0.0000% | 0.0000% | 0.0000% | 0.0807% |
+| [`composite-liqsweep-integration-01`](./validation/composite-liqsweep-integration-01/) | `composite` | excellent | `strict` | 355 | 355 | 355 | 0.0000% | 0.0000% | 0.0000% | 0.0877% |
+| [`composite-liqsweep-pivot-hh-ll-01`](./validation/composite-liqsweep-pivot-hh-ll-01/) | `composite` | excellent | `strict` | 1171 | 1171 | 1171 | 0.0000% | 0.0000% | 0.0000% | 0.0793% |
+| [`composite-liqsweep-wait-one-continuation-01`](./validation/composite-liqsweep-wait-one-continuation-01/) | `composite` | excellent | `strict` | 628 | 628 | 628 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
+| [`composite-liqsweep-wick-pierce-close-back-01`](./validation/composite-liqsweep-wick-pierce-close-back-01/) | `composite` | excellent | `strict` | 1015 | 1015 | 1015 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
+| [`composite-marketshift-integration-01`](./validation/composite-marketshift-integration-01/) | `composite` | excellent | `strict` | 905 | 905 | 905 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
+| [`composite-marketshift-pivot-state-machine-01`](./validation/composite-marketshift-pivot-state-machine-01/) | `composite` | excellent | `strict` | 906 | 906 | 906 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
+| [`composite-marketshift-rolling-highest-lowest-01`](./validation/composite-marketshift-rolling-highest-lowest-01/) | `composite` | excellent | `strict` | 374 | 374 | 374 | 0.0000% | 0.0000% | 0.0000% | 0.0725% |
+| [`composite-marketshift-state-edge-detector-01`](./validation/composite-marketshift-state-edge-detector-01/) | `composite` | excellent | `strict` | 905 | 905 | 905 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
+| [`composite-scalping-fast-ma-cross-trigger-01`](./validation/composite-scalping-fast-ma-cross-trigger-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
+| [`composite-scalping-integration-01`](./validation/composite-scalping-integration-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0579% |
+| [`composite-scalping-tight-tp-sl-points-01`](./validation/composite-scalping-tight-tp-sl-points-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0579% |
+| [`composite-trendmaster-integration-01`](./validation/composite-trendmaster-integration-01/) | `composite` | excellent | `strict` | 629 | 628 | 628 | 0.1590% | 0.0000% | 0.0000% | 0.0800% |
+| [`composite-trendmaster-line-new-projection-01`](./validation/composite-trendmaster-line-new-projection-01/) | `composite` | excellent | `strict` | 1592 | 1594 | 1592 | 0.1255% | 0.0000% | 0.0000% | 0.0778% |
+| [`composite-trendmaster-pivot-anchored-bracket-01`](./validation/composite-trendmaster-pivot-anchored-bracket-01/) | `composite` | excellent | `strict` | 3095 | 3097 | 3095 | 0.0646% | 0.0000% | 0.0000% | 0.0849% |
+| [`composite-trendmaster-three-tier-ema-state-01`](./validation/composite-trendmaster-three-tier-ema-state-01/) | `composite` | excellent | `strict` | 220 | 220 | 220 | 0.0000% | 0.0000% | 0.0000% | 0.0631% |
+| [`composite-trendmaster-trend-momentum-structure-gate-01`](./validation/composite-trendmaster-trend-momentum-structure-gate-01/) | `composite` | excellent | `strict` | 362 | 362 | 362 | 0.0000% | 0.0000% | 0.0000% | 0.0727% |
+| [`composite-vcp-cumulative-volume-delta-01`](./validation/composite-vcp-cumulative-volume-delta-01/) | `composite` | excellent | `strict` | 3119 | 3119 | 3119 | 0.0000% | 0.0000% | 0.0000% | 0.0761% |
+| [`composite-vcp-fvg-active-zones-01`](./validation/composite-vcp-fvg-active-zones-01/) | `composite` | excellent | `strict` | 11800 | 11851 | 11797 | 0.4303% | 0.0000% | 0.0000% | 0.0586% |
+| [`composite-vcp-integration-01`](./validation/composite-vcp-integration-01/) | `composite` | excellent | `strict` | 336 | 336 | 335 | 0.0000% | 0.0000% | 0.0000% | 0.0930% |
+| [`composite-vcp-manual-adx-regime-01`](./validation/composite-vcp-manual-adx-regime-01/) | `composite` | excellent | `strict` | 636 | 637 | 636 | 0.1570% | 0.0000% | 0.0000% | 0.0793% |
+| [`composite-vcp-pivot-strength-5-01`](./validation/composite-vcp-pivot-strength-5-01/) | `composite` | excellent | `strict` | 1937 | 1937 | 1937 | 0.0000% | 0.0000% | 0.0000% | 0.0773% |
+| [`composite-vcp-rsi-smooth-divergence-01`](./validation/composite-vcp-rsi-smooth-divergence-01/) | `composite` | excellent | `strict` | 142 | 142 | 142 | 0.0000% | 0.0000% | 0.0000% | 0.0808% |
+| [`composite-vcp-session-tz-newyork-01`](./validation/composite-vcp-session-tz-newyork-01/) | `composite` | excellent | `strict` | 396 | 396 | 396 | 0.0000% | 0.0000% | 0.0000% | 0.0752% |
+| [`composite-vcp-vol-zscore-anomaly-01`](./validation/composite-vcp-vol-zscore-anomaly-01/) | `composite` | excellent | `strict` | 591 | 591 | 591 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
+| [`composite-wunderscalper-alert-templates-01`](./validation/composite-wunderscalper-alert-templates-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
+| [`composite-wunderscalper-explicit-reverse-01`](./validation/composite-wunderscalper-explicit-reverse-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
+| [`composite-wunderscalper-integration-01`](./validation/composite-wunderscalper-integration-01/) | `composite` | excellent | `strict` | 3097 | 3097 | 3097 | 0.0000% | 0.0000% | 0.0000% | 0.0833% |
+| [`ltf-bool-array-bull-majority-01`](./validation/ltf-bool-array-bull-majority-01/) | `ltf` | excellent | `strict` | 3116 | 3116 | 3116 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
+| [`ltf-numeric-float-ratio15-01`](./validation/ltf-numeric-float-ratio15-01/) | `ltf` | excellent | `strict` | 820 | 826 | 791 | 0.7264% | 0.0000% | 0.0000% | 0.0867% |
+| [`magnifier-tick-dist-endpoints-01`](./validation/magnifier-tick-dist-endpoints-01/) | `magnifier` | excellent | `strict` | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
+| [`magnifier-tick-dist-endpoints-rsi-cross-08a`](./validation/magnifier-tick-dist-endpoints-rsi-cross-08a/) | `magnifier` | excellent | `strict` | 2345 | 2345 | 2345 | 0.0000% | 0.0000% | 0.0000% | 0.0704% |
+| [`magnifier-tick-dist-volume-weighted-on-01`](./validation/magnifier-tick-dist-volume-weighted-on-01/) | `magnifier` | excellent | `strict` | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0739% |
+| [`matrix-bool-mask-explicit-utc-tz-01`](./validation/matrix-bool-mask-explicit-utc-tz-01/) | `matrix` | excellent | `strict` | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
+| [`matrix-bool-mask-no-transpose-01`](./validation/matrix-bool-mask-no-transpose-01/) | `matrix` | excellent | `strict` | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
+| [`matrix-bool-mask-transpose-roundtrip-01`](./validation/matrix-bool-mask-transpose-roundtrip-01/) | `matrix` | excellent | `strict` | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
+| [`matrix-bool-regime-mask-24x7-01`](./validation/matrix-bool-regime-mask-24x7-01/) | `matrix` | excellent | `strict` | 774 | 774 | 774 | 0.0000% | 0.0000% | 0.0000% | 0.0841% |
+| [`matrix-covariance-eigen-pca-01`](./validation/matrix-covariance-eigen-pca-01/) | `matrix` | excellent | `strict` | 2850 | 2850 | 2850 | 0.0000% | 0.0000% | 0.0000% | 0.0778% |
+| [`matrix-eigen-rank-deficient-cov-01`](./validation/matrix-eigen-rank-deficient-cov-01/) | `matrix` | excellent | `strict` | 871 | 871 | 871 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`mtf-daily-array-median-percentrank-01`](./validation/mtf-daily-array-median-percentrank-01/) | `mtf` | excellent | `strict` | 362 | 363 | 362 | 0.2755% | 0.0000% | 0.0000% | 0.0961% |
+| [`mtf-daily-ema26-warmup-01`](./validation/mtf-daily-ema26-warmup-01/) | `mtf` | excellent | `strict` | 31 | 31 | 31 | 0.0000% | 0.0000% | 0.0000% | 0.0884% |
+| [`mtf-daily-prev-high-break-01`](./validation/mtf-daily-prev-high-break-01/) | `mtf` | excellent | `strict` | 147 | 147 | 147 | 0.0000% | 0.0000% | 0.0000% | 0.0687% |
+| [`mtf-dual-tf-60-240-rising-01`](./validation/mtf-dual-tf-60-240-rising-01/) | `mtf` | excellent | `strict` | 736 | 736 | 736 | 0.0000% | 0.0000% | 0.0000% | 0.0653% |
+| [`mtf-htf-60-close-change-baseline-01`](./validation/mtf-htf-60-close-change-baseline-01/) | `mtf` | excellent | `strict` | 8775 | 8775 | 8775 | 0.0000% | 0.0000% | 0.0000% | 0.0673% |
+| [`mtf-htf-60-close-roll-01`](./validation/mtf-htf-60-close-roll-01/) | `mtf` | excellent | `strict` | 8775 | 8775 | 8775 | 0.0000% | 0.0000% | 0.0000% | 0.0653% |
+| [`mtf-htf-60-gaps-on-roll-01`](./validation/mtf-htf-60-gaps-on-roll-01/) | `mtf` | excellent | `strict` | 2247 | 2247 | 2247 | 0.0000% | 0.0000% | 0.0000% | 0.0736% |
+| [`mtf-htf-60-rsi14-inside-security-01`](./validation/mtf-htf-60-rsi14-inside-security-01/) | `mtf` | excellent | `strict` | 496 | 496 | 496 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
+| [`mtf-htf-60-sma20-inside-security-01`](./validation/mtf-htf-60-sma20-inside-security-01/) | `mtf` | excellent | `strict` | 540 | 540 | 540 | 0.0000% | 0.0000% | 0.0000% | 0.0768% |
+| [`mtf-htf-60-volume-spike-01`](./validation/mtf-htf-60-volume-spike-01/) | `mtf` | excellent | `strict` | 584 | 584 | 584 | 0.0000% | 0.0000% | 0.0000% | 0.0886% |
+| [`mtf-htf-confluence-manual-trail-01`](./validation/mtf-htf-confluence-manual-trail-01/) | `mtf` | excellent | `strict` | 345 | 345 | 345 | 0.0000% | 0.0000% | 0.0004% | 0.0814% |
+| [`mtf-htf-confluence-static-bracket-01`](./validation/mtf-htf-confluence-static-bracket-01/) | `mtf` | excellent | `strict` | 283 | 283 | 283 | 0.0000% | 0.0000% | 0.0004% | 0.0815% |
+| [`mtf-roll-state-60-240-d-minimal-01`](./validation/mtf-roll-state-60-240-d-minimal-01/) | `mtf` | excellent | `strict` | 2938 | 2948 | 2938 | 0.3392% | 0.0000% | 0.0000% | 0.0677% |
+| [`mtf-triple-tf-close-confluence-01`](./validation/mtf-triple-tf-close-confluence-01/) | `mtf` | excellent | `strict` | 48 | 48 | 48 | 0.0000% | 0.0000% | 0.0000% | 0.0911% |
+| [`mtf-triple-tf-macd-hist-confluence-01`](./validation/mtf-triple-tf-macd-hist-confluence-01/) | `mtf` | excellent | `strict` | 24 | 24 | 23 | 0.0000% | 0.0000% | 0.0000% | 0.1662% |
+| [`na-deep-history-int-na-01`](./validation/na-deep-history-int-na-01/) | `na` | excellent | `strict` | 106 | 106 | 106 | 0.0000% | 0.0000% | 0.0000% | 0.1001% |
+| [`na-nz-fixnan-history-chain-01`](./validation/na-nz-fixnan-history-chain-01/) | `na` | excellent | `strict` | 3093 | 3093 | 3093 | 0.0000% | 0.0000% | 0.0000% | 0.0756% |
+| [`oca-exit-bracket-internal-cancel-01`](./validation/oca-exit-bracket-internal-cancel-01/) | `oca` | excellent | `strict` | 421 | 421 | 421 | 0.0000% | 0.0000% | 0.0005% | 0.1087% |
+| [`oca-multi-bracket-isolation-01`](./validation/oca-multi-bracket-isolation-01/) | `oca` | excellent | `strict` | 1244 | 1244 | 1244 | 0.0000% | 0.0000% | 0.0005% | 0.1362% |
+| [`oca-raw-strategy-order-reduce-01`](./validation/oca-raw-strategy-order-reduce-01/) | `oca` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0005% | 0.1273% |
+| [`order-close-all-cancel-all-01`](./validation/order-close-all-cancel-all-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0005% | 0.4564% |
+| [`order-close-immediate-vs-next-bar-01`](./validation/order-close-immediate-vs-next-bar-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
+| [`order-cross-entry-cancel-same-pass-01`](./validation/order-cross-entry-cancel-same-pass-01/) | `order` | excellent | `strict` | 495 | 495 | 495 | 0.0000% | 0.0000% | 0.0000% | 0.0836% |
+| [`order-cross-entry-close-same-pass-01`](./validation/order-cross-entry-close-same-pass-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0830% |
+| [`order-cross-exit-close-same-pass-01`](./validation/order-cross-exit-close-same-pass-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0675% |
+| [`order-deferred-flip-guaranteed-gap-stops-01`](./validation/order-deferred-flip-guaranteed-gap-stops-01/) | `order` | excellent | `strict` | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
+| [`order-deferred-flip-pooc-cross-bar-01`](./validation/order-deferred-flip-pooc-cross-bar-01/) | `order` | excellent | `strict` | 791 | 791 | 791 | 0.0000% | 0.0005% | 0.0000% | 0.1444% |
+| [`order-dual-four-bar-stop-no-close-01`](./validation/order-dual-four-bar-stop-no-close-01/) | `order` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0817% |
+| [`order-dual-side-same-id-stop-no-cancel-01`](./validation/order-dual-side-same-id-stop-no-cancel-01/) | `order` | excellent | `strict` | 689 | 689 | 689 | 0.0000% | 0.0000% | 0.0000% | 0.0844% |
+| [`order-dual-stop-both-touch-priority-01`](./validation/order-dual-stop-both-touch-priority-01/) | `order` | excellent | `strict` | 757 | 757 | 757 | 0.0000% | 0.0000% | 0.0000% | 0.0949% |
+| [`order-dual-stop-cancel-rotation-01`](./validation/order-dual-stop-cancel-rotation-01/) | `order` | excellent | `strict` | 792 | 792 | 792 | 0.0000% | 0.0000% | 0.0000% | 0.0788% |
+| [`order-dual-stop-far-only-01`](./validation/order-dual-stop-far-only-01/) | `order` | excellent | `strict` | 364 | 364 | 364 | 0.0000% | 0.0000% | 0.0000% | 0.0952% |
+| [`order-dual-stop-near-only-01`](./validation/order-dual-stop-near-only-01/) | `order` | excellent | `strict` | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.1101% |
+| [`order-dual-stop-open-high-first-path-01`](./validation/order-dual-stop-open-high-first-path-01/) | `order` | excellent | `strict` | 216 | 216 | 216 | 0.0000% | 0.0000% | 0.0000% | 0.1134% |
+| [`order-dual-stop-open-low-first-path-01`](./validation/order-dual-stop-open-low-first-path-01/) | `order` | excellent | `strict` | 188 | 188 | 188 | 0.0000% | 0.0000% | 0.0000% | 0.1113% |
+| [`order-dual-stop-open-tie-01`](./validation/order-dual-stop-open-tie-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`order-dual-stop-source-order-long-first-01`](./validation/order-dual-stop-source-order-long-first-01/) | `order` | excellent | `strict` | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.1101% |
+| [`order-dual-stop-source-order-short-first-01`](./validation/order-dual-stop-source-order-short-first-01/) | `order` | excellent | `strict` | 365 | 365 | 365 | 0.0000% | 0.0000% | 0.0000% | 0.0872% |
+| [`order-entry-implicit-reversal-exit-01`](./validation/order-entry-implicit-reversal-exit-01/) | `order` | excellent | `strict` | 1098 | 1098 | 1098 | 0.0000% | 0.0000% | 0.0000% | 0.0767% |
+| [`order-flip-stop-no-paired-close-01`](./validation/order-flip-stop-no-paired-close-01/) | `order` | excellent | `strict` | 724 | 724 | 724 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
+| [`order-market-close-fill-basis-01`](./validation/order-market-close-fill-basis-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0773% |
+| [`order-one-side-four-bar-far-opposite-01`](./validation/order-one-side-four-bar-far-opposite-01/) | `order` | excellent | `strict` | 349 | 349 | 349 | 0.0000% | 0.0000% | 0.0000% | 0.0818% |
+| [`order-opposite-entry-close-same-pass-01`](./validation/order-opposite-entry-close-same-pass-01/) | `order` | excellent | `strict` | 843 | 843 | 843 | 0.0000% | 0.0000% | 0.0000% | 0.0819% |
+| [`order-percent-equity-cash-commission-01`](./validation/order-percent-equity-cash-commission-01/) | `order` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0014% |
+| [`order-process-on-close-false-01`](./validation/order-process-on-close-false-01/) | `order` | excellent | `strict` | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`order-process-on-close-true-01`](./validation/order-process-on-close-true-01/) | `order` | excellent | `strict` | 857 | 857 | 857 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`order-range-expansion-pending-stop-01`](./validation/order-range-expansion-pending-stop-01/) | `order` | excellent | `strict` | 2947 | 2947 | 2947 | 0.0000% | 0.0000% | 0.0000% | 0.0798% |
+| [`order-same-id-entry-close-same-bar-01`](./validation/order-same-id-entry-close-same-bar-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0656% |
+| [`order-same-id-market-entry-repeat-01`](./validation/order-same-id-market-entry-repeat-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
+| [`order-same-id-stop-after-flat-01`](./validation/order-same-id-stop-after-flat-01/) | `order` | excellent | `strict` | 703 | 703 | 703 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
+| [`order-same-id-stop-cross-before-modify-01`](./validation/order-same-id-stop-cross-before-modify-01/) | `order` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0815% |
+| [`order-same-id-stop-minute-zero-01`](./validation/order-same-id-stop-minute-zero-01/) | `order` | excellent | `strict` | 578 | 578 | 578 | 0.0000% | 0.0000% | 0.0000% | 0.0811% |
+| [`order-same-id-stop-modification-01`](./validation/order-same-id-stop-modification-01/) | `order` | excellent | `strict` | 689 | 689 | 689 | 0.0000% | 0.0000% | 0.0000% | 0.0844% |
+| [`order-same-id-stop-raise-only-01`](./validation/order-same-id-stop-raise-only-01/) | `order` | excellent | `strict` | 666 | 666 | 666 | 0.0000% | 0.0000% | 0.0000% | 0.0825% |
+| [`order-same-id-stop-window-four-bars-01`](./validation/order-same-id-stop-window-four-bars-01/) | `order` | excellent | `strict` | 349 | 349 | 349 | 0.0000% | 0.0000% | 0.0000% | 0.0818% |
+| [`order-stale-stop-after-close-no-cancel-01`](./validation/order-stale-stop-after-close-no-cancel-01/) | `order` | excellent | `strict` | 572 | 572 | 572 | 0.0000% | 0.0000% | 0.0000% | 0.0800% |
+| [`order-stop-cancel-no-regime-close-01`](./validation/order-stop-cancel-no-regime-close-01/) | `order` | excellent | `strict` | 1610 | 1610 | 1610 | 0.0000% | 0.0000% | 0.0000% | 0.0855% |
+| [`order-stop-entry-cancel-opposite-01`](./validation/order-stop-entry-cancel-opposite-01/) | `order` | excellent | `strict` | 1738 | 1738 | 1738 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
+| [`order-stop-entry-reversal-grouping-01`](./validation/order-stop-entry-reversal-grouping-01/) | `order` | excellent | `strict` | 1464 | 1464 | 1464 | 0.0000% | 0.0000% | 0.0000% | 0.0748% |
+| [`order-stop-entry-touch-boundary-01`](./validation/order-stop-entry-touch-boundary-01/) | `order` | excellent | `strict` | 548 | 548 | 548 | 0.0000% | 0.0000% | 0.0000% | 0.0811% |
+| [`pyramid-cash-fractional-commission-01`](./validation/pyramid-cash-fractional-commission-01/) | `pyramid` | excellent | `strict` | 790 | 789 | 788 | 0.1266% | 0.0000% | 0.0000% | 0.0370% |
+| [`pyramid-close-id-grouping-01`](./validation/pyramid-close-id-grouping-01/) | `pyramid` | excellent | `strict` | 2196 | 2196 | 2196 | 0.0000% | 0.0000% | 0.0000% | 0.0805% |
+| [`pyramid-deferred-flip-close-all-01`](./validation/pyramid-deferred-flip-close-all-01/) | `pyramid` | excellent | `strict` | 2356 | 2378 | 2345 | 0.9251% | 0.0000% | 0.0000% | 0.0855% |
+| [`pyramid-flip-stop-pyramiding-2-01`](./validation/pyramid-flip-stop-pyramiding-2-01/) | `pyramid` | excellent | `strict` | 843 | 843 | 843 | 0.0000% | 0.0000% | 0.0000% | 0.0819% |
+| [`recompute-alma-sar-corr-magnifier-01`](./validation/recompute-alma-sar-corr-magnifier-01/) | `recompute` | excellent | `strict` | 582 | 582 | 582 | 0.0000% | 0.0000% | 0.0000% | 0.0795% |
+| [`recompute-mtf-rsi-macd-bb-01`](./validation/recompute-mtf-rsi-macd-bb-01/) | `recompute` | excellent | `strict` | 286 | 286 | 286 | 0.0000% | 0.0000% | 0.0000% | 0.0700% |
+| [`session-hour-minute-pulse-filter-01`](./validation/session-hour-minute-pulse-filter-01/) | `session` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0699% |
+| [`session-ny-spring-forward-dst-01`](./validation/session-ny-spring-forward-dst-01/) | `session` | excellent | `strict` | 396 | 396 | 396 | 0.0000% | 0.0000% | 0.0000% | 0.0735% |
+| [`ta-bb-kc-squeeze-breakout-01`](./validation/ta-bb-kc-squeeze-breakout-01/) | `ta` | excellent | `strict` | 813 | 813 | 813 | 0.0000% | 0.0000% | 0.0000% | 0.0863% |
+| [`ta-bb-rsi-mean-reversion-01`](./validation/ta-bb-rsi-mean-reversion-01/) | `ta` | excellent | `strict` | 495 | 495 | 495 | 0.0000% | 0.0000% | 0.0000% | 0.0820% |
+| [`ta-cci-threshold-cross-01`](./validation/ta-cci-threshold-cross-01/) | `ta` | excellent | `strict` | 2462 | 2462 | 2462 | 0.0000% | 0.0000% | 0.0000% | 0.0719% |
+| [`ta-chandelier-exit-direction-01`](./validation/ta-chandelier-exit-direction-01/) | `ta` | excellent | `strict` | 1603 | 1603 | 1603 | 0.0000% | 0.0000% | 0.0000% | 0.0828% |
+| [`ta-closedtrades-risk-introspection-01`](./validation/ta-closedtrades-risk-introspection-01/) | `ta` | excellent | `strict` | 751 | 751 | 751 | 0.0000% | 0.0000% | 0.0000% | 0.1216% |
+| [`ta-dmi-adx-di-cross-01`](./validation/ta-dmi-adx-di-cross-01/) | `ta` | excellent | `strict` | 2747 | 2743 | 2741 | 0.1456% | 0.0000% | 0.0000% | 0.0779% |
+| [`ta-donchian-channel-breakout-01`](./validation/ta-donchian-channel-breakout-01/) | `ta` | excellent | `strict` | 1002 | 1002 | 1002 | 0.0000% | 0.0000% | 0.0000% | 0.0794% |
+| [`ta-dual-ma-switch-dispatch-01`](./validation/ta-dual-ma-switch-dispatch-01/) | `ta` | excellent | `strict` | 1238 | 1238 | 1238 | 0.0000% | 0.0000% | 0.0000% | 0.0888% |
+| [`ta-dual-thrust-open-anchored-range-01`](./validation/ta-dual-thrust-open-anchored-range-01/) | `ta` | excellent | `strict` | 2870 | 2870 | 2870 | 0.0000% | 0.0000% | 0.0000% | 0.0784% |
+| [`ta-elder-ray-bull-bear-power-01`](./validation/ta-elder-ray-bull-bear-power-01/) | `ta` | excellent | `strict` | 2483 | 2483 | 2483 | 0.0000% | 0.0000% | 0.0000% | 0.0786% |
+| [`ta-ema-ribbon-stack-transition-01`](./validation/ta-ema-ribbon-stack-transition-01/) | `ta` | excellent | `strict` | 626 | 626 | 626 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
+| [`ta-engulfing-candle-pattern-01`](./validation/ta-engulfing-candle-pattern-01/) | `ta` | excellent | `strict` | 826 | 826 | 825 | 0.0000% | 0.0000% | 0.0000% | 0.0791% |
+| [`ta-highestbars-lowestbars-breakout-01`](./validation/ta-highestbars-lowestbars-breakout-01/) | `ta` | excellent | `strict` | 1585 | 1585 | 1585 | 0.0000% | 0.0000% | 0.0000% | 0.0834% |
+| [`ta-hma-55-close-cross-01`](./validation/ta-hma-55-close-cross-01/) | `ta` | excellent | `strict` | 4839 | 4839 | 4839 | 0.0000% | 0.0000% | 0.0000% | 0.0817% |
+| [`ta-hma-fast-slow-cross-01`](./validation/ta-hma-fast-slow-cross-01/) | `ta` | excellent | `strict` | 4713 | 4713 | 4713 | 0.0000% | 0.0000% | 0.0000% | 0.0821% |
+| [`ta-inside-bar-engulfing-01`](./validation/ta-inside-bar-engulfing-01/) | `ta` | excellent | `strict` | 3614 | 3614 | 3614 | 0.0000% | 0.0000% | 0.0000% | 0.0764% |
+| [`ta-kama-style-efficiency-ratio-01`](./validation/ta-kama-style-efficiency-ratio-01/) | `ta` | excellent | `strict` | 4598 | 4600 | 4598 | 0.0435% | 0.0000% | 0.0000% | 0.0772% |
+| [`ta-keltner-channel-break-01`](./validation/ta-keltner-channel-break-01/) | `ta` | excellent | `strict` | 706 | 706 | 706 | 0.0000% | 0.0000% | 0.0000% | 0.0776% |
+| [`ta-linreg-stdev-channel-revert-01`](./validation/ta-linreg-stdev-channel-revert-01/) | `ta` | excellent | `strict` | 248 | 248 | 248 | 0.0000% | 0.0000% | 0.0000% | 0.0943% |
+| [`ta-macd-12-26-9-line-signal-cross-01`](./validation/ta-macd-12-26-9-line-signal-cross-01/) | `ta` | excellent | `strict` | 3022 | 3022 | 3022 | 0.0000% | 0.0000% | 0.0000% | 0.0856% |
+| [`ta-macd-histogram-reversal-01`](./validation/ta-macd-histogram-reversal-01/) | `ta` | excellent | `strict` | 2813 | 2813 | 2813 | 0.0000% | 0.0000% | 0.0000% | 0.0885% |
+| [`ta-macd-line-gt-signal-continuous-state-01`](./validation/ta-macd-line-gt-signal-continuous-state-01/) | `ta` | excellent | `strict` | 1511 | 1511 | 1511 | 0.0000% | 0.0000% | 0.0000% | 0.0861% |
+| [`ta-map-regime-threshold-lookup-01`](./validation/ta-map-regime-threshold-lookup-01/) | `ta` | excellent | `strict` | 801 | 801 | 801 | 0.0000% | 0.0000% | 0.0000% | 0.0783% |
+| [`ta-median-vs-ema-cross-01`](./validation/ta-median-vs-ema-cross-01/) | `ta` | excellent | `strict` | 2837 | 2837 | 2837 | 0.0000% | 0.0000% | 0.0000% | 0.0827% |
+| [`ta-momentum-roc-zero-cross-01`](./validation/ta-momentum-roc-zero-cross-01/) | `ta` | excellent | `strict` | 5690 | 5690 | 5690 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
+| [`ta-multi-indicator-score-composite-01`](./validation/ta-multi-indicator-score-composite-01/) | `ta` | excellent | `strict` | 3910 | 3911 | 3910 | 0.0256% | 0.0000% | 0.0000% | 0.0830% |
+| [`ta-percentrank-mean-reversion-01`](./validation/ta-percentrank-mean-reversion-01/) | `ta` | excellent | `strict` | 363 | 362 | 362 | 0.2755% | 0.0000% | 0.0000% | 0.0716% |
+| [`ta-pivot-array-unshift-pop-01`](./validation/ta-pivot-array-unshift-pop-01/) | `ta` | excellent | `strict` | 829 | 829 | 829 | 0.0000% | 0.0000% | 0.0000% | 0.0893% |
+| [`ta-pivot-atr-stop-target-01`](./validation/ta-pivot-atr-stop-target-01/) | `ta` | excellent | `strict` | 1618 | 1619 | 1618 | 0.0618% | 0.0000% | 0.0005% | 0.1055% |
+| [`ta-pivot-confirmed-break-01`](./validation/ta-pivot-confirmed-break-01/) | `ta` | excellent | `strict` | 1115 | 1115 | 1115 | 0.0000% | 0.0000% | 0.0000% | 0.0866% |
+| [`ta-range-filter-var-band-01`](./validation/ta-range-filter-var-band-01/) | `ta` | excellent | `strict` | 401 | 401 | 401 | 0.0000% | 0.0000% | 0.0000% | 0.0789% |
+| [`ta-rsi-bb-self-bands-01`](./validation/ta-rsi-bb-self-bands-01/) | `ta` | excellent | `strict` | 350 | 351 | 350 | 0.2849% | 0.0000% | 0.0000% | 0.0802% |
+| [`ta-rsi-ema-signal-cross-01`](./validation/ta-rsi-ema-signal-cross-01/) | `ta` | excellent | `strict` | 846 | 846 | 846 | 0.0000% | 0.0000% | 0.0000% | 0.0824% |
+| [`ta-rsi-macd-and-continuous-state-01`](./validation/ta-rsi-macd-and-continuous-state-01/) | `ta` | excellent | `strict` | 1916 | 1916 | 1916 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
+| [`ta-rsi14-bands-30-70-01`](./validation/ta-rsi14-bands-30-70-01/) | `ta` | excellent | `strict` | 256 | 256 | 256 | 0.0000% | 0.0000% | 0.0000% | 0.0814% |
+| [`ta-rsi14-cross-50-01`](./validation/ta-rsi14-cross-50-01/) | `ta` | excellent | `strict` | 4690 | 4690 | 4690 | 0.0000% | 0.0000% | 0.0000% | 0.0767% |
+| [`ta-rsi14-gt-50-continuous-state-01`](./validation/ta-rsi14-gt-50-continuous-state-01/) | `ta` | excellent | `strict` | 2345 | 2345 | 2345 | 0.0000% | 0.0000% | 0.0000% | 0.0751% |
+| [`ta-rsi14-gt60-lt45-no-matrix-01`](./validation/ta-rsi14-gt60-lt45-no-matrix-01/) | `ta` | excellent | `strict` | 785 | 785 | 785 | 0.0000% | 0.0000% | 0.0000% | 0.0840% |
+| [`ta-sar-flip-entry-01`](./validation/ta-sar-flip-entry-01/) | `ta` | excellent | `strict` | 3082 | 3082 | 3082 | 0.0000% | 0.0000% | 0.0000% | 0.0803% |
+| [`ta-sma-152-close-cross-01`](./validation/ta-sma-152-close-cross-01/) | `ta` | excellent | `strict` | 1617 | 1617 | 1617 | 0.0000% | 0.0000% | 0.0000% | 0.0699% |
+| [`ta-sma-dual-cross-01`](./validation/ta-sma-dual-cross-01/) | `ta` | excellent | `strict` | 2150 | 2150 | 2150 | 0.0000% | 0.0000% | 0.0000% | 0.0791% |
+| [`ta-stdev-sma-expansion-break-01`](./validation/ta-stdev-sma-expansion-break-01/) | `ta` | excellent | `strict` | 878 | 878 | 878 | 0.0000% | 0.0000% | 0.0000% | 0.0782% |
+| [`ta-stoch-slow-k-d-cross-01`](./validation/ta-stoch-slow-k-d-cross-01/) | `ta` | excellent | `strict` | 7585 | 7585 | 7585 | 0.0000% | 0.0000% | 0.0000% | 0.0762% |
+| [`ta-stochastic-rsi-cross-01`](./validation/ta-stochastic-rsi-cross-01/) | `ta` | excellent | `strict` | 1337 | 1337 | 1305 | 0.0000% | 0.0000% | 0.0000% | 0.1153% |
+| [`ta-str-match-regex-filter-01`](./validation/ta-str-match-regex-filter-01/) | `ta` | excellent | `strict` | 1916 | 1916 | 1916 | 0.0000% | 0.0000% | 0.0000% | 0.0779% |
+| [`ta-supertrend-adx-filter-01`](./validation/ta-supertrend-adx-filter-01/) | `ta` | excellent | `strict` | 455 | 455 | 455 | 0.0000% | 0.0000% | 0.0000% | 0.0769% |
+| [`ta-supertrend-direction-flip-01`](./validation/ta-supertrend-direction-flip-01/) | `ta` | excellent | `strict` | 819 | 819 | 819 | 0.0000% | 0.0000% | 0.0000% | 0.0757% |
+| [`ta-triple-sma-stack-latch-01`](./validation/ta-triple-sma-stack-latch-01/) | `ta` | excellent | `strict` | 1406 | 1406 | 1406 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
+| [`ta-volume-spike-atr-breakout-01`](./validation/ta-volume-spike-atr-breakout-01/) | `ta` | excellent | `strict` | 1778 | 1778 | 1778 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`ta-vwma-vs-sma-divergence-01`](./validation/ta-vwma-vs-sma-divergence-01/) | `ta` | excellent | `strict` | 2574 | 2574 | 2574 | 0.0000% | 0.0000% | 0.0000% | 0.0801% |
+| [`udt-method-calls-sibling-cumulative-01`](./validation/udt-method-calls-sibling-cumulative-01/) | `udt` | excellent | `strict` | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
+| [`udt-method-default-param-kwargs-01`](./validation/udt-method-default-param-kwargs-01/) | `udt` | excellent | `strict` | 417 | 417 | 417 | 0.0000% | 0.0000% | 0.0000% | 0.0875% |
+| [`udt-method-drives-strategy-entry-01`](./validation/udt-method-drives-strategy-entry-01/) | `udt` | excellent | `strict` | 1635 | 1635 | 1635 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`udt-method-extra-primitive-args-01`](./validation/udt-method-extra-primitive-args-01/) | `udt` | excellent | `strict` | 2504 | 2504 | 2504 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`udt-method-feeds-strategy-exit-prices-01`](./validation/udt-method-feeds-strategy-exit-prices-01/) | `udt` | excellent | `strict` | 704 | 704 | 704 | 0.0000% | 0.0000% | 0.0004% | 0.0876% |
+| [`udt-method-in-for-loop-01`](./validation/udt-method-in-for-loop-01/) | `udt` | excellent | `strict` | 1660 | 1660 | 1660 | 0.0000% | 0.0000% | 0.0000% | 0.0756% |
+| [`udt-method-in-if-else-branch-01`](./validation/udt-method-in-if-else-branch-01/) | `udt` | excellent | `strict` | 402 | 402 | 402 | 0.0000% | 0.0000% | 0.0000% | 0.0813% |
+| [`udt-method-in-switch-arms-01`](./validation/udt-method-in-switch-arms-01/) | `udt` | excellent | `strict` | 402 | 402 | 402 | 0.0000% | 0.0000% | 0.0000% | 0.0813% |
+| [`udt-method-in-while-loop-01`](./validation/udt-method-in-while-loop-01/) | `udt` | excellent | `strict` | 306 | 306 | 306 | 0.0000% | 0.0000% | 0.0000% | 0.0846% |
+| [`udt-method-mutating-self-ref-01`](./validation/udt-method-mutating-self-ref-01/) | `udt` | excellent | `strict` | 2293 | 2293 | 2293 | 0.0000% | 0.0000% | 0.0000% | 0.0624% |
+| [`udt-method-on-array-element-01`](./validation/udt-method-on-array-element-01/) | `udt` | excellent | `strict` | 868 | 868 | 868 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`udt-method-reads-strategy-state-01`](./validation/udt-method-reads-strategy-state-01/) | `udt` | excellent | `strict` | 705 | 705 | 705 | 0.0000% | 0.0000% | 0.0000% | 0.0848% |
+| [`udt-method-receives-ta-series-param-01`](./validation/udt-method-receives-ta-series-param-01/) | `udt` | excellent | `strict` | 2676 | 2676 | 2676 | 0.0000% | 0.0000% | 0.0000% | 0.0754% |
+| [`udt-method-scalar-return-01`](./validation/udt-method-scalar-return-01/) | `udt` | excellent | `strict` | 507 | 507 | 507 | 0.0000% | 0.0000% | 0.0000% | 0.0849% |
+| [`udt-method-tuple-return-destructure-01`](./validation/udt-method-tuple-return-destructure-01/) | `udt` | excellent | `strict` | 1095 | 1095 | 1095 | 0.0000% | 0.0000% | 0.0004% | 0.0875% |
+| [`udt-method-udt-return-from-func-01`](./validation/udt-method-udt-return-from-func-01/) | `udt` | excellent | `strict` | 132 | 132 | 132 | 0.0000% | 0.0000% | 0.0000% | 0.0705% |
+| [`udt-method-uses-history-globals-01`](./validation/udt-method-uses-history-globals-01/) | `udt` | excellent | `strict` | 131 | 131 | 131 | 0.0000% | 0.0000% | 0.0000% | 0.1029% |
+| [`udt-method-uses-math-funcs-01`](./validation/udt-method-uses-math-funcs-01/) | `udt` | excellent | `strict` | 789 | 789 | 789 | 0.0000% | 0.0000% | 0.0000% | 0.0845% |
+| [`udt-method-uses-na-nz-fixnan-01`](./validation/udt-method-uses-na-nz-fixnan-01/) | `udt` | excellent | `strict` | 695 | 695 | 695 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
+| [`udt-method-var-instance-streak-01`](./validation/udt-method-var-instance-streak-01/) | `udt` | excellent | `strict` | 1007 | 1007 | 1007 | 0.0000% | 0.0000% | 0.0000% | 0.0557% |
+| [`udt-method-windowed-method-chain-01`](./validation/udt-method-windowed-method-chain-01/) | `udt` | excellent | `strict` | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
+| [`udt-regime-stack-stress-01`](./validation/udt-regime-stack-stress-01/) | `udt` | excellent | `strict` | 3910 | 3911 | 3910 | 0.0256% | 0.0000% | 0.0000% | 0.0830% |
+| [`varip-var-udt-in-security-positive-01`](./validation/varip-var-udt-in-security-positive-01/) | `varip` | excellent | `strict` | 207 | 207 | 207 | 0.0000% | 0.0000% | 0.0000% | 0.0710% |
 
