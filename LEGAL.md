@@ -28,12 +28,19 @@ This corpus is licensed under the Apache License, Version 2.0
   Binance USDT-M Perpetual ETH/USDT-USDT. Public market price/volume
   series; redistribution is factual-data territory.
 
-`generated.cpp` (transpiler output) and `strategy.dylib` /
-`strategy.so` / `strategy.dll` (compiled artefacts) are NOT shipped
-publicly. The `pineforge-codegen` transpiler is closed-source;
-reproducers regenerate `generated.cpp` locally via
-`scripts/regen_corpus_cpp.py` and compile the per-probe `.so` via
-`cmake --build build --target corpus_strategies`. See `corpus/.gitignore`.
+- **Transpiler output** (`generated.cpp`) — the C++ output of the
+  `pineforge-codegen` transpiler over each `strategy.pine`. The
+  transpiler itself is closed-source, but its output is shipped here
+  under the same Apache-2.0 license as the `strategy.pine` it
+  derives from (clean-room PineForge originals). Including
+  `generated.cpp` in-tree means the engine repo plus this corpus plus
+  a C++17 compiler is sufficient to reproduce the headline parity
+  figure end-to-end — no transpiler access required.
+
+The compiled per-probe artefacts (`strategy.dylib` / `strategy.so` /
+`strategy.dll`) remain platform-specific build outputs and are not
+shipped; reproducers compile them locally via `cmake --build build
+--target corpus_strategies`. See `corpus/.gitignore`.
 
 ## Trademarks
 

@@ -24,19 +24,23 @@ The canonical, regenerated-each-sweep disposition table is
 
 ## Artifact tuple
 
-Each probe directory ships three files in git:
+Each probe directory ships four files in git:
 
-| File                | Source             | Role                                                      |
-| ------------------- | ------------------ | --------------------------------------------------------- |
-| `strategy.pine`     | hand-written       | PineScript v6 source                                      |
-| `tv_trades.csv`     | TradingView export | TV broker emulator's trade list for `strategy.pine`       |
-| `engine_trades.csv` | PineForge          | Engine's trade list for the same script (TV-format CSV)   |
+| File                | Source                       | Role                                                       |
+| ------------------- | ---------------------------- | ---------------------------------------------------------- |
+| `strategy.pine`     | hand-written                 | PineScript v6 source                                       |
+| `generated.cpp`     | pineforge-codegen transpiler | C++ output of the transpiler over `strategy.pine`          |
+| `tv_trades.csv`     | TradingView export           | TV broker emulator's trade list for `strategy.pine`        |
+| `engine_trades.csv` | PineForge                    | Engine's trade list for the same script (TV-format CSV)    |
 
-`generated.cpp` and the compiled `strategy.dylib` / `.so` / `.dll` are not
-redistributed publicly. The reproducer regenerates them locally: run the
-closed-source transpiler at `pineforge-codegen` over each `strategy.pine`
-to produce `generated.cpp`, then `cmake --build build --target
-corpus_strategies` to compile the per-strategy shared library.
+`generated.cpp` is the transpiler output of our own clean-room
+PineScript and ships under the same Apache-2.0 license as
+`strategy.pine`. It is included in-tree so public users can rebuild
+without needing access to the closed-source `pineforge-codegen`
+transpiler — `cmake --build build --target corpus_strategies` compiles
+each `generated.cpp` into a per-strategy shared library. The compiled
+`strategy.dylib` / `.so` / `.dll` are platform-specific build artefacts
+and remain ignored.
 
 ## Reference OHLCV
 
@@ -81,7 +85,7 @@ corpus/
 ├── LEGAL.md                    provenance / trademarks
 ├── README.md                   this file
 ├── CMakeLists.txt              per-strategy .so build glob
-├── .gitignore                  ignores generated.cpp + strategy.dylib/.so/.dll
+├── .gitignore                  ignores compiled strategy.dylib/.so/.dll only
 ├── validation_report.md        canonical parity disposition, regenerated each sweep
 └── validation_report.{html,pdf}   rendered from .md
 ```
@@ -160,20 +164,21 @@ That script:
 
 ## Reproducing parity locally
 
+No transpiler access required — `generated.cpp` ships in-tree.
+
 ```bash
-# 1. Pull the corpus submodule into the engine checkout
+# 1. Clone the engine and pull this corpus submodule
+git clone https://github.com/fullpass-4pass/pineforge-engine.git
+cd pineforge-engine
 git submodule update --init corpus
 
-# 2. Regenerate each generated.cpp from strategy.pine
-#    (requires the closed-source pineforge-codegen transpiler)
-python3 ../pineforge-codegen/scripts/regen_corpus_cpp.py
-
-# 3. Build all per-strategy .so files, run them, and verify
+# 2. Build all per-strategy .so files, run them, and verify
 JOBS=8 scripts/run_corpus.sh
 ```
 
-The engine is deterministic given a fixed bar feed, fixed `generated.cpp`,
-and a fixed runtime build. If a probe's regenerated `engine_trades.csv`
+You need the engine repo, this corpus, and a C++17 compiler. The engine
+is deterministic given a fixed bar feed, the shipped `generated.cpp`,
+and a fixed runtime build. If a probe's rebuilt `engine_trades.csv`
 disagrees with the committed copy, that is a bug — please open an issue.
 
 ## CSV format

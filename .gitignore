@@ -1,5 +1,7 @@
-# Build / transpiler outputs — regenerated locally, not redistributed.
-**/generated.cpp
+# Compiled per-strategy shared libraries — platform-specific build artefacts,
+# regenerated locally by scripts/run_corpus.sh. The transpiler output
+# (generated.cpp) is shipped in-tree so public users can rebuild without
+# needing the closed-source pineforge-codegen transpiler.
 **/strategy.dylib
 **/strategy.so
 **/strategy.dll
