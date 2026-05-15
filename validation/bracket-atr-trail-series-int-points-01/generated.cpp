@@ -103,7 +103,9 @@ extern "C" {
         auto* strat = static_cast<GeneratedStrategy*>(s);
         std::string itf = input_tf ? input_tf : "";
         std::string stf = script_tf ? script_tf : "";
-        if (itf.empty() || stf.empty() || itf == stf) {
+        bool needs_full_run = (bar_magnifier != 0)
+            || (!itf.empty() && !stf.empty() && itf != stf);
+        if (!needs_full_run) {
             strat->run(bars, n);
         } else {
             strat->run(bars, n, itf, stf, bar_magnifier != 0, magnifier_samples,
