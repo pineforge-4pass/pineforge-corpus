@@ -3,7 +3,7 @@
 ## Purpose
 Isolate `ta.macd(close, 12, 26, 9)` as `EMA(12) - EMA(26)` with `EMA(macd, 9)` signal line. Validates engine EMA chain depth + tuple destructuring. Distinct from `validation/01-macd-histogram` (which uses histogram-zero crossings).
 
-Targets MACD path of gap probe `validation/37-regex-string-filter`.
+Targets the MACD path used by the regex / string-filter probe in this tree.
 
 ## Setup + export
 See `../README.md`. Quick reference:

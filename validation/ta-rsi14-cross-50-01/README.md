@@ -5,7 +5,7 @@ Isolate `ta.rsi(close, 14)` (Wilder seed + smoothing) end-to-end. Drift on this 
 - RSI math: engine `RMA::compute` / `RSI::compute` (now Pine bit-exact post fc22c34) — should be 0 ULP drift
 - OHLCV input drift: TV chart's bar OHLC ≠ shipped corpus OHLCV — see `../README.md` step 1
 
-Indirectly diagnoses gap probes `validation/37-regex-string-filter` (RSI(14)+MACD) and `validation_typed_matrix/typed-matrix-probe-01-bool-regime-mask` (RSI(14)).
+Indirectly diagnoses other RSI(14)-consuming probes in this corpus (e.g. the regex / string-filter and typed-matrix bool-regime-mask surfaces) by isolating the RSI math from the surrounding strategy logic.
 
 ## Setup + export
 See `../README.md` for the full workflow (chart-feed verification, scraper-based OHLC check, validator command, deeper per-bar diff via `tv_ta_basic_helper.pine` which already publishes RSI(14)).

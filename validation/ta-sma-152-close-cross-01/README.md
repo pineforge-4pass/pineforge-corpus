@@ -3,7 +3,7 @@
 ## Purpose
 Isolate `ta.sma(close, 152)` over a long window (~38h on 15m TF). Tests engine sliding-window sum precision. Naive running-sum has ULP drift `~1.5e-13` per update; over 30k bars that compounds to ~1e-9 — measurable at threshold crossings.
 
-Targets gap probe `community/MarketShift` SMA path.
+Targets long-window SMA paths used by community-style market-structure-shift logic (this corpus does not redistribute that script) and any other SMA(152)-consuming surface in this tree.
 
 ## Setup + export
 See `../README.md`. Quick reference:

@@ -6,7 +6,7 @@ Isolate `ta.hma(close, 55)`. HMA = `wma(2*wma(src, n/2) - wma(src, n), sqrt(n))`
 - Nested WMA composition with intermediate negative weights via `2*wma_half - wma_full`
 - `sqrt(n)` rounding: `sqrt(55) = 7.416...` → Pine floors to **7**; verify engine matches
 
-Targets gap probe `community/MarketShift` HMA path.
+Targets the community-style market-structure-shift HMA logic (this corpus does not redistribute that script) and any other HMA(55)-consuming surface in this tree.
 
 ## Setup + export
 See `../README.md`. Quick reference:
