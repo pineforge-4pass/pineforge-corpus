@@ -9,6 +9,7 @@ behaviour matches TradingView on the same bar feed.
 ## Headline parity
 
 - **228** verified strategies, all under `corpus/validation/`.
+- **~313,000 trades** total across the suite (TV: 312,829; engine: 312,920 — `+91` ≈ 0.03 % over TV).
 - **227** excellent (bit-for-bit or within strict thresholds on every
   parity dimension).
 - **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` —
