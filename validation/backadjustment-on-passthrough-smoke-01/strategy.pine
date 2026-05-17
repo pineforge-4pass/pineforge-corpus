@@ -1,0 +1,38 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// backadjustment-on-passthrough-smoke-01
+//
+// Smoke probe: verifies that request.security() with backadjustment=backadjustment.on
+// compiles and runs without error. Before the G2 sprint, backadjustment was an
+// unrecognized kwarg and was hard-rejected by the support_checker.
+//
+// Also tests settlement_as_close and adjustment constants for compile-pass.
+//
+// TV_RUN_NEEDED: No TV CSV required — smoke probe only. No trade parity asserted.
+//@version=6
+strategy("PF backadjustment-on-passthrough-smoke-01", shorttitle="G2_BADJ_01",
+    overlay=false, initial_capital=10000, currency=currency.USD,
+    commission_type=strategy.commission.percent, commission_value=0, slippage=0)
+
+// These should all compile (backadjustment kwarg accepted + ignored by codegen)
+data_ba = request.security(syminfo.tickerid, "D", close, backadjustment=backadjustment.on)
+data_sac = request.security(syminfo.tickerid, "D", close, settlement_as_close=settlement_as_close.on)
+
+// Also test standalone constant access
+ba_on  = backadjustment.on
+ba_off = backadjustment.off
+ba_inh = backadjustment.inherit
+sac_on = settlement_as_close.on
+adj_div = adjustment.dividends
+adj_spl = adjustment.splits
+
+// Simple SMA crossover strategy to produce trades
+fast = ta.sma(close, 10)
+slow = ta.sma(close, 30)
+
+if ta.crossover(fast, slow)
+    strategy.entry("L", strategy.long)
+if ta.crossunder(fast, slow)
+    strategy.close("L")

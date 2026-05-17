@@ -1,0 +1,19 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// ticker-heikinashi-rejected-01
+//
+// Expected-reject probe: ticker.heikinashi() should be hard-rejected.
+// PineForge backtests run on the same symbol only (no chart-type modifiers).
+// After G2 sprint: ticker.heikinashi is in HARD_REJECT_FUNC while
+// ticker.inherit and ticker.standard are passthroughs.
+//@version=6
+strategy("PF ticker-heikinashi-rejected-01", shorttitle="G2_TKR_HA_01", overlay=false)
+
+// This should be rejected at the support_checker stage
+t = ticker.heikinashi(syminfo.tickerid)
+data = request.security(t, "D", close)
+
+if data > close
+    strategy.entry("L", strategy.long)
