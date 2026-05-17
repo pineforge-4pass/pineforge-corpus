@@ -1,0 +1,7 @@
+{
+  "_comment": "Smoke probe: chart.is_standard == true in batch engine. No TV CSV needed.",
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "chart.is_standard is a compile-time constant; no TV export required for this smoke probe."
+  }
+}

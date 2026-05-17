@@ -1,0 +1,4 @@
+{
+  "_comment": "Parity probe: timeframe.main_period == '15' gates entries on 15m corpus data.",
+  "tv_trades_csv": "tv_trades.csv"
+}
