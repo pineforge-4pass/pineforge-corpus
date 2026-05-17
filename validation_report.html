@@ -6,170 +6,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>PineForge Corpus Validation Report</title>
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    svg {
-      height: auto;
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #1a1a1a;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    /* The extra [class] is a hack that increases specificity enough to
-       override a similar rule in reveal.js */
-    ul.task-list[class]{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      font-size: inherit;
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+body {
+max-width: 1400px !important;
+padding-left: 32px;
+padding-right: 32px;
+}
+
+table {
+border-collapse: collapse;
+width: 100%;
+font-size: 0.85em;
+margin-bottom: 1em;
+}
+th, td {
+padding: 4px 8px;
+border-bottom: 1px solid #d0d7de;
+text-align: left;
+vertical-align: top;
+}
+th {
+background-color: #f6f8fa;
+font-weight: 600;
+}
+
+th:nth-child(n+5), td:nth-child(n+5) {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+
+td code {
+white-space: nowrap;
+font-size: 0.9em;
+}
+
+@media print {
+body {
+max-width: 100% !important;
+padding: 0 !important;
+margin: 0 !important;
+font-size: 9pt;
+}
+table {
+font-size: 8pt;
+page-break-inside: auto;
+}
+tr {
+page-break-inside: avoid;
+page-break-after: auto;
+}
+thead {
+display: table-header-group;
+}
+h1, h2, h3 {
+page-break-after: avoid;
+}
+}
+
+@page {
+size: A4 landscape;
+margin: 12mm 10mm;
+}
+</style>
 </head>
 <body>
 <header id="title-block-header">
@@ -178,9 +92,9 @@
 <h1 id="pineforge-corpus-validation-report">PineForge Corpus Validation
 Report</h1>
 <p><strong>Generated:</strong> 2026-05-17 (UTC) — engine
-<code>cbc2419</code>, corpus <code>5d5e5c3</code></p>
+<code>c3fb12c</code>, corpus <code>2b58ae5</code></p>
 <p>All probes live under <code>corpus/validation/</code>; categories
-below are derived from each slug's leading hyphen-token (e.g.
+below are derived from each slug&#39;s leading hyphen-token (e.g.
 <code>ta-...</code>, <code>composite-...</code>).</p>
 <h2 id="headline">Headline</h2>
 <ul>
@@ -196,7 +110,7 @@ below are derived from each slug's leading hyphen-token (e.g.
 </ul>
 <h2 id="anomalies--non-excellent">Anomalies &amp; Non-Excellent</h2>
 <p>Each row points at a probe under <code>corpus/validation/</code>;
-rationale is captured in the probe's <code>inputs.json</code> notes
+rationale is captured in the probe&#39;s <code>inputs.json</code> notes
 field where present.</p>
 <table>
 <thead>
@@ -213,8 +127,7 @@ field where present.</p>
 <tbody>
 <tr>
 <td><strong>anomaly</strong></td>
-<td><a
-href="./validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equity-mirror-strategy-equity-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equity-mirror-strategy-equity-01</code></a></td>
 <td style="text-align: right;">24</td>
 <td style="text-align: right;">25</td>
 <td style="text-align: right;">4.0000%</td>
@@ -223,7 +136,7 @@ href="./validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equi
 boundary (&gt;=95% confidence, deep-analyzed). Engine is deterministic
 and CORRECT per Pine semantics; TV admits some over-equity entries and
 rejects some under-equity ones non-monotonically. Cannot be made to
-match TV without replicating TV's broker bug. See
+match TV without replicating TV&#39;s broker bug. See
 pineforge-utils/parity-anomalies/tv-margin-boundary.md and
 corpus/validation_report.md headline. Sibling probes
 (parity-probe-04/05/06) that leave any meaningful headroom below 100%
@@ -526,8 +439,7 @@ scratch trades with <code>|tv_pnl| &lt; $0.01</code>).</p>
 </thead>
 <tbody>
 <tr>
-<td><a
-href="./validation/analyzer-parity-choch-bos-isolator-01/"><code>analyzer-parity-choch-bos-isolator-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-parity-choch-bos-isolator-01/"><code>analyzer-parity-choch-bos-isolator-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -540,8 +452,7 @@ href="./validation/analyzer-parity-choch-bos-isolator-01/"><code>analyzer-parity
 <td style="text-align: right;">0.0705%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/analyzer-parity-edge-margin-50-pct-01/"><code>analyzer-parity-edge-margin-50-pct-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-parity-edge-margin-50-pct-01/"><code>analyzer-parity-edge-margin-50-pct-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -554,8 +465,7 @@ href="./validation/analyzer-parity-edge-margin-50-pct-01/"><code>analyzer-parity
 <td style="text-align: right;">0.0701%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/analyzer-parity-percent-of-equity-sizing-01/"><code>analyzer-parity-percent-of-equity-sizing-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-parity-percent-of-equity-sizing-01/"><code>analyzer-parity-percent-of-equity-sizing-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -568,8 +478,7 @@ href="./validation/analyzer-parity-percent-of-equity-sizing-01/"><code>analyzer-
 <td style="text-align: right;">0.0006%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/analyzer-parity-small-equity-fraction-01/"><code>analyzer-parity-small-equity-fraction-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-parity-small-equity-fraction-01/"><code>analyzer-parity-small-equity-fraction-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -582,8 +491,7 @@ href="./validation/analyzer-parity-small-equity-fraction-01/"><code>analyzer-par
 <td style="text-align: right;">0.0698%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/analyzer-parity-stop-limit-timing-01/"><code>analyzer-parity-stop-limit-timing-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-parity-stop-limit-timing-01/"><code>analyzer-parity-stop-limit-timing-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -596,8 +504,7 @@ href="./validation/analyzer-parity-stop-limit-timing-01/"><code>analyzer-parity-
 <td style="text-align: right;">0.1008%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/analyzer-self-test-multi-mode-01/"><code>analyzer-self-test-multi-mode-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/analyzer-self-test-multi-mode-01/"><code>analyzer-self-test-multi-mode-01</code></a></td>
 <td><code>analyzer</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -610,8 +517,7 @@ href="./validation/analyzer-self-test-multi-mode-01/"><code>analyzer-self-test-m
 <td style="text-align: right;">0.0687%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equity-mirror-strategy-equity-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equity-mirror-strategy-equity-01</code></a></td>
 <td><code>anomaly</code></td>
 <td>anomaly</td>
 <td><code>strict</code></td>
@@ -624,8 +530,7 @@ href="./validation/anomaly-equity-mirror-strategy-equity-01/"><code>anomaly-equi
 <td style="text-align: right;">2.3202%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/barstate-isconfirmed-magnifier-off-01b/"><code>barstate-isconfirmed-magnifier-off-01b</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/barstate-isconfirmed-magnifier-off-01b/"><code>barstate-isconfirmed-magnifier-off-01b</code></a></td>
 <td><code>barstate</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -638,8 +543,7 @@ href="./validation/barstate-isconfirmed-magnifier-off-01b/"><code>barstate-iscon
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/barstate-isconfirmed-magnifier-on-01a/"><code>barstate-isconfirmed-magnifier-on-01a</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/barstate-isconfirmed-magnifier-on-01a/"><code>barstate-isconfirmed-magnifier-on-01a</code></a></td>
 <td><code>barstate</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -652,8 +556,7 @@ href="./validation/barstate-isconfirmed-magnifier-on-01a/"><code>barstate-isconf
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-atr-trail-series-int-points-01/"><code>bracket-atr-trail-series-int-points-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-atr-trail-series-int-points-01/"><code>bracket-atr-trail-series-int-points-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -666,8 +569,7 @@ href="./validation/bracket-atr-trail-series-int-points-01/"><code>bracket-atr-tr
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-atr-trailing-stop-state-01/"><code>bracket-atr-trailing-stop-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-atr-trailing-stop-state-01/"><code>bracket-atr-trailing-stop-state-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -680,8 +582,7 @@ href="./validation/bracket-atr-trailing-stop-state-01/"><code>bracket-atr-traili
 <td style="text-align: right;">0.0786%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-entry-exit-same-pass-attach-01/"><code>bracket-entry-exit-same-pass-attach-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-entry-exit-same-pass-attach-01/"><code>bracket-entry-exit-same-pass-attach-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -694,8 +595,7 @@ href="./validation/bracket-entry-exit-same-pass-attach-01/"><code>bracket-entry-
 <td style="text-align: right;">0.1130%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-exit-stop-limit-trail-same-bar-01/"><code>bracket-exit-stop-limit-trail-same-bar-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-exit-stop-limit-trail-same-bar-01/"><code>bracket-exit-stop-limit-trail-same-bar-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -708,8 +608,7 @@ href="./validation/bracket-exit-stop-limit-trail-same-bar-01/"><code>bracket-exi
 <td style="text-align: right;">0.0755%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-exit-three-way-set-once-entry-01/"><code>bracket-exit-three-way-set-once-entry-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-exit-three-way-set-once-entry-01/"><code>bracket-exit-three-way-set-once-entry-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -722,8 +621,7 @@ href="./validation/bracket-exit-three-way-set-once-entry-01/"><code>bracket-exit
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-exit-tp-sl-fixed-01/"><code>bracket-exit-tp-sl-fixed-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-exit-tp-sl-fixed-01/"><code>bracket-exit-tp-sl-fixed-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -736,8 +634,7 @@ href="./validation/bracket-exit-tp-sl-fixed-01/"><code>bracket-exit-tp-sl-fixed-
 <td style="text-align: right;">0.1320%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-narrow-stop-limit-with-trail8-01/"><code>bracket-narrow-stop-limit-with-trail8-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-narrow-stop-limit-with-trail8-01/"><code>bracket-narrow-stop-limit-with-trail8-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -750,8 +647,7 @@ href="./validation/bracket-narrow-stop-limit-with-trail8-01/"><code>bracket-narr
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-partial-exit-qty-percent-01/"><code>bracket-partial-exit-qty-percent-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-partial-exit-qty-percent-01/"><code>bracket-partial-exit-qty-percent-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -764,8 +660,7 @@ href="./validation/bracket-partial-exit-qty-percent-01/"><code>bracket-partial-e
 <td style="text-align: right;">0.1594%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-same-id-exit-replace-01/"><code>bracket-same-id-exit-replace-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-same-id-exit-replace-01/"><code>bracket-same-id-exit-replace-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -778,8 +673,7 @@ href="./validation/bracket-same-id-exit-replace-01/"><code>bracket-same-id-exit-
 <td style="text-align: right;">0.1584%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-tp-sl-oca-reduce-isolate-01/"><code>bracket-tp-sl-oca-reduce-isolate-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-tp-sl-oca-reduce-isolate-01/"><code>bracket-tp-sl-oca-reduce-isolate-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -792,8 +686,7 @@ href="./validation/bracket-tp-sl-oca-reduce-isolate-01/"><code>bracket-tp-sl-oca
 <td style="text-align: right;">0.0561%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-trail-points-no-offset-explicit-01/"><code>bracket-trail-points-no-offset-explicit-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-trail-points-no-offset-explicit-01/"><code>bracket-trail-points-no-offset-explicit-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -806,8 +699,7 @@ href="./validation/bracket-trail-points-no-offset-explicit-01/"><code>bracket-tr
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-trail-points-with-offset-only-01/"><code>bracket-trail-points-with-offset-only-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-trail-points-with-offset-only-01/"><code>bracket-trail-points-with-offset-only-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -820,8 +712,7 @@ href="./validation/bracket-trail-points-with-offset-only-01/"><code>bracket-trai
 <td style="text-align: right;">0.0935%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/bracket-trailing-activation-offset-path-01/"><code>bracket-trailing-activation-offset-path-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/bracket-trailing-activation-offset-path-01/"><code>bracket-trailing-activation-offset-path-01</code></a></td>
 <td><code>bracket</code></td>
 <td>excellent</td>
 <td><code>production</code></td>
@@ -834,8 +725,7 @@ href="./validation/bracket-trailing-activation-offset-path-01/"><code>bracket-tr
 <td style="text-align: right;">0.0919%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/cap-max-intraday-filled-orders-isolate-01/"><code>cap-max-intraday-filled-orders-isolate-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/cap-max-intraday-filled-orders-isolate-01/"><code>cap-max-intraday-filled-orders-isolate-01</code></a></td>
 <td><code>cap</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -848,8 +738,7 @@ href="./validation/cap-max-intraday-filled-orders-isolate-01/"><code>cap-max-int
 <td style="text-align: right;">0.0794%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/cap-risk-gates-allow-max-intraday-01/"><code>cap-risk-gates-allow-max-intraday-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/cap-risk-gates-allow-max-intraday-01/"><code>cap-risk-gates-allow-max-intraday-01</code></a></td>
 <td><code>cap</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -862,8 +751,7 @@ href="./validation/cap-risk-gates-allow-max-intraday-01/"><code>cap-risk-gates-a
 <td style="text-align: right;">0.0726%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-4emarsi-integration-01/"><code>composite-4emarsi-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-integration-01/"><code>composite-4emarsi-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -876,8 +764,7 @@ href="./validation/composite-4emarsi-integration-01/"><code>composite-4emarsi-in
 <td style="text-align: right;">0.0848%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-4emarsi-quad-ema-stack-01/"><code>composite-4emarsi-quad-ema-stack-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-quad-ema-stack-01/"><code>composite-4emarsi-quad-ema-stack-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -890,8 +777,7 @@ href="./validation/composite-4emarsi-quad-ema-stack-01/"><code>composite-4emarsi
 <td style="text-align: right;">0.0650%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-4emarsi-rsi-pullback-latch-01/"><code>composite-4emarsi-rsi-pullback-latch-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-rsi-pullback-latch-01/"><code>composite-4emarsi-rsi-pullback-latch-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -904,8 +790,7 @@ href="./validation/composite-4emarsi-rsi-pullback-latch-01/"><code>composite-4em
 <td style="text-align: right;">0.0739%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-4emarsi-session-window-nbar-exit-01/"><code>composite-4emarsi-session-window-nbar-exit-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-session-window-nbar-exit-01/"><code>composite-4emarsi-session-window-nbar-exit-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -918,8 +803,7 @@ href="./validation/composite-4emarsi-session-window-nbar-exit-01/"><code>composi
 <td style="text-align: right;">0.0755%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-boscurv-integration-01/"><code>composite-boscurv-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-boscurv-integration-01/"><code>composite-boscurv-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -932,8 +816,7 @@ href="./validation/composite-boscurv-integration-01/"><code>composite-boscurv-in
 <td style="text-align: right;">0.0798%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-boscurv-linreg-slope-channel-01/"><code>composite-boscurv-linreg-slope-channel-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-boscurv-linreg-slope-channel-01/"><code>composite-boscurv-linreg-slope-channel-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -946,8 +829,7 @@ href="./validation/composite-boscurv-linreg-slope-channel-01/"><code>composite-b
 <td style="text-align: right;">0.0770%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-boscurv-pivot-bos-trigger-01/"><code>composite-boscurv-pivot-bos-trigger-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-boscurv-pivot-bos-trigger-01/"><code>composite-boscurv-pivot-bos-trigger-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -960,8 +842,7 @@ href="./validation/composite-boscurv-pivot-bos-trigger-01/"><code>composite-bosc
 <td style="text-align: right;">0.0848%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-bracket-cap-range-pending-stop-01/"><code>composite-bracket-cap-range-pending-stop-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-bracket-cap-range-pending-stop-01/"><code>composite-bracket-cap-range-pending-stop-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -974,8 +855,7 @@ href="./validation/composite-bracket-cap-range-pending-stop-01/"><code>composite
 <td style="text-align: right;">0.0569%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-adx-regime-classify-01/"><code>composite-ies-adx-regime-classify-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-adx-regime-classify-01/"><code>composite-ies-adx-regime-classify-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -988,8 +868,7 @@ href="./validation/composite-ies-adx-regime-classify-01/"><code>composite-ies-ad
 <td style="text-align: right;">0.0770%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-bb-kc-squeeze-release-01/"><code>composite-ies-bb-kc-squeeze-release-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-bb-kc-squeeze-release-01/"><code>composite-ies-bb-kc-squeeze-release-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1002,8 +881,7 @@ href="./validation/composite-ies-bb-kc-squeeze-release-01/"><code>composite-ies-
 <td style="text-align: right;">0.0799%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-cooldown-daily-cap-01/"><code>composite-ies-cooldown-daily-cap-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-cooldown-daily-cap-01/"><code>composite-ies-cooldown-daily-cap-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1016,8 +894,7 @@ href="./validation/composite-ies-cooldown-daily-cap-01/"><code>composite-ies-coo
 <td style="text-align: right;">0.0838%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-equity-feedback-sizing-01/"><code>composite-ies-equity-feedback-sizing-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-equity-feedback-sizing-01/"><code>composite-ies-equity-feedback-sizing-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1030,8 +907,7 @@ href="./validation/composite-ies-equity-feedback-sizing-01/"><code>composite-ies
 <td style="text-align: right;">0.0891%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-integration-01/"><code>composite-ies-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-integration-01/"><code>composite-ies-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1044,8 +920,7 @@ href="./validation/composite-ies-integration-01/"><code>composite-ies-integratio
 <td style="text-align: right;">0.0771%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-pivot-liquidity-sweep-01/"><code>composite-ies-pivot-liquidity-sweep-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-pivot-liquidity-sweep-01/"><code>composite-ies-pivot-liquidity-sweep-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1058,8 +933,7 @@ href="./validation/composite-ies-pivot-liquidity-sweep-01/"><code>composite-ies-
 <td style="text-align: right;">0.0786%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-pressure-gauge-01/"><code>composite-ies-pressure-gauge-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-pressure-gauge-01/"><code>composite-ies-pressure-gauge-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1072,8 +946,7 @@ href="./validation/composite-ies-pressure-gauge-01/"><code>composite-ies-pressur
 <td style="text-align: right;">0.0786%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-rsi-macd-momentum-01/"><code>composite-ies-rsi-macd-momentum-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-rsi-macd-momentum-01/"><code>composite-ies-rsi-macd-momentum-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1086,8 +959,7 @@ href="./validation/composite-ies-rsi-macd-momentum-01/"><code>composite-ies-rsi-
 <td style="text-align: right;">0.0821%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-ies-three-ema-bias-score-01/"><code>composite-ies-three-ema-bias-score-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-ies-three-ema-bias-score-01/"><code>composite-ies-three-ema-bias-score-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1100,8 +972,7 @@ href="./validation/composite-ies-three-ema-bias-score-01/"><code>composite-ies-t
 <td style="text-align: right;">0.0772%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kanuck-calc-on-every-tick-01/"><code>composite-kanuck-calc-on-every-tick-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kanuck-calc-on-every-tick-01/"><code>composite-kanuck-calc-on-every-tick-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1114,8 +985,7 @@ href="./validation/composite-kanuck-calc-on-every-tick-01/"><code>composite-kanu
 <td style="text-align: right;">0.0750%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kanuck-integration-01/"><code>composite-kanuck-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kanuck-integration-01/"><code>composite-kanuck-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1128,8 +998,7 @@ href="./validation/composite-kanuck-integration-01/"><code>composite-kanuck-inte
 <td style="text-align: right;">0.0723%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kanuck-kama-state-recurrence-01/"><code>composite-kanuck-kama-state-recurrence-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kanuck-kama-state-recurrence-01/"><code>composite-kanuck-kama-state-recurrence-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1142,8 +1011,7 @@ href="./validation/composite-kanuck-kama-state-recurrence-01/"><code>composite-k
 <td style="text-align: right;">0.0750%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kanuck-max-bars-back-500-01/"><code>composite-kanuck-max-bars-back-500-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kanuck-max-bars-back-500-01/"><code>composite-kanuck-max-bars-back-500-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1156,8 +1024,7 @@ href="./validation/composite-kanuck-max-bars-back-500-01/"><code>composite-kanuc
 <td style="text-align: right;">0.0577%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kkb-ema-atr-breakout-band-01/"><code>composite-kkb-ema-atr-breakout-band-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kkb-ema-atr-breakout-band-01/"><code>composite-kkb-ema-atr-breakout-band-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1170,8 +1037,7 @@ href="./validation/composite-kkb-ema-atr-breakout-band-01/"><code>composite-kkb-
 <td style="text-align: right;">0.0717%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kkb-integration-01/"><code>composite-kkb-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kkb-integration-01/"><code>composite-kkb-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1184,8 +1050,7 @@ href="./validation/composite-kkb-integration-01/"><code>composite-kkb-integratio
 <td style="text-align: right;">0.0717%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kkb-kalman-filter-1d-01/"><code>composite-kkb-kalman-filter-1d-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kkb-kalman-filter-1d-01/"><code>composite-kkb-kalman-filter-1d-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1198,8 +1063,7 @@ href="./validation/composite-kkb-kalman-filter-1d-01/"><code>composite-kkb-kalma
 <td style="text-align: right;">0.0765%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-kkb-margin-100-pct-01/"><code>composite-kkb-margin-100-pct-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-kkb-margin-100-pct-01/"><code>composite-kkb-margin-100-pct-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1212,8 +1076,7 @@ href="./validation/composite-kkb-margin-100-pct-01/"><code>composite-kkb-margin-
 <td style="text-align: right;">0.0807%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-liqsweep-integration-01/"><code>composite-liqsweep-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-liqsweep-integration-01/"><code>composite-liqsweep-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1226,8 +1089,7 @@ href="./validation/composite-liqsweep-integration-01/"><code>composite-liqsweep-
 <td style="text-align: right;">0.0877%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-liqsweep-pivot-hh-ll-01/"><code>composite-liqsweep-pivot-hh-ll-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-liqsweep-pivot-hh-ll-01/"><code>composite-liqsweep-pivot-hh-ll-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1240,8 +1102,7 @@ href="./validation/composite-liqsweep-pivot-hh-ll-01/"><code>composite-liqsweep-
 <td style="text-align: right;">0.0793%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-liqsweep-wait-one-continuation-01/"><code>composite-liqsweep-wait-one-continuation-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-liqsweep-wait-one-continuation-01/"><code>composite-liqsweep-wait-one-continuation-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1254,8 +1115,7 @@ href="./validation/composite-liqsweep-wait-one-continuation-01/"><code>composite
 <td style="text-align: right;">0.0769%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-liqsweep-wick-pierce-close-back-01/"><code>composite-liqsweep-wick-pierce-close-back-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-liqsweep-wick-pierce-close-back-01/"><code>composite-liqsweep-wick-pierce-close-back-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1268,8 +1128,7 @@ href="./validation/composite-liqsweep-wick-pierce-close-back-01/"><code>composit
 <td style="text-align: right;">0.0848%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-marketshift-integration-01/"><code>composite-marketshift-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-marketshift-integration-01/"><code>composite-marketshift-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1282,8 +1141,7 @@ href="./validation/composite-marketshift-integration-01/"><code>composite-market
 <td style="text-align: right;">0.0849%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-marketshift-pivot-state-machine-01/"><code>composite-marketshift-pivot-state-machine-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-marketshift-pivot-state-machine-01/"><code>composite-marketshift-pivot-state-machine-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1296,8 +1154,7 @@ href="./validation/composite-marketshift-pivot-state-machine-01/"><code>composit
 <td style="text-align: right;">0.0848%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-marketshift-rolling-highest-lowest-01/"><code>composite-marketshift-rolling-highest-lowest-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-marketshift-rolling-highest-lowest-01/"><code>composite-marketshift-rolling-highest-lowest-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1310,8 +1167,7 @@ href="./validation/composite-marketshift-rolling-highest-lowest-01/"><code>compo
 <td style="text-align: right;">0.0725%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-marketshift-state-edge-detector-01/"><code>composite-marketshift-state-edge-detector-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-marketshift-state-edge-detector-01/"><code>composite-marketshift-state-edge-detector-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1324,8 +1180,7 @@ href="./validation/composite-marketshift-state-edge-detector-01/"><code>composit
 <td style="text-align: right;">0.0849%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-scalping-fast-ma-cross-trigger-01/"><code>composite-scalping-fast-ma-cross-trigger-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-scalping-fast-ma-cross-trigger-01/"><code>composite-scalping-fast-ma-cross-trigger-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1338,8 +1193,7 @@ href="./validation/composite-scalping-fast-ma-cross-trigger-01/"><code>composite
 <td style="text-align: right;">0.0833%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-scalping-integration-01/"><code>composite-scalping-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-scalping-integration-01/"><code>composite-scalping-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1352,8 +1206,7 @@ href="./validation/composite-scalping-integration-01/"><code>composite-scalping-
 <td style="text-align: right;">0.0579%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-scalping-tight-tp-sl-points-01/"><code>composite-scalping-tight-tp-sl-points-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-scalping-tight-tp-sl-points-01/"><code>composite-scalping-tight-tp-sl-points-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1366,8 +1219,7 @@ href="./validation/composite-scalping-tight-tp-sl-points-01/"><code>composite-sc
 <td style="text-align: right;">0.0579%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-trendmaster-integration-01/"><code>composite-trendmaster-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-trendmaster-integration-01/"><code>composite-trendmaster-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1380,8 +1232,7 @@ href="./validation/composite-trendmaster-integration-01/"><code>composite-trendm
 <td style="text-align: right;">0.0800%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-trendmaster-line-new-projection-01/"><code>composite-trendmaster-line-new-projection-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-trendmaster-line-new-projection-01/"><code>composite-trendmaster-line-new-projection-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1394,8 +1245,7 @@ href="./validation/composite-trendmaster-line-new-projection-01/"><code>composit
 <td style="text-align: right;">0.0778%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-trendmaster-pivot-anchored-bracket-01/"><code>composite-trendmaster-pivot-anchored-bracket-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-trendmaster-pivot-anchored-bracket-01/"><code>composite-trendmaster-pivot-anchored-bracket-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1408,8 +1258,7 @@ href="./validation/composite-trendmaster-pivot-anchored-bracket-01/"><code>compo
 <td style="text-align: right;">0.0849%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-trendmaster-three-tier-ema-state-01/"><code>composite-trendmaster-three-tier-ema-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-trendmaster-three-tier-ema-state-01/"><code>composite-trendmaster-three-tier-ema-state-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1422,8 +1271,7 @@ href="./validation/composite-trendmaster-three-tier-ema-state-01/"><code>composi
 <td style="text-align: right;">0.0633%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-trendmaster-trend-momentum-structure-gate-01/"><code>composite-trendmaster-trend-momentum-structure-gate-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-trendmaster-trend-momentum-structure-gate-01/"><code>composite-trendmaster-trend-momentum-structure-gate-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1436,8 +1284,7 @@ href="./validation/composite-trendmaster-trend-momentum-structure-gate-01/"><cod
 <td style="text-align: right;">0.0727%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-cumulative-volume-delta-01/"><code>composite-vcp-cumulative-volume-delta-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-cumulative-volume-delta-01/"><code>composite-vcp-cumulative-volume-delta-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1450,8 +1297,7 @@ href="./validation/composite-vcp-cumulative-volume-delta-01/"><code>composite-vc
 <td style="text-align: right;">0.0761%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-fvg-active-zones-01/"><code>composite-vcp-fvg-active-zones-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-fvg-active-zones-01/"><code>composite-vcp-fvg-active-zones-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1464,8 +1310,7 @@ href="./validation/composite-vcp-fvg-active-zones-01/"><code>composite-vcp-fvg-a
 <td style="text-align: right;">0.0586%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-integration-01/"><code>composite-vcp-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-integration-01/"><code>composite-vcp-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1478,8 +1323,7 @@ href="./validation/composite-vcp-integration-01/"><code>composite-vcp-integratio
 <td style="text-align: right;">0.0930%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-manual-adx-regime-01/"><code>composite-vcp-manual-adx-regime-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-manual-adx-regime-01/"><code>composite-vcp-manual-adx-regime-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1492,8 +1336,7 @@ href="./validation/composite-vcp-manual-adx-regime-01/"><code>composite-vcp-manu
 <td style="text-align: right;">0.0793%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-pivot-strength-5-01/"><code>composite-vcp-pivot-strength-5-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-pivot-strength-5-01/"><code>composite-vcp-pivot-strength-5-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1506,8 +1349,7 @@ href="./validation/composite-vcp-pivot-strength-5-01/"><code>composite-vcp-pivot
 <td style="text-align: right;">0.0773%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-rsi-smooth-divergence-01/"><code>composite-vcp-rsi-smooth-divergence-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-rsi-smooth-divergence-01/"><code>composite-vcp-rsi-smooth-divergence-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1520,8 +1362,7 @@ href="./validation/composite-vcp-rsi-smooth-divergence-01/"><code>composite-vcp-
 <td style="text-align: right;">0.0808%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-session-tz-newyork-01/"><code>composite-vcp-session-tz-newyork-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-session-tz-newyork-01/"><code>composite-vcp-session-tz-newyork-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1534,8 +1375,7 @@ href="./validation/composite-vcp-session-tz-newyork-01/"><code>composite-vcp-ses
 <td style="text-align: right;">0.0752%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-vcp-vol-zscore-anomaly-01/"><code>composite-vcp-vol-zscore-anomaly-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-vcp-vol-zscore-anomaly-01/"><code>composite-vcp-vol-zscore-anomaly-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1548,8 +1388,7 @@ href="./validation/composite-vcp-vol-zscore-anomaly-01/"><code>composite-vcp-vol
 <td style="text-align: right;">0.0739%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-wunderscalper-alert-templates-01/"><code>composite-wunderscalper-alert-templates-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-wunderscalper-alert-templates-01/"><code>composite-wunderscalper-alert-templates-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1562,8 +1401,7 @@ href="./validation/composite-wunderscalper-alert-templates-01/"><code>composite-
 <td style="text-align: right;">0.0833%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-wunderscalper-explicit-reverse-01/"><code>composite-wunderscalper-explicit-reverse-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-wunderscalper-explicit-reverse-01/"><code>composite-wunderscalper-explicit-reverse-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1576,8 +1414,7 @@ href="./validation/composite-wunderscalper-explicit-reverse-01/"><code>composite
 <td style="text-align: right;">0.0833%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/composite-wunderscalper-integration-01/"><code>composite-wunderscalper-integration-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/composite-wunderscalper-integration-01/"><code>composite-wunderscalper-integration-01</code></a></td>
 <td><code>composite</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1590,8 +1427,7 @@ href="./validation/composite-wunderscalper-integration-01/"><code>composite-wund
 <td style="text-align: right;">0.0833%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ltf-bool-array-bull-majority-01/"><code>ltf-bool-array-bull-majority-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ltf-bool-array-bull-majority-01/"><code>ltf-bool-array-bull-majority-01</code></a></td>
 <td><code>ltf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1604,8 +1440,7 @@ href="./validation/ltf-bool-array-bull-majority-01/"><code>ltf-bool-array-bull-m
 <td style="text-align: right;">0.0739%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ltf-numeric-float-ratio15-01/"><code>ltf-numeric-float-ratio15-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ltf-numeric-float-ratio15-01/"><code>ltf-numeric-float-ratio15-01</code></a></td>
 <td><code>ltf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1618,8 +1453,7 @@ href="./validation/ltf-numeric-float-ratio15-01/"><code>ltf-numeric-float-ratio1
 <td style="text-align: right;">0.0867%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/magnifier-tick-dist-endpoints-01/"><code>magnifier-tick-dist-endpoints-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/magnifier-tick-dist-endpoints-01/"><code>magnifier-tick-dist-endpoints-01</code></a></td>
 <td><code>magnifier</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1632,8 +1466,7 @@ href="./validation/magnifier-tick-dist-endpoints-01/"><code>magnifier-tick-dist-
 <td style="text-align: right;">0.0739%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/magnifier-tick-dist-endpoints-rsi-cross-08a/"><code>magnifier-tick-dist-endpoints-rsi-cross-08a</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/magnifier-tick-dist-endpoints-rsi-cross-08a/"><code>magnifier-tick-dist-endpoints-rsi-cross-08a</code></a></td>
 <td><code>magnifier</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1646,8 +1479,7 @@ href="./validation/magnifier-tick-dist-endpoints-rsi-cross-08a/"><code>magnifier
 <td style="text-align: right;">0.0704%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/magnifier-tick-dist-volume-weighted-on-01/"><code>magnifier-tick-dist-volume-weighted-on-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/magnifier-tick-dist-volume-weighted-on-01/"><code>magnifier-tick-dist-volume-weighted-on-01</code></a></td>
 <td><code>magnifier</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1660,8 +1492,7 @@ href="./validation/magnifier-tick-dist-volume-weighted-on-01/"><code>magnifier-t
 <td style="text-align: right;">0.0739%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-bool-mask-explicit-utc-tz-01/"><code>matrix-bool-mask-explicit-utc-tz-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-bool-mask-explicit-utc-tz-01/"><code>matrix-bool-mask-explicit-utc-tz-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1674,8 +1505,7 @@ href="./validation/matrix-bool-mask-explicit-utc-tz-01/"><code>matrix-bool-mask-
 <td style="text-align: right;">0.0841%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-bool-mask-no-transpose-01/"><code>matrix-bool-mask-no-transpose-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-bool-mask-no-transpose-01/"><code>matrix-bool-mask-no-transpose-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1688,8 +1518,7 @@ href="./validation/matrix-bool-mask-no-transpose-01/"><code>matrix-bool-mask-no-
 <td style="text-align: right;">0.0841%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-bool-mask-transpose-roundtrip-01/"><code>matrix-bool-mask-transpose-roundtrip-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-bool-mask-transpose-roundtrip-01/"><code>matrix-bool-mask-transpose-roundtrip-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1702,8 +1531,7 @@ href="./validation/matrix-bool-mask-transpose-roundtrip-01/"><code>matrix-bool-m
 <td style="text-align: right;">0.0841%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-bool-regime-mask-24x7-01/"><code>matrix-bool-regime-mask-24x7-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-bool-regime-mask-24x7-01/"><code>matrix-bool-regime-mask-24x7-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1716,8 +1544,7 @@ href="./validation/matrix-bool-regime-mask-24x7-01/"><code>matrix-bool-regime-ma
 <td style="text-align: right;">0.0841%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-covariance-eigen-pca-01/"><code>matrix-covariance-eigen-pca-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-covariance-eigen-pca-01/"><code>matrix-covariance-eigen-pca-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1730,8 +1557,7 @@ href="./validation/matrix-covariance-eigen-pca-01/"><code>matrix-covariance-eige
 <td style="text-align: right;">0.0778%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/matrix-eigen-rank-deficient-cov-01/"><code>matrix-eigen-rank-deficient-cov-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/matrix-eigen-rank-deficient-cov-01/"><code>matrix-eigen-rank-deficient-cov-01</code></a></td>
 <td><code>matrix</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1744,8 +1570,7 @@ href="./validation/matrix-eigen-rank-deficient-cov-01/"><code>matrix-eigen-rank-
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-daily-array-median-percentrank-01/"><code>mtf-daily-array-median-percentrank-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-daily-array-median-percentrank-01/"><code>mtf-daily-array-median-percentrank-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1758,8 +1583,7 @@ href="./validation/mtf-daily-array-median-percentrank-01/"><code>mtf-daily-array
 <td style="text-align: right;">0.0961%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-daily-ema26-warmup-01/"><code>mtf-daily-ema26-warmup-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-daily-ema26-warmup-01/"><code>mtf-daily-ema26-warmup-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1772,8 +1596,7 @@ href="./validation/mtf-daily-ema26-warmup-01/"><code>mtf-daily-ema26-warmup-01</
 <td style="text-align: right;">0.0884%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-daily-prev-high-break-01/"><code>mtf-daily-prev-high-break-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-daily-prev-high-break-01/"><code>mtf-daily-prev-high-break-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1786,8 +1609,7 @@ href="./validation/mtf-daily-prev-high-break-01/"><code>mtf-daily-prev-high-brea
 <td style="text-align: right;">0.0687%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-dual-tf-60-240-rising-01/"><code>mtf-dual-tf-60-240-rising-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-dual-tf-60-240-rising-01/"><code>mtf-dual-tf-60-240-rising-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1800,8 +1622,7 @@ href="./validation/mtf-dual-tf-60-240-rising-01/"><code>mtf-dual-tf-60-240-risin
 <td style="text-align: right;">0.0653%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-close-change-baseline-01/"><code>mtf-htf-60-close-change-baseline-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-close-change-baseline-01/"><code>mtf-htf-60-close-change-baseline-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1814,8 +1635,7 @@ href="./validation/mtf-htf-60-close-change-baseline-01/"><code>mtf-htf-60-close-
 <td style="text-align: right;">0.0673%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-close-roll-01/"><code>mtf-htf-60-close-roll-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-close-roll-01/"><code>mtf-htf-60-close-roll-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1828,8 +1648,7 @@ href="./validation/mtf-htf-60-close-roll-01/"><code>mtf-htf-60-close-roll-01</co
 <td style="text-align: right;">0.0653%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-gaps-on-roll-01/"><code>mtf-htf-60-gaps-on-roll-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-gaps-on-roll-01/"><code>mtf-htf-60-gaps-on-roll-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1842,8 +1661,7 @@ href="./validation/mtf-htf-60-gaps-on-roll-01/"><code>mtf-htf-60-gaps-on-roll-01
 <td style="text-align: right;">0.0736%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-rsi14-inside-security-01/"><code>mtf-htf-60-rsi14-inside-security-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-rsi14-inside-security-01/"><code>mtf-htf-60-rsi14-inside-security-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1856,8 +1674,7 @@ href="./validation/mtf-htf-60-rsi14-inside-security-01/"><code>mtf-htf-60-rsi14-
 <td style="text-align: right;">0.0779%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-sma20-inside-security-01/"><code>mtf-htf-60-sma20-inside-security-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-sma20-inside-security-01/"><code>mtf-htf-60-sma20-inside-security-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1870,8 +1687,7 @@ href="./validation/mtf-htf-60-sma20-inside-security-01/"><code>mtf-htf-60-sma20-
 <td style="text-align: right;">0.0768%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-60-volume-spike-01/"><code>mtf-htf-60-volume-spike-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-60-volume-spike-01/"><code>mtf-htf-60-volume-spike-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1884,8 +1700,7 @@ href="./validation/mtf-htf-60-volume-spike-01/"><code>mtf-htf-60-volume-spike-01
 <td style="text-align: right;">0.0886%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-confluence-manual-trail-01/"><code>mtf-htf-confluence-manual-trail-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-confluence-manual-trail-01/"><code>mtf-htf-confluence-manual-trail-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1898,8 +1713,7 @@ href="./validation/mtf-htf-confluence-manual-trail-01/"><code>mtf-htf-confluence
 <td style="text-align: right;">0.0814%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-htf-confluence-static-bracket-01/"><code>mtf-htf-confluence-static-bracket-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-htf-confluence-static-bracket-01/"><code>mtf-htf-confluence-static-bracket-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1912,8 +1726,7 @@ href="./validation/mtf-htf-confluence-static-bracket-01/"><code>mtf-htf-confluen
 <td style="text-align: right;">0.0815%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-roll-state-60-240-d-minimal-01/"><code>mtf-roll-state-60-240-d-minimal-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-roll-state-60-240-d-minimal-01/"><code>mtf-roll-state-60-240-d-minimal-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1926,8 +1739,7 @@ href="./validation/mtf-roll-state-60-240-d-minimal-01/"><code>mtf-roll-state-60-
 <td style="text-align: right;">0.0677%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-triple-tf-close-confluence-01/"><code>mtf-triple-tf-close-confluence-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-triple-tf-close-confluence-01/"><code>mtf-triple-tf-close-confluence-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1940,8 +1752,7 @@ href="./validation/mtf-triple-tf-close-confluence-01/"><code>mtf-triple-tf-close
 <td style="text-align: right;">0.0911%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/mtf-triple-tf-macd-hist-confluence-01/"><code>mtf-triple-tf-macd-hist-confluence-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/mtf-triple-tf-macd-hist-confluence-01/"><code>mtf-triple-tf-macd-hist-confluence-01</code></a></td>
 <td><code>mtf</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1954,8 +1765,7 @@ href="./validation/mtf-triple-tf-macd-hist-confluence-01/"><code>mtf-triple-tf-m
 <td style="text-align: right;">0.1662%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/na-deep-history-int-na-01/"><code>na-deep-history-int-na-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/na-deep-history-int-na-01/"><code>na-deep-history-int-na-01</code></a></td>
 <td><code>na</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1968,8 +1778,7 @@ href="./validation/na-deep-history-int-na-01/"><code>na-deep-history-int-na-01</
 <td style="text-align: right;">0.1001%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/na-nz-fixnan-history-chain-01/"><code>na-nz-fixnan-history-chain-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/na-nz-fixnan-history-chain-01/"><code>na-nz-fixnan-history-chain-01</code></a></td>
 <td><code>na</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1982,8 +1791,7 @@ href="./validation/na-nz-fixnan-history-chain-01/"><code>na-nz-fixnan-history-ch
 <td style="text-align: right;">0.0756%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/oca-exit-bracket-internal-cancel-01/"><code>oca-exit-bracket-internal-cancel-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/oca-exit-bracket-internal-cancel-01/"><code>oca-exit-bracket-internal-cancel-01</code></a></td>
 <td><code>oca</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -1996,8 +1804,7 @@ href="./validation/oca-exit-bracket-internal-cancel-01/"><code>oca-exit-bracket-
 <td style="text-align: right;">0.1087%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/oca-multi-bracket-isolation-01/"><code>oca-multi-bracket-isolation-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/oca-multi-bracket-isolation-01/"><code>oca-multi-bracket-isolation-01</code></a></td>
 <td><code>oca</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2010,8 +1817,7 @@ href="./validation/oca-multi-bracket-isolation-01/"><code>oca-multi-bracket-isol
 <td style="text-align: right;">0.1362%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/oca-raw-strategy-order-reduce-01/"><code>oca-raw-strategy-order-reduce-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/oca-raw-strategy-order-reduce-01/"><code>oca-raw-strategy-order-reduce-01</code></a></td>
 <td><code>oca</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2024,8 +1830,7 @@ href="./validation/oca-raw-strategy-order-reduce-01/"><code>oca-raw-strategy-ord
 <td style="text-align: right;">0.1273%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-close-all-cancel-all-01/"><code>order-close-all-cancel-all-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-close-all-cancel-all-01/"><code>order-close-all-cancel-all-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2038,8 +1843,7 @@ href="./validation/order-close-all-cancel-all-01/"><code>order-close-all-cancel-
 <td style="text-align: right;">0.4564%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-close-immediate-vs-next-bar-01/"><code>order-close-immediate-vs-next-bar-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-close-immediate-vs-next-bar-01/"><code>order-close-immediate-vs-next-bar-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2052,8 +1856,7 @@ href="./validation/order-close-immediate-vs-next-bar-01/"><code>order-close-imme
 <td style="text-align: right;">0.0794%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-cross-entry-cancel-same-pass-01/"><code>order-cross-entry-cancel-same-pass-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-cross-entry-cancel-same-pass-01/"><code>order-cross-entry-cancel-same-pass-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2066,8 +1869,7 @@ href="./validation/order-cross-entry-cancel-same-pass-01/"><code>order-cross-ent
 <td style="text-align: right;">0.0836%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-cross-entry-close-same-pass-01/"><code>order-cross-entry-close-same-pass-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-cross-entry-close-same-pass-01/"><code>order-cross-entry-close-same-pass-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2080,8 +1882,7 @@ href="./validation/order-cross-entry-close-same-pass-01/"><code>order-cross-entr
 <td style="text-align: right;">0.0830%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-cross-exit-close-same-pass-01/"><code>order-cross-exit-close-same-pass-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-cross-exit-close-same-pass-01/"><code>order-cross-exit-close-same-pass-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2094,8 +1895,7 @@ href="./validation/order-cross-exit-close-same-pass-01/"><code>order-cross-exit-
 <td style="text-align: right;">0.0675%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-deferred-flip-guaranteed-gap-stops-01/"><code>order-deferred-flip-guaranteed-gap-stops-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-deferred-flip-guaranteed-gap-stops-01/"><code>order-deferred-flip-guaranteed-gap-stops-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2108,8 +1908,7 @@ href="./validation/order-deferred-flip-guaranteed-gap-stops-01/"><code>order-def
 <td style="text-align: right;">0.0779%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-deferred-flip-pooc-cross-bar-01/"><code>order-deferred-flip-pooc-cross-bar-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-deferred-flip-pooc-cross-bar-01/"><code>order-deferred-flip-pooc-cross-bar-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2122,8 +1921,7 @@ href="./validation/order-deferred-flip-pooc-cross-bar-01/"><code>order-deferred-
 <td style="text-align: right;">0.1444%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-four-bar-stop-no-close-01/"><code>order-dual-four-bar-stop-no-close-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-four-bar-stop-no-close-01/"><code>order-dual-four-bar-stop-no-close-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2136,8 +1934,7 @@ href="./validation/order-dual-four-bar-stop-no-close-01/"><code>order-dual-four-
 <td style="text-align: right;">0.0817%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-side-same-id-stop-no-cancel-01/"><code>order-dual-side-same-id-stop-no-cancel-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-side-same-id-stop-no-cancel-01/"><code>order-dual-side-same-id-stop-no-cancel-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2150,8 +1947,7 @@ href="./validation/order-dual-side-same-id-stop-no-cancel-01/"><code>order-dual-
 <td style="text-align: right;">0.0844%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-both-touch-priority-01/"><code>order-dual-stop-both-touch-priority-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-both-touch-priority-01/"><code>order-dual-stop-both-touch-priority-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2164,8 +1960,7 @@ href="./validation/order-dual-stop-both-touch-priority-01/"><code>order-dual-sto
 <td style="text-align: right;">0.0949%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-cancel-rotation-01/"><code>order-dual-stop-cancel-rotation-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-cancel-rotation-01/"><code>order-dual-stop-cancel-rotation-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2178,8 +1973,7 @@ href="./validation/order-dual-stop-cancel-rotation-01/"><code>order-dual-stop-ca
 <td style="text-align: right;">0.0788%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-far-only-01/"><code>order-dual-stop-far-only-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-far-only-01/"><code>order-dual-stop-far-only-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2192,8 +1986,7 @@ href="./validation/order-dual-stop-far-only-01/"><code>order-dual-stop-far-only-
 <td style="text-align: right;">0.0952%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-near-only-01/"><code>order-dual-stop-near-only-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-near-only-01/"><code>order-dual-stop-near-only-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2206,8 +1999,7 @@ href="./validation/order-dual-stop-near-only-01/"><code>order-dual-stop-near-onl
 <td style="text-align: right;">0.1101%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-open-high-first-path-01/"><code>order-dual-stop-open-high-first-path-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-open-high-first-path-01/"><code>order-dual-stop-open-high-first-path-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2220,8 +2012,7 @@ href="./validation/order-dual-stop-open-high-first-path-01/"><code>order-dual-st
 <td style="text-align: right;">0.1134%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-open-low-first-path-01/"><code>order-dual-stop-open-low-first-path-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-open-low-first-path-01/"><code>order-dual-stop-open-low-first-path-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2234,8 +2025,7 @@ href="./validation/order-dual-stop-open-low-first-path-01/"><code>order-dual-sto
 <td style="text-align: right;">0.1113%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-open-tie-01/"><code>order-dual-stop-open-tie-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-open-tie-01/"><code>order-dual-stop-open-tie-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2248,8 +2038,7 @@ href="./validation/order-dual-stop-open-tie-01/"><code>order-dual-stop-open-tie-
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-source-order-long-first-01/"><code>order-dual-stop-source-order-long-first-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-source-order-long-first-01/"><code>order-dual-stop-source-order-long-first-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2262,8 +2051,7 @@ href="./validation/order-dual-stop-source-order-long-first-01/"><code>order-dual
 <td style="text-align: right;">0.1101%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-dual-stop-source-order-short-first-01/"><code>order-dual-stop-source-order-short-first-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-dual-stop-source-order-short-first-01/"><code>order-dual-stop-source-order-short-first-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2276,8 +2064,7 @@ href="./validation/order-dual-stop-source-order-short-first-01/"><code>order-dua
 <td style="text-align: right;">0.0872%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-entry-implicit-reversal-exit-01/"><code>order-entry-implicit-reversal-exit-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-entry-implicit-reversal-exit-01/"><code>order-entry-implicit-reversal-exit-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2290,8 +2077,7 @@ href="./validation/order-entry-implicit-reversal-exit-01/"><code>order-entry-imp
 <td style="text-align: right;">0.0767%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-flip-stop-no-paired-close-01/"><code>order-flip-stop-no-paired-close-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-flip-stop-no-paired-close-01/"><code>order-flip-stop-no-paired-close-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2304,8 +2090,7 @@ href="./validation/order-flip-stop-no-paired-close-01/"><code>order-flip-stop-no
 <td style="text-align: right;">0.0769%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-market-close-fill-basis-01/"><code>order-market-close-fill-basis-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-market-close-fill-basis-01/"><code>order-market-close-fill-basis-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2318,8 +2103,7 @@ href="./validation/order-market-close-fill-basis-01/"><code>order-market-close-f
 <td style="text-align: right;">0.0773%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-one-side-four-bar-far-opposite-01/"><code>order-one-side-four-bar-far-opposite-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-one-side-four-bar-far-opposite-01/"><code>order-one-side-four-bar-far-opposite-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2332,8 +2116,7 @@ href="./validation/order-one-side-four-bar-far-opposite-01/"><code>order-one-sid
 <td style="text-align: right;">0.0818%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-opposite-entry-close-same-pass-01/"><code>order-opposite-entry-close-same-pass-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-opposite-entry-close-same-pass-01/"><code>order-opposite-entry-close-same-pass-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2346,8 +2129,7 @@ href="./validation/order-opposite-entry-close-same-pass-01/"><code>order-opposit
 <td style="text-align: right;">0.0819%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-percent-equity-cash-commission-01/"><code>order-percent-equity-cash-commission-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-percent-equity-cash-commission-01/"><code>order-percent-equity-cash-commission-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2360,8 +2142,7 @@ href="./validation/order-percent-equity-cash-commission-01/"><code>order-percent
 <td style="text-align: right;">0.0014%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-process-on-close-false-01/"><code>order-process-on-close-false-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-process-on-close-false-01/"><code>order-process-on-close-false-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2374,8 +2155,7 @@ href="./validation/order-process-on-close-false-01/"><code>order-process-on-clos
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-process-on-close-true-01/"><code>order-process-on-close-true-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-process-on-close-true-01/"><code>order-process-on-close-true-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2388,8 +2168,7 @@ href="./validation/order-process-on-close-true-01/"><code>order-process-on-close
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-range-expansion-pending-stop-01/"><code>order-range-expansion-pending-stop-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-range-expansion-pending-stop-01/"><code>order-range-expansion-pending-stop-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2402,8 +2181,7 @@ href="./validation/order-range-expansion-pending-stop-01/"><code>order-range-exp
 <td style="text-align: right;">0.0798%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-entry-close-same-bar-01/"><code>order-same-id-entry-close-same-bar-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-entry-close-same-bar-01/"><code>order-same-id-entry-close-same-bar-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2416,8 +2194,7 @@ href="./validation/order-same-id-entry-close-same-bar-01/"><code>order-same-id-e
 <td style="text-align: right;">0.0656%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-market-entry-repeat-01/"><code>order-same-id-market-entry-repeat-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-market-entry-repeat-01/"><code>order-same-id-market-entry-repeat-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2430,8 +2207,7 @@ href="./validation/order-same-id-market-entry-repeat-01/"><code>order-same-id-ma
 <td style="text-align: right;">0.0782%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-after-flat-01/"><code>order-same-id-stop-after-flat-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-after-flat-01/"><code>order-same-id-stop-after-flat-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2444,8 +2220,7 @@ href="./validation/order-same-id-stop-after-flat-01/"><code>order-same-id-stop-a
 <td style="text-align: right;">0.0821%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-cross-before-modify-01/"><code>order-same-id-stop-cross-before-modify-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-cross-before-modify-01/"><code>order-same-id-stop-cross-before-modify-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2458,8 +2233,7 @@ href="./validation/order-same-id-stop-cross-before-modify-01/"><code>order-same-
 <td style="text-align: right;">0.0815%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-minute-zero-01/"><code>order-same-id-stop-minute-zero-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-minute-zero-01/"><code>order-same-id-stop-minute-zero-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2472,8 +2246,7 @@ href="./validation/order-same-id-stop-minute-zero-01/"><code>order-same-id-stop-
 <td style="text-align: right;">0.0811%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-modification-01/"><code>order-same-id-stop-modification-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-modification-01/"><code>order-same-id-stop-modification-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2486,8 +2259,7 @@ href="./validation/order-same-id-stop-modification-01/"><code>order-same-id-stop
 <td style="text-align: right;">0.0844%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-raise-only-01/"><code>order-same-id-stop-raise-only-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-raise-only-01/"><code>order-same-id-stop-raise-only-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2500,8 +2272,7 @@ href="./validation/order-same-id-stop-raise-only-01/"><code>order-same-id-stop-r
 <td style="text-align: right;">0.0825%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-same-id-stop-window-four-bars-01/"><code>order-same-id-stop-window-four-bars-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-same-id-stop-window-four-bars-01/"><code>order-same-id-stop-window-four-bars-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2514,8 +2285,7 @@ href="./validation/order-same-id-stop-window-four-bars-01/"><code>order-same-id-
 <td style="text-align: right;">0.0818%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-stale-stop-after-close-no-cancel-01/"><code>order-stale-stop-after-close-no-cancel-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-stale-stop-after-close-no-cancel-01/"><code>order-stale-stop-after-close-no-cancel-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2528,8 +2298,7 @@ href="./validation/order-stale-stop-after-close-no-cancel-01/"><code>order-stale
 <td style="text-align: right;">0.0800%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-stop-cancel-no-regime-close-01/"><code>order-stop-cancel-no-regime-close-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-stop-cancel-no-regime-close-01/"><code>order-stop-cancel-no-regime-close-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2542,8 +2311,7 @@ href="./validation/order-stop-cancel-no-regime-close-01/"><code>order-stop-cance
 <td style="text-align: right;">0.0855%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-stop-entry-cancel-opposite-01/"><code>order-stop-entry-cancel-opposite-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-stop-entry-cancel-opposite-01/"><code>order-stop-entry-cancel-opposite-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2556,8 +2324,7 @@ href="./validation/order-stop-entry-cancel-opposite-01/"><code>order-stop-entry-
 <td style="text-align: right;">0.0821%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-stop-entry-reversal-grouping-01/"><code>order-stop-entry-reversal-grouping-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-stop-entry-reversal-grouping-01/"><code>order-stop-entry-reversal-grouping-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2570,8 +2337,7 @@ href="./validation/order-stop-entry-reversal-grouping-01/"><code>order-stop-entr
 <td style="text-align: right;">0.0748%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/order-stop-entry-touch-boundary-01/"><code>order-stop-entry-touch-boundary-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/order-stop-entry-touch-boundary-01/"><code>order-stop-entry-touch-boundary-01</code></a></td>
 <td><code>order</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2584,8 +2350,7 @@ href="./validation/order-stop-entry-touch-boundary-01/"><code>order-stop-entry-t
 <td style="text-align: right;">0.0811%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/pyramid-cash-fractional-commission-01/"><code>pyramid-cash-fractional-commission-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/pyramid-cash-fractional-commission-01/"><code>pyramid-cash-fractional-commission-01</code></a></td>
 <td><code>pyramid</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2598,8 +2363,7 @@ href="./validation/pyramid-cash-fractional-commission-01/"><code>pyramid-cash-fr
 <td style="text-align: right;">0.0370%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/pyramid-close-id-grouping-01/"><code>pyramid-close-id-grouping-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/pyramid-close-id-grouping-01/"><code>pyramid-close-id-grouping-01</code></a></td>
 <td><code>pyramid</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2612,8 +2376,7 @@ href="./validation/pyramid-close-id-grouping-01/"><code>pyramid-close-id-groupin
 <td style="text-align: right;">0.0805%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/pyramid-deferred-flip-close-all-01/"><code>pyramid-deferred-flip-close-all-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/pyramid-deferred-flip-close-all-01/"><code>pyramid-deferred-flip-close-all-01</code></a></td>
 <td><code>pyramid</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2626,8 +2389,7 @@ href="./validation/pyramid-deferred-flip-close-all-01/"><code>pyramid-deferred-f
 <td style="text-align: right;">0.0855%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/pyramid-flip-stop-pyramiding-2-01/"><code>pyramid-flip-stop-pyramiding-2-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/pyramid-flip-stop-pyramiding-2-01/"><code>pyramid-flip-stop-pyramiding-2-01</code></a></td>
 <td><code>pyramid</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2640,8 +2402,7 @@ href="./validation/pyramid-flip-stop-pyramiding-2-01/"><code>pyramid-flip-stop-p
 <td style="text-align: right;">0.0819%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/recompute-alma-sar-corr-magnifier-01/"><code>recompute-alma-sar-corr-magnifier-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/recompute-alma-sar-corr-magnifier-01/"><code>recompute-alma-sar-corr-magnifier-01</code></a></td>
 <td><code>recompute</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2654,8 +2415,7 @@ href="./validation/recompute-alma-sar-corr-magnifier-01/"><code>recompute-alma-s
 <td style="text-align: right;">0.0795%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/recompute-mtf-rsi-macd-bb-01/"><code>recompute-mtf-rsi-macd-bb-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/recompute-mtf-rsi-macd-bb-01/"><code>recompute-mtf-rsi-macd-bb-01</code></a></td>
 <td><code>recompute</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2668,8 +2428,7 @@ href="./validation/recompute-mtf-rsi-macd-bb-01/"><code>recompute-mtf-rsi-macd-b
 <td style="text-align: right;">0.0700%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/risk-max-contracts-held-gate-pyramid-01/"><code>risk-max-contracts-held-gate-pyramid-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/risk-max-contracts-held-gate-pyramid-01/"><code>risk-max-contracts-held-gate-pyramid-01</code></a></td>
 <td><code>risk</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2682,8 +2441,7 @@ href="./validation/risk-max-contracts-held-gate-pyramid-01/"><code>risk-max-cont
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/session-hour-minute-pulse-filter-01/"><code>session-hour-minute-pulse-filter-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/session-hour-minute-pulse-filter-01/"><code>session-hour-minute-pulse-filter-01</code></a></td>
 <td><code>session</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2696,8 +2454,7 @@ href="./validation/session-hour-minute-pulse-filter-01/"><code>session-hour-minu
 <td style="text-align: right;">0.0699%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/session-ny-spring-forward-dst-01/"><code>session-ny-spring-forward-dst-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/session-ny-spring-forward-dst-01/"><code>session-ny-spring-forward-dst-01</code></a></td>
 <td><code>session</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2710,8 +2467,7 @@ href="./validation/session-ny-spring-forward-dst-01/"><code>session-ny-spring-fo
 <td style="text-align: right;">0.0735%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/stats-eventrades-zero-pnl-count-01/"><code>stats-eventrades-zero-pnl-count-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/stats-eventrades-zero-pnl-count-01/"><code>stats-eventrades-zero-pnl-count-01</code></a></td>
 <td><code>stats</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2724,8 +2480,7 @@ href="./validation/stats-eventrades-zero-pnl-count-01/"><code>stats-eventrades-z
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-bb-kc-squeeze-breakout-01/"><code>ta-bb-kc-squeeze-breakout-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-bb-kc-squeeze-breakout-01/"><code>ta-bb-kc-squeeze-breakout-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2738,8 +2493,7 @@ href="./validation/ta-bb-kc-squeeze-breakout-01/"><code>ta-bb-kc-squeeze-breakou
 <td style="text-align: right;">0.0863%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-bb-rsi-mean-reversion-01/"><code>ta-bb-rsi-mean-reversion-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-bb-rsi-mean-reversion-01/"><code>ta-bb-rsi-mean-reversion-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2752,8 +2506,7 @@ href="./validation/ta-bb-rsi-mean-reversion-01/"><code>ta-bb-rsi-mean-reversion-
 <td style="text-align: right;">0.0820%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-cci-threshold-cross-01/"><code>ta-cci-threshold-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-cci-threshold-cross-01/"><code>ta-cci-threshold-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2766,8 +2519,7 @@ href="./validation/ta-cci-threshold-cross-01/"><code>ta-cci-threshold-cross-01</
 <td style="text-align: right;">0.0719%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-chandelier-exit-direction-01/"><code>ta-chandelier-exit-direction-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-chandelier-exit-direction-01/"><code>ta-chandelier-exit-direction-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2780,8 +2532,7 @@ href="./validation/ta-chandelier-exit-direction-01/"><code>ta-chandelier-exit-di
 <td style="text-align: right;">0.0828%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-closedtrades-risk-introspection-01/"><code>ta-closedtrades-risk-introspection-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-closedtrades-risk-introspection-01/"><code>ta-closedtrades-risk-introspection-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2794,8 +2545,7 @@ href="./validation/ta-closedtrades-risk-introspection-01/"><code>ta-closedtrades
 <td style="text-align: right;">0.1216%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-dmi-adx-di-cross-01/"><code>ta-dmi-adx-di-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-dmi-adx-di-cross-01/"><code>ta-dmi-adx-di-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2808,8 +2558,7 @@ href="./validation/ta-dmi-adx-di-cross-01/"><code>ta-dmi-adx-di-cross-01</code><
 <td style="text-align: right;">0.0779%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-donchian-channel-breakout-01/"><code>ta-donchian-channel-breakout-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-donchian-channel-breakout-01/"><code>ta-donchian-channel-breakout-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2822,8 +2571,7 @@ href="./validation/ta-donchian-channel-breakout-01/"><code>ta-donchian-channel-b
 <td style="text-align: right;">0.0794%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-dual-ma-switch-dispatch-01/"><code>ta-dual-ma-switch-dispatch-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-dual-ma-switch-dispatch-01/"><code>ta-dual-ma-switch-dispatch-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2836,8 +2584,7 @@ href="./validation/ta-dual-ma-switch-dispatch-01/"><code>ta-dual-ma-switch-dispa
 <td style="text-align: right;">0.0888%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-dual-thrust-open-anchored-range-01/"><code>ta-dual-thrust-open-anchored-range-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-dual-thrust-open-anchored-range-01/"><code>ta-dual-thrust-open-anchored-range-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2850,8 +2597,7 @@ href="./validation/ta-dual-thrust-open-anchored-range-01/"><code>ta-dual-thrust-
 <td style="text-align: right;">0.0784%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-elder-ray-bull-bear-power-01/"><code>ta-elder-ray-bull-bear-power-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-elder-ray-bull-bear-power-01/"><code>ta-elder-ray-bull-bear-power-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2864,8 +2610,7 @@ href="./validation/ta-elder-ray-bull-bear-power-01/"><code>ta-elder-ray-bull-bea
 <td style="text-align: right;">0.0786%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-ema-ribbon-stack-transition-01/"><code>ta-ema-ribbon-stack-transition-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-ema-ribbon-stack-transition-01/"><code>ta-ema-ribbon-stack-transition-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2878,8 +2623,7 @@ href="./validation/ta-ema-ribbon-stack-transition-01/"><code>ta-ema-ribbon-stack
 <td style="text-align: right;">0.0797%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-engulfing-candle-pattern-01/"><code>ta-engulfing-candle-pattern-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-engulfing-candle-pattern-01/"><code>ta-engulfing-candle-pattern-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2892,8 +2636,7 @@ href="./validation/ta-engulfing-candle-pattern-01/"><code>ta-engulfing-candle-pa
 <td style="text-align: right;">0.0791%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-highestbars-lowestbars-breakout-01/"><code>ta-highestbars-lowestbars-breakout-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-highestbars-lowestbars-breakout-01/"><code>ta-highestbars-lowestbars-breakout-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2906,8 +2649,7 @@ href="./validation/ta-highestbars-lowestbars-breakout-01/"><code>ta-highestbars-
 <td style="text-align: right;">0.0834%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-hma-55-close-cross-01/"><code>ta-hma-55-close-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-hma-55-close-cross-01/"><code>ta-hma-55-close-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2920,8 +2662,7 @@ href="./validation/ta-hma-55-close-cross-01/"><code>ta-hma-55-close-cross-01</co
 <td style="text-align: right;">0.0817%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-hma-fast-slow-cross-01/"><code>ta-hma-fast-slow-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-hma-fast-slow-cross-01/"><code>ta-hma-fast-slow-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2934,8 +2675,7 @@ href="./validation/ta-hma-fast-slow-cross-01/"><code>ta-hma-fast-slow-cross-01</
 <td style="text-align: right;">0.0821%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-inside-bar-engulfing-01/"><code>ta-inside-bar-engulfing-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-inside-bar-engulfing-01/"><code>ta-inside-bar-engulfing-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2948,8 +2688,7 @@ href="./validation/ta-inside-bar-engulfing-01/"><code>ta-inside-bar-engulfing-01
 <td style="text-align: right;">0.0764%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-kama-style-efficiency-ratio-01/"><code>ta-kama-style-efficiency-ratio-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-kama-style-efficiency-ratio-01/"><code>ta-kama-style-efficiency-ratio-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2962,8 +2701,7 @@ href="./validation/ta-kama-style-efficiency-ratio-01/"><code>ta-kama-style-effic
 <td style="text-align: right;">0.0772%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-keltner-channel-break-01/"><code>ta-keltner-channel-break-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-keltner-channel-break-01/"><code>ta-keltner-channel-break-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2976,8 +2714,7 @@ href="./validation/ta-keltner-channel-break-01/"><code>ta-keltner-channel-break-
 <td style="text-align: right;">0.0776%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-linreg-stdev-channel-revert-01/"><code>ta-linreg-stdev-channel-revert-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-linreg-stdev-channel-revert-01/"><code>ta-linreg-stdev-channel-revert-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -2990,8 +2727,7 @@ href="./validation/ta-linreg-stdev-channel-revert-01/"><code>ta-linreg-stdev-cha
 <td style="text-align: right;">0.0943%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-macd-12-26-9-line-signal-cross-01/"><code>ta-macd-12-26-9-line-signal-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-macd-12-26-9-line-signal-cross-01/"><code>ta-macd-12-26-9-line-signal-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3004,8 +2740,7 @@ href="./validation/ta-macd-12-26-9-line-signal-cross-01/"><code>ta-macd-12-26-9-
 <td style="text-align: right;">0.0856%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-macd-histogram-reversal-01/"><code>ta-macd-histogram-reversal-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-macd-histogram-reversal-01/"><code>ta-macd-histogram-reversal-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3018,8 +2753,7 @@ href="./validation/ta-macd-histogram-reversal-01/"><code>ta-macd-histogram-rever
 <td style="text-align: right;">0.0885%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-macd-line-gt-signal-continuous-state-01/"><code>ta-macd-line-gt-signal-continuous-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-macd-line-gt-signal-continuous-state-01/"><code>ta-macd-line-gt-signal-continuous-state-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3032,8 +2766,7 @@ href="./validation/ta-macd-line-gt-signal-continuous-state-01/"><code>ta-macd-li
 <td style="text-align: right;">0.0861%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-map-regime-threshold-lookup-01/"><code>ta-map-regime-threshold-lookup-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-map-regime-threshold-lookup-01/"><code>ta-map-regime-threshold-lookup-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3046,8 +2779,7 @@ href="./validation/ta-map-regime-threshold-lookup-01/"><code>ta-map-regime-thres
 <td style="text-align: right;">0.0783%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-median-vs-ema-cross-01/"><code>ta-median-vs-ema-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-median-vs-ema-cross-01/"><code>ta-median-vs-ema-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3060,8 +2792,7 @@ href="./validation/ta-median-vs-ema-cross-01/"><code>ta-median-vs-ema-cross-01</
 <td style="text-align: right;">0.0827%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-momentum-roc-zero-cross-01/"><code>ta-momentum-roc-zero-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-momentum-roc-zero-cross-01/"><code>ta-momentum-roc-zero-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3074,8 +2805,7 @@ href="./validation/ta-momentum-roc-zero-cross-01/"><code>ta-momentum-roc-zero-cr
 <td style="text-align: right;">0.0782%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-multi-indicator-score-composite-01/"><code>ta-multi-indicator-score-composite-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-multi-indicator-score-composite-01/"><code>ta-multi-indicator-score-composite-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3088,8 +2818,7 @@ href="./validation/ta-multi-indicator-score-composite-01/"><code>ta-multi-indica
 <td style="text-align: right;">0.0830%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-percentrank-mean-reversion-01/"><code>ta-percentrank-mean-reversion-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-percentrank-mean-reversion-01/"><code>ta-percentrank-mean-reversion-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3102,8 +2831,7 @@ href="./validation/ta-percentrank-mean-reversion-01/"><code>ta-percentrank-mean-
 <td style="text-align: right;">0.0716%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-pivot-array-unshift-pop-01/"><code>ta-pivot-array-unshift-pop-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-pivot-array-unshift-pop-01/"><code>ta-pivot-array-unshift-pop-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3116,8 +2844,7 @@ href="./validation/ta-pivot-array-unshift-pop-01/"><code>ta-pivot-array-unshift-
 <td style="text-align: right;">0.0893%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-pivot-atr-stop-target-01/"><code>ta-pivot-atr-stop-target-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-pivot-atr-stop-target-01/"><code>ta-pivot-atr-stop-target-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3130,8 +2857,7 @@ href="./validation/ta-pivot-atr-stop-target-01/"><code>ta-pivot-atr-stop-target-
 <td style="text-align: right;">0.1055%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-pivot-confirmed-break-01/"><code>ta-pivot-confirmed-break-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-pivot-confirmed-break-01/"><code>ta-pivot-confirmed-break-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3144,8 +2870,7 @@ href="./validation/ta-pivot-confirmed-break-01/"><code>ta-pivot-confirmed-break-
 <td style="text-align: right;">0.0866%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-range-filter-var-band-01/"><code>ta-range-filter-var-band-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-range-filter-var-band-01/"><code>ta-range-filter-var-band-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3158,8 +2883,7 @@ href="./validation/ta-range-filter-var-band-01/"><code>ta-range-filter-var-band-
 <td style="text-align: right;">0.0789%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi-bb-self-bands-01/"><code>ta-rsi-bb-self-bands-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi-bb-self-bands-01/"><code>ta-rsi-bb-self-bands-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3172,8 +2896,7 @@ href="./validation/ta-rsi-bb-self-bands-01/"><code>ta-rsi-bb-self-bands-01</code
 <td style="text-align: right;">0.0802%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi-ema-signal-cross-01/"><code>ta-rsi-ema-signal-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi-ema-signal-cross-01/"><code>ta-rsi-ema-signal-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3186,8 +2909,7 @@ href="./validation/ta-rsi-ema-signal-cross-01/"><code>ta-rsi-ema-signal-cross-01
 <td style="text-align: right;">0.0824%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi-macd-and-continuous-state-01/"><code>ta-rsi-macd-and-continuous-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi-macd-and-continuous-state-01/"><code>ta-rsi-macd-and-continuous-state-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3200,8 +2922,7 @@ href="./validation/ta-rsi-macd-and-continuous-state-01/"><code>ta-rsi-macd-and-c
 <td style="text-align: right;">0.0779%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi14-bands-30-70-01/"><code>ta-rsi14-bands-30-70-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi14-bands-30-70-01/"><code>ta-rsi14-bands-30-70-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3214,8 +2935,7 @@ href="./validation/ta-rsi14-bands-30-70-01/"><code>ta-rsi14-bands-30-70-01</code
 <td style="text-align: right;">0.0814%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi14-cross-50-01/"><code>ta-rsi14-cross-50-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi14-cross-50-01/"><code>ta-rsi14-cross-50-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3228,8 +2948,7 @@ href="./validation/ta-rsi14-cross-50-01/"><code>ta-rsi14-cross-50-01</code></a><
 <td style="text-align: right;">0.0767%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi14-gt-50-continuous-state-01/"><code>ta-rsi14-gt-50-continuous-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi14-gt-50-continuous-state-01/"><code>ta-rsi14-gt-50-continuous-state-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3242,8 +2961,7 @@ href="./validation/ta-rsi14-gt-50-continuous-state-01/"><code>ta-rsi14-gt-50-con
 <td style="text-align: right;">0.0751%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-rsi14-gt60-lt45-no-matrix-01/"><code>ta-rsi14-gt60-lt45-no-matrix-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-rsi14-gt60-lt45-no-matrix-01/"><code>ta-rsi14-gt60-lt45-no-matrix-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3256,8 +2974,7 @@ href="./validation/ta-rsi14-gt60-lt45-no-matrix-01/"><code>ta-rsi14-gt60-lt45-no
 <td style="text-align: right;">0.0840%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-sar-flip-entry-01/"><code>ta-sar-flip-entry-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-sar-flip-entry-01/"><code>ta-sar-flip-entry-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3270,8 +2987,7 @@ href="./validation/ta-sar-flip-entry-01/"><code>ta-sar-flip-entry-01</code></a><
 <td style="text-align: right;">0.0803%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-sma-152-close-cross-01/"><code>ta-sma-152-close-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-sma-152-close-cross-01/"><code>ta-sma-152-close-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3284,8 +3000,7 @@ href="./validation/ta-sma-152-close-cross-01/"><code>ta-sma-152-close-cross-01</
 <td style="text-align: right;">0.0699%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-sma-dual-cross-01/"><code>ta-sma-dual-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-sma-dual-cross-01/"><code>ta-sma-dual-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3298,8 +3013,7 @@ href="./validation/ta-sma-dual-cross-01/"><code>ta-sma-dual-cross-01</code></a><
 <td style="text-align: right;">0.0791%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-stdev-sma-expansion-break-01/"><code>ta-stdev-sma-expansion-break-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-stdev-sma-expansion-break-01/"><code>ta-stdev-sma-expansion-break-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3312,8 +3026,7 @@ href="./validation/ta-stdev-sma-expansion-break-01/"><code>ta-stdev-sma-expansio
 <td style="text-align: right;">0.0782%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-stoch-slow-k-d-cross-01/"><code>ta-stoch-slow-k-d-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-stoch-slow-k-d-cross-01/"><code>ta-stoch-slow-k-d-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3326,8 +3039,7 @@ href="./validation/ta-stoch-slow-k-d-cross-01/"><code>ta-stoch-slow-k-d-cross-01
 <td style="text-align: right;">0.0762%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-stochastic-rsi-cross-01/"><code>ta-stochastic-rsi-cross-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-stochastic-rsi-cross-01/"><code>ta-stochastic-rsi-cross-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3340,8 +3052,7 @@ href="./validation/ta-stochastic-rsi-cross-01/"><code>ta-stochastic-rsi-cross-01
 <td style="text-align: right;">0.1153%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-str-match-regex-filter-01/"><code>ta-str-match-regex-filter-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-str-match-regex-filter-01/"><code>ta-str-match-regex-filter-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3354,8 +3065,7 @@ href="./validation/ta-str-match-regex-filter-01/"><code>ta-str-match-regex-filte
 <td style="text-align: right;">0.0779%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-supertrend-adx-filter-01/"><code>ta-supertrend-adx-filter-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-supertrend-adx-filter-01/"><code>ta-supertrend-adx-filter-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3368,8 +3078,7 @@ href="./validation/ta-supertrend-adx-filter-01/"><code>ta-supertrend-adx-filter-
 <td style="text-align: right;">0.0769%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-supertrend-direction-flip-01/"><code>ta-supertrend-direction-flip-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-supertrend-direction-flip-01/"><code>ta-supertrend-direction-flip-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3382,8 +3091,7 @@ href="./validation/ta-supertrend-direction-flip-01/"><code>ta-supertrend-directi
 <td style="text-align: right;">0.0757%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-triple-sma-stack-latch-01/"><code>ta-triple-sma-stack-latch-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-triple-sma-stack-latch-01/"><code>ta-triple-sma-stack-latch-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3396,8 +3104,7 @@ href="./validation/ta-triple-sma-stack-latch-01/"><code>ta-triple-sma-stack-latc
 <td style="text-align: right;">0.0797%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-volume-spike-atr-breakout-01/"><code>ta-volume-spike-atr-breakout-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-volume-spike-atr-breakout-01/"><code>ta-volume-spike-atr-breakout-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3410,8 +3117,7 @@ href="./validation/ta-volume-spike-atr-breakout-01/"><code>ta-volume-spike-atr-b
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/ta-vwma-vs-sma-divergence-01/"><code>ta-vwma-vs-sma-divergence-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/ta-vwma-vs-sma-divergence-01/"><code>ta-vwma-vs-sma-divergence-01</code></a></td>
 <td><code>ta</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3424,8 +3130,7 @@ href="./validation/ta-vwma-vs-sma-divergence-01/"><code>ta-vwma-vs-sma-divergenc
 <td style="text-align: right;">0.0801%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/timeframe-main-period-self-adaptive-01/"><code>timeframe-main-period-self-adaptive-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/timeframe-main-period-self-adaptive-01/"><code>timeframe-main-period-self-adaptive-01</code></a></td>
 <td><code>timeframe</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3438,8 +3143,7 @@ href="./validation/timeframe-main-period-self-adaptive-01/"><code>timeframe-main
 <td style="text-align: right;">0.0815%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-calls-sibling-cumulative-01/"><code>udt-method-calls-sibling-cumulative-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-calls-sibling-cumulative-01/"><code>udt-method-calls-sibling-cumulative-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3452,8 +3156,7 @@ href="./validation/udt-method-calls-sibling-cumulative-01/"><code>udt-method-cal
 <td style="text-align: right;">0.0713%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-default-param-kwargs-01/"><code>udt-method-default-param-kwargs-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-default-param-kwargs-01/"><code>udt-method-default-param-kwargs-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3466,8 +3169,7 @@ href="./validation/udt-method-default-param-kwargs-01/"><code>udt-method-default
 <td style="text-align: right;">0.0875%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-drives-strategy-entry-01/"><code>udt-method-drives-strategy-entry-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-drives-strategy-entry-01/"><code>udt-method-drives-strategy-entry-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3480,8 +3182,7 @@ href="./validation/udt-method-drives-strategy-entry-01/"><code>udt-method-drives
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-extra-primitive-args-01/"><code>udt-method-extra-primitive-args-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-extra-primitive-args-01/"><code>udt-method-extra-primitive-args-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3494,8 +3195,7 @@ href="./validation/udt-method-extra-primitive-args-01/"><code>udt-method-extra-p
 <td style="text-align: right;">0.0000%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-feeds-strategy-exit-prices-01/"><code>udt-method-feeds-strategy-exit-prices-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-feeds-strategy-exit-prices-01/"><code>udt-method-feeds-strategy-exit-prices-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3508,8 +3208,7 @@ href="./validation/udt-method-feeds-strategy-exit-prices-01/"><code>udt-method-f
 <td style="text-align: right;">0.0876%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-in-for-loop-01/"><code>udt-method-in-for-loop-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-in-for-loop-01/"><code>udt-method-in-for-loop-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3522,8 +3221,7 @@ href="./validation/udt-method-in-for-loop-01/"><code>udt-method-in-for-loop-01</
 <td style="text-align: right;">0.0756%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-in-if-else-branch-01/"><code>udt-method-in-if-else-branch-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-in-if-else-branch-01/"><code>udt-method-in-if-else-branch-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3536,8 +3234,7 @@ href="./validation/udt-method-in-if-else-branch-01/"><code>udt-method-in-if-else
 <td style="text-align: right;">0.0813%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-in-switch-arms-01/"><code>udt-method-in-switch-arms-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-in-switch-arms-01/"><code>udt-method-in-switch-arms-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3550,8 +3247,7 @@ href="./validation/udt-method-in-switch-arms-01/"><code>udt-method-in-switch-arm
 <td style="text-align: right;">0.0813%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-in-while-loop-01/"><code>udt-method-in-while-loop-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-in-while-loop-01/"><code>udt-method-in-while-loop-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3564,8 +3260,7 @@ href="./validation/udt-method-in-while-loop-01/"><code>udt-method-in-while-loop-
 <td style="text-align: right;">0.0846%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-mutating-self-ref-01/"><code>udt-method-mutating-self-ref-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-mutating-self-ref-01/"><code>udt-method-mutating-self-ref-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3578,8 +3273,7 @@ href="./validation/udt-method-mutating-self-ref-01/"><code>udt-method-mutating-s
 <td style="text-align: right;">0.0624%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-on-array-element-01/"><code>udt-method-on-array-element-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-on-array-element-01/"><code>udt-method-on-array-element-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3592,8 +3286,7 @@ href="./validation/udt-method-on-array-element-01/"><code>udt-method-on-array-el
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-reads-strategy-state-01/"><code>udt-method-reads-strategy-state-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-reads-strategy-state-01/"><code>udt-method-reads-strategy-state-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3606,8 +3299,7 @@ href="./validation/udt-method-reads-strategy-state-01/"><code>udt-method-reads-s
 <td style="text-align: right;">0.0848%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-receives-ta-series-param-01/"><code>udt-method-receives-ta-series-param-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-receives-ta-series-param-01/"><code>udt-method-receives-ta-series-param-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3620,8 +3312,7 @@ href="./validation/udt-method-receives-ta-series-param-01/"><code>udt-method-rec
 <td style="text-align: right;">0.0754%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-scalar-return-01/"><code>udt-method-scalar-return-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-scalar-return-01/"><code>udt-method-scalar-return-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3634,8 +3325,7 @@ href="./validation/udt-method-scalar-return-01/"><code>udt-method-scalar-return-
 <td style="text-align: right;">0.0849%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-tuple-return-destructure-01/"><code>udt-method-tuple-return-destructure-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-tuple-return-destructure-01/"><code>udt-method-tuple-return-destructure-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3648,8 +3338,7 @@ href="./validation/udt-method-tuple-return-destructure-01/"><code>udt-method-tup
 <td style="text-align: right;">0.0875%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-udt-return-from-func-01/"><code>udt-method-udt-return-from-func-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-udt-return-from-func-01/"><code>udt-method-udt-return-from-func-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3662,8 +3351,7 @@ href="./validation/udt-method-udt-return-from-func-01/"><code>udt-method-udt-ret
 <td style="text-align: right;">0.0705%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-uses-history-globals-01/"><code>udt-method-uses-history-globals-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-uses-history-globals-01/"><code>udt-method-uses-history-globals-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3676,8 +3364,7 @@ href="./validation/udt-method-uses-history-globals-01/"><code>udt-method-uses-hi
 <td style="text-align: right;">0.1029%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-uses-math-funcs-01/"><code>udt-method-uses-math-funcs-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-uses-math-funcs-01/"><code>udt-method-uses-math-funcs-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3690,8 +3377,7 @@ href="./validation/udt-method-uses-math-funcs-01/"><code>udt-method-uses-math-fu
 <td style="text-align: right;">0.0845%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-uses-na-nz-fixnan-01/"><code>udt-method-uses-na-nz-fixnan-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-uses-na-nz-fixnan-01/"><code>udt-method-uses-na-nz-fixnan-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3704,8 +3390,7 @@ href="./validation/udt-method-uses-na-nz-fixnan-01/"><code>udt-method-uses-na-nz
 <td style="text-align: right;">0.0829%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-var-instance-streak-01/"><code>udt-method-var-instance-streak-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-var-instance-streak-01/"><code>udt-method-var-instance-streak-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3718,8 +3403,7 @@ href="./validation/udt-method-var-instance-streak-01/"><code>udt-method-var-inst
 <td style="text-align: right;">0.0557%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-method-windowed-method-chain-01/"><code>udt-method-windowed-method-chain-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-method-windowed-method-chain-01/"><code>udt-method-windowed-method-chain-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3732,8 +3416,7 @@ href="./validation/udt-method-windowed-method-chain-01/"><code>udt-method-window
 <td style="text-align: right;">0.0713%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/udt-regime-stack-stress-01/"><code>udt-regime-stack-stress-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/udt-regime-stack-stress-01/"><code>udt-regime-stack-stress-01</code></a></td>
 <td><code>udt</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3746,8 +3429,7 @@ href="./validation/udt-regime-stack-stress-01/"><code>udt-regime-stack-stress-01
 <td style="text-align: right;">0.0830%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/varip-counter-state-positive-01/"><code>varip-counter-state-positive-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/varip-counter-state-positive-01/"><code>varip-counter-state-positive-01</code></a></td>
 <td><code>varip</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3760,8 +3442,7 @@ href="./validation/varip-counter-state-positive-01/"><code>varip-counter-state-p
 <td style="text-align: right;">0.0764%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/varip-var-udt-in-security-positive-01/"><code>varip-var-udt-in-security-positive-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/varip-var-udt-in-security-positive-01/"><code>varip-var-udt-in-security-positive-01</code></a></td>
 <td><code>varip</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3774,8 +3455,7 @@ href="./validation/varip-var-udt-in-security-positive-01/"><code>varip-var-udt-i
 <td style="text-align: right;">0.0710%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/vwap-bands-breakout-1sigma-01/"><code>vwap-bands-breakout-1sigma-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/vwap-bands-breakout-1sigma-01/"><code>vwap-bands-breakout-1sigma-01</code></a></td>
 <td><code>vwap</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
@@ -3788,8 +3468,7 @@ href="./validation/vwap-bands-breakout-1sigma-01/"><code>vwap-bands-breakout-1si
 <td style="text-align: right;">0.0755%</td>
 </tr>
 <tr>
-<td><a
-href="./validation/vwap-bands-mean-reversion-2sigma-01/"><code>vwap-bands-mean-reversion-2sigma-01</code></a></td>
+<td><a href="https://github.com/fullpass-4pass/pineforge-corpus/tree/main/validation/vwap-bands-mean-reversion-2sigma-01/"><code>vwap-bands-mean-reversion-2sigma-01</code></a></td>
 <td><code>vwap</code></td>
 <td>excellent</td>
 <td><code>strict</code></td>
