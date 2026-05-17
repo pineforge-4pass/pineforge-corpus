@@ -1,6 +1,7 @@
 {
+  "ohlcv_csv": "../../data/ohlcv_ETH-USDT-USDT_15m.csv",
   "validation_overrides": {
     "expect_tv_match": true,
-    "expect_tv_match_reason": "VWAP bands 3-tuple parity probe — 97.5% trade-by-trade bit-exact match; 3-trade count delta (1.24%) at strict 1% threshold is intrinsic VWAP variance precision drift at anchor-day edges, not an engine bug"
+    "expect_tv_match_reason": "VWAP bands 3-tuple parity probe"
   }
 }
