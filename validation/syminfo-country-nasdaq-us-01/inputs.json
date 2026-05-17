@@ -1,0 +1,6 @@
+{
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "Smoke probe — validates syminfo.country derivation compiles and runs. No TV CSV available."
+  }
+}

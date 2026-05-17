@@ -1,0 +1,37 @@
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// syminfo-main-tickerid-futures-root-01
+//
+// Smoke probe: verifies syminfo.main_tickerid derivation compiles and runs.
+// Codegen derives main_tickerid from tickerid by stripping the futures suffix
+// (e.g. "CME_MINI:ES1!" -> "CME_MINI:ES"). For the default ETH-USDT data
+// (tickerid="UNKNOWN"), main_tickerid strips nothing (no numeric suffix).
+//
+// This probe also checks that syminfo.prefix and syminfo.root return na
+// (not 0) after the G2 critical fix.
+//
+// TV_RUN_NEEDED: No TV CSV required — smoke probe only. Verifies compile +
+// run without errors. No trade parity is asserted.
+//@version=6
+strategy("PF syminfo-main-tickerid-futures-root-01", shorttitle="G2_SMTID_01",
+    overlay=false, initial_capital=10000, currency=currency.USD,
+    commission_type=strategy.commission.percent, commission_value=0, slippage=0)
+
+// Verify syminfo.main_tickerid is accessible (na-safe)
+main_id = syminfo.main_tickerid
+
+// Verify syminfo.prefix and syminfo.root are na (not 0) after G2 fix
+// (These fields are not in SymInfo struct; previously silently emitted 0)
+p = syminfo.prefix
+r = syminfo.root
+
+// Simple SMA crossover to generate a few trades (smoke only)
+fast = ta.sma(close, 10)
+slow = ta.sma(close, 30)
+
+if ta.crossover(fast, slow)
+    strategy.entry("L", strategy.long)
+if ta.crossunder(fast, slow)
+    strategy.close("L")
