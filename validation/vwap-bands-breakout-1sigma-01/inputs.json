@@ -1,0 +1,12 @@
+{
+  "syminfo_overrides": {
+    "ticker":   "BTCUSDT",
+    "tickerid": "BINANCE:BTCUSDT",
+    "timezone": "UTC",
+    "session":  "24x7"
+  },
+  "validation_overrides": {
+    "expect_tv_match": true,
+    "expect_tv_match_reason": "VWAP bands 3-tuple breakout parity probe — requires tv_trades.csv from TradingView"
+  }
+}
