@@ -1,13 +1,22 @@
-# varip-reject-probe-02-var-udt-in-security
+# varip-var-udt-in-security-positive-01
 
-## Gap
-Companion to probe 01 (X10, Pine#1, C++#15): confirms the `varip` rejection is targeted, not blanket. A `var` UDT field mutated inside a `request.security` callable should ACCEPT and produce trades.
+## Purpose
+
+Confirms that `var` UDT state mutated inside a `request.security` callable compiles
+and produces trades. This probe uses `var` (not `varip`) — it is a positive smoke
+test for security-callable state persistence.
+
+As of Pine v6 sprint (2026-05): `varip` is now a **warning** (not an error) in
+PineForge. `varip` is treated as `var` in batch mode — no intrabar tick semantics
+are provided. This probe remains a purely `var`-based test; the new
+`varip-counter-state-positive-01` probe demonstrates `varip` passthrough directly.
 
 ## Expected behavior
-- `transpile(...)` should succeed with no errors.
-- `var Counter c` inside the `htfWork()` security callable persists across HTF bars.
-- Each HTF EMA crossover increments `c.hits`; chart-side `htfFired` flags the bar where the counter advances.
-- >=10 closed long trades on the 15m ETH-USDT-USDT window.
+- `transpile(...)` succeeds with no errors (no `validation_overrides.expect_reject`).
+- `var Counter c` inside the security callable persists across HTF bars.
+- Each HTF EMA crossover increments `c.hits`; chart-side `htfFired` flags the bar
+  where the counter advances.
+- Strategy produces long trades on the 15m ETH-USDT-USDT window.
 
 ## TV capture notes
 - 15m chart, ETH-USDT-USDT, same window as `data/ohlcv_ETH-USDT-USDT_15m.csv`.

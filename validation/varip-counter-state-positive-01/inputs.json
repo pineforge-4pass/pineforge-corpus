@@ -1,0 +1,6 @@
+{
+  "tv_trades_csv": "tv_trades.csv",
+  "validation_overrides": {
+    "expect_tv_match_reason": "varip treated as var in batch mode — counter increments bar-to-bar identically in both TV and PineForge batch"
+  }
+}
