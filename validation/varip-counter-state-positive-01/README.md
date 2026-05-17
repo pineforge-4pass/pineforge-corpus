@@ -21,7 +21,7 @@ on confirmed bars.
   are bar-aligned (as they are in all confirmed-bar strategies).
 
 ## TV capture notes (TV_RUN_NEEDED)
-- Symbol: BTCUSDT, TF: 15m, Range: 2024-01-01 to 2024-06-01
+- Symbol: ETHUSDT.P, TF: 15m, Range: 2024-01-01 to 2024-06-01
 - Export the List of Trades panel → save as `tv_trades.csv` in this directory.
 - The strategy is deterministic (counter-based, no price crossover), so TV/PF
   should produce exactly the same entry/exit bars.

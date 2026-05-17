@@ -1,5 +1,5 @@
 // TV_RUN_NEEDED: tv_trades.csv missing — capture in TradingView:
-//   Symbol: BTCUSDT  TF: 15m  Range: 2024-01-01..2024-06-01
+//   Symbol: ETHUSDT.P (Binance USDT-M Perpetual)  TF: 15m  Range: 2024-01-01..2024-06-01
 //   Save List of Trades → tv_trades.csv in this directory.
 
 //@version=6

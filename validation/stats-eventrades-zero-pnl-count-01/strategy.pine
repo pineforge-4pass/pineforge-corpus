@@ -1,5 +1,5 @@
 // TV_RUN_NEEDED: tv_trades.csv missing — capture in TradingView:
-//   Symbol: BTCUSDT  TF: 15m  Range: 2024-01-01..2024-06-01
+//   Symbol: ETHUSDT.P (Binance USDT-M Perpetual)  TF: 15m  Range: 2024-01-01..2024-06-01
 //   Save List of Trades → tv_trades.csv in this directory.
 //
 // This Pine Script® code is licensed under Apache-2.0
@@ -13,7 +13,7 @@
 //   Commission = 0 (set in strategy() declaration).
 //   Entry fills at bar N close; exit fills at bar N+1 open (= same value as
 //   bar N close when open == close, i.e., a flat OHLC bar). However, since
-//   real BTCUSDT bars are rarely flat, we instead use limit orders set at
+//   real ETHUSDT.P bars are rarely flat, we instead use limit orders set at
 //   bar.close so both entry and exit prices match exactly, producing 0 P&L.
 //
 //   Simpler approach used here: enter at bar close (market order, fills next
@@ -24,7 +24,7 @@
 //   Observation: strategy.eventrades should increment once per such trade.
 //   The probe confirms the counter is correct vs TradingView's reported value.
 //
-// TV setup: BTCUSDT 15m, 2024-01-01..2024-06-01
+// TV setup: ETHUSDT.P 15m, 2024-01-01..2024-06-01
 //@version=6
 strategy("PF-F: eventrades count", shorttitle="PF_F_EVTRADES", overlay=true,
      initial_capital=1000000, currency=currency.USD,
