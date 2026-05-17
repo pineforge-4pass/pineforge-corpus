@@ -1,6 +1,0 @@
-{
-  "validation_overrides": {
-    "expect_tv_match": false,
-    "expect_tv_match_reason": "Smoke probe — validates syminfo.main_tickerid/prefix/root compile and run. No TV CSV available."
-  }
-}

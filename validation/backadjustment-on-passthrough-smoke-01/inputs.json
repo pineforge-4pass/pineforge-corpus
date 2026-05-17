@@ -1,6 +1,0 @@
-{
-  "validation_overrides": {
-    "expect_tv_match": false,
-    "expect_tv_match_reason": "Smoke probe — validates backadjustment/settlement_as_close/adjustment constants compile and run. Codegen silently drops these kwargs. No TV CSV available."
-  }
-}
