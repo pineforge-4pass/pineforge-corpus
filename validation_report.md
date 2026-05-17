@@ -1,14 +1,14 @@
 # PineForge Corpus Validation Report
 
-**Generated:** 2026-05-15 (UTC) — engine `6db9974`, corpus `dc7f3d6`
+**Generated:** 2026-05-17 (UTC) — engine `cbc2419`, corpus `5d5e5c3`
 
 All probes live under `corpus/validation/`; categories below are derived
 from each slug's leading hyphen-token (e.g. `ta-...`, `composite-...`).
 
 ## Headline
 
-- **Total probes verified:** 228
-- **Excellent:** 227 (99.6%)
+- **Total probes verified:** 234
+- **Excellent:** 233 (99.6%)
 - **Strong:** 0
 - **Moderate:** 0
 - **Weak:** 0
@@ -45,10 +45,14 @@ captured in the probe's `inputs.json` notes field where present.
 | `order` | 40 | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `pyramid` | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `recompute` | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `risk` | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `session` | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `stats` | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `ta` | 50 | 50 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `timeframe` | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | `udt` | 22 | 22 | 0 | 0 | 0 | 0 | 0 | 0 |
-| `varip` | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `varip` | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `vwap` | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Per-Strategy Detail
 
@@ -121,7 +125,7 @@ trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 | [`composite-trendmaster-integration-01`](./validation/composite-trendmaster-integration-01/) | `composite` | excellent | `strict` | 629 | 628 | 628 | 0.1590% | 0.0000% | 0.0000% | 0.0800% |
 | [`composite-trendmaster-line-new-projection-01`](./validation/composite-trendmaster-line-new-projection-01/) | `composite` | excellent | `strict` | 1592 | 1594 | 1592 | 0.1255% | 0.0000% | 0.0000% | 0.0778% |
 | [`composite-trendmaster-pivot-anchored-bracket-01`](./validation/composite-trendmaster-pivot-anchored-bracket-01/) | `composite` | excellent | `strict` | 3095 | 3097 | 3095 | 0.0646% | 0.0000% | 0.0000% | 0.0849% |
-| [`composite-trendmaster-three-tier-ema-state-01`](./validation/composite-trendmaster-three-tier-ema-state-01/) | `composite` | excellent | `strict` | 220 | 220 | 220 | 0.0000% | 0.0000% | 0.0000% | 0.0631% |
+| [`composite-trendmaster-three-tier-ema-state-01`](./validation/composite-trendmaster-three-tier-ema-state-01/) | `composite` | excellent | `strict` | 209 | 209 | 209 | 0.0000% | 0.0000% | 0.0000% | 0.0633% |
 | [`composite-trendmaster-trend-momentum-structure-gate-01`](./validation/composite-trendmaster-trend-momentum-structure-gate-01/) | `composite` | excellent | `strict` | 362 | 362 | 362 | 0.0000% | 0.0000% | 0.0000% | 0.0727% |
 | [`composite-vcp-cumulative-volume-delta-01`](./validation/composite-vcp-cumulative-volume-delta-01/) | `composite` | excellent | `strict` | 3119 | 3119 | 3119 | 0.0000% | 0.0000% | 0.0000% | 0.0761% |
 | [`composite-vcp-fvg-active-zones-01`](./validation/composite-vcp-fvg-active-zones-01/) | `composite` | excellent | `strict` | 11800 | 11851 | 11797 | 0.4303% | 0.0000% | 0.0000% | 0.0586% |
@@ -211,8 +215,10 @@ trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 | [`pyramid-flip-stop-pyramiding-2-01`](./validation/pyramid-flip-stop-pyramiding-2-01/) | `pyramid` | excellent | `strict` | 843 | 843 | 843 | 0.0000% | 0.0000% | 0.0000% | 0.0819% |
 | [`recompute-alma-sar-corr-magnifier-01`](./validation/recompute-alma-sar-corr-magnifier-01/) | `recompute` | excellent | `strict` | 582 | 582 | 582 | 0.0000% | 0.0000% | 0.0000% | 0.0795% |
 | [`recompute-mtf-rsi-macd-bb-01`](./validation/recompute-mtf-rsi-macd-bb-01/) | `recompute` | excellent | `strict` | 286 | 286 | 286 | 0.0000% | 0.0000% | 0.0000% | 0.0700% |
+| [`risk-max-contracts-held-gate-pyramid-01`](./validation/risk-max-contracts-held-gate-pyramid-01/) | `risk` | excellent | `strict` | 5 | 5 | 5 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`session-hour-minute-pulse-filter-01`](./validation/session-hour-minute-pulse-filter-01/) | `session` | excellent | `strict` | 366 | 366 | 366 | 0.0000% | 0.0000% | 0.0000% | 0.0699% |
 | [`session-ny-spring-forward-dst-01`](./validation/session-ny-spring-forward-dst-01/) | `session` | excellent | `strict` | 396 | 396 | 396 | 0.0000% | 0.0000% | 0.0000% | 0.0735% |
+| [`stats-eventrades-zero-pnl-count-01`](./validation/stats-eventrades-zero-pnl-count-01/) | `stats` | excellent | `strict` | 139 | 139 | 139 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`ta-bb-kc-squeeze-breakout-01`](./validation/ta-bb-kc-squeeze-breakout-01/) | `ta` | excellent | `strict` | 813 | 813 | 813 | 0.0000% | 0.0000% | 0.0000% | 0.0863% |
 | [`ta-bb-rsi-mean-reversion-01`](./validation/ta-bb-rsi-mean-reversion-01/) | `ta` | excellent | `strict` | 495 | 495 | 495 | 0.0000% | 0.0000% | 0.0000% | 0.0820% |
 | [`ta-cci-threshold-cross-01`](./validation/ta-cci-threshold-cross-01/) | `ta` | excellent | `strict` | 2462 | 2462 | 2462 | 0.0000% | 0.0000% | 0.0000% | 0.0719% |
@@ -263,6 +269,7 @@ trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 | [`ta-triple-sma-stack-latch-01`](./validation/ta-triple-sma-stack-latch-01/) | `ta` | excellent | `strict` | 1406 | 1406 | 1406 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
 | [`ta-volume-spike-atr-breakout-01`](./validation/ta-volume-spike-atr-breakout-01/) | `ta` | excellent | `strict` | 1778 | 1778 | 1778 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
 | [`ta-vwma-vs-sma-divergence-01`](./validation/ta-vwma-vs-sma-divergence-01/) | `ta` | excellent | `strict` | 2574 | 2574 | 2574 | 0.0000% | 0.0000% | 0.0000% | 0.0801% |
+| [`timeframe-main-period-self-adaptive-01`](./validation/timeframe-main-period-self-adaptive-01/) | `timeframe` | excellent | `strict` | 1477 | 1477 | 1477 | 0.0000% | 0.0000% | 0.0000% | 0.0815% |
 | [`udt-method-calls-sibling-cumulative-01`](./validation/udt-method-calls-sibling-cumulative-01/) | `udt` | excellent | `strict` | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
 | [`udt-method-default-param-kwargs-01`](./validation/udt-method-default-param-kwargs-01/) | `udt` | excellent | `strict` | 417 | 417 | 417 | 0.0000% | 0.0000% | 0.0000% | 0.0875% |
 | [`udt-method-drives-strategy-entry-01`](./validation/udt-method-drives-strategy-entry-01/) | `udt` | excellent | `strict` | 1635 | 1635 | 1635 | 0.0000% | 0.0000% | 0.0000% | 0.0829% |
@@ -285,5 +292,8 @@ trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 | [`udt-method-var-instance-streak-01`](./validation/udt-method-var-instance-streak-01/) | `udt` | excellent | `strict` | 1007 | 1007 | 1007 | 0.0000% | 0.0000% | 0.0000% | 0.0557% |
 | [`udt-method-windowed-method-chain-01`](./validation/udt-method-windowed-method-chain-01/) | `udt` | excellent | `strict` | 173 | 173 | 173 | 0.0000% | 0.0000% | 0.0000% | 0.0713% |
 | [`udt-regime-stack-stress-01`](./validation/udt-regime-stack-stress-01/) | `udt` | excellent | `strict` | 3910 | 3911 | 3910 | 0.0256% | 0.0000% | 0.0000% | 0.0830% |
+| [`varip-counter-state-positive-01`](./validation/varip-counter-state-positive-01/) | `varip` | excellent | `strict` | 760 | 760 | 760 | 0.0000% | 0.0000% | 0.0000% | 0.0764% |
 | [`varip-var-udt-in-security-positive-01`](./validation/varip-var-udt-in-security-positive-01/) | `varip` | excellent | `strict` | 207 | 207 | 207 | 0.0000% | 0.0000% | 0.0000% | 0.0710% |
+| [`vwap-bands-breakout-1sigma-01`](./validation/vwap-bands-breakout-1sigma-01/) | `vwap` | excellent | `strict` | 916 | 916 | 916 | 0.0000% | 0.0000% | 0.0000% | 0.0755% |
+| [`vwap-bands-mean-reversion-2sigma-01`](./validation/vwap-bands-mean-reversion-2sigma-01/) | `vwap` | excellent | `strict` | 228 | 228 | 228 | 0.0000% | 0.0000% | 0.0000% | 0.0797% |
 
