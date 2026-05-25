@@ -8,9 +8,9 @@ behaviour matches TradingView on the same bar feed.
 
 ## Headline parity
 
-- **228** verified strategies, all under `corpus/validation/`.
+- **234** verified strategies, all under `corpus/validation/`.
 - **~313,000 trades** total across the suite (TV: 312,829; engine: 312,920 — `+91` ≈ 0.03 % over TV).
-- **227** excellent (bit-for-bit or within strict thresholds on every
+- **233** excellent (bit-for-bit or within strict thresholds on every
   parity dimension).
 - **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` —
   where TradingView's broker emulator exhibits non-deterministic
@@ -60,25 +60,30 @@ optional 1-minute companion for `bar_magnifier` and lower-timeframe probes:
 
 ```
 corpus/
-├── validation/                228 probes — surface-driven probe family
+├── validation/                234 probes — surface-driven probe family
 │   ├── ta-*                    50 probes — TA built-in math (rsi, macd, sma, ...)
 │   ├── order-*                 40 probes — entry/exit/cancel placement
 │   ├── bracket-*               13 probes — TP/SL via strategy.exit / strategy.order
-│   ├── oca-*                    3 probes — OCA group cancel/reduce/none
-│   ├── cap-*                    2 probes — intraday cap (max_intraday_filled_orders)
-│   ├── pyramid-*                4 probes — pyramiding=N
+│   ├── udt-*                   22 probes — user-defined types + methods
 │   ├── mtf-*                   15 probes — request.security regular HTF
-│   ├── ltf-*                    2 probes — request.security_lower_tf arrays
+│   ├── matrix-*                 6 probes — matrix<T> typed/generic
+│   ├── analyzer-*               6 probes — engine analyzer / parity isolation
+│   ├── composite-*             52 probes — multi-surface integration (community-style)
+│   ├── pyramid-*                4 probes — pyramiding=N
+│   ├── oca-*                    3 probes — OCA group cancel/reduce/none
 │   ├── magnifier-*              3 probes — bar_magnifier sub-bar walks
-│   ├── barstate-*               2 probes — barstate.* checks
-│   ├── varip-*                  1 probe  — varip semantics
+│   ├── ltf-*                    2 probes — request.security_lower_tf arrays
+│   ├── session-*                2 probes — session() / TZ / DST
 │   ├── recompute-*              2 probes — calc_on_every_tick / TA recompute
 │   ├── na-*                     2 probes — na propagation
-│   ├── udt-*                   22 probes — user-defined types + methods
-│   ├── matrix-*                 6 probes — matrix<T> typed/generic
-│   ├── session-*                2 probes — session() / TZ / DST
-│   ├── composite-*             52 probes — multi-surface integration (community-style)
-│   ├── analyzer-*               6 probes — engine analyzer / parity isolation
+│   ├── cap-*                    2 probes — intraday cap (max_intraday_filled_orders)
+│   ├── barstate-*               2 probes — barstate.* checks
+│   ├── varip-*                  2 probes — varip semantics
+│   ├── vwap-*                   2 probes — VWAP band pricing / fills
+│   ├── risk-*                   1 probe  — risk gates / limits
+│   ├── stats-*                  1 probe  — performance stats / reporting
+│   ├── symbol-*                 1 probe  — ticker/symbol specification mapping
+│   ├── timeframe-*              1 probe  — script_tf/input_tf timeframe handling
 │   └── anomaly-*                1 probe  — documented TV non-determinism
 ├── data/                       reference OHLCV (Binance ETH-USDT-USDT 15m + 1m)
 ├── LICENSE                     Apache-2.0
@@ -91,7 +96,7 @@ corpus/
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
-Total: **52 + 50 + 40 + 22 + 15 + 13 + 6 + 6 + 4 + 3 + 3 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 = 228** probes.
+Total: **52 + 50 + 40 + 22 + 15 + 13 + 6 + 6 + 4 + 3 + 3 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 1 = 234** probes.
 
 ## Naming convention
 
@@ -114,7 +119,7 @@ Every probe directory follows:
   `barstate-isconfirmed-magnifier-on-01a` vs
   `…-magnifier-off-01b`).
 
-The 19 categories (with probe counts):
+The 24 categories (with probe counts):
 
 | Category    | Count | Surface exercised                                          |
 | ----------- | ----: | ---------------------------------------------------------- |
@@ -135,7 +140,12 @@ The 19 categories (with probe counts):
 | `ltf`       |     2 | `request.security_lower_tf` arrays                         |
 | `cap`       |     2 | Intraday cap (`max_intraday_filled_orders`)                |
 | `barstate`  |     2 | `barstate.*` checks                                        |
-| `varip`     |     1 | `varip` semantics                                          |
+| `varip`     |     2 | `varip` semantics                                          |
+| `vwap`      |     2 | VWAP band pricing / fills                                  |
+| `risk`      |     1 | risk gates / limits                                        |
+| `stats`     |     1 | performance stats / reporting                              |
+| `symbol`    |     1 | ticker/symbol specification mapping                        |
+| `timeframe` |     1 | script_tf/input_tf timeframe handling                      |
 | `anomaly`   |     1 | Documented TV non-determinism                              |
 
 ## Where the numbers come from
