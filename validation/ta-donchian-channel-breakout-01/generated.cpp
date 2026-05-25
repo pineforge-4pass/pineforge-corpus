@@ -22,6 +22,83 @@
 
 using namespace pineforge;
 
+// --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
+static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
+    // Strip trailing digits (optionally followed by '!') from the symbol part.
+    // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
+    std::string result = tickerid;
+    std::size_t colon = result.find(':');
+    std::size_t start = (colon == std::string::npos) ? 0 : colon + 1;
+    // Find end of base symbol (strip trailing digits + optional '!')
+    std::size_t end = result.size();
+    if (end > start && result[end - 1] == '!') {
+        --end;
+    }
+    while (end > start && std::isdigit((unsigned char)result[end - 1])) {
+        --end;
+    }
+    return result.substr(0, end);
+}
+
+static inline std::string _pf_derive_country(const std::string& tickerid) {
+    // Lookup country by exchange prefix (text before ':').
+    std::size_t colon = tickerid.find(':');
+    std::string prefix = (colon == std::string::npos)
+        ? tickerid : tickerid.substr(0, colon);
+    static const std::unordered_map<std::string, std::string> _tbl = {
+        {"AMEX", "US"},
+        {"AQUIS", "UK"},
+        {"ARCA", "US"},
+        {"ASX", "AU"},
+        {"B3", "BR"},
+        {"BINANCE", "GLOBAL"},
+        {"BITMEX", "GLOBAL"},
+        {"BMF", "BR"},
+        {"BMFBOVESPA", "BR"},
+        {"BSE", "IN"},
+        {"BYBIT", "GLOBAL"},
+        {"CBOE", "US"},
+        {"CBOT", "US"},
+        {"CME", "US"},
+        {"CME_MINI", "US"},
+        {"COINBASE", "US"},
+        {"COMEX", "US"},
+        {"DERIBIT", "GLOBAL"},
+        {"EURONEXT", "EU"},
+        {"HKEX", "HK"},
+        {"JSE", "ZA"},
+        {"KOSPI", "KR"},
+        {"KRAKEN", "GLOBAL"},
+        {"KRX", "KR"},
+        {"LSE", "UK"},
+        {"MOEX", "RU"},
+        {"NASDAQ", "US"},
+        {"NSE", "IN"},
+        {"NYMEX", "US"},
+        {"NYSE", "US"},
+        {"OKX", "GLOBAL"},
+        {"OSE", "JP"},
+        {"OTC", "US"},
+        {"SGX", "SG"},
+        {"SIX", "CH"},
+        {"SSE", "CN"},
+        {"SZSE", "CN"},
+        {"TSE", "JP"},
+        {"TSX", "CA"},
+        {"UPBIT", "KR"},
+        {"VENTURE", "CA"},
+        {"XETRA", "DE"}
+    };
+    auto it = _tbl.find(prefix);
+    return (it != _tbl.end()) ? it->second : na<std::string>();
+}
+// --- end syminfo derivation helpers ---
+
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::Highest _ta_highest_1;
@@ -38,6 +115,7 @@ public:
     bool longCond = false;
     bool shortCond = false;
     bool _ta_initialized_ = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() : _ta_highest_1(20), _ta_lowest_2(20), _ta_highest_3(10), _ta_lowest_4(10) {
         initial_capital_ = 1000000.0;
@@ -73,6 +151,11 @@ public:
     }
 
     void on_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            entryLen = get_input_int("Entry Channel Length", 20);
+            exitLen = get_input_int("Exit Channel Length", 10);
+            _inputs_initialized_ = true;
+        }
         if (!_ta_initialized_) {
             _ta_highest_1 = ta::Highest(get_input_int("Entry Channel Length", 20));
             _ta_lowest_2 = ta::Lowest(get_input_int("Entry Channel Length", 20));
@@ -80,8 +163,6 @@ public:
             _ta_lowest_4 = ta::Lowest(get_input_int("Exit Channel Length", 10));
             _ta_initialized_ = true;
         }
-        entryLen = get_input_int("Entry Channel Length", 20);
-        exitLen = get_input_int("Exit Channel Length", 10);
         entryUpper.push((is_first_tick_ ? _ta_highest_1.compute(current_bar_.high) : _ta_highest_1.recompute(current_bar_.high)));
         entryLower.push((is_first_tick_ ? _ta_lowest_2.compute(current_bar_.low) : _ta_lowest_2.recompute(current_bar_.low)));
         entryMid = ((double)((entryUpper[0] + entryLower[0])) / (double)(2));

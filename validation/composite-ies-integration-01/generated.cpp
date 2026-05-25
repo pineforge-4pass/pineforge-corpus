@@ -22,6 +22,83 @@
 
 using namespace pineforge;
 
+// --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
+static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
+    // Strip trailing digits (optionally followed by '!') from the symbol part.
+    // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
+    std::string result = tickerid;
+    std::size_t colon = result.find(':');
+    std::size_t start = (colon == std::string::npos) ? 0 : colon + 1;
+    // Find end of base symbol (strip trailing digits + optional '!')
+    std::size_t end = result.size();
+    if (end > start && result[end - 1] == '!') {
+        --end;
+    }
+    while (end > start && std::isdigit((unsigned char)result[end - 1])) {
+        --end;
+    }
+    return result.substr(0, end);
+}
+
+static inline std::string _pf_derive_country(const std::string& tickerid) {
+    // Lookup country by exchange prefix (text before ':').
+    std::size_t colon = tickerid.find(':');
+    std::string prefix = (colon == std::string::npos)
+        ? tickerid : tickerid.substr(0, colon);
+    static const std::unordered_map<std::string, std::string> _tbl = {
+        {"AMEX", "US"},
+        {"AQUIS", "UK"},
+        {"ARCA", "US"},
+        {"ASX", "AU"},
+        {"B3", "BR"},
+        {"BINANCE", "GLOBAL"},
+        {"BITMEX", "GLOBAL"},
+        {"BMF", "BR"},
+        {"BMFBOVESPA", "BR"},
+        {"BSE", "IN"},
+        {"BYBIT", "GLOBAL"},
+        {"CBOE", "US"},
+        {"CBOT", "US"},
+        {"CME", "US"},
+        {"CME_MINI", "US"},
+        {"COINBASE", "US"},
+        {"COMEX", "US"},
+        {"DERIBIT", "GLOBAL"},
+        {"EURONEXT", "EU"},
+        {"HKEX", "HK"},
+        {"JSE", "ZA"},
+        {"KOSPI", "KR"},
+        {"KRAKEN", "GLOBAL"},
+        {"KRX", "KR"},
+        {"LSE", "UK"},
+        {"MOEX", "RU"},
+        {"NASDAQ", "US"},
+        {"NSE", "IN"},
+        {"NYMEX", "US"},
+        {"NYSE", "US"},
+        {"OKX", "GLOBAL"},
+        {"OSE", "JP"},
+        {"OTC", "US"},
+        {"SGX", "SG"},
+        {"SIX", "CH"},
+        {"SSE", "CN"},
+        {"SZSE", "CN"},
+        {"TSE", "JP"},
+        {"TSX", "CA"},
+        {"UPBIT", "KR"},
+        {"VENTURE", "CA"},
+        {"XETRA", "DE"}
+    };
+    auto it = _tbl.find(prefix);
+    return (it != _tbl.end()) ? it->second : na<std::string>();
+}
+// --- end syminfo derivation helpers ---
+
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::TR _ta_tr_1;
@@ -109,6 +186,7 @@ public:
     bool short_entry = false;
     bool _var_initialized = false;
     bool _ta_initialized_ = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() : _ta_tr_1(true), _ta_rma_2(14), _ta_rma_3(14), _ta_rma_4(14), _ta_rma_5(14), _ta_atr_6(14), _ta_sma_7(42), _ta_ema_8(21), _ta_ema_9(55), _ta_ema_10(200), _ta_rsi_11(14), _ta_ema_12(12), _ta_ema_13(26), _ta_ema_14(9), _ta_ema_15(14), _ta_ema_16(5), bars_since_trade(999) {
         initial_capital_ = 1000000.0;
@@ -172,6 +250,29 @@ public:
             _var_initialized = true;
         } else {
         }
+        if (!_inputs_initialized_) {
+            i_adx_len = get_input_int("ADX period", 14);
+            i_adx_trend = get_input_double("ADX trend threshold", 25);
+            i_atr_len = get_input_int("ATR period", 14);
+            i_vol_exp = get_input_double("Vol expansion", 1.4);
+            i_vol_con = get_input_double("Vol contraction", 0.6);
+            i_ma_fast = get_input_int("Bias fast EMA", 21);
+            i_ma_slow = get_input_int("Bias slow EMA", 55);
+            i_ma_trend = get_input_int("Bias trend EMA", 200);
+            i_bias_thresh = get_input_double("Bias score threshold", 30);
+            i_rsi_len = get_input_int("RSI period", 14);
+            i_rsi_bull = get_input_double("RSI bullish level", 55);
+            i_rsi_bear = get_input_double("RSI bearish level", 45);
+            i_macd_fast = get_input_int("MACD fast", 12);
+            i_macd_slow = get_input_int("MACD slow", 26);
+            i_macd_sig = get_input_int("MACD signal", 9);
+            i_press_len = get_input_int("Pressure period", 14);
+            i_press_smo = get_input_int("Pressure smoothing", 5);
+            i_press_mom = get_input_int("Pressure momentum", 10);
+            i_press_thr = get_input_double("Pressure mom thresh", 0.05);
+            i_cooldown = get_input_int("Cooldown bars", 8);
+            _inputs_initialized_ = true;
+        }
         if (!_ta_initialized_) {
             _ta_rma_2 = ta::RMA(get_input_int("ADX period", 14));
             _ta_rma_3 = ta::RMA(get_input_int("ADX period", 14));
@@ -190,26 +291,6 @@ public:
             _ta_ema_16 = ta::EMA(get_input_int("Pressure smoothing", 5));
             _ta_initialized_ = true;
         }
-        i_adx_len = get_input_int("ADX period", 14);
-        i_adx_trend = get_input_double("ADX trend threshold", 25);
-        i_atr_len = get_input_int("ATR period", 14);
-        i_vol_exp = get_input_double("Vol expansion", 1.4);
-        i_vol_con = get_input_double("Vol contraction", 0.6);
-        i_ma_fast = get_input_int("Bias fast EMA", 21);
-        i_ma_slow = get_input_int("Bias slow EMA", 55);
-        i_ma_trend = get_input_int("Bias trend EMA", 200);
-        i_bias_thresh = get_input_double("Bias score threshold", 30);
-        i_rsi_len = get_input_int("RSI period", 14);
-        i_rsi_bull = get_input_double("RSI bullish level", 55);
-        i_rsi_bear = get_input_double("RSI bearish level", 45);
-        i_macd_fast = get_input_int("MACD fast", 12);
-        i_macd_slow = get_input_int("MACD slow", 26);
-        i_macd_sig = get_input_int("MACD signal", 9);
-        i_press_len = get_input_int("Pressure period", 14);
-        i_press_smo = get_input_int("Pressure smoothing", 5);
-        i_press_mom = get_input_int("Pressure momentum", 10);
-        i_press_thr = get_input_double("Pressure mom thresh", 0.05);
-        i_cooldown = get_input_int("Cooldown bars", 8);
         auto [adx_v, p_di_v, m_di_v] = f_adx_chain_cs0(i_adx_len);
         atr_v = (is_first_tick_ ? _ta_atr_6.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_6.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
         atr_avg = (is_first_tick_ ? _ta_sma_7.compute(atr_v) : _ta_sma_7.recompute(atr_v));

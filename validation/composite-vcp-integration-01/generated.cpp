@@ -22,6 +22,83 @@
 
 using namespace pineforge;
 
+// --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
+static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
+    // Strip trailing digits (optionally followed by '!') from the symbol part.
+    // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
+    std::string result = tickerid;
+    std::size_t colon = result.find(':');
+    std::size_t start = (colon == std::string::npos) ? 0 : colon + 1;
+    // Find end of base symbol (strip trailing digits + optional '!')
+    std::size_t end = result.size();
+    if (end > start && result[end - 1] == '!') {
+        --end;
+    }
+    while (end > start && std::isdigit((unsigned char)result[end - 1])) {
+        --end;
+    }
+    return result.substr(0, end);
+}
+
+static inline std::string _pf_derive_country(const std::string& tickerid) {
+    // Lookup country by exchange prefix (text before ':').
+    std::size_t colon = tickerid.find(':');
+    std::string prefix = (colon == std::string::npos)
+        ? tickerid : tickerid.substr(0, colon);
+    static const std::unordered_map<std::string, std::string> _tbl = {
+        {"AMEX", "US"},
+        {"AQUIS", "UK"},
+        {"ARCA", "US"},
+        {"ASX", "AU"},
+        {"B3", "BR"},
+        {"BINANCE", "GLOBAL"},
+        {"BITMEX", "GLOBAL"},
+        {"BMF", "BR"},
+        {"BMFBOVESPA", "BR"},
+        {"BSE", "IN"},
+        {"BYBIT", "GLOBAL"},
+        {"CBOE", "US"},
+        {"CBOT", "US"},
+        {"CME", "US"},
+        {"CME_MINI", "US"},
+        {"COINBASE", "US"},
+        {"COMEX", "US"},
+        {"DERIBIT", "GLOBAL"},
+        {"EURONEXT", "EU"},
+        {"HKEX", "HK"},
+        {"JSE", "ZA"},
+        {"KOSPI", "KR"},
+        {"KRAKEN", "GLOBAL"},
+        {"KRX", "KR"},
+        {"LSE", "UK"},
+        {"MOEX", "RU"},
+        {"NASDAQ", "US"},
+        {"NSE", "IN"},
+        {"NYMEX", "US"},
+        {"NYSE", "US"},
+        {"OKX", "GLOBAL"},
+        {"OSE", "JP"},
+        {"OTC", "US"},
+        {"SGX", "SG"},
+        {"SIX", "CH"},
+        {"SSE", "CN"},
+        {"SZSE", "CN"},
+        {"TSE", "JP"},
+        {"TSX", "CA"},
+        {"UPBIT", "KR"},
+        {"VENTURE", "CA"},
+        {"XETRA", "DE"}
+    };
+    auto it = _tbl.find(prefix);
+    return (it != _tbl.end()) ? it->second : na<std::string>();
+}
+// --- end syminfo derivation helpers ---
+
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::ATR _ta_atr_1;
@@ -98,6 +175,7 @@ public:
     bool short_setup = false;
     bool _var_initialized = false;
     bool _ta_initialized_ = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() : _ta_atr_1(14), _ta_pivothigh_2(5, 5), _ta_pivotlow_3(5, 5), _ta_rsi_4(14), _ta_ema_5(3), _ta_sma_6(20), _ta_stdev_7(20), _ta_sum_8(10), _ta_rma_11(14), _ta_rma_12(14), _ta_rma_13(14), _ta_rma_14(14), last_ph(na<double>()), last_pl(na<double>()) {
         initial_capital_ = 1000000.0;
@@ -148,6 +226,19 @@ public:
             _var_initialized = true;
         } else {
         }
+        if (!_inputs_initialized_) {
+            i_pivot = get_input_int("Pivot strength", 5);
+            i_fvg_atr = get_input_double("FVG min size (atr fraction)", 0.3);
+            i_rsi_len = get_input_int("RSI length", 14);
+            i_vol_ma_len = get_input_int("Volume MA length", 20);
+            i_vol_z = get_input_double("Volume z threshold", 2.0);
+            i_cd_sum = get_input_int("Cum-delta window", 10);
+            i_adx_len = get_input_int("ADX length", 14);
+            i_adx_thr = get_input_double("ADX trend threshold", 25);
+            i_session = get_input_string("Active session", std::string("0800-1600"));
+            i_tz = get_input_string("Timezone", std::string("America/New_York"));
+            _inputs_initialized_ = true;
+        }
         if (!_ta_initialized_) {
             _ta_pivothigh_2 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
             _ta_pivotlow_3 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
@@ -160,16 +251,6 @@ public:
             _ta_rma_14 = ta::RMA(get_input_int("ADX length", 14));
             _ta_initialized_ = true;
         }
-        i_pivot = get_input_int("Pivot strength", 5);
-        i_fvg_atr = get_input_double("FVG min size (atr fraction)", 0.3);
-        i_rsi_len = get_input_int("RSI length", 14);
-        i_vol_ma_len = get_input_int("Volume MA length", 20);
-        i_vol_z = get_input_double("Volume z threshold", 2.0);
-        i_cd_sum = get_input_int("Cum-delta window", 10);
-        i_adx_len = get_input_int("ADX length", 14);
-        i_adx_thr = get_input_double("ADX trend threshold", 25);
-        i_session = get_input_string("Active session", std::string("0800-1600"));
-        i_tz = get_input_string("Timezone", std::string("America/New_York"));
         atr_v = (is_first_tick_ ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
         ph_v = (is_first_tick_ ? _ta_pivothigh_2.compute(current_bar_.high) : _ta_pivothigh_2.recompute(current_bar_.high));
         pl_v = (is_first_tick_ ? _ta_pivotlow_3.compute(current_bar_.low) : _ta_pivotlow_3.recompute(current_bar_.low));

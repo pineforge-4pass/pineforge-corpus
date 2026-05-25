@@ -23,6 +23,11 @@
 using namespace pineforge;
 
 // --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
 static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
     // Strip trailing digits (optionally followed by '!') from the symbol part.
     // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
@@ -104,6 +109,7 @@ public:
     double fast = 0.0;
     double slow = 0.0;
     bool _ta_initialized_ = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() : _ta_sma_1(10), _ta_sma_2(30) {
         initial_capital_ = 1000000.0;
@@ -138,13 +144,13 @@ public:
     }
 
     void on_bar(const Bar& bar) override {
-        on_15m = true;
+        on_15m = (main_period() == std::string("15"));
         fast = (is_first_tick_ ? _ta_sma_1.compute(current_bar_.close) : _ta_sma_1.recompute(current_bar_.close));
         slow = (is_first_tick_ ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close));
-        if (((true && (is_first_tick_ ? _ta_crossover_3.compute(fast, slow) : _ta_crossover_3.recompute(fast, slow))) && (signed_position_size() <= 0))) {
+        if (((on_15m && (is_first_tick_ ? _ta_crossover_3.compute(fast, slow) : _ta_crossover_3.recompute(fast, slow))) && (signed_position_size() <= 0))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (((true && (is_first_tick_ ? _ta_crossunder_4.compute(fast, slow) : _ta_crossunder_4.recompute(fast, slow))) && (signed_position_size() >= 0))) {
+        if (((on_15m && (is_first_tick_ ? _ta_crossunder_4.compute(fast, slow) : _ta_crossunder_4.recompute(fast, slow))) && (signed_position_size() >= 0))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }

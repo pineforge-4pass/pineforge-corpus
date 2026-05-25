@@ -22,6 +22,83 @@
 
 using namespace pineforge;
 
+// --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
+static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
+    // Strip trailing digits (optionally followed by '!') from the symbol part.
+    // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
+    std::string result = tickerid;
+    std::size_t colon = result.find(':');
+    std::size_t start = (colon == std::string::npos) ? 0 : colon + 1;
+    // Find end of base symbol (strip trailing digits + optional '!')
+    std::size_t end = result.size();
+    if (end > start && result[end - 1] == '!') {
+        --end;
+    }
+    while (end > start && std::isdigit((unsigned char)result[end - 1])) {
+        --end;
+    }
+    return result.substr(0, end);
+}
+
+static inline std::string _pf_derive_country(const std::string& tickerid) {
+    // Lookup country by exchange prefix (text before ':').
+    std::size_t colon = tickerid.find(':');
+    std::string prefix = (colon == std::string::npos)
+        ? tickerid : tickerid.substr(0, colon);
+    static const std::unordered_map<std::string, std::string> _tbl = {
+        {"AMEX", "US"},
+        {"AQUIS", "UK"},
+        {"ARCA", "US"},
+        {"ASX", "AU"},
+        {"B3", "BR"},
+        {"BINANCE", "GLOBAL"},
+        {"BITMEX", "GLOBAL"},
+        {"BMF", "BR"},
+        {"BMFBOVESPA", "BR"},
+        {"BSE", "IN"},
+        {"BYBIT", "GLOBAL"},
+        {"CBOE", "US"},
+        {"CBOT", "US"},
+        {"CME", "US"},
+        {"CME_MINI", "US"},
+        {"COINBASE", "US"},
+        {"COMEX", "US"},
+        {"DERIBIT", "GLOBAL"},
+        {"EURONEXT", "EU"},
+        {"HKEX", "HK"},
+        {"JSE", "ZA"},
+        {"KOSPI", "KR"},
+        {"KRAKEN", "GLOBAL"},
+        {"KRX", "KR"},
+        {"LSE", "UK"},
+        {"MOEX", "RU"},
+        {"NASDAQ", "US"},
+        {"NSE", "IN"},
+        {"NYMEX", "US"},
+        {"NYSE", "US"},
+        {"OKX", "GLOBAL"},
+        {"OSE", "JP"},
+        {"OTC", "US"},
+        {"SGX", "SG"},
+        {"SIX", "CH"},
+        {"SSE", "CN"},
+        {"SZSE", "CN"},
+        {"TSE", "JP"},
+        {"TSX", "CA"},
+        {"UPBIT", "KR"},
+        {"VENTURE", "CA"},
+        {"XETRA", "DE"}
+    };
+    auto it = _tbl.find(prefix);
+    return (it != _tbl.end()) ? it->second : na<std::string>();
+}
+// --- end syminfo derivation helpers ---
+
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::Linreg _ta_linreg_1;
@@ -42,6 +119,7 @@ public:
     bool cross_up = false;
     bool cross_down = false;
     bool _ta_initialized_ = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() : _ta_linreg_1(50), _ta_linreg_2(50), _ta_atr_3(14) {
         initial_capital_ = 1000000.0;
@@ -76,16 +154,19 @@ public:
     }
 
     void on_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            i_lr_len = get_input_int("Linreg length", 50);
+            i_atr_len = get_input_int("ATR length", 14);
+            i_atr_mult = get_input_double("ATR multiplier", 2.0);
+            i_curve_offset = get_input_double("Slope curve offset", 5.0);
+            _inputs_initialized_ = true;
+        }
         if (!_ta_initialized_) {
             _ta_linreg_1 = ta::Linreg(get_input_int("Linreg length", 50));
             _ta_linreg_2 = ta::Linreg(get_input_int("Linreg length", 50));
             _ta_atr_3 = ta::ATR(get_input_int("ATR length", 14));
             _ta_initialized_ = true;
         }
-        i_lr_len = get_input_int("Linreg length", 50);
-        i_atr_len = get_input_int("ATR length", 14);
-        i_atr_mult = get_input_double("ATR multiplier", 2.0);
-        i_curve_offset = get_input_double("Slope curve offset", 5.0);
         mid = (is_first_tick_ ? _ta_linreg_1.compute(current_bar_.close, 0) : _ta_linreg_1.recompute(current_bar_.close, 0));
         lr_lag = (is_first_tick_ ? _ta_linreg_2.compute(current_bar_.close, 1) : _ta_linreg_2.recompute(current_bar_.close, 1));
         slope = (mid - lr_lag);

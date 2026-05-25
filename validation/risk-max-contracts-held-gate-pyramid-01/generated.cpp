@@ -23,6 +23,11 @@
 using namespace pineforge;
 
 // --- syminfo derivation helpers (PineForge G2) ---
+static inline std::string _pf_derive_prefix(const std::string& tickerid) {
+    std::size_t colon = tickerid.find(':');
+    return (colon == std::string::npos) ? tickerid : tickerid.substr(0, colon);
+}
+
 static inline std::string _pf_derive_main_tickerid(const std::string& tickerid) {
     // Strip trailing digits (optionally followed by '!') from the symbol part.
     // e.g. "CME_MINI:ES1!" -> "CME_MINI:ES", "NYMEX:CL2!" -> "NYMEX:CL"
@@ -97,6 +102,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     bool gate_open = false;
+    bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() {
         initial_capital_ = 1000000.0;
