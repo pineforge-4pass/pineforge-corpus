@@ -101,6 +101,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public BacktestEngine {
 public:
+    bool _use_precalc = false;
     int trailTicks = 0;
     bool _inputs_initialized_ = false;
 
@@ -147,6 +148,7 @@ public:
             strategy_exit(std::string("SX"), std::string("S"), (current_bar_.close * 0.98), (current_bar_.close * 1.01), 20, na<double>(), na<double>(), 100.0, std::string("3-way set once"), na<double>(), "");
         }
     }
+
 
 };
 

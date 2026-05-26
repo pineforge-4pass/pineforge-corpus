@@ -102,11 +102,14 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::EMA _ta_ema_1;
+    std::vector<double> _precalc__ta_ema_1;
     ta::ATR _ta_atr_2;
+    std::vector<double> _precalc__ta_atr_2;
     ta::Crossover _ta_crossover_3;
     ta::Crossunder _ta_crossunder_4;
     ta::Crossunder _ta_crossunder_5;
     ta::Crossover _ta_crossover_6;
+    bool _use_precalc = false;
     int i_ema_len = 0;
     int i_atr_len = 0;
     double i_mult = 0.0;
@@ -167,7 +170,7 @@ public:
             _ta_initialized_ = true;
         }
         mid_line = (is_first_tick_ ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));
-        half_w = ((is_first_tick_ ? _ta_atr_2.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_2.recompute(current_bar_.high, current_bar_.low, current_bar_.close)) * i_mult);
+        half_w = ((_use_precalc ? _precalc__ta_atr_2[bar_index_] : (is_first_tick_ ? _ta_atr_2.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_2.recompute(current_bar_.high, current_bar_.low, current_bar_.close))) * i_mult);
         upper = (mid_line + half_w);
         lower = (mid_line - half_w);
         long_break = (is_first_tick_ ? _ta_crossover_3.compute(current_bar_.close, upper) : _ta_crossover_3.recompute(current_bar_.close, upper));
@@ -192,6 +195,48 @@ public:
         if ((short_exit && (signed_position_size() < 0))) {
             strategy_close(std::string("S"), std::string("back to mid"), na<double>(), na<double>(), false);
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_ema_1.resize(n);
+        _precalc__ta_atr_2.resize(n);
+
+        _ta_ema_1 = ta::EMA(20);
+        _ta_atr_2 = ta::ATR(10);
+
+
+        for (int i = 0; i < n; ++i) {
+            _precalc__ta_ema_1[i] = _ta_ema_1.compute(bars[i].close);
+            _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close);
+        }
+
+        _ta_ema_1 = ta::EMA(20);
+        _ta_atr_2 = ta::ATR(10);
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

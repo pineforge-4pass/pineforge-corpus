@@ -102,8 +102,10 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     math::Sum _ta_sum_1;
+    std::vector<double> _precalc__ta_sum_1;
     ta::Crossover _ta_crossover_2;
     ta::Crossunder _ta_crossunder_3;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> kama;
     int i_kama_len = 0;
@@ -187,6 +189,47 @@ public:
         if ((cross_down && (signed_position_size() >= 0))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("kama cross down"), "", 0, -1);
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_sum_1.resize(n);
+
+        _ta_sum_1 = math::Sum(14);
+
+        _s_close.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_close.push(bars[i].close);
+            _precalc__ta_sum_1[i] = _ta_sum_1.compute(std::abs((bars[i].close - _s_close[1])));
+        }
+
+        _ta_sum_1 = math::Sum(14);
+        _s_close.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

@@ -107,7 +107,9 @@ public:
     ta::RMA _ta_rma_4;
     ta::RMA _ta_rma_5;
     ta::ATR _ta_atr_6;
+    std::vector<double> _precalc__ta_atr_6;
     ta::SMA _ta_sma_7;
+    bool _use_precalc = false;
     Series<double> _s_high;
     Series<double> _s_low;
     Series<bool> trending_regime;
@@ -223,6 +225,50 @@ public:
         if (long_exit) {
             strategy_close(std::string("L"), std::string("trending OFF"), na<double>(), na<double>(), false);
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_atr_6.resize(n);
+
+        _ta_atr_6 = ta::ATR(14);
+
+        _s_high.clear();
+        _s_low.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_high.push(bars[i].high);
+            _s_low.push(bars[i].low);
+            _precalc__ta_atr_6[i] = _ta_atr_6.compute(bars[i].high, bars[i].low, bars[i].close);
+        }
+
+        _ta_atr_6 = ta::ATR(14);
+        _s_high.clear();
+        _s_low.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

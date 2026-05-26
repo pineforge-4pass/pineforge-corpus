@@ -102,19 +102,29 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::ATR _ta_atr_1;
+    std::vector<double> _precalc__ta_atr_1;
     ta::PivotHigh _ta_pivothigh_2;
+    std::vector<double> _precalc__ta_pivothigh_2;
     ta::PivotLow _ta_pivotlow_3;
+    std::vector<double> _precalc__ta_pivotlow_3;
     ta::RSI _ta_rsi_4;
+    std::vector<double> _precalc__ta_rsi_4;
     ta::EMA _ta_ema_5;
     ta::SMA _ta_sma_6;
+    std::vector<double> _precalc__ta_sma_6;
     ta::StdDev _ta_stdev_7;
+    std::vector<double> _precalc__ta_stdev_7;
     math::Sum _ta_sum_8;
+    std::vector<double> _precalc__ta_sum_8;
     ta::Change _ta_change_9;
+    std::vector<double> _precalc__ta_change_9;
     ta::Change _ta_change_10;
+    std::vector<double> _precalc__ta_change_10;
     ta::RMA _ta_rma_11;
     ta::RMA _ta_rma_12;
     ta::RMA _ta_rma_13;
     ta::RMA _ta_rma_14;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> _s_high;
     Series<double> _s_low;
@@ -312,7 +322,7 @@ public:
         cd_up = (cum_d > 0);
         cd_dn = (cum_d < 0);
         up_mv = (is_first_tick_ ? _ta_change_9.compute(current_bar_.high) : _ta_change_9.recompute(current_bar_.high));
-        dn_mv = (-(is_first_tick_ ? _ta_change_10.compute(current_bar_.low) : _ta_change_10.recompute(current_bar_.low)));
+        dn_mv = (-(_use_precalc ? _precalc__ta_change_10[bar_index_] : (is_first_tick_ ? _ta_change_10.compute(current_bar_.low) : _ta_change_10.recompute(current_bar_.low))));
         p_dm_v = ((is_na(up_mv)) ? (na<double>()) : (((((up_mv > dn_mv) && (up_mv > 0))) ? (up_mv) : (0))));
         m_dm_v = ((is_na(dn_mv)) ? (na<double>()) : (((((dn_mv > up_mv) && (dn_mv > 0))) ? (dn_mv) : (0))));
         tr_smo = (is_first_tick_ ? _ta_rma_11.compute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))) : _ta_rma_11.recompute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))));
@@ -340,6 +350,88 @@ public:
         if (((!(in_session[0]) && in_session[1]) && (signed_position_size() != 0))) {
             strategy_close_all();
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_atr_1.resize(n);
+        _precalc__ta_pivothigh_2.resize(n);
+        _precalc__ta_pivotlow_3.resize(n);
+        _precalc__ta_rsi_4.resize(n);
+        _precalc__ta_sma_6.resize(n);
+        _precalc__ta_stdev_7.resize(n);
+        _precalc__ta_sum_8.resize(n);
+        _precalc__ta_change_9.resize(n);
+        _precalc__ta_change_10.resize(n);
+
+        _ta_atr_1 = ta::ATR(14);
+        _ta_pivothigh_2 = ta::PivotHigh(5, 5);
+        _ta_pivotlow_3 = ta::PivotLow(5, 5);
+        _ta_rsi_4 = ta::RSI(14);
+        _ta_sma_6 = ta::SMA(20);
+        _ta_stdev_7 = ta::StdDev(20);
+        _ta_sum_8 = math::Sum(10);
+        _ta_change_9 = ta::Change();
+        _ta_change_10 = ta::Change();
+
+        _s_close.clear();
+        _s_high.clear();
+        _s_low.clear();
+        _s_open.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_close.push(bars[i].close);
+            _s_high.push(bars[i].high);
+            _s_low.push(bars[i].low);
+            _s_open.push(bars[i].open);
+            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_pivothigh_2[i] = _ta_pivothigh_2.compute(bars[i].high);
+            _precalc__ta_pivotlow_3[i] = _ta_pivotlow_3.compute(bars[i].low);
+            _precalc__ta_rsi_4[i] = _ta_rsi_4.compute(bars[i].close);
+            _precalc__ta_sma_6[i] = _ta_sma_6.compute(bars[i].volume);
+            _precalc__ta_stdev_7[i] = _ta_stdev_7.compute(bars[i].volume);
+            _precalc__ta_sum_8[i] = _ta_sum_8.compute(vol_d);
+            _precalc__ta_change_9[i] = _ta_change_9.compute(bars[i].high);
+            _precalc__ta_change_10[i] = _ta_change_10.compute(bars[i].low);
+        }
+
+        _ta_atr_1 = ta::ATR(14);
+        _ta_pivothigh_2 = ta::PivotHigh(5, 5);
+        _ta_pivotlow_3 = ta::PivotLow(5, 5);
+        _ta_rsi_4 = ta::RSI(14);
+        _ta_sma_6 = ta::SMA(20);
+        _ta_stdev_7 = ta::StdDev(20);
+        _ta_sum_8 = math::Sum(10);
+        _ta_change_9 = ta::Change();
+        _ta_change_10 = ta::Change();
+        _s_close.clear();
+        _s_high.clear();
+        _s_low.clear();
+        _s_open.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

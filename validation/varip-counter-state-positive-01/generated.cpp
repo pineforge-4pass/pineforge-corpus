@@ -101,6 +101,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public BacktestEngine {
 public:
+    bool _use_precalc = false;
     int counter;
     int barsInTrade;
     bool entryCond = false;
@@ -161,6 +162,7 @@ public:
             barsInTrade = 0;
         }
     }
+
 
 };
 

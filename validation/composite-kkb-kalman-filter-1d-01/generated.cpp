@@ -103,6 +103,7 @@ class GeneratedStrategy : public BacktestEngine {
 public:
     ta::Crossover _ta_crossover_1;
     ta::Crossunder _ta_crossunder_2;
+    bool _use_precalc = false;
     Series<double> x;
     Series<double> p;
     double i_q = 0.0;
@@ -176,6 +177,7 @@ public:
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("kalman cross down"), "", 0, -1);
         }
     }
+
 
 };
 

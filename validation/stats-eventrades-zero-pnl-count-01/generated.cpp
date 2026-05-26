@@ -101,6 +101,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public BacktestEngine {
 public:
+    bool _use_precalc = false;
     double entry_price;
     bool _var_initialized = false;
     bool _inputs_initialized_ = false;
@@ -150,6 +151,7 @@ public:
             strategy_exit(std::string("LX"), std::string("LE"), entry_price, na<double>(), na<double>(), na<double>(), na<double>(), 100.0, std::string("even-trade exit @ entry"), na<double>(), "");
         }
     }
+
 
 };
 

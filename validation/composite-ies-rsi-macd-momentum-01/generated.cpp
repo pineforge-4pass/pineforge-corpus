@@ -102,9 +102,13 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::RSI _ta_rsi_1;
+    std::vector<double> _precalc__ta_rsi_1;
     ta::EMA _ta_ema_2;
+    std::vector<double> _precalc__ta_ema_2;
     ta::EMA _ta_ema_3;
+    std::vector<double> _precalc__ta_ema_3;
     ta::EMA _ta_ema_4;
+    bool _use_precalc = false;
     Series<double> macd_hist;
     Series<int> momentum_bear_score;
     Series<int> momentum_bull_score;
@@ -183,7 +187,7 @@ public:
         rsi_bearish = (rsi[0] < i_rsi_bear);
         rsi_momentum_up = (rsi[0] > rsi[3]);
         rsi_momentum_dn = (rsi[0] < rsi[3]);
-        macd_line = ((is_first_tick_ ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close)) - (is_first_tick_ ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close)));
+        macd_line = ((_use_precalc ? _precalc__ta_ema_2[bar_index_] : (is_first_tick_ ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close))) - (_use_precalc ? _precalc__ta_ema_3[bar_index_] : (is_first_tick_ ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close))));
         macd_signal = (is_first_tick_ ? _ta_ema_4.compute(macd_line) : _ta_ema_4.recompute(macd_line));
         macd_hist.push((macd_line - macd_signal));
         macd_bullish = ((macd_hist[0] > 0) && (macd_hist[0] > macd_hist[1]));
@@ -222,6 +226,52 @@ public:
             }
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("mom 2of3 short"), "", 0, -1);
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_rsi_1.resize(n);
+        _precalc__ta_ema_2.resize(n);
+        _precalc__ta_ema_3.resize(n);
+
+        _ta_rsi_1 = ta::RSI(14);
+        _ta_ema_2 = ta::EMA(12);
+        _ta_ema_3 = ta::EMA(26);
+
+
+        for (int i = 0; i < n; ++i) {
+            _precalc__ta_rsi_1[i] = _ta_rsi_1.compute(bars[i].close);
+            _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
+            _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
+        }
+
+        _ta_rsi_1 = ta::RSI(14);
+        _ta_ema_2 = ta::EMA(12);
+        _ta_ema_3 = ta::EMA(26);
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

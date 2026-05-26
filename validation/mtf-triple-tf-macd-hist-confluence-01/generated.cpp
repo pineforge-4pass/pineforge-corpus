@@ -114,6 +114,7 @@ public:
     ta::EMA _ta_ema_1_cs2;
     ta::EMA _ta_ema_2_cs2;
     ta::EMA _ta_ema_3_cs2;
+    bool _use_precalc = false;
     ta::EMA _sec0__ta_ema_1_v0;
     ta::EMA _sec0__ta_ema_1_v1;
     ta::EMA _sec0__ta_ema_1_v2;
@@ -223,6 +224,7 @@ public:
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), std::string("3-TF MACD bear"));
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         double _sec0_f_macd_hist_1_macd_val = ((is_complete ? _sec0__ta_ema_1_v2.compute(bar.close) : _sec0__ta_ema_1_v2.recompute(bar.close)) - (is_complete ? _sec0__ta_ema_2_v2.compute(bar.close) : _sec0__ta_ema_2_v2.recompute(bar.close)));

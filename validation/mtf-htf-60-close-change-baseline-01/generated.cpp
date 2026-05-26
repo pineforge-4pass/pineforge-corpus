@@ -104,6 +104,7 @@ public:
     double _req_sec_0 = na<double>();
     std::unordered_map<std::string, Series<double>> _security_helper_series_;
     ta::Change _ta_change_1;
+    bool _use_precalc = false;
     Series<bool> htfRoll;
     double htfClose = 0.0;
     bool _ta_initialized_ = false;
@@ -160,6 +161,7 @@ public:
             strategy_close(std::string("HTF_ROLL"), std::string("last bar flat"), na<double>(), na<double>(), false);
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         _req_sec_0 = bar.close;

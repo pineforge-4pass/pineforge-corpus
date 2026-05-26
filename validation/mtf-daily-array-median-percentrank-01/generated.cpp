@@ -103,6 +103,7 @@ class GeneratedStrategy : public BacktestEngine {
 public:
     double _req_sec_0 = na<double>();
     std::unordered_map<std::string, Series<double>> _security_helper_series_;
+    bool _use_precalc = false;
     std::vector<double> a;
     double htf_c = 0.0;
     double med = 0.0;
@@ -169,6 +170,7 @@ public:
             }
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         _req_sec_0 = bar.close;

@@ -107,16 +107,25 @@ public:
     ta::RMA _ta_rma_4;
     ta::RMA _ta_rma_5;
     ta::ATR _ta_atr_6;
+    std::vector<double> _precalc__ta_atr_6;
     ta::SMA _ta_sma_7;
     ta::EMA _ta_ema_8;
+    std::vector<double> _precalc__ta_ema_8;
     ta::EMA _ta_ema_9;
+    std::vector<double> _precalc__ta_ema_9;
     ta::EMA _ta_ema_10;
+    std::vector<double> _precalc__ta_ema_10;
     ta::RSI _ta_rsi_11;
+    std::vector<double> _precalc__ta_rsi_11;
     ta::EMA _ta_ema_12;
+    std::vector<double> _precalc__ta_ema_12;
     ta::EMA _ta_ema_13;
+    std::vector<double> _precalc__ta_ema_13;
     ta::EMA _ta_ema_14;
     ta::EMA _ta_ema_15;
+    std::vector<double> _precalc__ta_ema_15;
     ta::EMA _ta_ema_16;
+    bool _use_precalc = false;
     Series<double> _s_high;
     Series<double> _s_low;
     int bars_since_trade;
@@ -342,7 +351,7 @@ public:
         rsi_bear = (rsi_v[0] < i_rsi_bear);
         rsi_mom_up = (rsi_v[0] > rsi_v[3]);
         rsi_mom_dn = (rsi_v[0] < rsi_v[3]);
-        macd_line = ((is_first_tick_ ? _ta_ema_12.compute(current_bar_.close) : _ta_ema_12.recompute(current_bar_.close)) - (is_first_tick_ ? _ta_ema_13.compute(current_bar_.close) : _ta_ema_13.recompute(current_bar_.close)));
+        macd_line = ((_use_precalc ? _precalc__ta_ema_12[bar_index_] : (is_first_tick_ ? _ta_ema_12.compute(current_bar_.close) : _ta_ema_12.recompute(current_bar_.close))) - (_use_precalc ? _precalc__ta_ema_13[bar_index_] : (is_first_tick_ ? _ta_ema_13.compute(current_bar_.close) : _ta_ema_13.recompute(current_bar_.close))));
         macd_sig = (is_first_tick_ ? _ta_ema_14.compute(macd_line) : _ta_ema_14.recompute(macd_line));
         macd_hist.push((macd_line - macd_sig));
         macd_bull = ((macd_hist[0] > 0) && (macd_hist[0] > macd_hist[1]));
@@ -423,6 +432,78 @@ public:
         if ((!(trending) && (signed_position_size() != 0))) {
             strategy_close_all();
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_atr_6.resize(n);
+        _precalc__ta_ema_8.resize(n);
+        _precalc__ta_ema_9.resize(n);
+        _precalc__ta_ema_10.resize(n);
+        _precalc__ta_rsi_11.resize(n);
+        _precalc__ta_ema_12.resize(n);
+        _precalc__ta_ema_13.resize(n);
+        _precalc__ta_ema_15.resize(n);
+
+        _ta_atr_6 = ta::ATR(14);
+        _ta_ema_8 = ta::EMA(21);
+        _ta_ema_9 = ta::EMA(55);
+        _ta_ema_10 = ta::EMA(200);
+        _ta_rsi_11 = ta::RSI(14);
+        _ta_ema_12 = ta::EMA(12);
+        _ta_ema_13 = ta::EMA(26);
+        _ta_ema_15 = ta::EMA(14);
+
+        _s_high.clear();
+        _s_low.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_high.push(bars[i].high);
+            _s_low.push(bars[i].low);
+            _precalc__ta_atr_6[i] = _ta_atr_6.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_ema_8[i] = _ta_ema_8.compute(bars[i].close);
+            _precalc__ta_ema_9[i] = _ta_ema_9.compute(bars[i].close);
+            _precalc__ta_ema_10[i] = _ta_ema_10.compute(bars[i].close);
+            _precalc__ta_rsi_11[i] = _ta_rsi_11.compute(bars[i].close);
+            _precalc__ta_ema_12[i] = _ta_ema_12.compute(bars[i].close);
+            _precalc__ta_ema_13[i] = _ta_ema_13.compute(bars[i].close);
+            _precalc__ta_ema_15[i] = _ta_ema_15.compute(raw_press);
+        }
+
+        _ta_atr_6 = ta::ATR(14);
+        _ta_ema_8 = ta::EMA(21);
+        _ta_ema_9 = ta::EMA(55);
+        _ta_ema_10 = ta::EMA(200);
+        _ta_rsi_11 = ta::RSI(14);
+        _ta_ema_12 = ta::EMA(12);
+        _ta_ema_13 = ta::EMA(26);
+        _ta_ema_15 = ta::EMA(14);
+        _s_high.clear();
+        _s_low.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

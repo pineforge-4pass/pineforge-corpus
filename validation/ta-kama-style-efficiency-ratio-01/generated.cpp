@@ -102,6 +102,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     math::Sum _ta_sum_1;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> kama;
     Series<bool> kamaDown;
@@ -194,6 +195,7 @@ public:
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }
+
 
 };
 

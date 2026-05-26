@@ -104,6 +104,7 @@ public:
     ta::RSI _ta_rsi_1;
     ta::Crossover _ta_crossover_2;
     ta::Crossunder _ta_crossunder_3;
+    bool _use_precalc = false;
     Series<double> gatedSrc;
     int64_t sessId = 0.0;
     double deepRef = 0.0;
@@ -164,6 +165,7 @@ public:
             strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
         }
     }
+
 
 };
 

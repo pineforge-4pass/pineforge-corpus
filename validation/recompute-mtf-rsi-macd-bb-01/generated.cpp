@@ -111,6 +111,7 @@ public:
     ta::EMA _ta_ema_3;
     ta::EMA _ta_ema_4;
     ta::SMA _ta_sma_5;
+    bool _use_precalc = false;
     ta::RSI _sec0__ta_rsi_1;
     ta::EMA _sec1__ta_ema_2_v0;
     ta::EMA _sec1__ta_ema_2_v1;
@@ -199,6 +200,7 @@ public:
             strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         auto _secval_0 = is_complete ? _sec0__ta_rsi_1.compute(bar.close) : _sec0__ta_rsi_1.recompute(bar.close);

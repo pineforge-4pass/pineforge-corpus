@@ -113,6 +113,7 @@ public:
     ta::SMA _ta_sma_5_cs1;
     ta::Crossover _ta_crossover_6;
     ta::Crossunder _ta_crossunder_7;
+    bool _use_precalc = false;
     std::string maType = std::string("");
     int fastLen = 0;
     int slowLen = 0;
@@ -230,6 +231,7 @@ public:
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }
+
 
 };
 

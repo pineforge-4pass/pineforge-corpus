@@ -102,12 +102,16 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::ATR _ta_atr_1;
+    std::vector<double> _precalc__ta_atr_1;
     ta::Change _ta_change_2;
+    std::vector<double> _precalc__ta_change_2;
     ta::Change _ta_change_3;
+    std::vector<double> _precalc__ta_change_3;
     ta::RMA _ta_rma_4;
     ta::RMA _ta_rma_5;
     ta::RMA _ta_rma_6;
     ta::RMA _ta_rma_7;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> _s_high;
     Series<double> _s_low;
@@ -174,7 +178,7 @@ public:
         atrVal = (is_first_tick_ ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
         adxLen = 14;
         upMove = (is_first_tick_ ? _ta_change_2.compute(current_bar_.high) : _ta_change_2.recompute(current_bar_.high));
-        downMove = (-(is_first_tick_ ? _ta_change_3.compute(current_bar_.low) : _ta_change_3.recompute(current_bar_.low)));
+        downMove = (-(_use_precalc ? _precalc__ta_change_3[bar_index_] : (is_first_tick_ ? _ta_change_3.compute(current_bar_.low) : _ta_change_3.recompute(current_bar_.low))));
         plusDM = ((is_na(upMove)) ? (na<double>()) : (((((upMove > downMove) && (upMove > 0))) ? (upMove) : (0))));
         minusDM = ((is_na(downMove)) ? (na<double>()) : (((((downMove > upMove) && (downMove > 0))) ? (downMove) : (0))));
         trueRange = (is_first_tick_ ? _ta_rma_4.compute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))) : _ta_rma_4.recompute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))));
@@ -194,6 +198,61 @@ public:
         if ((regimeBullEnd && (signed_position_size() > 0))) {
             strategy_close(std::string("L"), std::string("adx trending-bull end exit"), na<double>(), na<double>(), false);
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_atr_1.resize(n);
+        _precalc__ta_change_2.resize(n);
+        _precalc__ta_change_3.resize(n);
+
+        _ta_atr_1 = ta::ATR(14);
+        _ta_change_2 = ta::Change();
+        _ta_change_3 = ta::Change();
+
+        _s_close.clear();
+        _s_high.clear();
+        _s_low.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_close.push(bars[i].close);
+            _s_high.push(bars[i].high);
+            _s_low.push(bars[i].low);
+            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_change_2[i] = _ta_change_2.compute(bars[i].high);
+            _precalc__ta_change_3[i] = _ta_change_3.compute(bars[i].low);
+        }
+
+        _ta_atr_1 = ta::ATR(14);
+        _ta_change_2 = ta::Change();
+        _ta_change_3 = ta::Change();
+        _s_close.clear();
+        _s_high.clear();
+        _s_low.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

@@ -109,6 +109,7 @@ class GeneratedStrategy : public BacktestEngine {
 public:
     ta::SMA _ta_sma_1;
     ta::Crossover _ta_crossover_2;
+    bool _use_precalc = false;
     Cfg cfg;
     double upOff = 0.0;
     double downOff = 0.0;
@@ -167,6 +168,7 @@ public:
             strategy_exit(std::string("LX"), std::string("L"), upOff, downOff, na<double>(), na<double>(), na<double>(), 100.0, std::string("bracket long"), na<double>(), "");
         }
     }
+
 
 };
 

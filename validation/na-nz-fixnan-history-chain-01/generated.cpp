@@ -102,6 +102,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::SMA _ta_sma_1;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> score;
     double _prev_fixnan_1 = na<double>();
@@ -162,6 +163,7 @@ public:
             strategy_close(std::string("N"), std::string("na chain flat"), na<double>(), na<double>(), false);
         }
     }
+
 
 };
 

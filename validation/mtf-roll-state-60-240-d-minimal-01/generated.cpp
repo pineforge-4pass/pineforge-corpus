@@ -108,6 +108,7 @@ public:
     std::unordered_map<std::string, Series<double>> _security_helper_series_;
     ta::Change _ta_change_1;
     ta::Change _ta_change_2;
+    bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> _s_high;
     Series<double> dHigh1;
@@ -183,6 +184,7 @@ public:
             strategy_close_all();
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         _req_sec_0 = bar.close;

@@ -102,8 +102,12 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::EMA _ta_ema_1;
+    std::vector<double> _precalc__ta_ema_1;
     ta::EMA _ta_ema_2;
+    std::vector<double> _precalc__ta_ema_2;
     ta::EMA _ta_ema_3;
+    std::vector<double> _precalc__ta_ema_3;
+    bool _use_precalc = false;
     int stack_state;
     int prev_state;
     int i_fast = 0;
@@ -191,6 +195,52 @@ public:
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("stack bear edge"), "", 0, -1);
         }
         prev_state = stack_state;
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_ema_1.resize(n);
+        _precalc__ta_ema_2.resize(n);
+        _precalc__ta_ema_3.resize(n);
+
+        _ta_ema_1 = ta::EMA(21);
+        _ta_ema_2 = ta::EMA(55);
+        _ta_ema_3 = ta::EMA(200);
+
+
+        for (int i = 0; i < n; ++i) {
+            _precalc__ta_ema_1[i] = _ta_ema_1.compute(bars[i].close);
+            _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
+            _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
+        }
+
+        _ta_ema_1 = ta::EMA(21);
+        _ta_ema_2 = ta::EMA(55);
+        _ta_ema_3 = ta::EMA(200);
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

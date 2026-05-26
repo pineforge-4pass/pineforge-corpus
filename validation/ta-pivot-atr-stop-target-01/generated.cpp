@@ -102,8 +102,12 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::PivotHigh _ta_pivothigh_1;
+    std::vector<double> _precalc__ta_pivothigh_1;
     ta::PivotLow _ta_pivotlow_2;
+    std::vector<double> _precalc__ta_pivotlow_2;
     ta::ATR _ta_atr_3;
+    std::vector<double> _precalc__ta_atr_3;
+    bool _use_precalc = false;
     Series<double> _s_close;
     double lastPvtH;
     double lastPvtL;
@@ -191,6 +195,55 @@ public:
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
             strategy_exit(std::string("XS"), std::string("Short"), (current_bar_.close - (atrVal * tpMult)), (current_bar_.close + (atrVal * atrMult)), na<double>(), na<double>(), na<double>(), 100.0, "", na<double>(), "");
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_pivothigh_1.resize(n);
+        _precalc__ta_pivotlow_2.resize(n);
+        _precalc__ta_atr_3.resize(n);
+
+        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
+        _ta_pivotlow_2 = ta::PivotLow(5, 5);
+        _ta_atr_3 = ta::ATR(14);
+
+        _s_close.clear();
+
+        for (int i = 0; i < n; ++i) {
+            _s_close.push(bars[i].close);
+            _precalc__ta_pivothigh_1[i] = _ta_pivothigh_1.compute(bars[i].high);
+            _precalc__ta_pivotlow_2[i] = _ta_pivotlow_2.compute(bars[i].low);
+            _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close);
+        }
+
+        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
+        _ta_pivotlow_2 = ta::PivotLow(5, 5);
+        _ta_atr_3 = ta::ATR(14);
+        _s_close.clear();
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

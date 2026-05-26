@@ -102,8 +102,12 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 class GeneratedStrategy : public BacktestEngine {
 public:
     ta::EMA _ta_ema_1;
+    std::vector<double> _precalc__ta_ema_1;
     ta::SMA _ta_sma_2;
+    std::vector<double> _precalc__ta_sma_2;
     ta::Mom _ta_mom_3;
+    std::vector<double> _precalc__ta_mom_3;
+    bool _use_precalc = false;
     std::unordered_map<std::string, double> myMap;
     bool trend = false;
     std::string regime_str = std::string("");
@@ -156,7 +160,7 @@ public:
             (myMap[std::string("bullish_limit")] = 1.5);
             (myMap[std::string("bearish_limit")] = (-1.5));
         }
-        trend = ((is_first_tick_ ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close)) > (is_first_tick_ ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close)));
+        trend = ((_use_precalc ? _precalc__ta_ema_1[bar_index_] : (is_first_tick_ ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close))) > (_use_precalc ? _precalc__ta_sma_2[bar_index_] : (is_first_tick_ ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close))));
         regime_str = ((trend) ? (std::string("bullish")) : (std::string("bearish")));
         currentKey = (regime_str + std::string("_limit"));
         limit = (((myMap.count(currentKey) > 0)) ? ((myMap.count(currentKey) ? myMap[currentKey] : 0.0)) : (0.0));
@@ -167,6 +171,52 @@ public:
         if ((!(trend) && (mom < limit))) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
+    }
+
+    void precalculate(const Bar* bars, int n) {
+        _use_precalc = false;
+        if (n <= 0 || bars == nullptr) return;
+
+        _precalc__ta_ema_1.resize(n);
+        _precalc__ta_sma_2.resize(n);
+        _precalc__ta_mom_3.resize(n);
+
+        _ta_ema_1 = ta::EMA(20);
+        _ta_sma_2 = ta::SMA(50);
+        _ta_mom_3 = ta::Mom(10);
+
+
+        for (int i = 0; i < n; ++i) {
+            _precalc__ta_ema_1[i] = _ta_ema_1.compute(bars[i].close);
+            _precalc__ta_sma_2[i] = _ta_sma_2.compute(bars[i].close);
+            _precalc__ta_mom_3[i] = _ta_mom_3.compute(bars[i].close);
+        }
+
+        _ta_ema_1 = ta::EMA(20);
+        _ta_sma_2 = ta::SMA(50);
+        _ta_mom_3 = ta::Mom(10);
+
+        _use_precalc = true;
+    }
+
+    void run(const Bar* bars, int n) {
+        precalculate(bars, n);
+        BacktestEngine::run(bars, n);
+    }
+
+    void run(const Bar* input_bars, int n_input,
+             const std::string& input_tf,
+             const std::string& script_tf,
+             bool bar_magnifier = false,
+             int magnifier_samples = 4,
+             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
+        bool needs_dynamic = bar_magnifier || (!input_tf.empty() && !script_tf.empty() && input_tf != script_tf);
+        if (needs_dynamic) {
+            _use_precalc = false;
+        } else {
+            precalculate(input_bars, n_input);
+        }
+        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
     }
 
 };

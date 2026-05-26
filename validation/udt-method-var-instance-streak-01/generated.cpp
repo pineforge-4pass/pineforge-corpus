@@ -109,6 +109,7 @@ struct Counter {
 
 class GeneratedStrategy : public BacktestEngine {
 public:
+    bool _use_precalc = false;
     Counter c;
     bool isGreen = false;
     int gs = 0;
@@ -176,6 +177,7 @@ public:
             strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
         }
     }
+
 
 };
 

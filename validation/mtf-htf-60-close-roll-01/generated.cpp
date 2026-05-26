@@ -104,6 +104,7 @@ public:
     double _req_sec_0 = na<double>();
     std::unordered_map<std::string, Series<double>> _security_helper_series_;
     ta::Change _ta_change_1;
+    bool _use_precalc = false;
     Series<bool> roll;
     double h60 = 0.0;
     bool _ta_initialized_ = false;
@@ -160,6 +161,7 @@ public:
             strategy_close(std::string("R"), "", na<double>(), na<double>(), false);
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         _req_sec_0 = bar.close;

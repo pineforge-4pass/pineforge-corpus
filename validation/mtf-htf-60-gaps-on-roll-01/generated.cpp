@@ -103,6 +103,7 @@ class GeneratedStrategy : public BacktestEngine {
 public:
     double _req_sec_0 = na<double>();
     std::unordered_map<std::string, Series<double>> _security_helper_series_;
+    bool _use_precalc = false;
     double lastHtfClose;
     double h60Gap = 0.0;
     bool hasHtfValue = false;
@@ -170,6 +171,7 @@ public:
             strategy_close(std::string("GAP_UP"), std::string("gap roll down"), na<double>(), na<double>(), false);
         }
     }
+
 
     void _eval_security_0(const Bar& bar, bool is_complete) {
         _req_sec_0 = bar.close;

@@ -101,6 +101,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public BacktestEngine {
 public:
+    bool _use_precalc = false;
     bool _inputs_initialized_ = false;
 
     explicit GeneratedStrategy() {
@@ -150,6 +151,7 @@ public:
             strategy_close(std::string("S"), std::string("market close short"), na<double>(), na<double>(), false);
         }
     }
+
 
 };
 
