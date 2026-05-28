@@ -8,7 +8,7 @@ behaviour matches TradingView on the same bar feed.
 
 ## Headline parity
 
-- **234** verified strategies, all under `corpus/validation/`.
+- **232** verified strategies, all under `corpus/validation/`.
 - **~313,000 trades** total across the suite (TV: 312,829; engine: 312,920 — `+91` ≈ 0.03 % over TV).
 - **233** excellent (bit-for-bit or within strict thresholds on every
   parity dimension).
@@ -60,7 +60,7 @@ optional 1-minute companion for `bar_magnifier` and lower-timeframe probes:
 
 ```
 corpus/
-├── validation/                234 probes — surface-driven probe family
+├── validation/                232 probes — surface-driven probe family
 │   ├── ta-*                    50 probes — TA built-in math (rsi, macd, sma, ...)
 │   ├── order-*                 40 probes — entry/exit/cancel placement
 │   ├── bracket-*               13 probes — TP/SL via strategy.exit / strategy.order
@@ -78,7 +78,6 @@ corpus/
 │   ├── na-*                     2 probes — na propagation
 │   ├── cap-*                    2 probes — intraday cap (max_intraday_filled_orders)
 │   ├── barstate-*               2 probes — barstate.* checks
-│   ├── varip-*                  2 probes — varip semantics
 │   ├── vwap-*                   2 probes — VWAP band pricing / fills
 │   ├── risk-*                   1 probe  — risk gates / limits
 │   ├── stats-*                  1 probe  — performance stats / reporting
@@ -96,7 +95,7 @@ corpus/
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
-Total: **52 + 50 + 40 + 22 + 15 + 13 + 6 + 6 + 4 + 3 + 3 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 1 = 234** probes.
+Total: **52 + 50 + 40 + 22 + 15 + 13 + 6 + 6 + 4 + 3 + 3 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 1 = 232** probes.
 
 ## Naming convention
 
@@ -119,7 +118,7 @@ Every probe directory follows:
   `barstate-isconfirmed-magnifier-on-01a` vs
   `…-magnifier-off-01b`).
 
-The 24 categories (with probe counts):
+The 23 categories (with probe counts):
 
 | Category    | Count | Surface exercised                                          |
 | ----------- | ----: | ---------------------------------------------------------- |
@@ -140,7 +139,6 @@ The 24 categories (with probe counts):
 | `ltf`       |     2 | `request.security_lower_tf` arrays                         |
 | `cap`       |     2 | Intraday cap (`max_intraday_filled_orders`)                |
 | `barstate`  |     2 | `barstate.*` checks                                        |
-| `varip`     |     2 | `varip` semantics                                          |
 | `vwap`      |     2 | VWAP band pricing / fills                                  |
 | `risk`      |     1 | risk gates / limits                                        |
 | `stats`     |     1 | performance stats / reporting                              |
