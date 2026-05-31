@@ -133,6 +133,7 @@ public:
         commission_type_ = CommissionType::PERCENT;
         commission_value_ = 0.0;
         slippage_ = 0;
+        _src_series_active_ = true;
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -219,7 +220,7 @@ public:
             _ta_sma_5_cs1 = ta::SMA(get_input_int("Slow Length", 30));
             _ta_initialized_ = true;
         }
-        src = get_input_double("Source", current_bar_.close);
+        src = get_input_source("Source", _src_close_)[0];
         fastMA = getMA_cs0(src, fastLen);
         slowMA = getMA_cs1(src, slowLen);
         longCond = (is_first_tick_ ? _ta_crossover_6.compute(fastMA, slowMA) : _ta_crossover_6.recompute(fastMA, slowMA));

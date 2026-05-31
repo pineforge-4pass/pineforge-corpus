@@ -130,6 +130,7 @@ public:
         commission_value_ = 0.0;
         slippage_ = 0;
         script_has_strategy_close_ = true;
+        _src_series_active_ = true;
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -172,7 +173,7 @@ public:
             _ta_linreg_3 = ta::Linreg(get_input_int("BB Length", 20));
             _ta_initialized_ = true;
         }
-        src = get_input_double("Source", current_bar_.close);
+        src = get_input_source("Source", _src_close_)[0];
         auto _result__ta_bb_1 = (is_first_tick_ ? _ta_bb_1.compute(src) : _ta_bb_1.recompute(src));
         double bbMid = _result__ta_bb_1.middle;
         double bbUpper = _result__ta_bb_1.upper;

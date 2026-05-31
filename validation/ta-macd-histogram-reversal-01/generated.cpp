@@ -123,6 +123,7 @@ public:
         commission_type_ = CommissionType::PERCENT;
         commission_value_ = 0.0;
         slippage_ = 0;
+        _src_series_active_ = true;
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -158,7 +159,7 @@ public:
             _ta_macd_1 = ta::MACD(get_input_int("Fast Length", 12), get_input_int("Slow Length", 26), get_input_int("Signal Length", 9));
             _ta_initialized_ = true;
         }
-        src = get_input_double("Source", current_bar_.close);
+        src = get_input_source("Source", _src_close_)[0];
         auto _result__ta_macd_1 = (is_first_tick_ ? _ta_macd_1.compute(src) : _ta_macd_1.recompute(src));
         double macdLine = _result__ta_macd_1.macd_line;
         double signalLine = _result__ta_macd_1.signal_line;
