@@ -1,0 +1,14 @@
+# This probe uses S&P/CBOE index data (SPX) — licensed market data that must
+# NOT be redistributed in the public corpus. The OHLCV feed and the TV trade
+# export are git-ignored; regenerate them locally per README.md.
+ohlcv_SPX_5m.csv
+tv_trades.csv
+# Raw TradingView exports (chart data + list of trades)
+SP_SPX*.csv
+US-equity*SPX*.csv
+*_SP_SPX_*.csv
+# Build / run artifacts
+strategy.dylib
+strategy.so
+strategy.dll
+engine_trades.csv

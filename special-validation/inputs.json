@@ -1,0 +1,9 @@
+{
+  "ohlcv_csv": "ohlcv_SPX_5m.csv",
+  "engine_chart_timezone": "Asia/Taipei",
+  "tv_trades_csv_tz": "utc_plus_8",
+  "runtime_overrides": {
+    "timezone": "America/New_York",
+    "session": "0930-1600:23456"
+  }
+}
