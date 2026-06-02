@@ -1,0 +1,5 @@
+{
+  "_comment": "EURUSD: 5-decimal tick 0.00001, point value 1 (1 unit base -> quote PnL).",
+  "ohlcv_csv": "ohlcv_EURUSD_15m.csv",
+  "runtime_overrides": { "mintick": 0.00001 }
+}

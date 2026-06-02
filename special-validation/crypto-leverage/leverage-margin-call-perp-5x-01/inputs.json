@@ -1,0 +1,7 @@
+{
+  "_comment": "Runs on the corpus default ETH-USDT-USDT 15m feed (= BINANCE:ETHUSDT.P family).",
+  "validation_overrides": {
+    "expect_tv_match": false,
+    "expect_tv_match_reason": "Engine has no in-position forced-liquidation; TV emits a Margin Call exit the engine does not. Exposes the missing liquidation surface."
+  }
+}
