@@ -1,0 +1,5 @@
+{
+  "_comment": "ES futures: tick 0.25, point value $50. syminfo injected at runtime (by design).",
+  "ohlcv_csv": "ohlcv_ES_5m.csv",
+  "runtime_overrides": { "mintick": 0.25, "pointvalue": 50 }
+}

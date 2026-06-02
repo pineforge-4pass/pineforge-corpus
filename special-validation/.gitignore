@@ -12,3 +12,6 @@ strategy.dylib
 strategy.so
 strategy.dll
 engine_trades.csv
+
+# Instrument OHLCV feeds for the nested probes (licensed; local only)
+ohlcv_*.csv

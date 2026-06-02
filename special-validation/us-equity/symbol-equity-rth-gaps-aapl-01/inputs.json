@@ -1,0 +1,6 @@
+{
+  "ohlcv_csv": "ohlcv_AAPL_5m.csv",
+  "chart_timezone": "America/New_York",
+  "tv_trades_csv_tz": "America/New_York",
+  "runtime_overrides": { "session": "0930-1600", "timezone": "America/New_York" }
+}
