@@ -9,6 +9,7 @@ regenerating each probe's local data per its README.
 
 | Category | Probe | Symbol | Status |
 |---|---|---|---|
+| us-equity | `us-equity-exchange-tz-intraday-cap-01` | SP:SPX 5m | excellent (intraday-cap rollover on a non-UTC chart) |
 | us-equity | `symbol-equity-rth-gaps-aapl-01` | BATS:AAPL 5m | excellent (RTH + overnight gaps + DST) |
 | futures | `symbol-futures-pointvalue-es-01` | CME_MINI:ES1! 5m | excellent (point value 50, 0.25 tick) |
 | forex | `symbol-fx-5dp-eurusd-01` | OANDA:EURUSD 15m | strong (TV-exact fills; sub-cent FX PnL artifact) |
