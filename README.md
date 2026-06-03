@@ -8,9 +8,9 @@ behaviour matches TradingView on the same bar feed.
 
 ## Headline parity
 
-- **232** verified strategies, all under `corpus/validation/`.
-- **~313,000 trades** total across the suite (TV: 312,829; engine: 312,920 — `+91` ≈ 0.03 % over TV).
-- **233** excellent (bit-for-bit or within strict thresholds on every
+- **246** verified strategies, all under `corpus/validation/`.
+- **~375,000 trades** total across the suite (TV: 375,453; engine: 375,548 — `+95` ≈ 0.03 % over TV).
+- **245** excellent (bit-for-bit or within strict thresholds on every
   parity dimension).
 - **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` —
   where TradingView's broker emulator exhibits non-deterministic
@@ -60,7 +60,7 @@ optional 1-minute companion for `bar_magnifier` and lower-timeframe probes:
 
 ```
 corpus/
-├── validation/                232 probes — surface-driven probe family
+├── validation/                246 probes — surface-driven probe family
 │   ├── ta-*                    50 probes — TA built-in math (rsi, macd, sma, ...)
 │   ├── order-*                 40 probes — entry/exit/cancel placement
 │   ├── bracket-*               13 probes — TP/SL via strategy.exit / strategy.order
@@ -95,7 +95,7 @@ corpus/
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
-Total: **52 + 50 + 40 + 22 + 15 + 13 + 6 + 6 + 4 + 3 + 3 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 1 + 1 + 1 + 1 = 232** probes.
+Total: **246** probes.
 
 ## Naming convention
 
