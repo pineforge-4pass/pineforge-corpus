@@ -37,7 +37,7 @@ Each probe directory ships four files in git:
 `generated.cpp` is the transpiler output of our own clean-room
 PineScript and ships under the same Apache-2.0 license as
 `strategy.pine`. It is included in-tree so public users can rebuild
-without needing access to the closed-source `pineforge-codegen`
+without needing access to the separate, source-available `pineforge-codegen`
 transpiler — `cmake --build build --target corpus_strategies` compiles
 each `generated.cpp` into a per-strategy shared library. The compiled
 `strategy.dylib` / `.so` / `.dll` are platform-specific build artefacts

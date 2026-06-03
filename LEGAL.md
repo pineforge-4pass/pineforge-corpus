@@ -15,9 +15,17 @@ This corpus is licensed under the Apache License, Version 2.0
   rewrites.
 
 - **TradingView "List of Trades" CSV exports** (`tv_trades.csv`) —
-  emitted by TradingView's broker emulator running our own
-  `strategy.pine` files on the reference OHLCV feed. We hold the right
-  to redistribute these as artefacts of our own scripts.
+  emitted by TradingView's broker emulator running our own clean-room
+  `strategy.pine` files on the reference OHLCV feed, exported manually
+  (no scraping, no API, no automated extraction). Included as
+  **factual parity reference records**. Our position: these are
+  factual outcomes of our **own** strategies (facts are not
+  copyrightable). We do **not** Apache-relicense TradingView's export
+  format/columns, so they sit in-tree as factual reference, not as an
+  Apache-2.0 work of ours. The one open item is **contractual** —
+  public redistribution under TradingView's Terms of Service — being
+  confirmed by US + Taiwan counsel (opinion targeted Q3 2026). Parity
+  does not depend on shipping them — see **Reproducibility** below.
 
 - **Engine trade lists** (`engine_trades.csv`) — produced by PineForge
   against the same OHLCV in TradingView's row-and-column format for
@@ -29,13 +37,15 @@ This corpus is licensed under the Apache License, Version 2.0
   series; redistribution is factual-data territory.
 
 - **Transpiler output** (`generated.cpp`) — the C++ output of the
-  `pineforge-codegen` transpiler over each `strategy.pine`. The
-  transpiler itself is closed-source, but its output is shipped here
-  under the same Apache-2.0 license as the `strategy.pine` it
-  derives from (clean-room PineForge originals). Including
-  `generated.cpp` in-tree means the engine repo plus this corpus plus
-  a C++17 compiler is sufficient to reproduce the headline parity
-  figure end-to-end — no transpiler access required.
+  [`pineforge-codegen`](https://github.com/pineforge-4pass/pineforge-codegen-oss)
+  transpiler over each `strategy.pine`. The transpiler is
+  **source-available** under the **PolyForm Noncommercial License
+  1.0.0** (a separate repository); its output over our clean-room
+  `strategy.pine` originals is shipped here under the same Apache-2.0
+  license as those `.pine` files. Including `generated.cpp` in-tree
+  means the engine repo plus this corpus plus a C++17 compiler is
+  sufficient to reproduce the headline parity figure end-to-end — no
+  transpiler access required.
 
 The compiled per-probe artefacts (`strategy.dylib` / `strategy.so` /
 `strategy.dll`) remain platform-specific build outputs and are not
@@ -49,11 +59,19 @@ This corpus is not affiliated with or endorsed by TradingView.
 
 ## License Field
 
-SPDX: `Apache-2.0`.
+SPDX `Apache-2.0` covers the **PineForge-authored** artefacts in this
+tree — `strategy.pine`, `generated.cpp`, `engine_trades.csv`, scripts,
+and build config. Public market `data/` (Binance OHLCV) is factual
+price/volume data. `tv_trades.csv` are TradingView exports included as
+factual reference only and are **not** a PineForge-licensed work (see
+above).
 
 ## Reproducibility
 
 The headline parity figure documented in `validation_report.md` is
-reproducible from the artefacts in this tree plus the public engine
-runtime. See the project root `README.md` for the full reproducer
-instructions.
+reproducible from the PineForge-authored artefacts in this tree plus
+the public engine runtime — **without** the `tv_trades.csv` reference
+files: `strategy.pine` + `generated.cpp` + public OHLCV regenerate
+`engine_trades.csv`, which you can diff against a TradingView export you
+produce yourself. See the project root `README.md` for the full
+reproducer instructions.
