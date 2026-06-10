@@ -1,6 +1,6 @@
 # PineForge Corpus Validation Report
 
-**Generated:** 2026-06-03 (UTC) — engine `f805611`, corpus `4d46828`
+**Generated:** 2026-06-10 (UTC) — engine `a6d107b`, corpus `38a1cc0`
 
 All probes live under `corpus/validation/`; categories below are derived
 from each slug's leading hyphen-token (e.g. `ta-...`, `composite-...`).

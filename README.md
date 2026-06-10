@@ -219,17 +219,21 @@ Trade #,Type,Date and time,Signal,Price USDT,Position size (qty),...
 
 `engine_trades.csv` (PineForge's mirrored format, fewer columns —
 PineForge does not currently emit TV's "Signal" tag or percent-of-position
-MFE/MAE):
+excursions):
 
 ```
-Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,MFE,MAE,Cumulative PnL
-14,Exit long,2026-04-27 20:30,2291.520000,1,1.820000,0.0795,2.250000,0.160000,-38.120000
-14,Entry long,2026-04-27 20:15,2289.700000,1,1.820000,0.0795,2.250000,0.160000,-38.120000
+Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,Favorable excursion USD,Adverse excursion USD,Cumulative PnL
+14,Exit long,2026-04-27 20:30,2291.520000,1,1.820000,0.0795,2.250000,-0.160000,-38.120000
+14,Entry long,2026-04-27 20:15,2289.700000,1,1.820000,0.0795,2.250000,-0.160000,-38.120000
 ```
 
 `Net PnL` and `Net PnL %` are per-trade. `Cumulative PnL` is the
-engine-side running total. `MFE`/`MAE` are dollars per unit qty,
-mirroring TV's "Favorable / Adverse excursion USD".
+engine-side running total. The excursion columns use TV's names and sign
+convention: favorable excursion is a non-negative total-USD run-up,
+adverse excursion is a **negative** total-USD drawdown
+(`(price diff) × qty`, summed over pyramid entries). Note this is the
+export convention only — Pine's `strategy.*trades.max_drawdown`
+accessors stay positive per the Pine v6 spec.
 
 ## Parity thresholds
 
@@ -244,11 +248,20 @@ profiles per probe and emits a tier label:
 | Entry-price p90 delta      |   0.01% |      0.01% |
 | Exit-price p90 delta       |   0.01% |      0.05% |
 | Per-trade P&L p90 delta    |   1.0%  |       1.0% |
+| Adverse excursion (MAE) p90 delta | 5.0% | 5.0% |
 
 PRODUCTION relaxes only the exit-price tolerance (5×) to absorb sub-bar
 broker-side fill drift on probes that use `strategy.exit`. The verifier
 auto-detects `strategy.exit` in `strategy.pine` and selects PRODUCTION
 for those probes; everything else stays on STRICT.
+
+The MAE gate exists to pin TV's excursion conventions (sign, total-USD
+scaling, exit-fill inclusion): a sign-convention regression reads ~200%,
+a per-unit-vs-total qty error reads 50%+, both far above 5%. Favorable
+excursion (MFE) stays report-only: same-bar stop/limit round-trips carry
+a TV-side MFE sourced from intrabar (1m) data that chart-TF OHLC cannot
+reproduce (the engine correctly emits 0), which pins MFE p90 at 100% on
+the magnifier tick-dist probes by construction.
 
 A trade is "matched" when engine and TV agree on direction and entry/
 exit times fall within a 1-hour gating window (plus a $3 entry-price
@@ -260,7 +273,7 @@ on TV's magnifier zero-PnL trades.
 
 | Tier          | Meaning |
 | ------------- | ------- |
-| `excellent`   | All four dimensions pass the resolved profile. Bit-for-bit or within strict-profile thresholds. |
+| `excellent`   | All gated dimensions (count, entry, exit, P&L, MAE) pass the resolved profile. Bit-for-bit or within strict-profile thresholds. |
 | `strong`      | Dimensions pass a relaxed envelope (5× thresholds) — close but not excellent. Used as a pass-with-caveat tier. |
 | `moderate`    | Some dimensions exceed the strong envelope but trades still align meaningfully. Investigate. |
 | `weak`        | Significant divergence. Real bug or probe-design issue. |
