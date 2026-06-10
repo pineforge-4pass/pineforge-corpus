@@ -184,7 +184,7 @@ No transpiler access required — `generated.cpp` ships in-tree.
 
 ```bash
 # 1. Clone the engine and pull this corpus submodule
-git clone https://github.com/fullpass-4pass/pineforge-engine.git
+git clone https://github.com/pineforge-4pass/pineforge-engine.git
 cd pineforge-engine
 git submodule update --init corpus
 
