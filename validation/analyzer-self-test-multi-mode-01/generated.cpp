@@ -52,36 +52,29 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
         ? tickerid : tickerid.substr(0, colon);
     static const std::unordered_map<std::string, std::string> _tbl = {
         {"AMEX", "US"},
-        {"AQUIS", "UK"},
+        {"AQUIS", "GB"},
         {"ARCA", "US"},
         {"ASX", "AU"},
         {"B3", "BR"},
-        {"BINANCE", "GLOBAL"},
-        {"BITMEX", "GLOBAL"},
         {"BMF", "BR"},
         {"BMFBOVESPA", "BR"},
         {"BSE", "IN"},
-        {"BYBIT", "GLOBAL"},
         {"CBOE", "US"},
         {"CBOT", "US"},
         {"CME", "US"},
         {"CME_MINI", "US"},
         {"COINBASE", "US"},
         {"COMEX", "US"},
-        {"DERIBIT", "GLOBAL"},
-        {"EURONEXT", "EU"},
         {"HKEX", "HK"},
         {"JSE", "ZA"},
         {"KOSPI", "KR"},
-        {"KRAKEN", "GLOBAL"},
         {"KRX", "KR"},
-        {"LSE", "UK"},
+        {"LSE", "GB"},
         {"MOEX", "RU"},
         {"NASDAQ", "US"},
         {"NSE", "IN"},
         {"NYMEX", "US"},
         {"NYSE", "US"},
-        {"OKX", "GLOBAL"},
         {"OSE", "JP"},
         {"OTC", "US"},
         {"SGX", "SG"},
@@ -171,8 +164,8 @@ public:
             stepBars = get_input_int("clock_pulse: unused (legacy bar step)", 96);
             _inputs_initialized_ = true;
         }
-        inPulse = (((bar_index_ > 0) && (_bar_hour() == 0)) && (_bar_minute() == 15));
-        exitPulse = (((bar_index_ > 0) && (_bar_hour() == 0)) && (_bar_minute() == 30));
+        inPulse = (((bar_index_ > 0) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 0)) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() == 15));
+        exitPulse = (((bar_index_ > 0) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 0)) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() == 30));
         h60 = _req_sec_0;
         roll60.push(((is_first_tick_ ? _ta_change_1.compute(h60) : _ta_change_1.recompute(h60)) != 0));
         dH1.push(_req_sec_1);

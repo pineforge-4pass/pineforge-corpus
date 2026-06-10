@@ -52,36 +52,29 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
         ? tickerid : tickerid.substr(0, colon);
     static const std::unordered_map<std::string, std::string> _tbl = {
         {"AMEX", "US"},
-        {"AQUIS", "UK"},
+        {"AQUIS", "GB"},
         {"ARCA", "US"},
         {"ASX", "AU"},
         {"B3", "BR"},
-        {"BINANCE", "GLOBAL"},
-        {"BITMEX", "GLOBAL"},
         {"BMF", "BR"},
         {"BMFBOVESPA", "BR"},
         {"BSE", "IN"},
-        {"BYBIT", "GLOBAL"},
         {"CBOE", "US"},
         {"CBOT", "US"},
         {"CME", "US"},
         {"CME_MINI", "US"},
         {"COINBASE", "US"},
         {"COMEX", "US"},
-        {"DERIBIT", "GLOBAL"},
-        {"EURONEXT", "EU"},
         {"HKEX", "HK"},
         {"JSE", "ZA"},
         {"KOSPI", "KR"},
-        {"KRAKEN", "GLOBAL"},
         {"KRX", "KR"},
-        {"LSE", "UK"},
+        {"LSE", "GB"},
         {"MOEX", "RU"},
         {"NASDAQ", "US"},
         {"NSE", "IN"},
         {"NYMEX", "US"},
         {"NYSE", "US"},
-        {"OKX", "GLOBAL"},
         {"OSE", "JP"},
         {"OTC", "US"},
         {"SGX", "SG"},
@@ -140,18 +133,18 @@ public:
     }
 
     void on_bar(const Bar& bar) override {
-        firstWindow = (((_bar_hour() == 2) && (_bar_minute() <= 45)) && (signed_position_size() == 0));
-        secondWindow = (((_bar_hour() == 8) && (_bar_minute() <= 45)) && (signed_position_size() == 0));
+        firstWindow = ((([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 2) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() <= 45)) && (signed_position_size() == 0));
+        secondWindow = ((([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 8) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() <= 45)) && (signed_position_size() == 0));
         if (firstWindow) {
             strategy_entry(std::string("LE"), true, na<double>(), (current_bar_.high + syminfo_.mintick), na<double>(), std::string("first window stop"), "", 0, -1);
         }
-        if ((((_bar_hour() == 6) && (_bar_minute() == 15)) && (signed_position_size() > 0))) {
+        if (((([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 6) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() == 15)) && (signed_position_size() > 0))) {
             strategy_close(std::string("LE"), std::string("first close"), na<double>(), na<double>(), false);
         }
         if (secondWindow) {
             strategy_entry(std::string("LE"), true, na<double>(), (current_bar_.high + syminfo_.mintick), na<double>(), std::string("second window stop"), "", 0, -1);
         }
-        if ((((_bar_hour() == 12) && (_bar_minute() == 15)) && (signed_position_size() > 0))) {
+        if (((([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }() == 12) && ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_min; }() == 15)) && (signed_position_size() > 0))) {
             strategy_close(std::string("LE"), std::string("second close"), na<double>(), na<double>(), false);
         }
     }
