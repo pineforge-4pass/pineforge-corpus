@@ -13,3 +13,9 @@ data/derived/
 
 # oh-my-claudecode operational state
 .omc/
+
+# Claude Code worktrees. Local-only scratch checkouts: these were previously
+# committed as bare gitlinks with no matching .gitmodules entry, which made
+# `git clone --recurse-submodules` fail for every consumer of this repo
+# ("fatal: No url found for submodule path 'corpus/.claude/worktrees/feat-A'").
+.claude/worktrees/
