@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <optional>
+#include <type_traits>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -21,6 +23,9 @@
 #include <pineforge/session_time.hpp>
 #include <pineforge/matrix.hpp>
 #include <pineforge/generic_matrix.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -94,7 +99,105 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+template <typename _PFValue>
+struct _PFCheckpointTraits {
+    using snapshot_type = _PFValue;
+    static snapshot_type take(const _PFValue& value) { return value; }
+    static void restore(_PFValue& value, const snapshot_type& snapshot) {
+        value = snapshot;
+    }
+};
+
+template <>
+struct _PFCheckpointTraits<PineMatrix> {
+    using matrix_type = PineMatrix;
+    using snapshot_type = std::optional<typename matrix_type::Snapshot>;
+    static snapshot_type take(const matrix_type& value) {
+        if (value.is_na()) return std::nullopt;
+        return value.snapshot();
+    }
+    static void restore(matrix_type& value, const snapshot_type& snapshot) {
+        if (!snapshot) {
+            value = matrix_type{};
+            return;
+        }
+        value.restore(*snapshot);
+    }
+};
+
+template <typename _PFElement>
+struct _PFCheckpointTraits<PineGenericMatrix<_PFElement>> {
+    using matrix_type = PineGenericMatrix<_PFElement>;
+    using element_traits = _PFCheckpointTraits<_PFElement>;
+    using element_snapshot = typename element_traits::snapshot_type;
+    struct active_snapshot {
+        typename matrix_type::Snapshot outer;
+        int rows;
+        int columns;
+        std::vector<element_snapshot> elements;
+    };
+    using snapshot_type = std::optional<active_snapshot>;
+    static snapshot_type take(const matrix_type& value) {
+        if (value.is_na()) return std::nullopt;
+        active_snapshot snapshot{value.snapshot(), value.rows(),
+                                 value.columns(), {}};
+        snapshot.elements.reserve(
+            static_cast<std::size_t>(snapshot.rows) *
+            static_cast<std::size_t>(snapshot.columns));
+        for (int row = 0; row < snapshot.rows; ++row) {
+            for (int column = 0; column < snapshot.columns; ++column) {
+                snapshot.elements.push_back(
+                    element_traits::take(value.get(row, column)));
+            }
+        }
+        return snapshot;
+    }
+    static void restore(matrix_type& value, const snapshot_type& snapshot) {
+        if (!snapshot) {
+            value = matrix_type{};
+            return;
+        }
+        value.restore(snapshot->outer);
+        std::size_t index = 0;
+        for (int row = 0; row < snapshot->rows; ++row) {
+            for (int column = 0; column < snapshot->columns; ++column) {
+                _PFElement element = value.get(row, column);
+                element_traits::restore(element, snapshot->elements[index++]);
+                value.set(row, column, element);
+            }
+        }
+    }
+};
+
+template <typename _PFElement, typename _PFAllocator>
+struct _PFCheckpointTraits<std::vector<_PFElement, _PFAllocator>> {
+    using element_traits = _PFCheckpointTraits<_PFElement>;
+    using element_snapshot = typename element_traits::snapshot_type;
+    using snapshot_type = std::vector<element_snapshot>;
+    static snapshot_type take(
+            const std::vector<_PFElement, _PFAllocator>& value) {
+        snapshot_type snapshot;
+        snapshot.reserve(value.size());
+        for (std::size_t index = 0; index < value.size(); ++index) {
+            const _PFElement element = value[index];
+            snapshot.push_back(element_traits::take(element));
+        }
+        return snapshot;
+    }
+    static void restore(
+            std::vector<_PFElement, _PFAllocator>& value,
+            const snapshot_type& snapshot) {
+        value.clear();
+        value.reserve(snapshot.size());
+        for (const auto& element_snapshot_value : snapshot) {
+            _PFElement element{};
+            element_traits::restore(element, element_snapshot_value);
+            value.push_back(element);
+        }
+    }
+};
+
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::RSI _ta_rsi_1;
     std::vector<double> _precalc__ta_rsi_1;
@@ -113,40 +216,143 @@ public:
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::snapshot_type _pf_value_0;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mask)>::snapshot_type _pf_value_1;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mT)>::snapshot_type _pf_value_2;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mTT)>::snapshot_type _pf_value_3;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::rsiVal)>::snapshot_type _pf_value_4;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::h)>::snapshot_type _pf_value_5;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d)>::snapshot_type _pf_value_6;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::sample)>::snapshot_type _pf_value_7;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::hotCount)>::snapshot_type _pf_value_8;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::entryCond)>::snapshot_type _pf_value_9;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::exitCond)>::snapshot_type _pf_value_10;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::snapshot_type _pf_value_11;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::snapshot_type _pf_value_12;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::snapshot_type _pf_value_13;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::take(_ta_rsi_1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::mask)>::take(mask),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::mT)>::take(mT),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::mTT)>::take(mTT),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::rsiVal)>::take(rsiVal),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::h)>::take(h),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::d)>::take(d),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::sample)>::take(sample),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::hotCount)>::take(hotCount),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::entryCond)>::take(entryCond),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::exitCond)>::take(exitCond),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::take(_var_initialized),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::take(_ta_initialized_),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::take(_inputs_initialized_),
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::restore(this->_ta_rsi_1, _pf_script_state_checkpoint_->_pf_value_0);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mask)>::restore(this->mask, _pf_script_state_checkpoint_->_pf_value_1);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mT)>::restore(this->mT, _pf_script_state_checkpoint_->_pf_value_2);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::mTT)>::restore(this->mTT, _pf_script_state_checkpoint_->_pf_value_3);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::rsiVal)>::restore(this->rsiVal, _pf_script_state_checkpoint_->_pf_value_4);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::h)>::restore(this->h, _pf_script_state_checkpoint_->_pf_value_5);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d)>::restore(this->d, _pf_script_state_checkpoint_->_pf_value_6);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::sample)>::restore(this->sample, _pf_script_state_checkpoint_->_pf_value_7);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::hotCount)>::restore(this->hotCount, _pf_script_state_checkpoint_->_pf_value_8);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::entryCond)>::restore(this->entryCond, _pf_script_state_checkpoint_->_pf_value_9);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::exitCond)>::restore(this->exitCond, _pf_script_state_checkpoint_->_pf_value_10);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::restore(this->_var_initialized, _pf_script_state_checkpoint_->_pf_value_11);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::restore(this->_ta_initialized_, _pf_script_state_checkpoint_->_pf_value_12);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::restore(this->_inputs_initialized_, _pf_script_state_checkpoint_->_pf_value_13);
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() : _ta_rsi_1(14) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_rsi_1 = decltype(this->_ta_rsi_1)(14);
+        this->_precalc__ta_rsi_1 = decltype(this->_precalc__ta_rsi_1){};
+        this->_use_precalc = false;
+        this->mask = decltype(this->mask){};
+        this->mT = decltype(this->mT){};
+        this->mTT = decltype(this->mTT){};
+        this->rsiVal = 0.0;
+        this->h = 0;
+        this->d = 0.0;
+        this->sample = 0.0;
+        this->hotCount = 0;
+        this->entryCond = false;
+        this->exitCond = false;
+        this->_var_initialized = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
             mask = PineGenericMatrix<bool>::new_(24, 7, false);
             mT = PineGenericMatrix<bool>::new_(7, 24, false);
@@ -154,30 +360,42 @@ public:
             _var_initialized = true;
         } else {
         }
-        rsiVal = (is_first_tick_ ? _ta_rsi_1.compute(current_bar_.close) : _ta_rsi_1.recompute(current_bar_.close));
-        h = [&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_hour; }();
-        d = ([&]() -> int { std::string _tz = (syminfo_.timezone); time_t _secs = (time_t)((current_bar_.timestamp) / 1000); struct tm tm_buf; if (_tz.empty() || _tz == "UTC" || _tz == "Etc/UTC") { gmtime_r(&_secs, &tm_buf); } else { static std::mutex _pf_tz_mu; std::lock_guard<std::mutex> _pf_tz_lock(_pf_tz_mu); const char* _old = std::getenv("TZ"); std::string _old_tz = _old ? _old : ""; bool _had_old = (_old != nullptr); ::setenv("TZ", _tz.c_str(), 1); ::tzset(); localtime_r(&_secs, &tm_buf); if (_had_old) { ::setenv("TZ", _old_tz.c_str(), 1); } else { ::unsetenv("TZ"); } ::tzset(); } return tm_buf.tm_wday + 1; }() - 1);
-        if ((((((!(is_na(rsiVal)) && (rsiVal > 60.0)) && (h >= 0)) && (h < 24)) && (d >= 0)) && (d < 7))) {
+        rsiVal = (history_advances_new_bar() ? _ta_rsi_1.compute(current_bar_.close) : _ta_rsi_1.recompute(current_bar_.close));
+        h = pine_hour((int64_t)(current_bar_.timestamp), syminfo_.timezone);
+        d = (pine_dayofweek((int64_t)(current_bar_.timestamp), syminfo_.timezone) - 1);
+        if ((((((!(is_na(rsiVal)) && ([&]{ auto _pna_l = (rsiVal); auto _pna_r = (60.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) && ([&]{ auto _pna_l = (h); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }())) && ([&]{ auto _pna_l = (h); auto _pna_r = (24); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }())) && ([&]{ auto _pna_l = (d); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }())) && ([&]{ auto _pna_l = (d); auto _pna_r = (7); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()))) {
             mask.set((int)(h), (int)(d), true);
         }
         mT = mask.transpose();
         mTT = mT.transpose();
-        sample = mTT.get((int)((((h < 24)) ? (h) : (0))), (int)(((((d >= 0) && (d < 7))) ? (d) : (0))));
+        sample = mTT.get((int)(((([&]{ auto _pna_l = (h); auto _pna_r = (24); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }())) ? (h) : (0))), (int)((((([&]{ auto _pna_l = (d); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (d); auto _pna_r = (7); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()))) ? (d) : (0))));
         hotCount = 0;
-        for (int i = 0; i <= 23; i += 1) {
-            for (int j = 0; j <= 6; j += 1) {
+        int _for_start_0 = (0);
+        int _for_end_0 = (23);
+        int _for_step_0 = (1);
+        if (_for_step_0 < 0) _for_step_0 = -_for_step_0;
+        if (_for_step_0 == 0) _for_step_0 = 1;
+        const bool _for_down_0 = (_for_start_0 > _for_end_0);
+        for (int i = _for_start_0; (_for_down_0 ? (i >= _for_end_0) : (i <= _for_end_0)); i += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = (23)) {
+            int _for_start_1 = (0);
+            int _for_end_1 = (6);
+            int _for_step_1 = (1);
+            if (_for_step_1 < 0) _for_step_1 = -_for_step_1;
+            if (_for_step_1 == 0) _for_step_1 = 1;
+            const bool _for_down_1 = (_for_start_1 > _for_end_1);
+            for (int j = _for_start_1; (_for_down_1 ? (j >= _for_end_1) : (j <= _for_end_1)); j += (_for_down_1 ? -_for_step_1 : _for_step_1), _for_end_1 = (6)) {
                 if (mTT.get((int)(i), (int)(j))) {
                     hotCount += 1;
                 }
             }
         }
-        entryCond = (((hotCount >= 6) && (rsiVal > 55.0)) && sample);
-        exitCond = (!(is_na(rsiVal)) && (rsiVal < 45.0));
-        if ((entryCond && (signed_position_size() == 0))) {
+        entryCond = ((([&]{ auto _pna_l = (hotCount); auto _pna_r = (6); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (rsiVal); auto _pna_r = (55.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) && sample);
+        exitCond = (!(is_na(rsiVal)) && ([&]{ auto _pna_l = (rsiVal); auto _pna_r = (45.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));
+        if ((entryCond && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }()))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
         }
-        if ((exitCond && (signed_position_size() > 0))) {
-            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
+        if ((exitCond && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()))) {
+            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false, 279172874259ULL);
         }
     }
 
@@ -191,6 +409,19 @@ public:
 
 
         for (int i = 0; i < n; ++i) {
+            if (_src_series_active_) {
+                const double _pc_o = bars[i].open;
+                const double _pc_h = bars[i].high;
+                const double _pc_l = bars[i].low;
+                const double _pc_c = bars[i].close;
+                const double _pc_v = bars[i].volume;
+                _src_open_.push(_pc_o);   _src_high_.push(_pc_h);   _src_low_.push(_pc_l);
+                _src_close_.push(_pc_c);  _src_volume_.push(_pc_v);
+                _src_hl2_.push((_pc_h + _pc_l) / 2.0);
+                _src_hlc3_.push((_pc_h + _pc_l + _pc_c) / 3.0);
+                _src_ohlc4_.push((_pc_o + _pc_h + _pc_l + _pc_c) / 4.0);
+                _src_hlcc4_.push((_pc_h + _pc_l + _pc_c + _pc_c) / 4.0);
+            }
             _precalc__ta_rsi_1[i] = _ta_rsi_1.compute(bars[i].close);
         }
 
@@ -199,25 +430,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

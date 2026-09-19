@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -21,6 +21,14 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifdef PF_PINE_TIME_HAS_SESSION_DAY
+#define PF_PINE_TIME_SESSION_DAY_ARGS(tz, sess) , tz, sess
+#else
+#define PF_PINE_TIME_SESSION_DAY_ARGS(tz, sess)
+#endif
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -94,7 +102,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::ATR _ta_atr_1;
     std::vector<double> _precalc__ta_atr_1;
@@ -426,40 +434,149 @@ public:
     }
 
     explicit GeneratedStrategy() : _ta_atr_1(14), _ta_pivothigh_2(5, 5), _ta_pivotlow_3(5, 5), _ta_rsi_4(14), _ta_ema_5(3), _ta_sma_6(20), _ta_stdev_7(20), _ta_sum_8(10), _ta_rma_11(14), _ta_rma_12(14), _ta_rma_13(14), _ta_rma_14(14), last_ph(na<double>()), last_pl(na<double>()) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "calc_on_order_fills") { calc_on_order_fills_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_atr_1 = decltype(this->_ta_atr_1)(14);
+        this->_precalc__ta_atr_1 = decltype(this->_precalc__ta_atr_1){};
+        this->_ta_pivothigh_2 = decltype(this->_ta_pivothigh_2)(5, 5);
+        this->_precalc__ta_pivothigh_2 = decltype(this->_precalc__ta_pivothigh_2){};
+        this->_ta_pivotlow_3 = decltype(this->_ta_pivotlow_3)(5, 5);
+        this->_precalc__ta_pivotlow_3 = decltype(this->_precalc__ta_pivotlow_3){};
+        this->_ta_rsi_4 = decltype(this->_ta_rsi_4)(14);
+        this->_precalc__ta_rsi_4 = decltype(this->_precalc__ta_rsi_4){};
+        this->_ta_ema_5 = decltype(this->_ta_ema_5)(3);
+        this->_ta_sma_6 = decltype(this->_ta_sma_6)(20);
+        this->_precalc__ta_sma_6 = decltype(this->_precalc__ta_sma_6){};
+        this->_ta_stdev_7 = decltype(this->_ta_stdev_7)(20);
+        this->_precalc__ta_stdev_7 = decltype(this->_precalc__ta_stdev_7){};
+        this->_ta_sum_8 = decltype(this->_ta_sum_8)(10);
+        this->_ta_change_9 = decltype(this->_ta_change_9){};
+        this->_precalc__ta_change_9 = decltype(this->_precalc__ta_change_9){};
+        this->_ta_change_10 = decltype(this->_ta_change_10){};
+        this->_precalc__ta_change_10 = decltype(this->_precalc__ta_change_10){};
+        this->_ta_rma_11 = decltype(this->_ta_rma_11)(14);
+        this->_ta_rma_12 = decltype(this->_ta_rma_12)(14);
+        this->_ta_rma_13 = decltype(this->_ta_rma_13)(14);
+        this->_ta_rma_14 = decltype(this->_ta_rma_14)(14);
+        this->_use_precalc = false;
+        this->_s_close = decltype(this->_s_close){};
+        this->_s_high = decltype(this->_s_high){};
+        this->_s_low = decltype(this->_s_low){};
+        this->_s_open = decltype(this->_s_open){};
+        this->last_ph = decltype(this->last_ph)(na<double>());
+        this->last_pl = decltype(this->last_pl)(na<double>());
+        this->z_top = decltype(this->z_top){};
+        this->z_bot = decltype(this->z_bot){};
+        this->z_isb = decltype(this->z_isb){};
+        this->in_session = decltype(this->in_session){};
+        this->rsi_smooth = decltype(this->rsi_smooth){};
+        this->i_pivot = 0;
+        this->i_fvg_atr = 0.0;
+        this->i_rsi_len = 0;
+        this->i_vol_ma_len = 0;
+        this->i_vol_z = 0.0;
+        this->i_cd_sum = 0;
+        this->i_adx_len = 0;
+        this->i_adx_thr = 0.0;
+        this->i_session = std::string("");
+        this->i_tz = std::string("");
+        this->atr_v = 0.0;
+        this->ph_v = 0.0;
+        this->pl_v = 0.0;
+        this->pivot_break_up = false;
+        this->pivot_break_dn = false;
+        this->bull_fvg_event = false;
+        this->bear_fvg_event = false;
+        this->fvg_min_w = 0.0;
+        this->in_bull_fvg = false;
+        this->in_bear_fvg = false;
+        this->rsi_v = 0.0;
+        this->rsi_div_bull = false;
+        this->rsi_div_bear = false;
+        this->vol_ma = 0.0;
+        this->vol_std = 0.0;
+        this->vol_z = 0.0;
+        this->vol_anom_bull = false;
+        this->vol_anom_bear = false;
+        this->buy_vol = 0.0;
+        this->sell_vol = 0.0;
+        this->vol_d = 0.0;
+        this->cum_d = 0.0;
+        this->cd_up = false;
+        this->cd_dn = false;
+        this->up_mv = 0.0;
+        this->dn_mv = 0.0;
+        this->p_dm_v = 0.0;
+        this->m_dm_v = 0.0;
+        this->tr_smo = 0.0;
+        this->p_di_v = 0.0;
+        this->m_di_v = 0.0;
+        this->dx_v = 0.0;
+        this->adx_v = 0.0;
+        this->trending_bull = false;
+        this->trending_bear = false;
+        this->long_setup = false;
+        this->short_setup = false;
+        this->_var_initialized = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
         if (history_advances_new_bar()) _s_high.push(current_bar_.high);
@@ -500,7 +617,7 @@ public:
             _ta_rma_14 = ta::RMA(get_input_int("ADX length", 14));
             _ta_initialized_ = true;
         }
-        atr_v = (history_advances_new_bar() ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
+        atr_v = (history_advances_new_bar() ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
         ph_v = (history_advances_new_bar() ? _ta_pivothigh_2.compute(current_bar_.high) : _ta_pivothigh_2.recompute(current_bar_.high));
         pl_v = (history_advances_new_bar() ? _ta_pivotlow_3.compute(current_bar_.low) : _ta_pivotlow_3.recompute(current_bar_.low));
         if (!(is_na(ph_v))) {
@@ -525,9 +642,9 @@ public:
             z_isb.push_back(false);
         }
         while (([&]{ auto _pna_l = ((double)z_top.size()); auto _pna_r = (30); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) {
-            [&](){ auto v=z_top.front(); z_top.erase(z_top.begin()); return v; }();
-            [&](){ auto v=z_bot.front(); z_bot.erase(z_bot.begin()); return v; }();
-            [&](){ auto v=z_isb.front(); z_isb.erase(z_isb.begin()); return v; }();
+            [&](auto&& __pf_array){ if(__pf_array.empty()) pine_runtime_error("Cannot use shift() if array is empty."); using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; __pf_array_value_type __pf_array_value=__pf_array.front(); __pf_array.erase(__pf_array.begin()); return __pf_array_value; }((z_top));
+            [&](auto&& __pf_array){ if(__pf_array.empty()) pine_runtime_error("Cannot use shift() if array is empty."); using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; __pf_array_value_type __pf_array_value=__pf_array.front(); __pf_array.erase(__pf_array.begin()); return __pf_array_value; }((z_bot));
+            [&](auto&& __pf_array){ if(__pf_array.empty()) pine_runtime_error("Cannot use shift() if array is empty."); using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; __pf_array_value_type __pf_array_value=__pf_array.front(); __pf_array.erase(__pf_array.begin()); return __pf_array_value; }((z_isb));
         }
         in_bull_fvg = false;
         in_bear_fvg = false;
@@ -539,9 +656,9 @@ public:
             if (_for_step_0 == 0) _for_step_0 = 1;
             const bool _for_down_0 = (_for_start_0 > _for_end_0);
             for (int k = _for_start_0; (_for_down_0 ? (k >= _for_end_0) : (k <= _for_end_0)); k += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = (((double)z_top.size() - 1))) {
-                double t = z_top[(k)];
-                double b = z_bot[(k)];
-                bool s = z_isb[(k)];
+                double t = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_top));
+                double b = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_bot));
+                bool s = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_isb));
                 if ((([&]{ auto _pna_l = (current_bar_.low); auto _pna_r = (t); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) || _pfc_eq); }()) && ([&]{ auto _pna_l = (current_bar_.high); auto _pna_r = (b); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()))) {
                     if (s) {
                         in_bull_fvg = true;
@@ -578,19 +695,19 @@ public:
         adx_v = (history_advances_new_bar() ? _ta_rma_14.compute(dx_v) : _ta_rma_14.recompute(dx_v));
         trending_bull = (([&]{ auto _pna_l = (adx_v); auto _pna_r = (i_adx_thr); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (p_di_v); auto _pna_r = (m_di_v); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         trending_bear = (([&]{ auto _pna_l = (adx_v); auto _pna_r = (i_adx_thr); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (m_di_v); auto _pna_r = (p_di_v); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
-        if (history_advances_new_bar()) in_session.push(!(is_na(pine_time(current_bar_.timestamp, script_tf_, i_session, i_tz, script_tf_))));
-        else in_session.update(!(is_na(pine_time(current_bar_.timestamp, script_tf_, i_session, i_tz, script_tf_))));
+        if (history_advances_new_bar()) in_session.push(!(is_na(pine_time(current_bar_.timestamp, script_tf_, i_session, i_tz, script_tf_ PF_PINE_TIME_SESSION_DAY_ARGS(syminfo_.timezone, syminfo_.session)))));
+        else in_session.update(!(is_na(pine_time(current_bar_.timestamp, script_tf_, i_session, i_tz, script_tf_ PF_PINE_TIME_SESSION_DAY_ARGS(syminfo_.timezone, syminfo_.session)))));
         long_setup = ((((pivot_break_up && in_bull_fvg) && (vol_anom_bull || cd_up)) && trending_bull) && in_session[0]);
         short_setup = ((((pivot_break_dn && in_bear_fvg) && (vol_anom_bear || cd_dn)) && trending_bear) && in_session[0]);
         if ((long_setup && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) || _pfc_eq); }()))) {
             if (([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }())) {
-                strategy_close(std::string("S"), std::string("flip flat"), na<double>(), na<double>(), false);
+                strategy_close(std::string("S"), std::string("flip flat"), na<double>(), na<double>(), false, 794568949783ULL);
             }
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), std::string("vcp confluence long"));
         }
         if ((short_setup && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()))) {
             if (([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) {
-                strategy_close(std::string("L"), std::string("flip flat"), na<double>(), na<double>(), false);
+                strategy_close(std::string("L"), std::string("flip flat"), na<double>(), na<double>(), false, 816043786263ULL);
             }
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), std::string("vcp confluence short"));
         }
@@ -644,7 +761,7 @@ public:
                 _src_ohlc4_.push((_pc_o + _pc_h + _pc_l + _pc_c) / 4.0);
                 _src_hlcc4_.push((_pc_h + _pc_l + _pc_c + _pc_c) / 4.0);
             }
-            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
             _precalc__ta_pivothigh_2[i] = _ta_pivothigh_2.compute(bars[i].high);
             _precalc__ta_pivotlow_3[i] = _ta_pivotlow_3.compute(bars[i].low);
             _precalc__ta_rsi_4[i] = _ta_rsi_4.compute(bars[i].close);
@@ -670,25 +787,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

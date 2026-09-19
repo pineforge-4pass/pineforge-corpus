@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -21,6 +21,9 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -98,7 +101,7 @@ const int RelayMode_Trend = 0;
 const int RelayMode_Reversion = 1;
 static const std::string RelayMode_str_values[] = {std::string("Trend"), std::string("Reversion")};
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::EMA _ta_ema_1;
     std::vector<double> _precalc__ta_ema_1;
@@ -226,42 +229,97 @@ public:
     }
 
     explicit GeneratedStrategy() : _ta_ema_1(16), _ta_ema_2(45), _ta_rsi_3(12), _ta_atr_4(16) {
-        initial_capital_ = 100000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 2.0;
-        pyramiding_ = 0;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.05;
-        slippage_ = 1;
-        margin_long_ = 100.0;
-        margin_short_ = 100.0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 100000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 2.0;
+        cfg.pyramiding = 0;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.05;
+        cfg.slippage = 1;
+        cfg.margin_long = 100.0;
+        cfg.margin_short = 100.0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "calc_on_order_fills") { calc_on_order_fills_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_ema_1 = decltype(this->_ta_ema_1)(16);
+        this->_precalc__ta_ema_1 = decltype(this->_precalc__ta_ema_1){};
+        this->_ta_ema_2 = decltype(this->_ta_ema_2)(45);
+        this->_precalc__ta_ema_2 = decltype(this->_precalc__ta_ema_2){};
+        this->_ta_rsi_3 = decltype(this->_ta_rsi_3)(12);
+        this->_precalc__ta_rsi_3 = decltype(this->_precalc__ta_rsi_3){};
+        this->_ta_atr_4 = decltype(this->_ta_atr_4)(16);
+        this->_precalc__ta_atr_4 = decltype(this->_precalc__ta_atr_4){};
+        this->_ta_crossover_5 = decltype(this->_ta_crossover_5){};
+        this->_ta_crossunder_6 = decltype(this->_ta_crossunder_6){};
+        this->_ta_crossunder_7 = decltype(this->_ta_crossunder_7){};
+        this->_ta_crossover_8 = decltype(this->_ta_crossover_8){};
+        this->_use_precalc = false;
+        this->mode = 0.0;
+        this->fastLength = 0;
+        this->slowLength = 0;
+        this->rsiLength = 0;
+        this->reversionEntry = 0.0;
+        this->reversionExit = 0.0;
+        this->atrLength = 0;
+        this->stopAtr = 0.0;
+        this->fastEma = 0.0;
+        this->slowEma = 0.0;
+        this->momentum = 0.0;
+        this->atrValue = 0.0;
+        this->trendMode = false;
+        this->entrySignal = false;
+        this->exitSignal = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (!_inputs_initialized_) {
             mode = get_input_int("Signal Regime", RelayMode_Trend);
             fastLength = get_input_int("Fast EMA", 16);
@@ -283,7 +341,7 @@ public:
         fastEma = (history_advances_new_bar() ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));
         slowEma = (history_advances_new_bar() ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close));
         momentum = (history_advances_new_bar() ? _ta_rsi_3.compute(current_bar_.close) : _ta_rsi_3.recompute(current_bar_.close));
-        atrValue = (history_advances_new_bar() ? _ta_atr_4.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_4.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
+        atrValue = (history_advances_new_bar() ? _ta_atr_4.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_4.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
         trendMode = ([&]{ auto _pna_l = (mode); auto _pna_r = (RelayMode_Trend); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l == _pna_r); }());
         entrySignal = ((trendMode) ? ((history_advances_new_bar() ? _ta_crossover_5.compute(fastEma, slowEma) : _ta_crossover_5.recompute(fastEma, slowEma))) : ((history_advances_new_bar() ? _ta_crossunder_6.compute(momentum, reversionEntry) : _ta_crossunder_6.recompute(momentum, reversionEntry))));
         exitSignal = ((trendMode) ? ((history_advances_new_bar() ? _ta_crossunder_7.compute(fastEma, slowEma) : _ta_crossunder_7.recompute(fastEma, slowEma))) : ((history_advances_new_bar() ? _ta_crossover_8.compute(momentum, reversionExit) : _ta_crossover_8.recompute(momentum, reversionExit))));
@@ -330,7 +388,7 @@ public:
             _precalc__ta_ema_1[i] = _ta_ema_1.compute(bars[i].close);
             _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
             _precalc__ta_rsi_3[i] = _ta_rsi_3.compute(bars[i].close);
-            _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
         _ta_ema_1 = ta::EMA(16);
@@ -341,25 +399,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

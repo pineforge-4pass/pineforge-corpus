@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <optional>
+#include <type_traits>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -19,6 +21,9 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -92,7 +97,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::ATR _ta_atr_1;
     std::vector<double> _precalc__ta_atr_1;
@@ -115,7 +120,7 @@ public:
     bool arm_long = false;
     bool arm_short = false;
     double pos_qty = 0.0;
-    int pos_dir = 0;
+    double pos_dir = 0.0;
     double entry_px = 0.0;
     double tp_px = 0.0;
     double sl_px = 0.0;
@@ -124,46 +129,202 @@ public:
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        decltype(GeneratedStrategy::_ta_atr_1) _pf_value_0;
+        decltype(GeneratedStrategy::_s_close) _pf_value_1;
+        decltype(GeneratedStrategy::_s_high) _pf_value_2;
+        decltype(GeneratedStrategy::_s_low) _pf_value_3;
+        decltype(GeneratedStrategy::_s_open) _pf_value_4;
+        decltype(GeneratedStrategy::atr_now) _pf_value_5;
+        decltype(GeneratedStrategy::i_tp_ticks) _pf_value_6;
+        decltype(GeneratedStrategy::i_sl_ticks) _pf_value_7;
+        decltype(GeneratedStrategy::i_max_fills) _pf_value_8;
+        decltype(GeneratedStrategy::i_atr_len) _pf_value_9;
+        decltype(GeneratedStrategy::i_atr_mult) _pf_value_10;
+        decltype(GeneratedStrategy::prev_range) _pf_value_11;
+        decltype(GeneratedStrategy::atr_prev) _pf_value_12;
+        decltype(GeneratedStrategy::expansion) _pf_value_13;
+        decltype(GeneratedStrategy::prev_up) _pf_value_14;
+        decltype(GeneratedStrategy::prev_down) _pf_value_15;
+        decltype(GeneratedStrategy::arm_long) _pf_value_16;
+        decltype(GeneratedStrategy::arm_short) _pf_value_17;
+        decltype(GeneratedStrategy::pos_qty) _pf_value_18;
+        decltype(GeneratedStrategy::pos_dir) _pf_value_19;
+        decltype(GeneratedStrategy::entry_px) _pf_value_20;
+        decltype(GeneratedStrategy::tp_px) _pf_value_21;
+        decltype(GeneratedStrategy::sl_px) _pf_value_22;
+        decltype(GeneratedStrategy::in_position) _pf_value_23;
+        decltype(GeneratedStrategy::exit_dir) _pf_value_24;
+        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_25;
+        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_26;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _ta_atr_1,
+            _s_close,
+            _s_high,
+            _s_low,
+            _s_open,
+            atr_now,
+            i_tp_ticks,
+            i_sl_ticks,
+            i_max_fills,
+            i_atr_len,
+            i_atr_mult,
+            prev_range,
+            atr_prev,
+            expansion,
+            prev_up,
+            prev_down,
+            arm_long,
+            arm_short,
+            pos_qty,
+            pos_dir,
+            entry_px,
+            tp_px,
+            sl_px,
+            in_position,
+            exit_dir,
+            _ta_initialized_,
+            _inputs_initialized_,
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        this->_ta_atr_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_s_close = _pf_script_state_checkpoint_->_pf_value_1;
+        this->_s_high = _pf_script_state_checkpoint_->_pf_value_2;
+        this->_s_low = _pf_script_state_checkpoint_->_pf_value_3;
+        this->_s_open = _pf_script_state_checkpoint_->_pf_value_4;
+        this->atr_now = _pf_script_state_checkpoint_->_pf_value_5;
+        this->i_tp_ticks = _pf_script_state_checkpoint_->_pf_value_6;
+        this->i_sl_ticks = _pf_script_state_checkpoint_->_pf_value_7;
+        this->i_max_fills = _pf_script_state_checkpoint_->_pf_value_8;
+        this->i_atr_len = _pf_script_state_checkpoint_->_pf_value_9;
+        this->i_atr_mult = _pf_script_state_checkpoint_->_pf_value_10;
+        this->prev_range = _pf_script_state_checkpoint_->_pf_value_11;
+        this->atr_prev = _pf_script_state_checkpoint_->_pf_value_12;
+        this->expansion = _pf_script_state_checkpoint_->_pf_value_13;
+        this->prev_up = _pf_script_state_checkpoint_->_pf_value_14;
+        this->prev_down = _pf_script_state_checkpoint_->_pf_value_15;
+        this->arm_long = _pf_script_state_checkpoint_->_pf_value_16;
+        this->arm_short = _pf_script_state_checkpoint_->_pf_value_17;
+        this->pos_qty = _pf_script_state_checkpoint_->_pf_value_18;
+        this->pos_dir = _pf_script_state_checkpoint_->_pf_value_19;
+        this->entry_px = _pf_script_state_checkpoint_->_pf_value_20;
+        this->tp_px = _pf_script_state_checkpoint_->_pf_value_21;
+        this->sl_px = _pf_script_state_checkpoint_->_pf_value_22;
+        this->in_position = _pf_script_state_checkpoint_->_pf_value_23;
+        this->exit_dir = _pf_script_state_checkpoint_->_pf_value_24;
+        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_25;
+        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_26;
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() : _ta_atr_1(14) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
-        if (is_first_tick_) _s_close.push(current_bar_.close);
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_atr_1 = decltype(this->_ta_atr_1)(14);
+        this->_precalc__ta_atr_1 = decltype(this->_precalc__ta_atr_1){};
+        this->_use_precalc = false;
+        this->_s_close = decltype(this->_s_close){};
+        this->_s_high = decltype(this->_s_high){};
+        this->_s_low = decltype(this->_s_low){};
+        this->_s_open = decltype(this->_s_open){};
+        this->atr_now = decltype(this->atr_now){};
+        this->i_tp_ticks = 0;
+        this->i_sl_ticks = 0;
+        this->i_max_fills = 0;
+        this->i_atr_len = 0;
+        this->i_atr_mult = 0.0;
+        this->prev_range = 0.0;
+        this->atr_prev = 0.0;
+        this->expansion = false;
+        this->prev_up = false;
+        this->prev_down = false;
+        this->arm_long = false;
+        this->arm_short = false;
+        this->pos_qty = 0.0;
+        this->pos_dir = 0.0;
+        this->entry_px = 0.0;
+        this->tp_px = 0.0;
+        this->sl_px = 0.0;
+        this->in_position = false;
+        this->exit_dir = 0.0;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
+        if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
-        if (is_first_tick_) _s_high.push(current_bar_.high);
+        if (history_advances_new_bar()) _s_high.push(current_bar_.high);
         else _s_high.update(current_bar_.high);
-        if (is_first_tick_) _s_low.push(current_bar_.low);
+        if (history_advances_new_bar()) _s_low.push(current_bar_.low);
         else _s_low.update(current_bar_.low);
-        if (is_first_tick_) _s_open.push(current_bar_.open);
+        if (history_advances_new_bar()) _s_open.push(current_bar_.open);
         else _s_open.update(current_bar_.open);
         if (!_inputs_initialized_) {
             i_tp_ticks = get_input_int("Take profit (ticks)", 10);
@@ -177,13 +338,14 @@ public:
             _ta_atr_1 = ta::ATR(get_input_int("ATR length", 14));
             _ta_initialized_ = true;
         }
-        max_intraday_filled_orders_ = (int)(i_max_fills);
+        set_pine_risk_max_intraday_filled_orders((int)(i_max_fills));
         prev_range = (_s_high[1] - _s_low[1]);
-        atr_now.push((is_first_tick_ ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close)));
+        if (history_advances_new_bar()) atr_now.push((history_advances_new_bar() ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close())));
+        else atr_now.update((history_advances_new_bar() ? _ta_atr_1.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close())));
         atr_prev = atr_now[1];
-        expansion = (!(is_na(atr_prev)) && (prev_range > (atr_prev * i_atr_mult)));
-        prev_up = (_s_close[1] > _s_open[1]);
-        prev_down = (_s_close[1] < _s_open[1]);
+        expansion = (!(is_na(atr_prev)) && ([&]{ auto _pna_l = (prev_range); auto _pna_r = ((atr_prev * i_atr_mult)); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
+        prev_up = ([&]{ auto _pna_l = (_s_close[1]); auto _pna_r = (_s_open[1]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }());
+        prev_down = ([&]{ auto _pna_l = (_s_close[1]); auto _pna_r = (_s_open[1]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }());
         arm_long = (expansion && prev_up);
         arm_short = (expansion && prev_down);
         if (arm_long) {
@@ -197,12 +359,12 @@ public:
             strategy_cancel(std::string("ShortOnGap"));
         }
         pos_qty = std::abs(signed_position_size());
-        pos_dir = (((signed_position_size() > 0)) ? (1) : ((((signed_position_size() < 0)) ? ((-1)) : (0))));
-        entry_px = position_entry_price_;
+        pos_dir = ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (1) : (((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }())) ? ((-1)) : (0))));
+        entry_px = (signed_position_size() == 0.0 ? na<double>() : position_entry_price_);
         tp_px = (entry_px + ((pos_dir * i_tp_ticks) * syminfo_.mintick));
         sl_px = (entry_px - ((pos_dir * i_sl_ticks) * syminfo_.mintick));
-        in_position = (pos_qty > 0);
-        exit_dir = (((pos_dir > 0)) ? (false) : (true));
+        in_position = ([&]{ auto _pna_l = (pos_qty); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }());
+        exit_dir = ((([&]{ auto _pna_l = (pos_dir); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l > _pna_r); }())) ? (false) : (true));
         if (in_position) {
             strategy_order(std::string("BracketTP"), exit_dir, pos_qty, tp_px, na<double>(), std::string("bracket97"), 2);
             strategy_order(std::string("BracketSL"), exit_dir, pos_qty, na<double>(), sl_px, std::string("bracket97"), 2);
@@ -230,7 +392,20 @@ public:
             _s_high.push(bars[i].high);
             _s_low.push(bars[i].low);
             _s_open.push(bars[i].open);
-            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close);
+            if (_src_series_active_) {
+                const double _pc_o = bars[i].open;
+                const double _pc_h = bars[i].high;
+                const double _pc_l = bars[i].low;
+                const double _pc_c = bars[i].close;
+                const double _pc_v = bars[i].volume;
+                _src_open_.push(_pc_o);   _src_high_.push(_pc_h);   _src_low_.push(_pc_l);
+                _src_close_.push(_pc_c);  _src_volume_.push(_pc_v);
+                _src_hl2_.push((_pc_h + _pc_l) / 2.0);
+                _src_hlc3_.push((_pc_h + _pc_l + _pc_c) / 3.0);
+                _src_ohlc4_.push((_pc_o + _pc_h + _pc_l + _pc_c) / 4.0);
+                _src_hlcc4_.push((_pc_h + _pc_l + _pc_c + _pc_c) / 4.0);
+            }
+            _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
         _ta_atr_1 = ta::ATR(14);
@@ -242,25 +417,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

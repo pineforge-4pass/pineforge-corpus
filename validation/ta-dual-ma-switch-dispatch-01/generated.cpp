@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <optional>
+#include <type_traits>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -19,6 +21,9 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -92,7 +97,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::EMA _ta_ema_1;
     ta::SMA _ta_sma_2;
@@ -118,82 +123,217 @@ public:
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        decltype(GeneratedStrategy::_ta_ema_1) _pf_value_0;
+        decltype(GeneratedStrategy::_ta_sma_2) _pf_value_1;
+        decltype(GeneratedStrategy::_ta_wma_3) _pf_value_2;
+        decltype(GeneratedStrategy::_ta_hma_4) _pf_value_3;
+        decltype(GeneratedStrategy::_ta_sma_5) _pf_value_4;
+        decltype(GeneratedStrategy::_ta_ema_1_cs1) _pf_value_5;
+        decltype(GeneratedStrategy::_ta_sma_2_cs1) _pf_value_6;
+        decltype(GeneratedStrategy::_ta_wma_3_cs1) _pf_value_7;
+        decltype(GeneratedStrategy::_ta_hma_4_cs1) _pf_value_8;
+        decltype(GeneratedStrategy::_ta_sma_5_cs1) _pf_value_9;
+        decltype(GeneratedStrategy::_ta_crossover_6) _pf_value_10;
+        decltype(GeneratedStrategy::_ta_crossunder_7) _pf_value_11;
+        decltype(GeneratedStrategy::maType) _pf_value_12;
+        decltype(GeneratedStrategy::fastLen) _pf_value_13;
+        decltype(GeneratedStrategy::slowLen) _pf_value_14;
+        decltype(GeneratedStrategy::src) _pf_value_15;
+        decltype(GeneratedStrategy::fastMA) _pf_value_16;
+        decltype(GeneratedStrategy::slowMA) _pf_value_17;
+        decltype(GeneratedStrategy::longCond) _pf_value_18;
+        decltype(GeneratedStrategy::shortCond) _pf_value_19;
+        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_20;
+        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_21;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _ta_ema_1,
+            _ta_sma_2,
+            _ta_wma_3,
+            _ta_hma_4,
+            _ta_sma_5,
+            _ta_ema_1_cs1,
+            _ta_sma_2_cs1,
+            _ta_wma_3_cs1,
+            _ta_hma_4_cs1,
+            _ta_sma_5_cs1,
+            _ta_crossover_6,
+            _ta_crossunder_7,
+            maType,
+            fastLen,
+            slowLen,
+            src,
+            fastMA,
+            slowMA,
+            longCond,
+            shortCond,
+            _ta_initialized_,
+            _inputs_initialized_,
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        this->_ta_ema_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_ta_sma_2 = _pf_script_state_checkpoint_->_pf_value_1;
+        this->_ta_wma_3 = _pf_script_state_checkpoint_->_pf_value_2;
+        this->_ta_hma_4 = _pf_script_state_checkpoint_->_pf_value_3;
+        this->_ta_sma_5 = _pf_script_state_checkpoint_->_pf_value_4;
+        this->_ta_ema_1_cs1 = _pf_script_state_checkpoint_->_pf_value_5;
+        this->_ta_sma_2_cs1 = _pf_script_state_checkpoint_->_pf_value_6;
+        this->_ta_wma_3_cs1 = _pf_script_state_checkpoint_->_pf_value_7;
+        this->_ta_hma_4_cs1 = _pf_script_state_checkpoint_->_pf_value_8;
+        this->_ta_sma_5_cs1 = _pf_script_state_checkpoint_->_pf_value_9;
+        this->_ta_crossover_6 = _pf_script_state_checkpoint_->_pf_value_10;
+        this->_ta_crossunder_7 = _pf_script_state_checkpoint_->_pf_value_11;
+        this->maType = _pf_script_state_checkpoint_->_pf_value_12;
+        this->fastLen = _pf_script_state_checkpoint_->_pf_value_13;
+        this->slowLen = _pf_script_state_checkpoint_->_pf_value_14;
+        this->src = _pf_script_state_checkpoint_->_pf_value_15;
+        this->fastMA = _pf_script_state_checkpoint_->_pf_value_16;
+        this->slowMA = _pf_script_state_checkpoint_->_pf_value_17;
+        this->longCond = _pf_script_state_checkpoint_->_pf_value_18;
+        this->shortCond = _pf_script_state_checkpoint_->_pf_value_19;
+        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_20;
+        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_21;
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() : _ta_ema_1(10), _ta_sma_2(10), _ta_wma_3(10), _ta_hma_4(10), _ta_sma_5(10), _ta_ema_1_cs1(30), _ta_sma_2_cs1(30), _ta_wma_3_cs1(30), _ta_hma_4_cs1(30), _ta_sma_5_cs1(30) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        _src_series_active_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        cfg.src_series_active = true;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    double getMA_cs0(double source, int length) {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_ema_1 = decltype(this->_ta_ema_1)(10);
+        this->_ta_sma_2 = decltype(this->_ta_sma_2)(10);
+        this->_ta_wma_3 = decltype(this->_ta_wma_3)(10);
+        this->_ta_hma_4 = decltype(this->_ta_hma_4)(10);
+        this->_ta_sma_5 = decltype(this->_ta_sma_5)(10);
+        this->_ta_ema_1_cs1 = decltype(this->_ta_ema_1_cs1)(30);
+        this->_ta_sma_2_cs1 = decltype(this->_ta_sma_2_cs1)(30);
+        this->_ta_wma_3_cs1 = decltype(this->_ta_wma_3_cs1)(30);
+        this->_ta_hma_4_cs1 = decltype(this->_ta_hma_4_cs1)(30);
+        this->_ta_sma_5_cs1 = decltype(this->_ta_sma_5_cs1)(30);
+        this->_ta_crossover_6 = decltype(this->_ta_crossover_6){};
+        this->_ta_crossunder_7 = decltype(this->_ta_crossunder_7){};
+        this->_use_precalc = false;
+        this->maType = std::string("");
+        this->fastLen = 0;
+        this->slowLen = 0;
+        this->src = 0.0;
+        this->fastMA = 0.0;
+        this->slowMA = 0.0;
+        this->longCond = false;
+        this->shortCond = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        (void)bars; (void)n; (void)allow_precalculation;
+    }
+
+    double getMA_cs0(double source, int64_t length) {
         double _func_ret = 0.0;
         auto __switch_val_0 = maType;
         if (__switch_val_0 == std::string("EMA")) {
-            _func_ret = (is_first_tick_ ? _ta_ema_1.compute(source) : _ta_ema_1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_ema_1.compute(source) : _ta_ema_1.recompute(source));
         }
         else if (__switch_val_0 == std::string("SMA")) {
-            _func_ret = (is_first_tick_ ? _ta_sma_2.compute(source) : _ta_sma_2.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_2.compute(source) : _ta_sma_2.recompute(source));
         }
         else if (__switch_val_0 == std::string("WMA")) {
-            _func_ret = (is_first_tick_ ? _ta_wma_3.compute(source) : _ta_wma_3.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_wma_3.compute(source) : _ta_wma_3.recompute(source));
         }
         else if (__switch_val_0 == std::string("HMA")) {
-            _func_ret = (is_first_tick_ ? _ta_hma_4.compute(source) : _ta_hma_4.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_hma_4.compute(source) : _ta_hma_4.recompute(source));
         }
         else {
-            _func_ret = (is_first_tick_ ? _ta_sma_5.compute(source) : _ta_sma_5.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_5.compute(source) : _ta_sma_5.recompute(source));
         }
         return _func_ret;
     }
 
-    double getMA_cs1(double source, int length) {
+    double getMA_cs1(double source, int64_t length) {
         double _func_ret = 0.0;
         auto __switch_val_1 = maType;
         if (__switch_val_1 == std::string("EMA")) {
-            _func_ret = (is_first_tick_ ? _ta_ema_1_cs1.compute(source) : _ta_ema_1_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_ema_1_cs1.compute(source) : _ta_ema_1_cs1.recompute(source));
         }
         else if (__switch_val_1 == std::string("SMA")) {
-            _func_ret = (is_first_tick_ ? _ta_sma_2_cs1.compute(source) : _ta_sma_2_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_2_cs1.compute(source) : _ta_sma_2_cs1.recompute(source));
         }
         else if (__switch_val_1 == std::string("WMA")) {
-            _func_ret = (is_first_tick_ ? _ta_wma_3_cs1.compute(source) : _ta_wma_3_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_wma_3_cs1.compute(source) : _ta_wma_3_cs1.recompute(source));
         }
         else if (__switch_val_1 == std::string("HMA")) {
-            _func_ret = (is_first_tick_ ? _ta_hma_4_cs1.compute(source) : _ta_hma_4_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_hma_4_cs1.compute(source) : _ta_hma_4_cs1.recompute(source));
         }
         else {
-            _func_ret = (is_first_tick_ ? _ta_sma_5_cs1.compute(source) : _ta_sma_5_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_5_cs1.compute(source) : _ta_sma_5_cs1.recompute(source));
         }
         return _func_ret;
     }
 
-    void on_bar(const Bar& bar) override {
+    void on_source_bar(const Bar& bar) override {
         if (!_inputs_initialized_) {
             maType = get_input_string("MA Type", std::string("EMA"));
             fastLen = get_input_int("Fast Length", 10);
@@ -216,8 +356,8 @@ public:
         src = get_input_source("Source", _src_close_)[0];
         fastMA = getMA_cs0(src, fastLen);
         slowMA = getMA_cs1(src, slowLen);
-        longCond = (is_first_tick_ ? _ta_crossover_6.compute(fastMA, slowMA) : _ta_crossover_6.recompute(fastMA, slowMA));
-        shortCond = (is_first_tick_ ? _ta_crossunder_7.compute(fastMA, slowMA) : _ta_crossunder_7.recompute(fastMA, slowMA));
+        longCond = (history_advances_new_bar() ? _ta_crossover_6.compute(fastMA, slowMA) : _ta_crossover_6.recompute(fastMA, slowMA));
+        shortCond = (history_advances_new_bar() ? _ta_crossunder_7.compute(fastMA, slowMA) : _ta_crossunder_7.recompute(fastMA, slowMA));
         if (longCond) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
