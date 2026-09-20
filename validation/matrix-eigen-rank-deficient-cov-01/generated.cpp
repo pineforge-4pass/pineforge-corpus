@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -22,6 +22,9 @@
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
 #include <pineforge/matrix.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -95,7 +98,61 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+template <typename _PFValue>
+struct _PFCheckpointTraits {
+    using snapshot_type = _PFValue;
+    static snapshot_type take(const _PFValue& value) { return value; }
+    static void restore(_PFValue& value, const snapshot_type& snapshot) {
+        value = snapshot;
+    }
+};
+
+template <>
+struct _PFCheckpointTraits<PineMatrix> {
+    using matrix_type = PineMatrix;
+    using snapshot_type = std::optional<typename matrix_type::Snapshot>;
+    static snapshot_type take(const matrix_type& value) {
+        if (value.is_na()) return std::nullopt;
+        return value.snapshot();
+    }
+    static void restore(matrix_type& value, const snapshot_type& snapshot) {
+        if (!snapshot) {
+            value = matrix_type{};
+            return;
+        }
+        value.restore(*snapshot);
+    }
+};
+
+template <typename _PFElement, typename _PFAllocator>
+struct _PFCheckpointTraits<std::vector<_PFElement, _PFAllocator>> {
+    using element_traits = _PFCheckpointTraits<_PFElement>;
+    using element_snapshot = typename element_traits::snapshot_type;
+    using snapshot_type = std::vector<element_snapshot>;
+    static snapshot_type take(
+            const std::vector<_PFElement, _PFAllocator>& value) {
+        snapshot_type snapshot;
+        snapshot.reserve(value.size());
+        for (std::size_t index = 0; index < value.size(); ++index) {
+            const _PFElement element = value[index];
+            snapshot.push_back(element_traits::take(element));
+        }
+        return snapshot;
+    }
+    static void restore(
+            std::vector<_PFElement, _PFAllocator>& value,
+            const snapshot_type& snapshot) {
+        value.clear();
+        value.reserve(snapshot.size());
+        for (const auto& element_snapshot_value : snapshot) {
+            _PFElement element{};
+            element_traits::restore(element, element_snapshot_value);
+            value.push_back(element);
+        }
+    }
+};
+
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::SMA _ta_sma_1;
     ta::SMA _ta_sma_1_cs1;
@@ -131,35 +188,35 @@ public:
     bool _inputs_initialized_ = false;
 
     struct _PFScriptState {
-        decltype(GeneratedStrategy::_ta_sma_1) _pf_value_0;
-        decltype(GeneratedStrategy::_ta_sma_1_cs1) _pf_value_1;
-        decltype(GeneratedStrategy::_ta_sma_1_cs2) _pf_value_2;
-        decltype(GeneratedStrategy::_ta_ema_2) _pf_value_3;
-        decltype(GeneratedStrategy::_ta_ema_3) _pf_value_4;
-        decltype(GeneratedStrategy::_ta_crossover_4) _pf_value_5;
-        decltype(GeneratedStrategy::_ta_crossunder_5) _pf_value_6;
-        decltype(GeneratedStrategy::cov3) _pf_value_7;
-        decltype(GeneratedStrategy::N) _pf_value_8;
-        decltype(GeneratedStrategy::c1) _pf_value_9;
-        decltype(GeneratedStrategy::c2) _pf_value_10;
-        decltype(GeneratedStrategy::c3) _pf_value_11;
-        decltype(GeneratedStrategy::m1) _pf_value_12;
-        decltype(GeneratedStrategy::m2) _pf_value_13;
-        decltype(GeneratedStrategy::m3) _pf_value_14;
-        decltype(GeneratedStrategy::d1) _pf_value_15;
-        decltype(GeneratedStrategy::d2) _pf_value_16;
-        decltype(GeneratedStrategy::d3) _pf_value_17;
-        decltype(GeneratedStrategy::warmedUp) _pf_value_18;
-        decltype(GeneratedStrategy::evals) _pf_value_19;
-        decltype(GeneratedStrategy::emin) _pf_value_20;
-        decltype(GeneratedStrategy::eigenOk) _pf_value_21;
-        decltype(GeneratedStrategy::emaFast) _pf_value_22;
-        decltype(GeneratedStrategy::emaSlow) _pf_value_23;
-        decltype(GeneratedStrategy::baseEntry) _pf_value_24;
-        decltype(GeneratedStrategy::baseExit) _pf_value_25;
-        decltype(GeneratedStrategy::_var_initialized) _pf_value_26;
-        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_27;
-        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_28;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1)>::snapshot_type _pf_value_0;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs1)>::snapshot_type _pf_value_1;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs2)>::snapshot_type _pf_value_2;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::snapshot_type _pf_value_3;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::snapshot_type _pf_value_4;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossover_4)>::snapshot_type _pf_value_5;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossunder_5)>::snapshot_type _pf_value_6;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::cov3)>::snapshot_type _pf_value_7;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::N)>::snapshot_type _pf_value_8;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c1)>::snapshot_type _pf_value_9;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c2)>::snapshot_type _pf_value_10;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c3)>::snapshot_type _pf_value_11;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m1)>::snapshot_type _pf_value_12;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m2)>::snapshot_type _pf_value_13;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m3)>::snapshot_type _pf_value_14;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d1)>::snapshot_type _pf_value_15;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d2)>::snapshot_type _pf_value_16;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d3)>::snapshot_type _pf_value_17;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::warmedUp)>::snapshot_type _pf_value_18;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::evals)>::snapshot_type _pf_value_19;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emin)>::snapshot_type _pf_value_20;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::eigenOk)>::snapshot_type _pf_value_21;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emaFast)>::snapshot_type _pf_value_22;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emaSlow)>::snapshot_type _pf_value_23;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::baseEntry)>::snapshot_type _pf_value_24;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::baseExit)>::snapshot_type _pf_value_25;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::snapshot_type _pf_value_26;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::snapshot_type _pf_value_27;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::snapshot_type _pf_value_28;
     };
     static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
     static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
@@ -167,69 +224,69 @@ public:
 
     void snapshot_script_state() override {
         _pf_script_state_checkpoint_.emplace(_PFScriptState{
-            _ta_sma_1,
-            _ta_sma_1_cs1,
-            _ta_sma_1_cs2,
-            _ta_ema_2,
-            _ta_ema_3,
-            _ta_crossover_4,
-            _ta_crossunder_5,
-            cov3,
-            N,
-            c1,
-            c2,
-            c3,
-            m1,
-            m2,
-            m3,
-            d1,
-            d2,
-            d3,
-            warmedUp,
-            evals,
-            emin,
-            eigenOk,
-            emaFast,
-            emaSlow,
-            baseEntry,
-            baseExit,
-            _var_initialized,
-            _ta_initialized_,
-            _inputs_initialized_,
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1)>::take(_ta_sma_1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs1)>::take(_ta_sma_1_cs1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs2)>::take(_ta_sma_1_cs2),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::take(_ta_ema_2),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::take(_ta_ema_3),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossover_4)>::take(_ta_crossover_4),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossunder_5)>::take(_ta_crossunder_5),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::cov3)>::take(cov3),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::N)>::take(N),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::c1)>::take(c1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::c2)>::take(c2),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::c3)>::take(c3),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::m1)>::take(m1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::m2)>::take(m2),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::m3)>::take(m3),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::d1)>::take(d1),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::d2)>::take(d2),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::d3)>::take(d3),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::warmedUp)>::take(warmedUp),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::evals)>::take(evals),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::emin)>::take(emin),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::eigenOk)>::take(eigenOk),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::emaFast)>::take(emaFast),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::emaSlow)>::take(emaSlow),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::baseEntry)>::take(baseEntry),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::baseExit)>::take(baseExit),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::take(_var_initialized),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::take(_ta_initialized_),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::take(_inputs_initialized_),
         });
     }
 
     void restore_script_state() override {
         if (!_pf_script_state_checkpoint_) return;
-        this->_ta_sma_1 = _pf_script_state_checkpoint_->_pf_value_0;
-        this->_ta_sma_1_cs1 = _pf_script_state_checkpoint_->_pf_value_1;
-        this->_ta_sma_1_cs2 = _pf_script_state_checkpoint_->_pf_value_2;
-        this->_ta_ema_2 = _pf_script_state_checkpoint_->_pf_value_3;
-        this->_ta_ema_3 = _pf_script_state_checkpoint_->_pf_value_4;
-        this->_ta_crossover_4 = _pf_script_state_checkpoint_->_pf_value_5;
-        this->_ta_crossunder_5 = _pf_script_state_checkpoint_->_pf_value_6;
-        this->cov3 = _pf_script_state_checkpoint_->_pf_value_7;
-        this->N = _pf_script_state_checkpoint_->_pf_value_8;
-        this->c1 = _pf_script_state_checkpoint_->_pf_value_9;
-        this->c2 = _pf_script_state_checkpoint_->_pf_value_10;
-        this->c3 = _pf_script_state_checkpoint_->_pf_value_11;
-        this->m1 = _pf_script_state_checkpoint_->_pf_value_12;
-        this->m2 = _pf_script_state_checkpoint_->_pf_value_13;
-        this->m3 = _pf_script_state_checkpoint_->_pf_value_14;
-        this->d1 = _pf_script_state_checkpoint_->_pf_value_15;
-        this->d2 = _pf_script_state_checkpoint_->_pf_value_16;
-        this->d3 = _pf_script_state_checkpoint_->_pf_value_17;
-        this->warmedUp = _pf_script_state_checkpoint_->_pf_value_18;
-        this->evals = _pf_script_state_checkpoint_->_pf_value_19;
-        this->emin = _pf_script_state_checkpoint_->_pf_value_20;
-        this->eigenOk = _pf_script_state_checkpoint_->_pf_value_21;
-        this->emaFast = _pf_script_state_checkpoint_->_pf_value_22;
-        this->emaSlow = _pf_script_state_checkpoint_->_pf_value_23;
-        this->baseEntry = _pf_script_state_checkpoint_->_pf_value_24;
-        this->baseExit = _pf_script_state_checkpoint_->_pf_value_25;
-        this->_var_initialized = _pf_script_state_checkpoint_->_pf_value_26;
-        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_27;
-        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_28;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1)>::restore(this->_ta_sma_1, _pf_script_state_checkpoint_->_pf_value_0);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs1)>::restore(this->_ta_sma_1_cs1, _pf_script_state_checkpoint_->_pf_value_1);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_sma_1_cs2)>::restore(this->_ta_sma_1_cs2, _pf_script_state_checkpoint_->_pf_value_2);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::restore(this->_ta_ema_2, _pf_script_state_checkpoint_->_pf_value_3);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::restore(this->_ta_ema_3, _pf_script_state_checkpoint_->_pf_value_4);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossover_4)>::restore(this->_ta_crossover_4, _pf_script_state_checkpoint_->_pf_value_5);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_crossunder_5)>::restore(this->_ta_crossunder_5, _pf_script_state_checkpoint_->_pf_value_6);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::cov3)>::restore(this->cov3, _pf_script_state_checkpoint_->_pf_value_7);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::N)>::restore(this->N, _pf_script_state_checkpoint_->_pf_value_8);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c1)>::restore(this->c1, _pf_script_state_checkpoint_->_pf_value_9);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c2)>::restore(this->c2, _pf_script_state_checkpoint_->_pf_value_10);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c3)>::restore(this->c3, _pf_script_state_checkpoint_->_pf_value_11);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m1)>::restore(this->m1, _pf_script_state_checkpoint_->_pf_value_12);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m2)>::restore(this->m2, _pf_script_state_checkpoint_->_pf_value_13);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::m3)>::restore(this->m3, _pf_script_state_checkpoint_->_pf_value_14);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d1)>::restore(this->d1, _pf_script_state_checkpoint_->_pf_value_15);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d2)>::restore(this->d2, _pf_script_state_checkpoint_->_pf_value_16);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::d3)>::restore(this->d3, _pf_script_state_checkpoint_->_pf_value_17);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::warmedUp)>::restore(this->warmedUp, _pf_script_state_checkpoint_->_pf_value_18);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::evals)>::restore(this->evals, _pf_script_state_checkpoint_->_pf_value_19);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emin)>::restore(this->emin, _pf_script_state_checkpoint_->_pf_value_20);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::eigenOk)>::restore(this->eigenOk, _pf_script_state_checkpoint_->_pf_value_21);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emaFast)>::restore(this->emaFast, _pf_script_state_checkpoint_->_pf_value_22);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::emaSlow)>::restore(this->emaSlow, _pf_script_state_checkpoint_->_pf_value_23);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::baseEntry)>::restore(this->baseEntry, _pf_script_state_checkpoint_->_pf_value_24);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::baseExit)>::restore(this->baseExit, _pf_script_state_checkpoint_->_pf_value_25);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::restore(this->_var_initialized, _pf_script_state_checkpoint_->_pf_value_26);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_initialized_)>::restore(this->_ta_initialized_, _pf_script_state_checkpoint_->_pf_value_27);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::restore(this->_inputs_initialized_, _pf_script_state_checkpoint_->_pf_value_28);
     }
 
     void commit_script_state() override {
@@ -237,52 +294,109 @@ public:
     }
 
     explicit GeneratedStrategy() : _ta_sma_1(32), _ta_sma_1_cs1(32), _ta_sma_1_cs2(32), _ta_ema_2(9), _ta_ema_3(21) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "calc_on_order_fills") { calc_on_order_fills_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    double mean_cs0(double src, int len) {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_sma_1 = decltype(this->_ta_sma_1)(32);
+        this->_ta_sma_1_cs1 = decltype(this->_ta_sma_1_cs1)(32);
+        this->_ta_sma_1_cs2 = decltype(this->_ta_sma_1_cs2)(32);
+        this->_ta_ema_2 = decltype(this->_ta_ema_2)(9);
+        this->_precalc__ta_ema_2 = decltype(this->_precalc__ta_ema_2){};
+        this->_ta_ema_3 = decltype(this->_ta_ema_3)(21);
+        this->_precalc__ta_ema_3 = decltype(this->_precalc__ta_ema_3){};
+        this->_ta_crossover_4 = decltype(this->_ta_crossover_4){};
+        this->_ta_crossunder_5 = decltype(this->_ta_crossunder_5){};
+        this->_use_precalc = false;
+        this->cov3 = decltype(this->cov3){};
+        this->N = 0;
+        this->c1 = 0.0;
+        this->c2 = 0.0;
+        this->c3 = 0.0;
+        this->m1 = 0.0;
+        this->m2 = 0.0;
+        this->m3 = 0.0;
+        this->d1 = 0.0;
+        this->d2 = 0.0;
+        this->d3 = 0.0;
+        this->warmedUp = false;
+        this->evals = decltype(this->evals){};
+        this->emin = 0.0;
+        this->eigenOk = false;
+        this->emaFast = 0.0;
+        this->emaSlow = 0.0;
+        this->baseEntry = false;
+        this->baseExit = false;
+        this->_var_initialized = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    double mean_cs0(double src, int64_t len) {
         return (history_advances_new_bar() ? _ta_sma_1.compute(src) : _ta_sma_1.recompute(src));
     }
 
-    double mean_cs1(double src, int len) {
+    double mean_cs1(double src, int64_t len) {
         return (history_advances_new_bar() ? _ta_sma_1_cs1.compute(src) : _ta_sma_1_cs1.recompute(src));
     }
 
-    double mean_cs2(double src, int len) {
+    double mean_cs2(double src, int64_t len) {
         return (history_advances_new_bar() ? _ta_sma_1_cs2.compute(src) : _ta_sma_1_cs2.recompute(src));
     }
 
-    void on_bar(const Bar& bar) override {
+    void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
             cov3 = PineMatrix::new_(3, 3, 0.0);
             _var_initialized = true;
@@ -309,7 +423,7 @@ public:
         cov3.set((int)(2), (int)(2), (d3 * d3));
         warmedUp = ([&]{ auto _pna_l = (pine_bar_index()); auto _pna_r = (32); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }());
         evals = ((warmedUp) ? (cov3.eigenvalues()) : (std::vector<double>((size_t)(0), 0.0)));
-        emin = ((([&]{ auto _pna_l = ((double)evals.size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (*std::min_element(evals.begin(),evals.end())) : (na<double>()));
+        emin = ((([&]{ auto _pna_l = ((double)evals.size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? ((evals.empty()?na<double>():*std::min_element(evals.begin(),evals.end()))) : (na<double>()));
         eigenOk = (!(is_na(emin)) && ([&]{ auto _pna_l = (emin); auto _pna_r = (1e-09); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         emaFast = (history_advances_new_bar() ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close));
         emaSlow = (history_advances_new_bar() ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close));
@@ -362,25 +476,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

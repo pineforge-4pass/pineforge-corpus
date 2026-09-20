@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <optional>
+#include <type_traits>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -19,6 +21,9 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -92,7 +97,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::PivotHigh _ta_pivothigh_1;
     std::vector<double> _precalc__ta_pivothigh_1;
@@ -136,49 +141,242 @@ public:
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        decltype(GeneratedStrategy::_ta_pivothigh_1) _pf_value_0;
+        decltype(GeneratedStrategy::_ta_pivotlow_2) _pf_value_1;
+        decltype(GeneratedStrategy::_ta_linreg_3) _pf_value_2;
+        decltype(GeneratedStrategy::_ta_linreg_4) _pf_value_3;
+        decltype(GeneratedStrategy::_ta_atr_5) _pf_value_4;
+        decltype(GeneratedStrategy::_ta_crossunder_6) _pf_value_5;
+        decltype(GeneratedStrategy::_ta_crossover_7) _pf_value_6;
+        decltype(GeneratedStrategy::_s_close) _pf_value_7;
+        decltype(GeneratedStrategy::last_ph) _pf_value_8;
+        decltype(GeneratedStrategy::last_pl) _pf_value_9;
+        decltype(GeneratedStrategy::i_left) _pf_value_10;
+        decltype(GeneratedStrategy::i_right) _pf_value_11;
+        decltype(GeneratedStrategy::i_lr_len) _pf_value_12;
+        decltype(GeneratedStrategy::i_atr_len) _pf_value_13;
+        decltype(GeneratedStrategy::i_atr_mult) _pf_value_14;
+        decltype(GeneratedStrategy::i_curve_offset) _pf_value_15;
+        decltype(GeneratedStrategy::ph) _pf_value_16;
+        decltype(GeneratedStrategy::pl) _pf_value_17;
+        decltype(GeneratedStrategy::bos_long) _pf_value_18;
+        decltype(GeneratedStrategy::bos_short) _pf_value_19;
+        decltype(GeneratedStrategy::mid) _pf_value_20;
+        decltype(GeneratedStrategy::lr_lag) _pf_value_21;
+        decltype(GeneratedStrategy::slope) _pf_value_22;
+        decltype(GeneratedStrategy::width) _pf_value_23;
+        decltype(GeneratedStrategy::upper) _pf_value_24;
+        decltype(GeneratedStrategy::lower) _pf_value_25;
+        decltype(GeneratedStrategy::channel_bull) _pf_value_26;
+        decltype(GeneratedStrategy::channel_bear) _pf_value_27;
+        decltype(GeneratedStrategy::go_long) _pf_value_28;
+        decltype(GeneratedStrategy::go_short) _pf_value_29;
+        decltype(GeneratedStrategy::exit_long) _pf_value_30;
+        decltype(GeneratedStrategy::exit_short) _pf_value_31;
+        decltype(GeneratedStrategy::_var_initialized) _pf_value_32;
+        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_33;
+        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_34;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _ta_pivothigh_1,
+            _ta_pivotlow_2,
+            _ta_linreg_3,
+            _ta_linreg_4,
+            _ta_atr_5,
+            _ta_crossunder_6,
+            _ta_crossover_7,
+            _s_close,
+            last_ph,
+            last_pl,
+            i_left,
+            i_right,
+            i_lr_len,
+            i_atr_len,
+            i_atr_mult,
+            i_curve_offset,
+            ph,
+            pl,
+            bos_long,
+            bos_short,
+            mid,
+            lr_lag,
+            slope,
+            width,
+            upper,
+            lower,
+            channel_bull,
+            channel_bear,
+            go_long,
+            go_short,
+            exit_long,
+            exit_short,
+            _var_initialized,
+            _ta_initialized_,
+            _inputs_initialized_,
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        this->_ta_pivothigh_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_ta_pivotlow_2 = _pf_script_state_checkpoint_->_pf_value_1;
+        this->_ta_linreg_3 = _pf_script_state_checkpoint_->_pf_value_2;
+        this->_ta_linreg_4 = _pf_script_state_checkpoint_->_pf_value_3;
+        this->_ta_atr_5 = _pf_script_state_checkpoint_->_pf_value_4;
+        this->_ta_crossunder_6 = _pf_script_state_checkpoint_->_pf_value_5;
+        this->_ta_crossover_7 = _pf_script_state_checkpoint_->_pf_value_6;
+        this->_s_close = _pf_script_state_checkpoint_->_pf_value_7;
+        this->last_ph = _pf_script_state_checkpoint_->_pf_value_8;
+        this->last_pl = _pf_script_state_checkpoint_->_pf_value_9;
+        this->i_left = _pf_script_state_checkpoint_->_pf_value_10;
+        this->i_right = _pf_script_state_checkpoint_->_pf_value_11;
+        this->i_lr_len = _pf_script_state_checkpoint_->_pf_value_12;
+        this->i_atr_len = _pf_script_state_checkpoint_->_pf_value_13;
+        this->i_atr_mult = _pf_script_state_checkpoint_->_pf_value_14;
+        this->i_curve_offset = _pf_script_state_checkpoint_->_pf_value_15;
+        this->ph = _pf_script_state_checkpoint_->_pf_value_16;
+        this->pl = _pf_script_state_checkpoint_->_pf_value_17;
+        this->bos_long = _pf_script_state_checkpoint_->_pf_value_18;
+        this->bos_short = _pf_script_state_checkpoint_->_pf_value_19;
+        this->mid = _pf_script_state_checkpoint_->_pf_value_20;
+        this->lr_lag = _pf_script_state_checkpoint_->_pf_value_21;
+        this->slope = _pf_script_state_checkpoint_->_pf_value_22;
+        this->width = _pf_script_state_checkpoint_->_pf_value_23;
+        this->upper = _pf_script_state_checkpoint_->_pf_value_24;
+        this->lower = _pf_script_state_checkpoint_->_pf_value_25;
+        this->channel_bull = _pf_script_state_checkpoint_->_pf_value_26;
+        this->channel_bear = _pf_script_state_checkpoint_->_pf_value_27;
+        this->go_long = _pf_script_state_checkpoint_->_pf_value_28;
+        this->go_short = _pf_script_state_checkpoint_->_pf_value_29;
+        this->exit_long = _pf_script_state_checkpoint_->_pf_value_30;
+        this->exit_short = _pf_script_state_checkpoint_->_pf_value_31;
+        this->_var_initialized = _pf_script_state_checkpoint_->_pf_value_32;
+        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_33;
+        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_34;
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() : _ta_pivothigh_1(5, 5), _ta_pivotlow_2(5, 5), _ta_linreg_3(50), _ta_linreg_4(50), _ta_atr_5(14) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
-        if (is_first_tick_) _s_close.push(current_bar_.close);
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_pivothigh_1 = decltype(this->_ta_pivothigh_1)(5, 5);
+        this->_precalc__ta_pivothigh_1 = decltype(this->_precalc__ta_pivothigh_1){};
+        this->_ta_pivotlow_2 = decltype(this->_ta_pivotlow_2)(5, 5);
+        this->_precalc__ta_pivotlow_2 = decltype(this->_precalc__ta_pivotlow_2){};
+        this->_ta_linreg_3 = decltype(this->_ta_linreg_3)(50);
+        this->_precalc__ta_linreg_3 = decltype(this->_precalc__ta_linreg_3){};
+        this->_ta_linreg_4 = decltype(this->_ta_linreg_4)(50);
+        this->_precalc__ta_linreg_4 = decltype(this->_precalc__ta_linreg_4){};
+        this->_ta_atr_5 = decltype(this->_ta_atr_5)(14);
+        this->_precalc__ta_atr_5 = decltype(this->_precalc__ta_atr_5){};
+        this->_ta_crossunder_6 = decltype(this->_ta_crossunder_6){};
+        this->_ta_crossover_7 = decltype(this->_ta_crossover_7){};
+        this->_use_precalc = false;
+        this->_s_close = decltype(this->_s_close){};
+        this->last_ph = decltype(this->last_ph){};
+        this->last_pl = decltype(this->last_pl){};
+        this->i_left = 0;
+        this->i_right = 0;
+        this->i_lr_len = 0;
+        this->i_atr_len = 0;
+        this->i_atr_mult = 0.0;
+        this->i_curve_offset = 0.0;
+        this->ph = 0.0;
+        this->pl = 0.0;
+        this->bos_long = false;
+        this->bos_short = false;
+        this->mid = 0.0;
+        this->lr_lag = 0.0;
+        this->slope = 0.0;
+        this->width = 0.0;
+        this->upper = 0.0;
+        this->lower = 0.0;
+        this->channel_bull = false;
+        this->channel_bear = false;
+        this->go_long = false;
+        this->go_short = false;
+        this->exit_long = false;
+        this->exit_short = false;
+        this->_var_initialized = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
+        if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
         if (!_var_initialized) {
             last_ph.push(na<double>());
             last_pl.push(na<double>());
             _var_initialized = true;
         } else {
-            if (is_first_tick_) last_ph.push(last_ph[0]);
-            if (is_first_tick_) last_pl.push(last_pl[0]);
+            if (history_advances_new_bar()) last_ph.push(last_ph[0]);
+            else last_ph.update(last_ph[0]);
+            if (history_advances_new_bar()) last_pl.push(last_pl[0]);
+            else last_pl.update(last_pl[0]);
         }
         if (!_inputs_initialized_) {
             i_left = get_input_int("Pivot left bars", 5);
@@ -197,39 +395,39 @@ public:
             _ta_atr_5 = ta::ATR(get_input_int("ATR length", 14));
             _ta_initialized_ = true;
         }
-        ph = (is_first_tick_ ? _ta_pivothigh_1.compute(current_bar_.high) : _ta_pivothigh_1.recompute(current_bar_.high));
-        pl = (is_first_tick_ ? _ta_pivotlow_2.compute(current_bar_.low) : _ta_pivotlow_2.recompute(current_bar_.low));
+        ph = (history_advances_new_bar() ? _ta_pivothigh_1.compute(current_bar_.high) : _ta_pivothigh_1.recompute(current_bar_.high));
+        pl = (history_advances_new_bar() ? _ta_pivotlow_2.compute(current_bar_.low) : _ta_pivotlow_2.recompute(current_bar_.low));
         if (!(is_na(ph))) {
             last_ph.update(ph);
         }
         if (!(is_na(pl))) {
             last_pl.update(pl);
         }
-        bos_long = ((!(is_na(last_ph[0])) && (current_bar_.close > last_ph[0])) && (_s_close[1] <= (is_na(last_ph[1]) ? last_ph[0] : last_ph[1])));
-        bos_short = ((!(is_na(last_pl[0])) && (current_bar_.close < last_pl[0])) && (_s_close[1] >= (is_na(last_pl[1]) ? last_pl[0] : last_pl[1])));
-        mid = (is_first_tick_ ? _ta_linreg_3.compute(current_bar_.close, 0) : _ta_linreg_3.recompute(current_bar_.close, 0));
-        lr_lag = (is_first_tick_ ? _ta_linreg_4.compute(current_bar_.close, 1) : _ta_linreg_4.recompute(current_bar_.close, 1));
+        bos_long = ((!(is_na(last_ph[0])) && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (last_ph[0]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) && ([&]{ auto _pna_l = (_s_close[1]); auto _pna_r = (([&]{ auto _nz_v = (last_ph[1]); return is_na(_nz_v) ? (last_ph[0]) : _nz_v; }())); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) || _pfc_eq); }()));
+        bos_short = ((!(is_na(last_pl[0])) && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (last_pl[0]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }())) && ([&]{ auto _pna_l = (_s_close[1]); auto _pna_r = (([&]{ auto _nz_v = (last_pl[1]); return is_na(_nz_v) ? (last_pl[0]) : _nz_v; }())); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()));
+        mid = (history_advances_new_bar() ? _ta_linreg_3.compute(current_bar_.close, 0) : _ta_linreg_3.recompute(current_bar_.close, 0));
+        lr_lag = (history_advances_new_bar() ? _ta_linreg_4.compute(current_bar_.close, 1) : _ta_linreg_4.recompute(current_bar_.close, 1));
         slope = (mid - lr_lag);
-        width = ((_use_precalc ? _precalc__ta_atr_5[bar_index_] : (is_first_tick_ ? _ta_atr_5.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_5.recompute(current_bar_.high, current_bar_.low, current_bar_.close))) * i_atr_mult);
+        width = ((_use_precalc ? _precalc__ta_atr_5[bar_index_] : (history_advances_new_bar() ? _ta_atr_5.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_5.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()))) * i_atr_mult);
         upper = ((mid + width) + (slope * i_curve_offset));
         lower = ((mid - width) + (slope * i_curve_offset));
-        channel_bull = (current_bar_.close > (mid + (slope * i_curve_offset)));
-        channel_bear = (current_bar_.close < (mid + (slope * i_curve_offset)));
+        channel_bull = ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = ((mid + (slope * i_curve_offset))); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }());
+        channel_bear = ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = ((mid + (slope * i_curve_offset))); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }());
         go_long = (bos_long && channel_bull);
         go_short = (bos_short && channel_bear);
-        exit_long = ((signed_position_size() > 0) && (is_first_tick_ ? _ta_crossunder_6.compute(current_bar_.close, lower) : _ta_crossunder_6.recompute(current_bar_.close, lower)));
-        exit_short = ((signed_position_size() < 0) && (is_first_tick_ ? _ta_crossover_7.compute(current_bar_.close, upper) : _ta_crossover_7.recompute(current_bar_.close, upper)));
-        if ((go_long && (signed_position_size() <= 0))) {
+        exit_long = (([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && (history_advances_new_bar() ? _ta_crossunder_6.compute(current_bar_.close, lower) : _ta_crossunder_6.recompute(current_bar_.close, lower)));
+        exit_short = (([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) && (history_advances_new_bar() ? _ta_crossover_7.compute(current_bar_.close, upper) : _ta_crossover_7.recompute(current_bar_.close, upper)));
+        if ((go_long && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) || _pfc_eq); }()))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("integ long"), "", 0, -1);
         }
-        if ((go_short && (signed_position_size() >= 0))) {
+        if ((go_short && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), 1, std::string("integ short"), "", 0, -1);
         }
         if (exit_long) {
-            strategy_close(std::string("L"), std::string("integ exit long"), na<double>(), na<double>(), false);
+            strategy_close(std::string("L"), std::string("integ exit long"), na<double>(), na<double>(), false, 335007449107ULL);
         }
         if (exit_short) {
-            strategy_close(std::string("S"), std::string("integ exit short"), na<double>(), na<double>(), false);
+            strategy_close(std::string("S"), std::string("integ exit short"), na<double>(), na<double>(), false, 343597383699ULL);
         }
     }
 
@@ -253,11 +451,24 @@ public:
 
         for (int i = 0; i < n; ++i) {
             _s_close.push(bars[i].close);
+            if (_src_series_active_) {
+                const double _pc_o = bars[i].open;
+                const double _pc_h = bars[i].high;
+                const double _pc_l = bars[i].low;
+                const double _pc_c = bars[i].close;
+                const double _pc_v = bars[i].volume;
+                _src_open_.push(_pc_o);   _src_high_.push(_pc_h);   _src_low_.push(_pc_l);
+                _src_close_.push(_pc_c);  _src_volume_.push(_pc_v);
+                _src_hl2_.push((_pc_h + _pc_l) / 2.0);
+                _src_hlc3_.push((_pc_h + _pc_l + _pc_c) / 3.0);
+                _src_ohlc4_.push((_pc_o + _pc_h + _pc_l + _pc_c) / 4.0);
+                _src_hlcc4_.push((_pc_h + _pc_l + _pc_c + _pc_c) / 4.0);
+            }
             _precalc__ta_pivothigh_1[i] = _ta_pivothigh_1.compute(bars[i].high);
             _precalc__ta_pivotlow_2[i] = _ta_pivotlow_2.compute(bars[i].low);
             _precalc__ta_linreg_3[i] = _ta_linreg_3.compute(bars[i].close, 0);
             _precalc__ta_linreg_4[i] = _ta_linreg_4.compute(bars[i].close, 1);
-            _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
         _ta_pivothigh_1 = ta::PivotHigh(5, 5);
@@ -270,25 +481,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

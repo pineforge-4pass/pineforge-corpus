@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <optional>
+#include <type_traits>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -19,6 +21,14 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifdef PF_PINE_TIME_HAS_SESSION_DAY
+#define PF_PINE_TIME_SESSION_DAY_ARGS(tz, sess) , tz, sess
+#else
+#define PF_PINE_TIME_SESSION_DAY_ARGS(tz, sess)
+#endif
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -92,14 +102,14 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::RSI _ta_rsi_1;
     ta::Crossover _ta_crossover_2;
     ta::Crossunder _ta_crossunder_3;
     bool _use_precalc = false;
     Series<double> gatedSrc{500};
-    int64_t sessId = 0.0;
+    int64_t sessId = 0;
     double deepRef = 0.0;
     double src = 0.0;
     double rsiVal = 0.0;
@@ -109,53 +119,152 @@ public:
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        decltype(GeneratedStrategy::_ta_rsi_1) _pf_value_0;
+        decltype(GeneratedStrategy::_ta_crossover_2) _pf_value_1;
+        decltype(GeneratedStrategy::_ta_crossunder_3) _pf_value_2;
+        decltype(GeneratedStrategy::gatedSrc) _pf_value_3;
+        decltype(GeneratedStrategy::sessId) _pf_value_4;
+        decltype(GeneratedStrategy::deepRef) _pf_value_5;
+        decltype(GeneratedStrategy::src) _pf_value_6;
+        decltype(GeneratedStrategy::rsiVal) _pf_value_7;
+        decltype(GeneratedStrategy::sessOk) _pf_value_8;
+        decltype(GeneratedStrategy::entryCond) _pf_value_9;
+        decltype(GeneratedStrategy::exitCond) _pf_value_10;
+        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_11;
+        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_12;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _ta_rsi_1,
+            _ta_crossover_2,
+            _ta_crossunder_3,
+            gatedSrc,
+            sessId,
+            deepRef,
+            src,
+            rsiVal,
+            sessOk,
+            entryCond,
+            exitCond,
+            _ta_initialized_,
+            _inputs_initialized_,
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        this->_ta_rsi_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_ta_crossover_2 = _pf_script_state_checkpoint_->_pf_value_1;
+        this->_ta_crossunder_3 = _pf_script_state_checkpoint_->_pf_value_2;
+        this->gatedSrc = _pf_script_state_checkpoint_->_pf_value_3;
+        this->sessId = _pf_script_state_checkpoint_->_pf_value_4;
+        this->deepRef = _pf_script_state_checkpoint_->_pf_value_5;
+        this->src = _pf_script_state_checkpoint_->_pf_value_6;
+        this->rsiVal = _pf_script_state_checkpoint_->_pf_value_7;
+        this->sessOk = _pf_script_state_checkpoint_->_pf_value_8;
+        this->entryCond = _pf_script_state_checkpoint_->_pf_value_9;
+        this->exitCond = _pf_script_state_checkpoint_->_pf_value_10;
+        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_11;
+        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_12;
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() : _ta_rsi_1(14) {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
-        sessId = pine_time(current_bar_.timestamp, script_tf_, std::string("0930-1600"), std::string("America/New_York"), script_tf_);
-        gatedSrc.push(((is_na(sessId)) ? (na<double>()) : (current_bar_.close)));
-        deepRef = (is_na(gatedSrc[499]) ? current_bar_.close : gatedSrc[499]);
-        src = (is_na(gatedSrc[0]) ? deepRef : gatedSrc[0]);
-        rsiVal = (is_first_tick_ ? _ta_rsi_1.compute(src) : _ta_rsi_1.recompute(src));
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_rsi_1 = decltype(this->_ta_rsi_1)(14);
+        this->_ta_crossover_2 = decltype(this->_ta_crossover_2){};
+        this->_ta_crossunder_3 = decltype(this->_ta_crossunder_3){};
+        this->_use_precalc = false;
+        this->gatedSrc = decltype(this->gatedSrc){500};
+        this->sessId = 0;
+        this->deepRef = 0.0;
+        this->src = 0.0;
+        this->rsiVal = 0.0;
+        this->sessOk = false;
+        this->entryCond = false;
+        this->exitCond = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        (void)bars; (void)n; (void)allow_precalculation;
+    }
+
+    void on_source_bar(const Bar& bar) override {
+        sessId = pine_time(current_bar_.timestamp, script_tf_, std::string("0930-1600"), std::string("America/New_York"), script_tf_ PF_PINE_TIME_SESSION_DAY_ARGS(syminfo_.timezone, syminfo_.session));
+        if (history_advances_new_bar()) gatedSrc.push(((is_na(sessId)) ? (na<double>()) : (current_bar_.close)));
+        else gatedSrc.update(((is_na(sessId)) ? (na<double>()) : (current_bar_.close)));
+        deepRef = ([&]{ auto _nz_v = (gatedSrc[499]); return is_na(_nz_v) ? (current_bar_.close) : _nz_v; }());
+        src = ([&]{ auto _nz_v = (gatedSrc[0]); return is_na(_nz_v) ? (deepRef) : _nz_v; }());
+        rsiVal = (history_advances_new_bar() ? _ta_rsi_1.compute(src) : _ta_rsi_1.recompute(src));
         sessOk = !(is_na(sessId));
-        entryCond = ((is_first_tick_ ? _ta_crossover_2.compute(rsiVal, 30.0) : _ta_crossover_2.recompute(rsiVal, 30.0)) && sessOk);
-        exitCond = (is_first_tick_ ? _ta_crossunder_3.compute(rsiVal, 70.0) : _ta_crossunder_3.recompute(rsiVal, 70.0));
-        if ((entryCond && (signed_position_size() == 0))) {
+        entryCond = ((history_advances_new_bar() ? _ta_crossover_2.compute(rsiVal, 30.0) : _ta_crossover_2.recompute(rsiVal, 30.0)) && sessOk);
+        exitCond = (history_advances_new_bar() ? _ta_crossunder_3.compute(rsiVal, 70.0) : _ta_crossunder_3.recompute(rsiVal, 70.0));
+        if ((entryCond && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }()))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
         }
-        if ((exitCond && (signed_position_size() > 0))) {
-            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
+        if ((exitCond && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()))) {
+            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false, 219043332115ULL);
         }
     }
 

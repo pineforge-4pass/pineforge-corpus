@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -22,6 +22,9 @@
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
 #include <pineforge/matrix.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -149,7 +152,7 @@ struct _PFCheckpointTraits<std::vector<_PFElement, _PFAllocator>> {
     }
 };
 
-class GeneratedStrategy : public BacktestEngine {
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::ROC _ta_roc_1;
     std::vector<double> _precalc__ta_roc_1;
@@ -289,42 +292,100 @@ public:
     }
 
     explicit GeneratedStrategy() : _ta_roc_1(1), _ta_roc_2(1), _ta_correlation_3(26), _ta_ema_4(58), _ta_atr_5(19) {
-        initial_capital_ = 100000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 2.0;
-        pyramiding_ = 0;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.05;
-        slippage_ = 1;
-        margin_long_ = 100.0;
-        margin_short_ = 100.0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 100000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 2.0;
+        cfg.pyramiding = 0;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.05;
+        cfg.slippage = 1;
+        cfg.margin_long = 100.0;
+        cfg.margin_short = 100.0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "calc_on_order_fills") { calc_on_order_fills_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
+        } else {
             return;
         }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_ta_roc_1 = decltype(this->_ta_roc_1)(1);
+        this->_precalc__ta_roc_1 = decltype(this->_precalc__ta_roc_1){};
+        this->_ta_roc_2 = decltype(this->_ta_roc_2)(1);
+        this->_precalc__ta_roc_2 = decltype(this->_precalc__ta_roc_2){};
+        this->_ta_correlation_3 = decltype(this->_ta_correlation_3)(26);
+        this->_ta_ema_4 = decltype(this->_ta_ema_4)(58);
+        this->_precalc__ta_ema_4 = decltype(this->_precalc__ta_ema_4){};
+        this->_ta_atr_5 = decltype(this->_ta_atr_5)(19);
+        this->_precalc__ta_atr_5 = decltype(this->_precalc__ta_atr_5){};
+        this->_ta_crossover_6 = decltype(this->_ta_crossover_6){};
+        this->_use_precalc = false;
+        this->correlationMatrix = decltype(this->correlationMatrix){};
+        this->covarianceLength = 0;
+        this->trendLength = 0;
+        this->minimumConcentration = 0.0;
+        this->atrLength = 0;
+        this->maximumAtrLoss = 0.0;
+        this->priceReturn = 0.0;
+        this->volumeReturn = 0.0;
+        this->factorCorrelation = 0.0;
+        this->safeCorrelation = 0.0;
+        this->eigenValues = decltype(this->eigenValues){};
+        this->firstEigenvalue = 0.0;
+        this->secondEigenvalue = 0.0;
+        this->principalEigenvalue = 0.0;
+        this->trendLine = 0.0;
+        this->atrValue = 0.0;
+        this->enterLong = false;
+        this->regimeEnded = false;
+        this->riskExceeded = false;
+        this->_var_initialized = false;
+        this->_ta_initialized_ = false;
+        this->_inputs_initialized_ = false;
+        if (allow_precalculation) precalculate(bars, n);
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
             correlationMatrix = PineMatrix::new_(2, 2, 0.0);
             _var_initialized = true;
@@ -357,7 +418,7 @@ public:
         secondEigenvalue = ((([&]{ auto _pna_l = ((double)eigenValues.size()); auto _pna_r = (1); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? ([&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((1)); }((eigenValues))) : (na<double>()));
         principalEigenvalue = ([&]() -> double { double _v0 = (double)(firstEigenvalue); double _v1 = (double)(secondEigenvalue); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
         trendLine = (history_advances_new_bar() ? _ta_ema_4.compute(current_bar_.close) : _ta_ema_4.recompute(current_bar_.close));
-        atrValue = (history_advances_new_bar() ? _ta_atr_5.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_atr_5.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
+        atrValue = (history_advances_new_bar() ? _ta_atr_5.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_5.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
         enterLong = ((!(is_na(principalEigenvalue)) && (history_advances_new_bar() ? _ta_crossover_6.compute(principalEigenvalue, minimumConcentration) : _ta_crossover_6.recompute(principalEigenvalue, minimumConcentration))) && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (trendLine); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         regimeEnded = (([&]{ auto _pna_l = (principalEigenvalue); auto _pna_r = (1.08); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) || ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (trendLine); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));
         riskExceeded = (([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (((signed_position_size() == 0.0 ? na<double>() : position_entry_price_) - (atrValue * maximumAtrLoss))); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));
@@ -401,7 +462,7 @@ public:
             _precalc__ta_roc_1[i] = _ta_roc_1.compute(bars[i].close);
             _precalc__ta_roc_2[i] = _ta_roc_2.compute(bars[i].volume);
             _precalc__ta_ema_4[i] = _ta_ema_4.compute(bars[i].close);
-            _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close);
+            _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
         _ta_roc_1 = ta::ROC(1);
@@ -412,25 +473,6 @@ public:
         _use_precalc = true;
     }
 
-    void run(const Bar* bars, int n) {
-        precalculate(bars, n);
-        BacktestEngine::run(bars, n);
-    }
-
-    void run(const Bar* input_bars, int n_input,
-             const std::string& input_tf,
-             const std::string& script_tf,
-             bool bar_magnifier = false,
-             int magnifier_samples = 4,
-             MagnifierDistribution magnifier_dist = MagnifierDistribution::ENDPOINTS) {
-        bool needs_dynamic = bar_magnifier || !input_tf.empty() || !script_tf.empty();
-        if (needs_dynamic) {
-            _use_precalc = false;
-        } else {
-            precalculate(input_bars, n_input);
-        }
-        BacktestEngine::run(input_bars, n_input, input_tf, script_tf, bar_magnifier, magnifier_samples, magnifier_dist);
-    }
 
 };
 

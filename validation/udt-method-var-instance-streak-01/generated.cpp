@@ -1,4 +1,4 @@
-#include <pineforge/engine.hpp>
+#include <pineforge/source/pine_strategy_host.hpp>
 #include <pineforge/ta.hpp>
 #include <pineforge/math.hpp>
 #include <pineforge/series.hpp>
@@ -10,7 +10,14 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <deque>
+#include <functional>
+#include <limits>
 #include <tuple>
+#include <optional>
+#include <type_traits>
+#include <stdexcept>
+#include <utility>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -19,6 +26,9 @@
 #include <pineforge/log.hpp>
 #include <pineforge/str_utils.hpp>
 #include <pineforge/session_time.hpp>
+#ifndef PINEFORGE_HAS_NATIVE_LOWERING_V1
+#error "generated code requires pineforge-engine native lowering v1 (PINEFORGE_HAS_NATIVE_LOWERING_V1)"
+#endif
 
 using namespace pineforge;
 
@@ -93,15 +103,279 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 // --- end syminfo derivation helpers ---
 
 struct Counter {
-    int green_streak = 0;
-    int red_streak = 0;
-    int total_greens = 0;
-    int total_reds = 0;
-    static Counter create() { return Counter{}; }
+    int32_t __pf_id = -1;
+};
+inline bool is_na(const Counter& _z) { return _z.__pf_id < 0; }
+
+template <typename _PFValue>
+struct _PFCheckpointTraits;
+
+class _PFUdtUndoCoordinator {
+    std::vector<std::function<void()>> _pf_undo_;
+    uint64_t _pf_generation_ = 0;
+    bool _pf_active_ = false;
+public:
+    struct Snapshot { uint64_t generation; };
+    _PFUdtUndoCoordinator() = default;
+    _PFUdtUndoCoordinator(
+        const _PFUdtUndoCoordinator&) = delete;
+    _PFUdtUndoCoordinator& operator=(
+        const _PFUdtUndoCoordinator&) = delete;
+    _PFUdtUndoCoordinator(
+        _PFUdtUndoCoordinator&&) = delete;
+    _PFUdtUndoCoordinator& operator=(
+        _PFUdtUndoCoordinator&&) = delete;
+
+    void reset_for_run() {
+        _pf_undo_.clear();
+        _pf_active_ = false;
+        // Keep generation monotonic: an old token cannot become valid again.
+    }
+
+    Snapshot snapshot() {
+        if (_pf_generation_ == std::numeric_limits<uint64_t>::max()) {
+            throw std::overflow_error("UDT checkpoint generation exhausted");
+        }
+        ++_pf_generation_;
+        _pf_undo_.clear();
+        _pf_active_ = true;
+        return Snapshot{_pf_generation_};
+    }
+    uint64_t generation() const { return _pf_generation_; }
+    bool active() const { return _pf_active_; }
+    bool empty() const { return _pf_undo_.empty(); }
+    void record(uint64_t generation, std::function<void()> undo) {
+        if (!_pf_active_ || generation != _pf_generation_) {
+            throw std::runtime_error("invalid UDT undo generation");
+        }
+        _pf_undo_.push_back(std::move(undo));
+    }
+    void restore(const Snapshot& snapshot) {
+        if (!_pf_active_ || snapshot.generation != _pf_generation_) {
+            throw std::runtime_error("invalid UDT coordinator checkpoint token");
+        }
+        for (auto entry = _pf_undo_.rbegin();
+                entry != _pf_undo_.rend(); ++entry) (*entry)();
+        _pf_undo_.clear();
+    }
 };
 
-class GeneratedStrategy : public BacktestEngine {
+template <typename _PFHandle, typename _PFRecord>
+class _PFUdtArena {
+    using _PFRecordTraits = _PFCheckpointTraits<_PFRecord>;
+    using _PFRecordSnapshot = typename _PFRecordTraits::snapshot_type;
+    struct _PFSlot {
+        _PFRecord value;
+        uint64_t logged_generation = 0;
+    };
+    std::deque<_PFSlot> _pf_records_;
+    _PFUdtUndoCoordinator* _pf_coordinator_;
+    std::size_t _pf_checkpoint_size_ = 0;
+    uint64_t _pf_checkpoint_generation_ = 0;
+    bool _pf_checkpoint_active_ = false;
+
+    void capture(std::size_t index) {
+        if (!_pf_checkpoint_active_) return;
+        auto& slot = _pf_records_.at(index);
+        if (slot.logged_generation
+                == _pf_checkpoint_generation_) return;
+        auto snapshot = _PFRecordTraits::take(slot.value);
+        _pf_coordinator_->record(_pf_checkpoint_generation_,
+            [this, index, snapshot = std::move(snapshot)]() mutable {
+                auto& restore_slot = _pf_records_.at(index);
+                _PFRecordTraits::restore(restore_slot.value, snapshot);
+                restore_slot.logged_generation = 0;
+            });
+        slot.logged_generation = _pf_checkpoint_generation_;
+    }
 public:
+    struct Snapshot {
+        uint64_t generation;
+        std::size_t size;
+    };
+
+    explicit _PFUdtArena(
+            _PFUdtUndoCoordinator* coordinator)
+            : _pf_coordinator_(coordinator) {
+        if (!_pf_coordinator_)
+            throw std::invalid_argument("UDT arena requires undo coordinator");
+    }
+    _PFUdtArena(
+        const _PFUdtArena&) = delete;
+    _PFUdtArena& operator=(
+        const _PFUdtArena&) = delete;
+    _PFUdtArena(
+        _PFUdtArena&&) = delete;
+    _PFUdtArena& operator=(
+        _PFUdtArena&&) = delete;
+
+    void reset_for_run() {
+        _pf_records_.clear();
+        _pf_checkpoint_size_ = 0;
+        _pf_checkpoint_generation_ = 0;
+        _pf_checkpoint_active_ = false;
+        // The arena remains attached to its original coordinator.
+    }
+
+    _PFHandle create(_PFRecord value) {
+        if (_pf_records_.size() > static_cast<std::size_t>(
+                std::numeric_limits<int32_t>::max())) {
+            throw std::length_error("UDT object-ID capacity exceeded");
+        }
+        const auto id = static_cast<int32_t>(_pf_records_.size());
+        _pf_records_.push_back(_PFSlot{std::move(value), 0});
+        return _PFHandle{id};
+    }
+    _PFHandle copy(_PFHandle value) {
+        return create(static_cast<const _PFUdtArena&>(*this).get(value));
+    }
+    _PFRecord& get(_PFHandle value) {
+        if (value.__pf_id < 0
+                || static_cast<std::size_t>(value.__pf_id) >= _pf_records_.size()) {
+            throw std::runtime_error("UDT access on na or invalid object ID");
+        }
+        const auto index = static_cast<std::size_t>(value.__pf_id);
+        capture(index);
+        return _pf_records_[index].value;
+    }
+    const _PFRecord& get(_PFHandle value) const {
+        if (value.__pf_id < 0
+                || static_cast<std::size_t>(value.__pf_id) >= _pf_records_.size()) {
+            throw std::runtime_error("UDT access on na or invalid object ID");
+        }
+        return _pf_records_[static_cast<std::size_t>(value.__pf_id)].value;
+    }
+    const _PFRecord& read(_PFHandle value) const {
+        return get(value);
+    }
+    std::size_t size() const { return _pf_records_.size(); }
+    _PFRecord& record_at(std::size_t index) {
+        capture(index);
+        return _pf_records_.at(index).value;
+    }
+    const _PFRecord& record_at(std::size_t index) const {
+        return _pf_records_.at(index).value;
+    }
+    Snapshot snapshot() {
+        if (!_pf_coordinator_->active()) {
+            throw std::runtime_error("UDT coordinator checkpoint is not active");
+        }
+        _pf_checkpoint_generation_ = _pf_coordinator_->generation();
+        _pf_checkpoint_size_ = _pf_records_.size();
+        _pf_checkpoint_active_ = true;
+        return Snapshot{_pf_checkpoint_generation_,
+                        _pf_checkpoint_size_};
+    }
+    void restore(const Snapshot& snapshot) {
+        if (!_pf_checkpoint_active_
+                || snapshot.generation != _pf_checkpoint_generation_
+                || snapshot.generation != _pf_coordinator_->generation()
+                || snapshot.size != _pf_checkpoint_size_
+                || _pf_records_.size() < snapshot.size
+                || !_pf_coordinator_->empty()) {
+            throw std::runtime_error("invalid UDT checkpoint token");
+        }
+        _pf_records_.resize(snapshot.size);
+    }
+};
+
+struct _PFUdtRecord_Counter {
+    int64_t green_streak = 0;
+    int64_t red_streak = 0;
+    int64_t total_greens = 0;
+    int64_t total_reds = 0;
+};
+
+template <typename _PFValue>
+struct _PFCheckpointTraits {
+    using snapshot_type = _PFValue;
+    static snapshot_type take(const _PFValue& value) { return value; }
+    static void restore(_PFValue& value, const snapshot_type& snapshot) {
+        value = snapshot;
+    }
+};
+
+template <>
+struct _PFCheckpointTraits<_PFUdtUndoCoordinator> {
+    using coordinator_type = _PFUdtUndoCoordinator;
+    using snapshot_type = typename coordinator_type::Snapshot;
+    static snapshot_type take(coordinator_type& value) {
+        return value.snapshot();
+    }
+    static void restore(coordinator_type& value,
+                        const snapshot_type& snapshot) {
+        value.restore(snapshot);
+    }
+};
+
+template <typename _PFElement, typename _PFAllocator>
+struct _PFCheckpointTraits<std::vector<_PFElement, _PFAllocator>> {
+    using element_traits = _PFCheckpointTraits<_PFElement>;
+    using element_snapshot = typename element_traits::snapshot_type;
+    using snapshot_type = std::vector<element_snapshot>;
+    static snapshot_type take(
+            const std::vector<_PFElement, _PFAllocator>& value) {
+        snapshot_type snapshot;
+        snapshot.reserve(value.size());
+        for (std::size_t index = 0; index < value.size(); ++index) {
+            const _PFElement element = value[index];
+            snapshot.push_back(element_traits::take(element));
+        }
+        return snapshot;
+    }
+    static void restore(
+            std::vector<_PFElement, _PFAllocator>& value,
+            const snapshot_type& snapshot) {
+        value.clear();
+        value.reserve(snapshot.size());
+        for (const auto& element_snapshot_value : snapshot) {
+            _PFElement element{};
+            element_traits::restore(element, element_snapshot_value);
+            value.push_back(element);
+        }
+    }
+};
+
+template <>
+struct _PFCheckpointTraits<_PFUdtRecord_Counter> {
+    struct snapshot_type {
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::green_streak)>::snapshot_type _pf_field_0;
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::red_streak)>::snapshot_type _pf_field_1;
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_greens)>::snapshot_type _pf_field_2;
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_reds)>::snapshot_type _pf_field_3;
+    };
+    static snapshot_type take(const _PFUdtRecord_Counter& value) {
+        return snapshot_type{
+            _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::green_streak)>::take(value.green_streak),
+            _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::red_streak)>::take(value.red_streak),
+            _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_greens)>::take(value.total_greens),
+            _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_reds)>::take(value.total_reds),
+        };
+    }
+    static void restore(_PFUdtRecord_Counter& value, const snapshot_type& snapshot) {
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::green_streak)>::restore(value.green_streak, snapshot._pf_field_0);
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::red_streak)>::restore(value.red_streak, snapshot._pf_field_1);
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_greens)>::restore(value.total_greens, snapshot._pf_field_2);
+        _PFCheckpointTraits<decltype(_PFUdtRecord_Counter::total_reds)>::restore(value.total_reds, snapshot._pf_field_3);
+    }
+};
+
+template <>
+struct _PFCheckpointTraits<_PFUdtArena<Counter, _PFUdtRecord_Counter>> {
+    using arena_type = _PFUdtArena<Counter, _PFUdtRecord_Counter>;
+    using snapshot_type = typename arena_type::Snapshot;
+    static snapshot_type take(arena_type& value) {
+        return value.snapshot();
+    }
+    static void restore(arena_type& value, const snapshot_type& snapshot) {
+        value.restore(snapshot);
+    }
+};
+
+class GeneratedStrategy : public pineforge::source::PineStrategyHost {
+public:
+    _PFUdtUndoCoordinator _pf_udt_undo;
+    _PFUdtArena<Counter, _PFUdtRecord_Counter> _pf_udt_Counter{&_pf_udt_undo};
     bool _use_precalc = false;
     Counter c;
     bool isGreen = false;
@@ -109,65 +383,139 @@ public:
     bool _var_initialized = false;
     bool _inputs_initialized_ = false;
 
+    struct _PFScriptState {
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::snapshot_type _pf_value_0;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Counter)>::snapshot_type _pf_value_1;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c)>::snapshot_type _pf_value_2;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::isGreen)>::snapshot_type _pf_value_3;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::gs)>::snapshot_type _pf_value_4;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::snapshot_type _pf_value_5;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::snapshot_type _pf_value_6;
+    };
+    static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
+    static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
+    std::optional<_PFScriptState> _pf_script_state_checkpoint_;
+
+    void snapshot_script_state() override {
+        _pf_script_state_checkpoint_.emplace(_PFScriptState{
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::take(_pf_udt_undo),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Counter)>::take(_pf_udt_Counter),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::c)>::take(c),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::isGreen)>::take(isGreen),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::gs)>::take(gs),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::take(_var_initialized),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::take(_inputs_initialized_),
+        });
+    }
+
+    void restore_script_state() override {
+        if (!_pf_script_state_checkpoint_) return;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::restore(this->_pf_udt_undo, _pf_script_state_checkpoint_->_pf_value_0);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Counter)>::restore(this->_pf_udt_Counter, _pf_script_state_checkpoint_->_pf_value_1);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::c)>::restore(this->c, _pf_script_state_checkpoint_->_pf_value_2);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::isGreen)>::restore(this->isGreen, _pf_script_state_checkpoint_->_pf_value_3);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::gs)>::restore(this->gs, _pf_script_state_checkpoint_->_pf_value_4);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_var_initialized)>::restore(this->_var_initialized, _pf_script_state_checkpoint_->_pf_value_5);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_inputs_initialized_)>::restore(this->_inputs_initialized_, _pf_script_state_checkpoint_->_pf_value_6);
+    }
+
+    void commit_script_state() override {
+        snapshot_script_state();
+    }
+
     explicit GeneratedStrategy() {
-        initial_capital_ = 1000000.0;
-        default_qty_type_ = QtyType::FIXED;
-        default_qty_value_ = 1.0;
-        pyramiding_ = 1;
-        commission_type_ = CommissionType::PERCENT;
-        commission_value_ = 0.0;
-        slippage_ = 0;
-        script_has_strategy_close_ = true;
+#if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
+        pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
+#elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
+        pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
+#endif
+        pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 1000000.0;
+        cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
+        cfg.default_qty_value = 1.0;
+        cfg.pyramiding = 1;
+        cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
+        cfg.commission_value = 0.0;
+        cfg.slippage = 0;
+        configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
-        if (key == "initial_capital") { initial_capital_ = std::stod(value); return; }
-        if (key == "commission_value") { commission_value_ = std::stod(value); return; }
-        if (key == "default_qty_value") { default_qty_value_ = std::stod(value); return; }
-        if (key == "pyramiding") { pyramiding_ = std::stoi(value); return; }
-        if (key == "slippage") { slippage_ = std::stoi(value); return; }
-        if (key == "process_orders_on_close") { process_orders_on_close_ = (value == "true" || value == "1"); return; }
-        if (key == "close_entries_rule") { close_entries_rule_any_ = (value == "ANY" || value == "any" || value == "1"); return; }
-        if (key == "default_qty_type") {
-            if (value == "fixed" || value == "strategy.fixed" || value == "0") default_qty_type_ = QtyType::FIXED;
-            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") default_qty_type_ = QtyType::PERCENT_OF_EQUITY;
-            else if (value == "cash" || value == "strategy.cash" || value == "2") default_qty_type_ = QtyType::CASH;
-            return;
-        }
-        if (key == "commission_type") {
-            if (value == "percent" || value == "strategy.commission.percent" || value == "0") commission_type_ = CommissionType::PERCENT;
-            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") commission_type_ = CommissionType::CASH_PER_ORDER;
-            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") commission_type_ = CommissionType::CASH_PER_CONTRACT;
-            return;
-        }
-    }
-
-    int _udt_Counter_observe(Counter& self, bool isGreen) {
-        if (isGreen) {
-            self.green_streak = (self.green_streak + 1);
-            self.red_streak = 0;
-            self.total_greens = (self.total_greens + 1);
+        pineforge::source::StrategyOverrides overrides{};
+        if (key == "initial_capital") {
+            overrides.initial_capital = std::stod(value);
+        } else if (key == "commission_value") {
+            overrides.commission_value = std::stod(value);
+        } else if (key == "default_qty_value") {
+            overrides.default_qty_value = std::stod(value);
+        } else if (key == "pyramiding") {
+            overrides.pyramiding = std::stoi(value);
+        } else if (key == "slippage") {
+            overrides.slippage = std::stoi(value);
+        } else if (key == "process_orders_on_close") {
+            overrides.process_orders_on_close = (value == "true" || value == "1");
+        } else if (key == "calc_on_order_fills") {
+            overrides.calc_on_order_fills = (value == "true" || value == "1");
+        } else if (key == "close_entries_rule") {
+            overrides.close_entries_rule = (value == "ANY" || value == "any" || value == "1");
+        } else if (key == "default_qty_type") {
+            if (value == "fixed" || value == "strategy.fixed" || value == "0") overrides.default_qty_type = static_cast<int>(QtyType::FIXED);
+            else if (value == "percent_of_equity" || value == "strategy.percent_of_equity" || value == "1") overrides.default_qty_type = static_cast<int>(QtyType::PERCENT_OF_EQUITY);
+            else if (value == "cash" || value == "strategy.cash" || value == "2") overrides.default_qty_type = static_cast<int>(QtyType::CASH);
+            else return;
+        } else if (key == "commission_type") {
+            if (value == "percent" || value == "strategy.commission.percent" || value == "0") overrides.commission_type = static_cast<int>(CommissionType::PERCENT);
+            else if (value == "cash_per_order" || value == "strategy.commission.cash_per_order" || value == "1") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_ORDER);
+            else if (value == "cash_per_contract" || value == "strategy.commission.cash_per_contract" || value == "2") overrides.commission_type = static_cast<int>(CommissionType::CASH_PER_CONTRACT);
+            else return;
         } else {
-            self.red_streak = (self.red_streak + 1);
-            self.green_streak = 0;
-            self.total_reds = (self.total_reds + 1);
+            return;
         }
-        return self.green_streak;
+        pineforge::source::PineStrategyHost::set_strategy_override(overrides);
     }
 
-    void on_bar(const Bar& bar) override {
+#ifndef PINEFORGE_HAS_SCRIPT_RUN_PREPARE_V1
+#error "Generated lifecycle reset requires a matching PineForge engine; rebuild with script-run preparation support"
+#endif
+    void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
+        _pf_script_state_checkpoint_.reset();
+        this->_pf_udt_undo.reset_for_run();
+        this->_pf_udt_Counter.reset_for_run();
+        this->_use_precalc = false;
+        this->c = decltype(this->c){};
+        this->isGreen = false;
+        this->gs = 0;
+        this->_var_initialized = false;
+        this->_inputs_initialized_ = false;
+        (void)bars; (void)n; (void)allow_precalculation;
+    }
+
+    int _udt_Counter_observe(Counter self, bool isGreen) {
+        if (isGreen) {
+            _pf_udt_Counter.get(self).green_streak = (_pf_udt_Counter.read(self).green_streak + 1);
+            _pf_udt_Counter.get(self).red_streak = 0;
+            _pf_udt_Counter.get(self).total_greens = (_pf_udt_Counter.read(self).total_greens + 1);
+        } else {
+            _pf_udt_Counter.get(self).red_streak = (_pf_udt_Counter.read(self).red_streak + 1);
+            _pf_udt_Counter.get(self).green_streak = 0;
+            _pf_udt_Counter.get(self).total_reds = (_pf_udt_Counter.read(self).total_reds + 1);
+        }
+        return _pf_udt_Counter.read(self).green_streak;
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            c = Counter{.green_streak = 0, .red_streak = 0, .total_greens = 0, .total_reds = 0};
+            c = _pf_udt_Counter.create(_PFUdtRecord_Counter{.green_streak = (int64_t)(0), .red_streak = (int64_t)(0), .total_greens = (int64_t)(0), .total_reds = (int64_t)(0)});
             _var_initialized = true;
         } else {
         }
-        isGreen = (current_bar_.close > current_bar_.open);
+        isGreen = ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (current_bar_.open); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }());
         gs = _udt_Counter_observe(c, isGreen);
-        if (((gs >= 4) && (signed_position_size() == 0))) {
+        if ((([&]{ auto _pna_l = (gs); auto _pna_r = (4); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }()))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), 1, std::string("entry long"), "", 0, -1);
         }
-        if (((c.red_streak >= 1) && (signed_position_size() > 0))) {
-            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false);
+        if ((([&]{ auto _pna_l = (_pf_udt_Counter.read(c).red_streak); auto _pna_r = (1); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()))) {
+            strategy_close(std::string("L"), std::string("exit long"), na<double>(), na<double>(), false, 219043332115ULL);
         }
     }
 
