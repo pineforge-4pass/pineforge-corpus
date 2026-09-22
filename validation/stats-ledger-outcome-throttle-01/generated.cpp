@@ -320,7 +320,7 @@ public:
         nextQuantity = fullQuantity;
         if (([&]{ auto _pna_l = (((int)trades_.size())); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) {
             lastClosedIndex = (((int)trades_.size()) - 1);
-            lastRealizedProfit = closed_trade_profit(lastClosedIndex);
+            lastRealizedProfit = closed_trade_profit([&](){ double _pf_v = (double)(lastClosedIndex); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
             nextQuantity = ((([&]{ auto _pna_l = (lastRealizedProfit); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }())) ? (recoveryQuantity) : (fullQuantity));
         }
         enterLong = (history_advances_new_bar() ? _ta_crossover_4.compute(fastLine, slowLine) : _ta_crossover_4.recompute(fastLine, slowLine));

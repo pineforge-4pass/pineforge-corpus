@@ -349,7 +349,7 @@ public:
             prev_ph_y = last_ph_y;
             prev_ph_x = last_ph_x;
             last_ph_y = ph;
-            last_ph_x = cur_x;
+            last_ph_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         if (!(is_na(pl))) {
             cur_x = (pine_bar_index() - i_pivot);
@@ -359,7 +359,7 @@ public:
             prev_pl_y = last_pl_y;
             prev_pl_x = last_pl_x;
             last_pl_y = pl;
-            last_pl_x = cur_x;
+            last_pl_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         ref_lo = na<double>();
         if (((((!(is_na(prev_pl_y)) && !(is_na(prev_pl_x))) && !(is_na(last_pl_y))) && !(is_na(last_pl_x))) && ([&]{ auto _pna_l = (last_pl_x); auto _pna_r = (prev_pl_x); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l != _pna_r); }()))) {

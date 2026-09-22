@@ -525,7 +525,7 @@ public:
             prev_ph_y = last_ph;
             prev_ph_x = last_ph_x;
             last_ph = ph;
-            last_ph_x = cur_x;
+            last_ph_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         if (!(is_na(pl))) {
             cur_x = (pine_bar_index() - i_pivot);
@@ -535,7 +535,7 @@ public:
             prev_pl_y = last_pl;
             prev_pl_x = last_pl_x;
             last_pl = pl;
-            last_pl_x = cur_x;
+            last_pl_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         ema_fast = (history_advances_new_bar() ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close));
         ema_mid = (history_advances_new_bar() ? _ta_ema_4.compute(current_bar_.close) : _ta_ema_4.recompute(current_bar_.close));
