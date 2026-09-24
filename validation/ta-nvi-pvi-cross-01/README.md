@@ -46,7 +46,7 @@ full NVI+PVI form is used; no fallback was needed.
 - Reproduce:
   ```
   EIGEN=/opt/homebrew/include/eigen3
-  clang++ -std=c++17 -O2 -fPIC -shared -I include -I "$EIGEN" \
+  clang++ -std=c++17 -O2 -ffp-contract=off -fPIC -shared -I include -I "$EIGEN" \
     proposed-probes/ta-nvi-pvi-cross-01/generated.cpp \
     -Wl,-force_load,build/lib/libpineforge.a \
     -o proposed-probes/ta-nvi-pvi-cross-01/strategy.dylib

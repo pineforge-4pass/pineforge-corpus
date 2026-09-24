@@ -64,7 +64,7 @@ ready TradingView parity test. No engine source was modified by this probe.
 
    ```bash
    EIGEN=/opt/homebrew/include/eigen3
-   clang++ -std=c++17 -O2 -fPIC -shared -I include -I "$EIGEN" \
+   clang++ -std=c++17 -O2 -ffp-contract=off -fPIC -shared -I include -I "$EIGEN" \
        proposed-probes/mtf-htf-monthly-ema-cross-01/generated.cpp \
        -Wl,-force_load,build/lib/libpineforge.a \
        -o proposed-probes/mtf-htf-monthly-ema-cross-01/strategy.dylib

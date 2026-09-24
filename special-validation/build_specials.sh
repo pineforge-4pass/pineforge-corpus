@@ -16,7 +16,7 @@ EIGEN="${EIGEN3_INCLUDE_DIR:-/opt/homebrew/include/eigen3}"
 for probe in "$HERE"/*/*/; do
     [ -f "$probe/generated.cpp" ] || continue
     name="$(basename "$probe")"
-    clang++ -std=c++17 -O2 -fPIC -shared \
+    clang++ -std=c++17 -O2 -ffp-contract=off -fPIC -shared \
         -I"$ENGINE/include" -I"$EIGEN" \
         "$probe/generated.cpp" -Wl,-force_load,"$LIB" \
         -o "$probe/strategy.dylib"

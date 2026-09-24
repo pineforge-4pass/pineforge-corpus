@@ -33,7 +33,7 @@ alignment in a single probe.
 - Reproduce:
   ```bash
   EIGEN=/opt/homebrew/include/eigen3
-  clang++ -std=c++17 -O2 -fPIC -shared -I include -I "$EIGEN" \
+  clang++ -std=c++17 -O2 -ffp-contract=off -fPIC -shared -I include -I "$EIGEN" \
     proposed-probes/ta-wpr-14-bands-01/generated.cpp \
     -Wl,-force_load,build/lib/libpineforge.a \
     -o proposed-probes/ta-wpr-14-bands-01/strategy.dylib
