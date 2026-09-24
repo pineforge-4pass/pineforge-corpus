@@ -32,6 +32,45 @@
 
 using namespace pineforge;
 
+#ifdef PF_VWAP_HAS_ANCHOR_INPUT
+class _PFAnchoredVWAPBands {
+    ta::AnchoredVWAPBands impl_;
+public:
+    explicit _PFAnchoredVWAPBands(double mult) : impl_(mult) {}
+    ta::VWAPBandsResult compute(double src, double volume, int64_t timestamp, const std::string& tz, const std::string& session, bool anchor) {
+        (void)timestamp; (void)tz; (void)session;
+        return impl_.compute(src, volume, anchor);
+    }
+    ta::VWAPBandsResult recompute(double src, double volume, int64_t timestamp, const std::string& tz, const std::string& session, bool anchor) {
+        (void)timestamp; (void)tz; (void)session;
+        return impl_.recompute(src, volume, anchor);
+    }
+};
+#else
+class _PFAnchoredVWAPBands {
+    ta::VWAP impl_;
+    double mult_;
+public:
+    explicit _PFAnchoredVWAPBands(double mult) : mult_(mult) {}
+    ta::VWAPBandsResult compute(double src, double volume, int64_t timestamp, const std::string& tz, const std::string& session, bool) {
+#ifdef PF_VWAP_HAS_SESSION_ANCHOR
+        return impl_.compute_bands(src, volume, timestamp, mult_, tz, session);
+#else
+        (void)tz; (void)session;
+        return impl_.compute_bands(src, volume, timestamp, mult_);
+#endif
+    }
+    ta::VWAPBandsResult recompute(double src, double volume, int64_t timestamp, const std::string& tz, const std::string& session, bool) {
+#ifdef PF_VWAP_HAS_SESSION_ANCHOR
+        return impl_.recompute_bands(src, volume, timestamp, mult_, tz, session);
+#else
+        (void)tz; (void)session;
+        return impl_.recompute_bands(src, volume, timestamp, mult_);
+#endif
+    }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -104,8 +143,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
-    ta::VWAPBands _ta_vwap_bands_1;
-    std::vector<ta::VWAPBandsResult> _precalc__ta_vwap_bands_1;
+    _PFAnchoredVWAPBands _ta_vwap_anchored_bands_1;
     ta::Crossunder _ta_crossunder_2;
     ta::Crossover _ta_crossover_3;
     bool _use_precalc = false;
@@ -118,7 +156,7 @@ public:
     bool _inputs_initialized_ = false;
 
     struct _PFScriptState {
-        decltype(GeneratedStrategy::_ta_vwap_bands_1) _pf_value_0;
+        decltype(GeneratedStrategy::_ta_vwap_anchored_bands_1) _pf_value_0;
         decltype(GeneratedStrategy::_ta_crossunder_2) _pf_value_1;
         decltype(GeneratedStrategy::_ta_crossover_3) _pf_value_2;
         decltype(GeneratedStrategy::vw) _pf_value_3;
@@ -135,7 +173,7 @@ public:
 
     void snapshot_script_state() override {
         _pf_script_state_checkpoint_.emplace(_PFScriptState{
-            _ta_vwap_bands_1,
+            _ta_vwap_anchored_bands_1,
             _ta_crossunder_2,
             _ta_crossover_3,
             vw,
@@ -150,7 +188,7 @@ public:
 
     void restore_script_state() override {
         if (!_pf_script_state_checkpoint_) return;
-        this->_ta_vwap_bands_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_ta_vwap_anchored_bands_1 = _pf_script_state_checkpoint_->_pf_value_0;
         this->_ta_crossunder_2 = _pf_script_state_checkpoint_->_pf_value_1;
         this->_ta_crossover_3 = _pf_script_state_checkpoint_->_pf_value_2;
         this->vw = _pf_script_state_checkpoint_->_pf_value_3;
@@ -166,7 +204,7 @@ public:
         snapshot_script_state();
     }
 
-    explicit GeneratedStrategy() : _ta_vwap_bands_1(2) {
+    explicit GeneratedStrategy() : _ta_vwap_anchored_bands_1(2) {
 #if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
         pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
 #elif defined(PINEFORGE_HAS_EXPLICIT_PINE_CAP_V1)
@@ -218,8 +256,7 @@ public:
 #endif
     void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
         _pf_script_state_checkpoint_.reset();
-        this->_ta_vwap_bands_1 = decltype(this->_ta_vwap_bands_1)(2);
-        this->_precalc__ta_vwap_bands_1 = decltype(this->_precalc__ta_vwap_bands_1){};
+        this->_ta_vwap_anchored_bands_1 = decltype(this->_ta_vwap_anchored_bands_1)(2);
         this->_ta_crossunder_2 = decltype(this->_ta_crossunder_2){};
         this->_ta_crossover_3 = decltype(this->_ta_crossover_3){};
         this->_use_precalc = false;
@@ -230,14 +267,14 @@ public:
         this->exit_condition = false;
         this->_ta_initialized_ = false;
         this->_inputs_initialized_ = false;
-        if (allow_precalculation) precalculate(bars, n);
+        (void)bars; (void)n; (void)allow_precalculation;
     }
 
     void on_source_bar(const Bar& bar) override {
-        auto _result__ta_vwap_bands_1 = (history_advances_new_bar() ? _ta_vwap_bands_1.compute(current_bar_.close, current_bar_.volume, current_bar_.timestamp PF_VWAP_SESSION_ANCHOR_ARGS(syminfo_.timezone, syminfo_.session)) : _ta_vwap_bands_1.recompute(current_bar_.close, current_bar_.volume, current_bar_.timestamp PF_VWAP_SESSION_ANCHOR_ARGS(syminfo_.timezone, syminfo_.session)));
-        double vw = _result__ta_vwap_bands_1.vwap;
-        double upper_band = _result__ta_vwap_bands_1.upper;
-        double lower_band = _result__ta_vwap_bands_1.lower;
+        auto _result__ta_vwap_anchored_bands_1 = (history_advances_new_bar() ? _ta_vwap_anchored_bands_1.compute(current_bar_.close, current_bar_.volume, current_bar_.timestamp, syminfo_.timezone, syminfo_.session, tf_change(prev_bar_timestamp_, current_bar_.timestamp, std::string("1D"), syminfo_.timezone, syminfo_.session)) : _ta_vwap_anchored_bands_1.recompute(current_bar_.close, current_bar_.volume, current_bar_.timestamp, syminfo_.timezone, syminfo_.session, tf_change(prev_bar_timestamp_, current_bar_.timestamp, std::string("1D"), syminfo_.timezone, syminfo_.session)));
+        double vw = _result__ta_vwap_anchored_bands_1.vwap;
+        double upper_band = _result__ta_vwap_anchored_bands_1.upper;
+        double lower_band = _result__ta_vwap_anchored_bands_1.lower;
         long_condition = (history_advances_new_bar() ? _ta_crossunder_2.compute(current_bar_.close, lower_band) : _ta_crossunder_2.recompute(current_bar_.close, lower_band));
         exit_condition = (history_advances_new_bar() ? _ta_crossover_3.compute(current_bar_.close, vw) : _ta_crossover_3.recompute(current_bar_.close, vw));
         if (long_condition) {
@@ -246,37 +283,6 @@ public:
         if (exit_condition) {
             strategy_close(std::string("long"), "", na<double>(), na<double>(), false, 98784247827ULL);
         }
-    }
-
-    void precalculate(const Bar* bars, int n) {
-        _use_precalc = false;
-        if (n <= 0 || bars == nullptr) return;
-
-        _precalc__ta_vwap_bands_1.resize(n);
-
-        _ta_vwap_bands_1 = ta::VWAPBands(2);
-
-
-        for (int i = 0; i < n; ++i) {
-            if (_src_series_active_) {
-                const double _pc_o = bars[i].open;
-                const double _pc_h = bars[i].high;
-                const double _pc_l = bars[i].low;
-                const double _pc_c = bars[i].close;
-                const double _pc_v = bars[i].volume;
-                _src_open_.push(_pc_o);   _src_high_.push(_pc_h);   _src_low_.push(_pc_l);
-                _src_close_.push(_pc_c);  _src_volume_.push(_pc_v);
-                _src_hl2_.push((_pc_h + _pc_l) / 2.0);
-                _src_hlc3_.push((_pc_h + _pc_l + _pc_c) / 3.0);
-                _src_ohlc4_.push((_pc_o + _pc_h + _pc_l + _pc_c) / 4.0);
-                _src_hlcc4_.push((_pc_h + _pc_l + _pc_c + _pc_c) / 4.0);
-            }
-            _precalc__ta_vwap_bands_1[i] = _ta_vwap_bands_1.compute(bars[i].close, bars[i].volume, bars[i].timestamp PF_VWAP_SESSION_ANCHOR_ARGS(syminfo_.timezone, syminfo_.session));
-        }
-
-        _ta_vwap_bands_1 = ta::VWAPBands(2);
-
-        _use_precalc = true;
     }
 
 

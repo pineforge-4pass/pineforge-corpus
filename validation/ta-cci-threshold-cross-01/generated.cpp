@@ -281,7 +281,7 @@ public:
 
         _precalc__ta_cci_1.resize(n);
 
-        _ta_cci_1 = ta::CCI(20);
+        _ta_cci_1 = ta::CCI(get_input_int("CCI Length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -301,7 +301,7 @@ public:
             _precalc__ta_cci_1[i] = _ta_cci_1.compute(bars[i].close);
         }
 
-        _ta_cci_1 = ta::CCI(20);
+        _ta_cci_1 = ta::CCI(get_input_int("CCI Length", 20));
 
         _use_precalc = true;
     }

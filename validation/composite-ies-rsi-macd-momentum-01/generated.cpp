@@ -391,9 +391,9 @@ public:
         _precalc__ta_ema_2.resize(n);
         _precalc__ta_ema_3.resize(n);
 
-        _ta_rsi_1 = ta::RSI(14);
-        _ta_ema_2 = ta::EMA(12);
-        _ta_ema_3 = ta::EMA(26);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Period", 14));
+        _ta_ema_2 = ta::EMA(get_input_int("MACD Fast", 12));
+        _ta_ema_3 = ta::EMA(get_input_int("MACD Slow", 26));
 
 
         for (int i = 0; i < n; ++i) {
@@ -415,9 +415,9 @@ public:
             _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
         }
 
-        _ta_rsi_1 = ta::RSI(14);
-        _ta_ema_2 = ta::EMA(12);
-        _ta_ema_3 = ta::EMA(26);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Period", 14));
+        _ta_ema_2 = ta::EMA(get_input_int("MACD Fast", 12));
+        _ta_ema_3 = ta::EMA(get_input_int("MACD Slow", 26));
 
         _use_precalc = true;
     }

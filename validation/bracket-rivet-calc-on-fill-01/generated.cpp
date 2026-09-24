@@ -294,9 +294,9 @@ public:
         _precalc__ta_ema_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_ema_1 = ta::EMA(11);
-        _ta_ema_2 = ta::EMA(37);
-        _ta_atr_3 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast EMA", 11));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow EMA", 37));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 15));
 
 
         for (int i = 0; i < n; ++i) {
@@ -318,9 +318,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA(11);
-        _ta_ema_2 = ta::EMA(37);
-        _ta_atr_3 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast EMA", 11));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow EMA", 37));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 15));
 
         _use_precalc = true;
     }

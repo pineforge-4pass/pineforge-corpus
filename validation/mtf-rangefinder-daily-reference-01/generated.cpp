@@ -337,7 +337,7 @@ public:
 
         _precalc__ta_atr_1.resize(n);
 
-        _ta_atr_1 = ta::ATR(17);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 17));
 
         _s_high.clear();
         _s_low.clear();
@@ -361,7 +361,7 @@ public:
             _precalc__ta_atr_1[i] = _ta_atr_1.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_atr_1 = ta::ATR(17);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 17));
         _s_high.clear();
         _s_low.clear();
 

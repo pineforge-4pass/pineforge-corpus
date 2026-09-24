@@ -289,7 +289,7 @@ public:
         _precalc__ta_ema_1.resize(n);
         _precalc__ta_ema_2.resize(n);
 
-        _ta_ema_1 = ta::EMA(13);
+        _ta_ema_1 = ta::EMA(get_input_int("EMA Length", 13));
         _ta_ema_2 = ta::EMA(50);
 
 
@@ -311,7 +311,7 @@ public:
             _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
         }
 
-        _ta_ema_1 = ta::EMA(13);
+        _ta_ema_1 = ta::EMA(get_input_int("EMA Length", 13));
         _ta_ema_2 = ta::EMA(50);
 
         _use_precalc = true;

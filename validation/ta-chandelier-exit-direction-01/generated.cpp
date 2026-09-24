@@ -322,9 +322,9 @@ public:
         _precalc__ta_highest_2.resize(n);
         _precalc__ta_lowest_3.resize(n);
 
-        _ta_atr_1 = ta::ATR(22);
-        _ta_highest_2 = ta::Highest(22);
-        _ta_lowest_3 = ta::Lowest(22);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 22));
+        _ta_highest_2 = ta::Highest(get_input_int("Lookback", 22));
+        _ta_lowest_3 = ta::Lowest(get_input_int("Lookback", 22));
 
 
         for (int i = 0; i < n; ++i) {
@@ -346,9 +346,9 @@ public:
             _precalc__ta_lowest_3[i] = _ta_lowest_3.compute(bars[i].low);
         }
 
-        _ta_atr_1 = ta::ATR(22);
-        _ta_highest_2 = ta::Highest(22);
-        _ta_lowest_3 = ta::Lowest(22);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 22));
+        _ta_highest_2 = ta::Highest(get_input_int("Lookback", 22));
+        _ta_lowest_3 = ta::Lowest(get_input_int("Lookback", 22));
 
         _use_precalc = true;
     }

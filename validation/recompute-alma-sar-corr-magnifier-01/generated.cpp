@@ -27,6 +27,24 @@
 
 using namespace pineforge;
 
+#ifdef PF_ALMA_HAS_FLOOR
+class _PFALMA {
+    ta::ALMA impl_;
+public:
+    _PFALMA(int length, double offset, double sigma, bool floor = false) : impl_(length, offset, sigma, floor) {}
+    double compute(double src) { return impl_.compute(src); }
+    double recompute(double src) { return impl_.recompute(src); }
+};
+#else
+class _PFALMA {
+    ta::ALMA impl_;
+public:
+    _PFALMA(int length, double offset, double sigma, bool = false) : impl_(length, offset, sigma) {}
+    double compute(double src) { return impl_.compute(src); }
+    double recompute(double src) { return impl_.recompute(src); }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -99,7 +117,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
-    ta::ALMA _ta_alma_1;
+    _PFALMA _ta_alma_1;
     std::vector<double> _precalc__ta_alma_1;
     ta::SAR _ta_sar_2;
     std::vector<double> _precalc__ta_sar_2;
@@ -263,7 +281,7 @@ public:
         _precalc__ta_sar_2.resize(n);
         _precalc__ta_correlation_3.resize(n);
 
-        _ta_alma_1 = ta::ALMA(14, 0.85, 6);
+        _ta_alma_1 = _PFALMA(14, 0.85, 6);
         _ta_sar_2 = ta::SAR(0.02, 0.02, 0.2);
         _ta_correlation_3 = ta::Correlation(20);
 
@@ -287,7 +305,7 @@ public:
             _precalc__ta_correlation_3[i] = _ta_correlation_3.compute(bars[i].close, bars[i].volume);
         }
 
-        _ta_alma_1 = ta::ALMA(14, 0.85, 6);
+        _ta_alma_1 = _PFALMA(14, 0.85, 6);
         _ta_sar_2 = ta::SAR(0.02, 0.02, 0.2);
         _ta_correlation_3 = ta::Correlation(20);
 

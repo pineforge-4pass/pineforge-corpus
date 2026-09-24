@@ -337,9 +337,9 @@ public:
         _precalc__ta_ema_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_dmi_1 = ta::DMI(14, 12);
-        _ta_ema_2 = ta::EMA(48);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_dmi_1 = ta::DMI(get_input_int("DI Length", 14), get_input_int("ADX Smoothing", 12));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA", 48));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
 
 
         for (int i = 0; i < n; ++i) {
@@ -361,9 +361,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_dmi_1 = ta::DMI(14, 12);
-        _ta_ema_2 = ta::EMA(48);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_dmi_1 = ta::DMI(get_input_int("DI Length", 14), get_input_int("ADX Smoothing", 12));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA", 48));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
 
         _use_precalc = true;
     }

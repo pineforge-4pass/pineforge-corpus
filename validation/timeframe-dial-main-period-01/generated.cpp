@@ -498,15 +498,15 @@ public:
         _precalc__ta_ema_8.resize(n);
         _precalc__ta_atr_9.resize(n);
 
-        _ta_ema_1 = ta::EMA(43);
-        _ta_ema_2 = ta::EMA(96);
-        _ta_ema_3 = ta::EMA(20);
-        _ta_ema_4 = ta::EMA(44);
-        _ta_ema_5 = ta::EMA(11);
-        _ta_ema_6 = ta::EMA(24);
-        _ta_ema_7 = ta::EMA(6);
-        _ta_ema_8 = ta::EMA(14);
-        _ta_atr_9 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA(get_input_int("5m Fast EMA", 43));
+        _ta_ema_2 = ta::EMA(get_input_int("5m Slow EMA", 96));
+        _ta_ema_3 = ta::EMA(get_input_int("15m Fast EMA", 20));
+        _ta_ema_4 = ta::EMA(get_input_int("15m Slow EMA", 44));
+        _ta_ema_5 = ta::EMA(get_input_int("60m Fast EMA", 11));
+        _ta_ema_6 = ta::EMA(get_input_int("60m Slow EMA", 24));
+        _ta_ema_7 = ta::EMA(get_input_int("240m Fast EMA", 6));
+        _ta_ema_8 = ta::EMA(get_input_int("240m Slow EMA", 14));
+        _ta_atr_9 = ta::ATR(get_input_int("ATR Length", 15));
 
 
         for (int i = 0; i < n; ++i) {
@@ -534,15 +534,15 @@ public:
             _precalc__ta_atr_9[i] = _ta_atr_9.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA(43);
-        _ta_ema_2 = ta::EMA(96);
-        _ta_ema_3 = ta::EMA(20);
-        _ta_ema_4 = ta::EMA(44);
-        _ta_ema_5 = ta::EMA(11);
-        _ta_ema_6 = ta::EMA(24);
-        _ta_ema_7 = ta::EMA(6);
-        _ta_ema_8 = ta::EMA(14);
-        _ta_atr_9 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA(get_input_int("5m Fast EMA", 43));
+        _ta_ema_2 = ta::EMA(get_input_int("5m Slow EMA", 96));
+        _ta_ema_3 = ta::EMA(get_input_int("15m Fast EMA", 20));
+        _ta_ema_4 = ta::EMA(get_input_int("15m Slow EMA", 44));
+        _ta_ema_5 = ta::EMA(get_input_int("60m Fast EMA", 11));
+        _ta_ema_6 = ta::EMA(get_input_int("60m Slow EMA", 24));
+        _ta_ema_7 = ta::EMA(get_input_int("240m Fast EMA", 6));
+        _ta_ema_8 = ta::EMA(get_input_int("240m Slow EMA", 14));
+        _ta_atr_9 = ta::ATR(get_input_int("ATR Length", 15));
 
         _use_precalc = true;
     }

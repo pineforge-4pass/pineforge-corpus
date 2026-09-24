@@ -399,8 +399,8 @@ public:
         _precalc__ta_atr_3.resize(n);
 
         _ta_rsi_1 = ta::RSI(15);
-        _ta_ema_2 = ta::EMA(46);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 46));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
 
 
         for (int i = 0; i < n; ++i) {
@@ -423,8 +423,8 @@ public:
         }
 
         _ta_rsi_1 = ta::RSI(15);
-        _ta_ema_2 = ta::EMA(46);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 46));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
 
         _use_precalc = true;
     }

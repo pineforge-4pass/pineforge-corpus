@@ -289,7 +289,7 @@ public:
 
         _precalc__ta_stoch_1.resize(n);
 
-        _ta_stoch_1 = ta::Stoch(14);
+        _ta_stoch_1 = ta::Stoch(get_input_int("Stoch %K length", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -309,7 +309,7 @@ public:
             _precalc__ta_stoch_1[i] = _ta_stoch_1.compute(bars[i].close, bars[i].high, bars[i].low);
         }
 
-        _ta_stoch_1 = ta::Stoch(14);
+        _ta_stoch_1 = ta::Stoch(get_input_int("Stoch %K length", 14));
 
         _use_precalc = true;
     }

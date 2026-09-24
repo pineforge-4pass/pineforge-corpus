@@ -274,8 +274,8 @@ public:
         _precalc__ta_hma_1.resize(n);
         _precalc__ta_hma_2.resize(n);
 
-        _ta_hma_1 = ta::HMA(9);
-        _ta_hma_2 = ta::HMA(21);
+        _ta_hma_1 = ta::HMA(get_input_int("Fast HMA", 9));
+        _ta_hma_2 = ta::HMA(get_input_int("Slow HMA", 21));
 
 
         for (int i = 0; i < n; ++i) {
@@ -296,8 +296,8 @@ public:
             _precalc__ta_hma_2[i] = _ta_hma_2.compute(bars[i].close);
         }
 
-        _ta_hma_1 = ta::HMA(9);
-        _ta_hma_2 = ta::HMA(21);
+        _ta_hma_1 = ta::HMA(get_input_int("Fast HMA", 9));
+        _ta_hma_2 = ta::HMA(get_input_int("Slow HMA", 21));
 
         _use_precalc = true;
     }

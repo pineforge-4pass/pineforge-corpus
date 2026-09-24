@@ -269,8 +269,8 @@ public:
         _precalc__ta_sma_1.resize(n);
         _precalc__ta_sma_2.resize(n);
 
-        _ta_sma_1 = ta::SMA(10);
-        _ta_sma_2 = ta::SMA(30);
+        _ta_sma_1 = ta::SMA(get_input_int("Fast Length", 10));
+        _ta_sma_2 = ta::SMA(get_input_int("Slow Length", 30));
 
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
@@ -296,8 +296,8 @@ public:
             _precalc__ta_sma_2[i] = _ta_sma_2.compute(src);
         }
 
-        _ta_sma_1 = ta::SMA(10);
-        _ta_sma_2 = ta::SMA(30);
+        _ta_sma_1 = ta::SMA(get_input_int("Fast Length", 10));
+        _ta_sma_2 = ta::SMA(get_input_int("Slow Length", 30));
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
         _src_hl2_.clear(); _src_hlc3_.clear();

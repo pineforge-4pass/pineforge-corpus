@@ -688,7 +688,7 @@ public:
         dn_mv = (-(_use_precalc ? _precalc__ta_change_10[bar_index_] : (history_advances_new_bar() ? _ta_change_10.compute(current_bar_.low) : _ta_change_10.recompute(current_bar_.low))));
         p_dm_v = ((is_na(up_mv)) ? (na<double>()) : ((((([&]{ auto _pna_l = (up_mv); auto _pna_r = (dn_mv); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (up_mv); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()))) ? (up_mv) : (0))));
         m_dm_v = ((is_na(dn_mv)) ? (na<double>()) : ((((([&]{ auto _pna_l = (dn_mv); auto _pna_r = (up_mv); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (dn_mv); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()))) ? (dn_mv) : (0))));
-        tr_smo = (history_advances_new_bar() ? _ta_rma_11.compute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))) : _ta_rma_11.recompute((std::isnan(_s_close[1]) ? (current_bar_.high - current_bar_.low) : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))));
+        tr_smo = (history_advances_new_bar() ? _ta_rma_11.compute((std::isnan(_s_close[1]) ? na<double>() : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))) : _ta_rma_11.recompute((std::isnan(_s_close[1]) ? na<double>() : std::max(current_bar_.high - current_bar_.low, std::max(std::abs(current_bar_.high - _s_close[1]), std::abs(current_bar_.low - _s_close[1]))))));
         p_di_v = ((([&]{ auto _pna_l = (tr_smo); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)((100 * (history_advances_new_bar() ? _ta_rma_12.compute(p_dm_v) : _ta_rma_12.recompute(p_dm_v)))) / (double)(tr_smo))) : (0));
         m_di_v = ((([&]{ auto _pna_l = (tr_smo); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)((100 * (history_advances_new_bar() ? _ta_rma_13.compute(m_dm_v) : _ta_rma_13.recompute(m_dm_v)))) / (double)(tr_smo))) : (0));
         dx_v = ((([&]{ auto _pna_l = ((p_di_v + m_di_v)); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)((100 * std::abs((p_di_v - m_di_v)))) / (double)((p_di_v + m_di_v)))) : (0));
@@ -730,10 +730,10 @@ public:
         _precalc__ta_change_10.resize(n);
 
         _ta_atr_1 = ta::ATR(14);
-        _ta_pivothigh_2 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_3 = ta::PivotLow(5, 5);
-        _ta_rsi_4 = ta::RSI(14);
-        _ta_sma_6 = ta::SMA(20);
+        _ta_pivothigh_2 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_3 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_rsi_4 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_sma_6 = ta::SMA(get_input_int("Volume MA length", 20));
         _ta_stdev_7 = ta::StdDev(20);
         _ta_change_9 = ta::Change();
         _ta_change_10 = ta::Change();
@@ -772,10 +772,10 @@ public:
         }
 
         _ta_atr_1 = ta::ATR(14);
-        _ta_pivothigh_2 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_3 = ta::PivotLow(5, 5);
-        _ta_rsi_4 = ta::RSI(14);
-        _ta_sma_6 = ta::SMA(20);
+        _ta_pivothigh_2 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_3 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_rsi_4 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_sma_6 = ta::SMA(get_input_int("Volume MA length", 20));
         _ta_stdev_7 = ta::StdDev(20);
         _ta_change_9 = ta::Change();
         _ta_change_10 = ta::Change();

@@ -27,6 +27,24 @@
 
 using namespace pineforge;
 
+#ifdef PF_KC_HAS_USE_TRUE_RANGE
+class _PFKC {
+    ta::KC impl_;
+public:
+    _PFKC(int length, double mult, bool use_true_range = true) : impl_(length, mult, use_true_range) {}
+    ta::KCResult compute(double src, double high, double low, double close) { return impl_.compute(src, high, low, close); }
+    ta::KCResult recompute(double src, double high, double low, double close) { return impl_.recompute(src, high, low, close); }
+};
+#else
+class _PFKC {
+    ta::KC impl_;
+public:
+    _PFKC(int length, double mult, bool = true) : impl_(length, mult) {}
+    ta::KCResult compute(double src, double high, double low, double close) { return impl_.compute(src, high, low, close); }
+    ta::KCResult recompute(double src, double high, double low, double close) { return impl_.recompute(src, high, low, close); }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -101,7 +119,7 @@ class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::BB _ta_bb_1;
     std::vector<ta::BBResult> _precalc__ta_bb_1;
-    ta::KC _ta_kc_2;
+    _PFKC _ta_kc_2;
     std::vector<ta::KCResult> _precalc__ta_kc_2;
     ta::Linreg _ta_linreg_3;
     bool _use_precalc = false;
@@ -309,7 +327,7 @@ public:
         }
         if (!_ta_initialized_) {
             _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));
-            _ta_kc_2 = ta::KC(get_input_int("KC Length", 20), get_input_double("KC Multiplier", 1.5));
+            _ta_kc_2 = _PFKC(get_input_int("KC Length", 20), get_input_double("KC Multiplier", 1.5));
             _ta_linreg_3 = ta::Linreg(get_input_int("BB Length", 20));
             _ta_initialized_ = true;
         }
@@ -352,8 +370,8 @@ public:
         _precalc__ta_bb_1.resize(n);
         _precalc__ta_kc_2.resize(n);
 
-        _ta_bb_1 = ta::BB(20, 2.0);
-        _ta_kc_2 = ta::KC(20, 1.5);
+        _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));
+        _ta_kc_2 = _PFKC(get_input_int("KC Length", 20), get_input_double("KC Multiplier", 1.5));
 
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
@@ -379,8 +397,8 @@ public:
             _precalc__ta_kc_2[i] = _ta_kc_2.compute(src, bars[i].high, bars[i].low, bars[i].close);
         }
 
-        _ta_bb_1 = ta::BB(20, 2.0);
-        _ta_kc_2 = ta::KC(20, 1.5);
+        _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));
+        _ta_kc_2 = _PFKC(get_input_int("KC Length", 20), get_input_double("KC Multiplier", 1.5));
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
         _src_hl2_.clear(); _src_hlc3_.clear();

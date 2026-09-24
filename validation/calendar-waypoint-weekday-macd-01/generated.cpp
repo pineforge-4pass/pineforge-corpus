@@ -336,8 +336,8 @@ public:
         _precalc__ta_macd_1.resize(n);
         _precalc__ta_atr_2.resize(n);
 
-        _ta_macd_1 = ta::MACD(12, 26, 9);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_macd_1 = ta::MACD(get_input_int("MACD Fast", 12), get_input_int("MACD Slow", 26), get_input_int("MACD Signal", 9));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -358,8 +358,8 @@ public:
             _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_macd_1 = ta::MACD(12, 26, 9);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_macd_1 = ta::MACD(get_input_int("MACD Fast", 12), get_input_int("MACD Slow", 26), get_input_int("MACD Signal", 9));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
 
         _use_precalc = true;
     }

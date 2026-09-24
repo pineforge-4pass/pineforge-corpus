@@ -1205,9 +1205,9 @@ public:
         _precalc__ta_bb_3.resize(n);
         _precalc__ta_atr_4.resize(n);
 
-        _ta_rsi_1 = ta::RSI(14);
-        _ta_ema_2 = ta::EMA(20);
-        _ta_bb_3 = ta::BB(20, 2.0);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Length", 14));
+        _ta_ema_2 = ta::EMA(get_input_int("MA Length", 20));
+        _ta_bb_3 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Mult", 2.0));
         _ta_atr_4 = ta::ATR(14);
 
         _s_close.clear();
@@ -1233,9 +1233,9 @@ public:
             _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_rsi_1 = ta::RSI(14);
-        _ta_ema_2 = ta::EMA(20);
-        _ta_bb_3 = ta::BB(20, 2.0);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Length", 14));
+        _ta_ema_2 = ta::EMA(get_input_int("MA Length", 20));
+        _ta_bb_3 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Mult", 2.0));
         _ta_atr_4 = ta::ATR(14);
         _s_close.clear();
 

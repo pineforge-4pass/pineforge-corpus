@@ -387,10 +387,10 @@ public:
         _precalc__ta_atr_3.resize(n);
         _precalc__ta_ema_4.resize(n);
 
-        _ta_ema_1 = ta::EMA(9);
-        _ta_ema_2 = ta::EMA(21);
-        _ta_atr_3 = ta::ATR(14);
-        _ta_ema_4 = ta::EMA(20);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast EMA Length", 9));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow EMA Length", 21));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 14));
+        _ta_ema_4 = ta::EMA(get_input_int("HTF EMA Length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -413,10 +413,10 @@ public:
             _precalc__ta_ema_4[i] = _ta_ema_4.compute(bars[i].close);
         }
 
-        _ta_ema_1 = ta::EMA(9);
-        _ta_ema_2 = ta::EMA(21);
-        _ta_atr_3 = ta::ATR(14);
-        _ta_ema_4 = ta::EMA(20);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast EMA Length", 9));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow EMA Length", 21));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 14));
+        _ta_ema_4 = ta::EMA(get_input_int("HTF EMA Length", 20));
 
         _use_precalc = true;
     }

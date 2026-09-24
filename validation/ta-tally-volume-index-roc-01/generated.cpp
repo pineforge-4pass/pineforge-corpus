@@ -351,8 +351,8 @@ public:
 
         _ta_nvi_1 = ta::NVI();
         _ta_pvi_3 = ta::PVI();
-        _ta_ema_5 = ta::EMA(53);
-        _ta_atr_6 = ta::ATR(20);
+        _ta_ema_5 = ta::EMA(get_input_int("Trend EMA Length", 53));
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -377,8 +377,8 @@ public:
 
         _ta_nvi_1 = ta::NVI();
         _ta_pvi_3 = ta::PVI();
-        _ta_ema_5 = ta::EMA(53);
-        _ta_atr_6 = ta::ATR(20);
+        _ta_ema_5 = ta::EMA(get_input_int("Trend EMA Length", 53));
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Length", 20));
 
         _use_precalc = true;
     }

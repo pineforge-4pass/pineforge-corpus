@@ -306,8 +306,8 @@ public:
         _precalc__ta_roc_2.resize(n);
         _precalc__ta_roc_3.resize(n);
 
-        _ta_ema_1 = ta::EMA(47);
-        _ta_roc_2 = ta::ROC(12);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 47));
+        _ta_roc_2 = ta::ROC(get_input_int("Momentum ROC Length", 12));
         _ta_roc_3 = ta::ROC(1);
 
 
@@ -330,8 +330,8 @@ public:
             _precalc__ta_roc_3[i] = _ta_roc_3.compute(bars[i].close);
         }
 
-        _ta_ema_1 = ta::EMA(47);
-        _ta_roc_2 = ta::ROC(12);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 47));
+        _ta_roc_2 = ta::ROC(get_input_int("Momentum ROC Length", 12));
         _ta_roc_3 = ta::ROC(1);
 
         _use_precalc = true;

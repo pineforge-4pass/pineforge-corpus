@@ -367,10 +367,10 @@ public:
         _precalc__ta_ema_3.resize(n);
         _precalc__ta_ema_4.resize(n);
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_ema_3 = ta::EMA(5);
-        _ta_ema_4 = ta::EMA(13);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_ema_3 = ta::EMA(get_input_int("Fast EMA", 5));
+        _ta_ema_4 = ta::EMA(get_input_int("Slow EMA", 13));
 
 
         for (int i = 0; i < n; ++i) {
@@ -393,10 +393,10 @@ public:
             _precalc__ta_ema_4[i] = _ta_ema_4.compute(bars[i].close);
         }
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_ema_3 = ta::EMA(5);
-        _ta_ema_4 = ta::EMA(13);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_ema_3 = ta::EMA(get_input_int("Fast EMA", 5));
+        _ta_ema_4 = ta::EMA(get_input_int("Slow EMA", 13));
 
         _use_precalc = true;
     }

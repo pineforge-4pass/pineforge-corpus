@@ -277,7 +277,7 @@ public:
 
         _precalc__ta_supertrend_1.resize(n);
 
-        _ta_supertrend_1 = ta::Supertrend(3.0, 10);
+        _ta_supertrend_1 = ta::Supertrend(get_input_double("Supertrend factor", 3.0), get_input_int("Supertrend ATR length", 10));
 
 
         for (int i = 0; i < n; ++i) {
@@ -297,7 +297,7 @@ public:
             _precalc__ta_supertrend_1[i] = _ta_supertrend_1.compute(bars[i].high, bars[i].low, bars[i].close);
         }
 
-        _ta_supertrend_1 = ta::Supertrend(3.0, 10);
+        _ta_supertrend_1 = ta::Supertrend(get_input_double("Supertrend factor", 3.0), get_input_int("Supertrend ATR length", 10));
 
         _use_precalc = true;
     }

@@ -298,7 +298,7 @@ public:
 
         _precalc__ta_rsi_1.resize(n);
 
-        _ta_rsi_1 = ta::RSI(14);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Length", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -318,7 +318,7 @@ public:
             _precalc__ta_rsi_1[i] = _ta_rsi_1.compute(bars[i].close);
         }
 
-        _ta_rsi_1 = ta::RSI(14);
+        _ta_rsi_1 = ta::RSI(get_input_int("RSI Length", 14));
 
         _use_precalc = true;
     }

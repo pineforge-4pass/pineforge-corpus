@@ -326,10 +326,10 @@ public:
         _precalc__ta_lowest_4.resize(n);
         _precalc__ta_ema_5.resize(n);
 
-        _ta_highestbars_1 = ta::HighestBars(20);
-        _ta_lowestbars_2 = ta::LowestBars(20);
-        _ta_highest_3 = ta::Highest(20);
-        _ta_lowest_4 = ta::Lowest(20);
+        _ta_highestbars_1 = ta::HighestBars(get_input_int("Lookback", 20));
+        _ta_lowestbars_2 = ta::LowestBars(get_input_int("Lookback", 20));
+        _ta_highest_3 = ta::Highest(get_input_int("Lookback", 20));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Lookback", 20));
         _ta_ema_5 = ta::EMA(50);
 
 
@@ -354,10 +354,10 @@ public:
             _precalc__ta_ema_5[i] = _ta_ema_5.compute(bars[i].close);
         }
 
-        _ta_highestbars_1 = ta::HighestBars(20);
-        _ta_lowestbars_2 = ta::LowestBars(20);
-        _ta_highest_3 = ta::Highest(20);
-        _ta_lowest_4 = ta::Lowest(20);
+        _ta_highestbars_1 = ta::HighestBars(get_input_int("Lookback", 20));
+        _ta_lowestbars_2 = ta::LowestBars(get_input_int("Lookback", 20));
+        _ta_highest_3 = ta::Highest(get_input_int("Lookback", 20));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Lookback", 20));
         _ta_ema_5 = ta::EMA(50);
 
         _use_precalc = true;

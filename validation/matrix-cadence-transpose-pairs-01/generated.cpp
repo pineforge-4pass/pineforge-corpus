@@ -480,11 +480,11 @@ public:
         _precalc__ta_ema_4.resize(n);
         _precalc__ta_atr_5.resize(n);
 
-        _ta_sma_1 = ta::SMA(6);
-        _ta_sma_2 = ta::SMA(18);
-        _ta_sma_3 = ta::SMA(54);
-        _ta_ema_4 = ta::EMA(43);
-        _ta_atr_5 = ta::ATR(16);
+        _ta_sma_1 = ta::SMA(get_input_int("Short Horizon", 6));
+        _ta_sma_2 = ta::SMA(get_input_int("Medium Horizon", 18));
+        _ta_sma_3 = ta::SMA(get_input_int("Long Horizon", 54));
+        _ta_ema_4 = ta::EMA(get_input_int("Trend EMA Length", 43));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 16));
 
         _s_close.clear();
 
@@ -510,11 +510,11 @@ public:
             _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_sma_1 = ta::SMA(6);
-        _ta_sma_2 = ta::SMA(18);
-        _ta_sma_3 = ta::SMA(54);
-        _ta_ema_4 = ta::EMA(43);
-        _ta_atr_5 = ta::ATR(16);
+        _ta_sma_1 = ta::SMA(get_input_int("Short Horizon", 6));
+        _ta_sma_2 = ta::SMA(get_input_int("Medium Horizon", 18));
+        _ta_sma_3 = ta::SMA(get_input_int("Long Horizon", 54));
+        _ta_ema_4 = ta::EMA(get_input_int("Trend EMA Length", 43));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 16));
         _s_close.clear();
 
         _use_precalc = true;

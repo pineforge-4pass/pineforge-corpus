@@ -383,11 +383,11 @@ public:
         _precalc__ta_highest_4.resize(n);
         _precalc__ta_lowest_5.resize(n);
 
-        _ta_ema_1 = ta::EMA(21);
-        _ta_ema_2 = ta::EMA(55);
-        _ta_rsi_3 = ta::RSI(14);
-        _ta_highest_4 = ta::Highest(20);
-        _ta_lowest_5 = ta::Lowest(20);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA fast", 21));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA slow", 55));
+        _ta_rsi_3 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_highest_4 = ta::Highest(get_input_int("Breakout window", 20));
+        _ta_lowest_5 = ta::Lowest(get_input_int("Breakout window", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -411,11 +411,11 @@ public:
             _precalc__ta_lowest_5[i] = _ta_lowest_5.compute(bars[i].low);
         }
 
-        _ta_ema_1 = ta::EMA(21);
-        _ta_ema_2 = ta::EMA(55);
-        _ta_rsi_3 = ta::RSI(14);
-        _ta_highest_4 = ta::Highest(20);
-        _ta_lowest_5 = ta::Lowest(20);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA fast", 21));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA slow", 55));
+        _ta_rsi_3 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_highest_4 = ta::Highest(get_input_int("Breakout window", 20));
+        _ta_lowest_5 = ta::Lowest(get_input_int("Breakout window", 20));
 
         _use_precalc = true;
     }

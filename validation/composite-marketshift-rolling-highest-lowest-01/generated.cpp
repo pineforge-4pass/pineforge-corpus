@@ -282,8 +282,8 @@ public:
         _precalc__ta_highest_1.resize(n);
         _precalc__ta_lowest_2.resize(n);
 
-        _ta_highest_1 = ta::Highest(50);
-        _ta_lowest_2 = ta::Lowest(50);
+        _ta_highest_1 = ta::Highest(get_input_int("Rolling window length", 50));
+        _ta_lowest_2 = ta::Lowest(get_input_int("Rolling window length", 50));
 
 
         for (int i = 0; i < n; ++i) {
@@ -304,8 +304,8 @@ public:
             _precalc__ta_lowest_2[i] = _ta_lowest_2.compute(bars[i].low);
         }
 
-        _ta_highest_1 = ta::Highest(50);
-        _ta_lowest_2 = ta::Lowest(50);
+        _ta_highest_1 = ta::Highest(get_input_int("Rolling window length", 50));
+        _ta_lowest_2 = ta::Lowest(get_input_int("Rolling window length", 50));
 
         _use_precalc = true;
     }

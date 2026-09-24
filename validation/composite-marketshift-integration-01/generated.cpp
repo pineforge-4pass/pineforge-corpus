@@ -396,10 +396,10 @@ public:
         _precalc__ta_highest_3.resize(n);
         _precalc__ta_lowest_4.resize(n);
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_highest_3 = ta::Highest(50);
-        _ta_lowest_4 = ta::Lowest(50);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_highest_3 = ta::Highest(get_input_int("Rolling window length", 50));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Rolling window length", 50));
 
 
         for (int i = 0; i < n; ++i) {
@@ -422,10 +422,10 @@ public:
             _precalc__ta_lowest_4[i] = _ta_lowest_4.compute(bars[i].low);
         }
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_highest_3 = ta::Highest(50);
-        _ta_lowest_4 = ta::Lowest(50);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_highest_3 = ta::Highest(get_input_int("Rolling window length", 50));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Rolling window length", 50));
 
         _use_precalc = true;
     }

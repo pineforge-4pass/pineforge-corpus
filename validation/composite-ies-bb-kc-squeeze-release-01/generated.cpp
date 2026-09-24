@@ -336,10 +336,10 @@ public:
         _precalc__ta_ema_3.resize(n);
         _precalc__ta_atr_4.resize(n);
 
-        _ta_sma_1 = ta::SMA(20);
-        _ta_stdev_2 = ta::StdDev(20);
-        _ta_ema_3 = ta::EMA(20);
-        _ta_atr_4 = ta::ATR(20);
+        _ta_sma_1 = ta::SMA(get_input_int("BB Length", 20));
+        _ta_stdev_2 = ta::StdDev(get_input_int("BB Length", 20));
+        _ta_ema_3 = ta::EMA(get_input_int("KC Length", 20));
+        _ta_atr_4 = ta::ATR(get_input_int("KC Length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -362,10 +362,10 @@ public:
             _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_sma_1 = ta::SMA(20);
-        _ta_stdev_2 = ta::StdDev(20);
-        _ta_ema_3 = ta::EMA(20);
-        _ta_atr_4 = ta::ATR(20);
+        _ta_sma_1 = ta::SMA(get_input_int("BB Length", 20));
+        _ta_stdev_2 = ta::StdDev(get_input_int("BB Length", 20));
+        _ta_ema_3 = ta::EMA(get_input_int("KC Length", 20));
+        _ta_atr_4 = ta::ATR(get_input_int("KC Length", 20));
 
         _use_precalc = true;
     }

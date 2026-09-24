@@ -302,8 +302,8 @@ public:
         _precalc__ta_bb_1.resize(n);
         _precalc__ta_stdev_2.resize(n);
 
-        _ta_bb_1 = ta::BB(31, 2.15);
-        _ta_stdev_2 = ta::StdDev(31);
+        _ta_bb_1 = ta::BB(get_input_int("Band Length", 31), get_input_double("Band Width", 2.15));
+        _ta_stdev_2 = ta::StdDev(get_input_int("Band Length", 31));
 
 
         for (int i = 0; i < n; ++i) {
@@ -324,8 +324,8 @@ public:
             _precalc__ta_stdev_2[i] = _ta_stdev_2.compute(bars[i].close);
         }
 
-        _ta_bb_1 = ta::BB(31, 2.15);
-        _ta_stdev_2 = ta::StdDev(31);
+        _ta_bb_1 = ta::BB(get_input_int("Band Length", 31), get_input_double("Band Width", 2.15));
+        _ta_stdev_2 = ta::StdDev(get_input_int("Band Length", 31));
 
         _use_precalc = true;
     }

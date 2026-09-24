@@ -362,9 +362,9 @@ public:
         _precalc__ta_rsi_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_percentrank_1 = ta::PercentRank(55);
-        _ta_rsi_2 = ta::RSI(14);
-        _ta_atr_3 = ta::ATR(17);
+        _ta_percentrank_1 = ta::PercentRank(get_input_int("Rank Window", 55));
+        _ta_rsi_2 = ta::RSI(get_input_int("RSI Length", 14));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 17));
 
         _s_close.clear();
 
@@ -388,9 +388,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_percentrank_1 = ta::PercentRank(55);
-        _ta_rsi_2 = ta::RSI(14);
-        _ta_atr_3 = ta::ATR(17);
+        _ta_percentrank_1 = ta::PercentRank(get_input_int("Rank Window", 55));
+        _ta_rsi_2 = ta::RSI(get_input_int("RSI Length", 14));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 17));
         _s_close.clear();
 
         _use_precalc = true;

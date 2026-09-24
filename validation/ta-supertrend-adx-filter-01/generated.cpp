@@ -328,8 +328,8 @@ public:
         _precalc__ta_supertrend_1.resize(n);
         _precalc__ta_dmi_2.resize(n);
 
-        _ta_supertrend_1 = ta::Supertrend(3.0, 10);
-        _ta_dmi_2 = ta::DMI(14, 14);
+        _ta_supertrend_1 = ta::Supertrend(get_input_double("Supertrend Factor", 3.0), get_input_int("Supertrend ATR Period", 10));
+        _ta_dmi_2 = ta::DMI(get_input_int("DI Length", 14), get_input_int("ADX Smoothing", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -350,8 +350,8 @@ public:
             _precalc__ta_dmi_2[i] = _ta_dmi_2.compute(bars[i].high, bars[i].low, bars[i].close);
         }
 
-        _ta_supertrend_1 = ta::Supertrend(3.0, 10);
-        _ta_dmi_2 = ta::DMI(14, 14);
+        _ta_supertrend_1 = ta::Supertrend(get_input_double("Supertrend Factor", 3.0), get_input_int("Supertrend ATR Period", 10));
+        _ta_dmi_2 = ta::DMI(get_input_int("DI Length", 14), get_input_int("ADX Smoothing", 14));
 
         _use_precalc = true;
     }

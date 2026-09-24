@@ -351,10 +351,10 @@ public:
         _precalc__ta_ema_3.resize(n);
         _precalc__ta_atr_4.resize(n);
 
-        _ta_ema_1 = ta::EMA(1);
-        _ta_sma_2 = ta::SMA(1);
-        _ta_ema_3 = ta::EMA(113);
-        _ta_atr_4 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_sma_2 = ta::SMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_ema_3 = ta::EMA(get_input_int("Confirmation EMA", 113));
+        _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 15));
 
 
         for (int i = 0; i < n; ++i) {
@@ -377,10 +377,10 @@ public:
             _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA(1);
-        _ta_sma_2 = ta::SMA(1);
-        _ta_ema_3 = ta::EMA(113);
-        _ta_atr_4 = ta::ATR(15);
+        _ta_ema_1 = ta::EMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_sma_2 = ta::SMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_ema_3 = ta::EMA(get_input_int("Confirmation EMA", 113));
+        _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 15));
 
         _use_precalc = true;
     }

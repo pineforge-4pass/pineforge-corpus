@@ -365,9 +365,9 @@ public:
         _precalc__ta_ema_2.resize(n);
         _precalc__ta_ema_3.resize(n);
 
-        _ta_ema_1 = ta::EMA(21);
-        _ta_ema_2 = ta::EMA(55);
-        _ta_ema_3 = ta::EMA(200);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast MA", 21));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow MA", 55));
+        _ta_ema_3 = ta::EMA(get_input_int("Trend MA", 200));
 
 
         for (int i = 0; i < n; ++i) {
@@ -389,9 +389,9 @@ public:
             _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
         }
 
-        _ta_ema_1 = ta::EMA(21);
-        _ta_ema_2 = ta::EMA(55);
-        _ta_ema_3 = ta::EMA(200);
+        _ta_ema_1 = ta::EMA(get_input_int("Fast MA", 21));
+        _ta_ema_2 = ta::EMA(get_input_int("Slow MA", 55));
+        _ta_ema_3 = ta::EMA(get_input_int("Trend MA", 200));
 
         _use_precalc = true;
     }

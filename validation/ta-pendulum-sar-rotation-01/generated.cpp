@@ -325,8 +325,8 @@ public:
         _precalc__ta_sar_1.resize(n);
         _precalc__ta_ema_2.resize(n);
 
-        _ta_sar_1 = ta::SAR(0.018, 0.021, 0.19);
-        _ta_ema_2 = ta::EMA(73);
+        _ta_sar_1 = ta::SAR(get_input_double("SAR Start", 0.018), get_input_double("SAR Increment", 0.021), get_input_double("SAR Maximum", 0.19));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 73));
 
 
         for (int i = 0; i < n; ++i) {
@@ -347,8 +347,8 @@ public:
             _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
         }
 
-        _ta_sar_1 = ta::SAR(0.018, 0.021, 0.19);
-        _ta_ema_2 = ta::EMA(73);
+        _ta_sar_1 = ta::SAR(get_input_double("SAR Start", 0.018), get_input_double("SAR Increment", 0.021), get_input_double("SAR Maximum", 0.19));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 73));
 
         _use_precalc = true;
     }

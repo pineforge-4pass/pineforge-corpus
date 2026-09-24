@@ -341,8 +341,8 @@ public:
         _precalc__ta_atr_1.resize(n);
         _precalc__ta_highest_3.resize(n);
 
-        _ta_atr_1 = ta::ATR(15);
-        _ta_highest_3 = ta::Highest(28);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 15));
+        _ta_highest_3 = ta::Highest(get_input_int("Breakout Length", 28));
 
 
         for (int i = 0; i < n; ++i) {
@@ -363,8 +363,8 @@ public:
             _precalc__ta_highest_3[i] = _ta_highest_3.compute(bars[i].high);
         }
 
-        _ta_atr_1 = ta::ATR(15);
-        _ta_highest_3 = ta::Highest(28);
+        _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 15));
+        _ta_highest_3 = ta::Highest(get_input_int("Breakout Length", 28));
 
         _use_precalc = true;
     }

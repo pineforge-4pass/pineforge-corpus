@@ -348,10 +348,10 @@ public:
         _precalc__ta_linreg_4.resize(n);
         _precalc__ta_atr_5.resize(n);
 
-        _ta_cog_1 = ta::COG(13);
-        _ta_linreg_3 = ta::Linreg(38);
-        _ta_linreg_4 = ta::Linreg(38);
-        _ta_atr_5 = ta::ATR(20);
+        _ta_cog_1 = ta::COG(get_input_int("COG Length", 13));
+        _ta_linreg_3 = ta::Linreg(get_input_int("Regression Length", 38));
+        _ta_linreg_4 = ta::Linreg(get_input_int("Regression Length", 38));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -374,10 +374,10 @@ public:
             _precalc__ta_atr_5[i] = _ta_atr_5.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_cog_1 = ta::COG(13);
-        _ta_linreg_3 = ta::Linreg(38);
-        _ta_linreg_4 = ta::Linreg(38);
-        _ta_atr_5 = ta::ATR(20);
+        _ta_cog_1 = ta::COG(get_input_int("COG Length", 13));
+        _ta_linreg_3 = ta::Linreg(get_input_int("Regression Length", 38));
+        _ta_linreg_4 = ta::Linreg(get_input_int("Regression Length", 38));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 20));
 
         _use_precalc = true;
     }

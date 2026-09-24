@@ -333,8 +333,8 @@ public:
         _precalc__ta_ema_2.resize(n);
         _precalc__ta_ema_3.resize(n);
 
-        _ta_ema_2 = ta::EMA(9);
-        _ta_ema_3 = ta::EMA(21);
+        _ta_ema_2 = ta::EMA(get_input_int("Fast EMA", 9));
+        _ta_ema_3 = ta::EMA(get_input_int("Slow EMA", 21));
 
 
         for (int i = 0; i < n; ++i) {
@@ -355,8 +355,8 @@ public:
             _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
         }
 
-        _ta_ema_2 = ta::EMA(9);
-        _ta_ema_3 = ta::EMA(21);
+        _ta_ema_2 = ta::EMA(get_input_int("Fast EMA", 9));
+        _ta_ema_3 = ta::EMA(get_input_int("Slow EMA", 21));
 
         _use_precalc = true;
     }

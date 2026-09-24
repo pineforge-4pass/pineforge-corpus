@@ -295,8 +295,8 @@ public:
         _precalc__ta_pivothigh_1.resize(n);
         _precalc__ta_pivotlow_2.resize(n);
 
-        _ta_pivothigh_1 = ta::PivotHigh(10, 5);
-        _ta_pivotlow_2 = ta::PivotLow(10, 5);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Swing Left Bars", 10), get_input_int("Swing Right Bars", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Swing Left Bars", 10), get_input_int("Swing Right Bars", 5));
 
 
         for (int i = 0; i < n; ++i) {
@@ -317,8 +317,8 @@ public:
             _precalc__ta_pivotlow_2[i] = _ta_pivotlow_2.compute(bars[i].low);
         }
 
-        _ta_pivothigh_1 = ta::PivotHigh(10, 5);
-        _ta_pivotlow_2 = ta::PivotLow(10, 5);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Swing Left Bars", 10), get_input_int("Swing Right Bars", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Swing Left Bars", 10), get_input_int("Swing Right Bars", 5));
 
         _use_precalc = true;
     }

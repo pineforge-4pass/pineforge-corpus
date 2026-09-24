@@ -27,6 +27,29 @@
 
 using namespace pineforge;
 
+#ifdef PF_PIVOT_LEVELS_HAS_ANCHOR
+class _PFPivotPointLevels {
+    ta::PivotPointLevels impl_;
+public:
+    std::vector<double> compute(const std::string& type, bool anchor, bool developing, double open, double high, double low, double close) {
+        return impl_.compute(type, anchor, developing, open, high, low, close);
+    }
+    std::vector<double> recompute(const std::string& type, bool anchor, bool developing, double open, double high, double low, double close) {
+        return impl_.recompute(type, anchor, developing, open, high, low, close);
+    }
+};
+#else
+class _PFPivotPointLevels {
+public:
+    std::vector<double> compute(const std::string& type, bool, bool, double, double high, double low, double close) {
+        return ta::pivot_point_levels(type, high, low, close);
+    }
+    std::vector<double> recompute(const std::string& type, bool, bool, double, double high, double low, double close) {
+        return ta::pivot_point_levels(type, high, low, close);
+    }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -99,8 +122,9 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
-    ta::Crossover _ta_crossover_1;
-    ta::Crossunder _ta_crossunder_2;
+    _PFPivotPointLevels _ta_pivot_point_levels_1;
+    ta::Crossover _ta_crossover_2;
+    ta::Crossunder _ta_crossunder_3;
     bool _use_precalc = false;
     Series<double> _s_close;
     Series<double> _s_high;
@@ -113,17 +137,18 @@ public:
     bool _inputs_initialized_ = false;
 
     struct _PFScriptState {
-        decltype(GeneratedStrategy::_ta_crossover_1) _pf_value_0;
-        decltype(GeneratedStrategy::_ta_crossunder_2) _pf_value_1;
-        decltype(GeneratedStrategy::_s_close) _pf_value_2;
-        decltype(GeneratedStrategy::_s_high) _pf_value_3;
-        decltype(GeneratedStrategy::_s_low) _pf_value_4;
-        decltype(GeneratedStrategy::pivots) _pf_value_5;
-        decltype(GeneratedStrategy::P) _pf_value_6;
-        decltype(GeneratedStrategy::R1) _pf_value_7;
-        decltype(GeneratedStrategy::S1) _pf_value_8;
-        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_9;
-        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_10;
+        decltype(GeneratedStrategy::_ta_pivot_point_levels_1) _pf_value_0;
+        decltype(GeneratedStrategy::_ta_crossover_2) _pf_value_1;
+        decltype(GeneratedStrategy::_ta_crossunder_3) _pf_value_2;
+        decltype(GeneratedStrategy::_s_close) _pf_value_3;
+        decltype(GeneratedStrategy::_s_high) _pf_value_4;
+        decltype(GeneratedStrategy::_s_low) _pf_value_5;
+        decltype(GeneratedStrategy::pivots) _pf_value_6;
+        decltype(GeneratedStrategy::P) _pf_value_7;
+        decltype(GeneratedStrategy::R1) _pf_value_8;
+        decltype(GeneratedStrategy::S1) _pf_value_9;
+        decltype(GeneratedStrategy::_ta_initialized_) _pf_value_10;
+        decltype(GeneratedStrategy::_inputs_initialized_) _pf_value_11;
     };
     static_assert(std::is_copy_constructible_v<_PFScriptState>, "generated Pine state must be deep-copy constructible");
     static_assert(std::is_copy_assignable_v<_PFScriptState>, "generated Pine state must be deep-copy assignable");
@@ -131,8 +156,9 @@ public:
 
     void snapshot_script_state() override {
         _pf_script_state_checkpoint_.emplace(_PFScriptState{
-            _ta_crossover_1,
-            _ta_crossunder_2,
+            _ta_pivot_point_levels_1,
+            _ta_crossover_2,
+            _ta_crossunder_3,
             _s_close,
             _s_high,
             _s_low,
@@ -147,17 +173,18 @@ public:
 
     void restore_script_state() override {
         if (!_pf_script_state_checkpoint_) return;
-        this->_ta_crossover_1 = _pf_script_state_checkpoint_->_pf_value_0;
-        this->_ta_crossunder_2 = _pf_script_state_checkpoint_->_pf_value_1;
-        this->_s_close = _pf_script_state_checkpoint_->_pf_value_2;
-        this->_s_high = _pf_script_state_checkpoint_->_pf_value_3;
-        this->_s_low = _pf_script_state_checkpoint_->_pf_value_4;
-        this->pivots = _pf_script_state_checkpoint_->_pf_value_5;
-        this->P = _pf_script_state_checkpoint_->_pf_value_6;
-        this->R1 = _pf_script_state_checkpoint_->_pf_value_7;
-        this->S1 = _pf_script_state_checkpoint_->_pf_value_8;
-        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_9;
-        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_10;
+        this->_ta_pivot_point_levels_1 = _pf_script_state_checkpoint_->_pf_value_0;
+        this->_ta_crossover_2 = _pf_script_state_checkpoint_->_pf_value_1;
+        this->_ta_crossunder_3 = _pf_script_state_checkpoint_->_pf_value_2;
+        this->_s_close = _pf_script_state_checkpoint_->_pf_value_3;
+        this->_s_high = _pf_script_state_checkpoint_->_pf_value_4;
+        this->_s_low = _pf_script_state_checkpoint_->_pf_value_5;
+        this->pivots = _pf_script_state_checkpoint_->_pf_value_6;
+        this->P = _pf_script_state_checkpoint_->_pf_value_7;
+        this->R1 = _pf_script_state_checkpoint_->_pf_value_8;
+        this->S1 = _pf_script_state_checkpoint_->_pf_value_9;
+        this->_ta_initialized_ = _pf_script_state_checkpoint_->_pf_value_10;
+        this->_inputs_initialized_ = _pf_script_state_checkpoint_->_pf_value_11;
     }
 
     void commit_script_state() override {
@@ -220,8 +247,9 @@ public:
 #endif
     void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
         _pf_script_state_checkpoint_.reset();
-        this->_ta_crossover_1 = decltype(this->_ta_crossover_1){};
-        this->_ta_crossunder_2 = decltype(this->_ta_crossunder_2){};
+        this->_ta_pivot_point_levels_1 = decltype(this->_ta_pivot_point_levels_1){};
+        this->_ta_crossover_2 = decltype(this->_ta_crossover_2){};
+        this->_ta_crossunder_3 = decltype(this->_ta_crossunder_3){};
         this->_use_precalc = false;
         this->_s_close = decltype(this->_s_close){};
         this->_s_high = decltype(this->_s_high){};
@@ -242,14 +270,14 @@ public:
         else _s_high.update(current_bar_.high);
         if (history_advances_new_bar()) _s_low.push(current_bar_.low);
         else _s_low.update(current_bar_.low);
-        pivots = ta::pivot_point_levels(std::string("Traditional"), _s_high[1], _s_low[1], _s_close[1]);
+        pivots = (history_advances_new_bar() ? _ta_pivot_point_levels_1.compute(std::string("Traditional"), true, false, current_bar_.open, current_bar_.high, current_bar_.low, current_bar_.close) : _ta_pivot_point_levels_1.recompute(std::string("Traditional"), true, false, current_bar_.open, current_bar_.high, current_bar_.low, current_bar_.close));
         P = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((0)); }((pivots));
         R1 = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((1)); }((pivots));
         S1 = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((2)); }((pivots));
-        if ((history_advances_new_bar() ? _ta_crossover_1.compute(current_bar_.close, R1) : _ta_crossover_1.recompute(current_bar_.close, R1))) {
+        if ((history_advances_new_bar() ? _ta_crossover_2.compute(current_bar_.close, R1) : _ta_crossover_2.recompute(current_bar_.close, R1))) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), std::string("close x> R1"));
         }
-        if ((history_advances_new_bar() ? _ta_crossunder_2.compute(current_bar_.close, S1) : _ta_crossunder_2.recompute(current_bar_.close, S1))) {
+        if ((history_advances_new_bar() ? _ta_crossunder_3.compute(current_bar_.close, S1) : _ta_crossunder_3.recompute(current_bar_.close, S1))) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), std::string("close x< S1"));
         }
     }

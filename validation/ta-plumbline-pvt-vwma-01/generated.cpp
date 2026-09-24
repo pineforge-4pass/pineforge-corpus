@@ -317,9 +317,9 @@ public:
         _precalc__ta_pvt_2.resize(n);
         _precalc__ta_atr_4.resize(n);
 
-        _ta_vwma_1 = ta::VWMA(33);
+        _ta_vwma_1 = ta::VWMA(get_input_int("VWMA Length", 33));
         _ta_pvt_2 = ta::PVT();
-        _ta_atr_4 = ta::ATR(21);
+        _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 21));
 
 
         for (int i = 0; i < n; ++i) {
@@ -341,9 +341,9 @@ public:
             _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_vwma_1 = ta::VWMA(33);
+        _ta_vwma_1 = ta::VWMA(get_input_int("VWMA Length", 33));
         _ta_pvt_2 = ta::PVT();
-        _ta_atr_4 = ta::ATR(21);
+        _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 21));
 
         _use_precalc = true;
     }

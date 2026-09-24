@@ -858,13 +858,13 @@ public:
         _precalc__ta_ema_12.resize(n);
         _precalc__ta_ema_13.resize(n);
 
-        _ta_atr_6 = ta::ATR(14);
-        _ta_ema_8 = ta::EMA(21);
-        _ta_ema_9 = ta::EMA(55);
-        _ta_ema_10 = ta::EMA(200);
-        _ta_rsi_11 = ta::RSI(14);
-        _ta_ema_12 = ta::EMA(12);
-        _ta_ema_13 = ta::EMA(26);
+        _ta_atr_6 = ta::ATR(get_input_int("ATR period", 14));
+        _ta_ema_8 = ta::EMA(get_input_int("Bias fast EMA", 21));
+        _ta_ema_9 = ta::EMA(get_input_int("Bias slow EMA", 55));
+        _ta_ema_10 = ta::EMA(get_input_int("Bias trend EMA", 200));
+        _ta_rsi_11 = ta::RSI(get_input_int("RSI period", 14));
+        _ta_ema_12 = ta::EMA(get_input_int("MACD fast", 12));
+        _ta_ema_13 = ta::EMA(get_input_int("MACD slow", 26));
 
         _s_high.clear();
         _s_low.clear();
@@ -894,13 +894,13 @@ public:
             _precalc__ta_ema_13[i] = _ta_ema_13.compute(bars[i].close);
         }
 
-        _ta_atr_6 = ta::ATR(14);
-        _ta_ema_8 = ta::EMA(21);
-        _ta_ema_9 = ta::EMA(55);
-        _ta_ema_10 = ta::EMA(200);
-        _ta_rsi_11 = ta::RSI(14);
-        _ta_ema_12 = ta::EMA(12);
-        _ta_ema_13 = ta::EMA(26);
+        _ta_atr_6 = ta::ATR(get_input_int("ATR period", 14));
+        _ta_ema_8 = ta::EMA(get_input_int("Bias fast EMA", 21));
+        _ta_ema_9 = ta::EMA(get_input_int("Bias slow EMA", 55));
+        _ta_ema_10 = ta::EMA(get_input_int("Bias trend EMA", 200));
+        _ta_rsi_11 = ta::RSI(get_input_int("RSI period", 14));
+        _ta_ema_12 = ta::EMA(get_input_int("MACD fast", 12));
+        _ta_ema_13 = ta::EMA(get_input_int("MACD slow", 26));
         _s_high.clear();
         _s_low.clear();
 

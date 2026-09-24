@@ -285,7 +285,7 @@ public:
 
         _precalc__ta_sma_1.resize(n);
 
-        _ta_sma_1 = ta::SMA(400);
+        _ta_sma_1 = ta::SMA(get_input_int("Long SMA length", 400));
 
         _s_close.clear();
 
@@ -307,7 +307,7 @@ public:
             _precalc__ta_sma_1[i] = _ta_sma_1.compute(bars[i].close);
         }
 
-        _ta_sma_1 = ta::SMA(400);
+        _ta_sma_1 = ta::SMA(get_input_int("Long SMA length", 400));
         _s_close.clear();
 
         _use_precalc = true;

@@ -386,7 +386,7 @@ public:
 
         _precalc__ta_atr_6.resize(n);
 
-        _ta_atr_6 = ta::ATR(14);
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Period", 14));
 
         _s_high.clear();
         _s_low.clear();
@@ -410,7 +410,7 @@ public:
             _precalc__ta_atr_6[i] = _ta_atr_6.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_atr_6 = ta::ATR(14);
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Period", 14));
         _s_high.clear();
         _s_low.clear();
 

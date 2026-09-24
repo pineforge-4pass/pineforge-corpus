@@ -591,14 +591,14 @@ public:
         _precalc__ta_highest_7.resize(n);
         _precalc__ta_lowest_8.resize(n);
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_ema_3 = ta::EMA(21);
-        _ta_ema_4 = ta::EMA(55);
-        _ta_ema_5 = ta::EMA(200);
-        _ta_rsi_6 = ta::RSI(14);
-        _ta_highest_7 = ta::Highest(20);
-        _ta_lowest_8 = ta::Lowest(20);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_ema_3 = ta::EMA(get_input_int("EMA fast", 21));
+        _ta_ema_4 = ta::EMA(get_input_int("EMA mid", 55));
+        _ta_ema_5 = ta::EMA(get_input_int("EMA slow", 200));
+        _ta_rsi_6 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_highest_7 = ta::Highest(get_input_int("Breakout window", 20));
+        _ta_lowest_8 = ta::Lowest(get_input_int("Breakout window", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -625,14 +625,14 @@ public:
             _precalc__ta_lowest_8[i] = _ta_lowest_8.compute(bars[i].low);
         }
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
-        _ta_ema_3 = ta::EMA(21);
-        _ta_ema_4 = ta::EMA(55);
-        _ta_ema_5 = ta::EMA(200);
-        _ta_rsi_6 = ta::RSI(14);
-        _ta_highest_7 = ta::Highest(20);
-        _ta_lowest_8 = ta::Lowest(20);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
+        _ta_ema_3 = ta::EMA(get_input_int("EMA fast", 21));
+        _ta_ema_4 = ta::EMA(get_input_int("EMA mid", 55));
+        _ta_ema_5 = ta::EMA(get_input_int("EMA slow", 200));
+        _ta_rsi_6 = ta::RSI(get_input_int("RSI length", 14));
+        _ta_highest_7 = ta::Highest(get_input_int("Breakout window", 20));
+        _ta_lowest_8 = ta::Lowest(get_input_int("Breakout window", 20));
 
         _use_precalc = true;
     }

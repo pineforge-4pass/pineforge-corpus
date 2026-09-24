@@ -281,7 +281,7 @@ public:
 
         _precalc__ta_sar_1.resize(n);
 
-        _ta_sar_1 = ta::SAR(0.02, 0.02, 0.2);
+        _ta_sar_1 = ta::SAR(get_input_double("SAR start", 0.02), get_input_double("SAR increment", 0.02), get_input_double("SAR max AF", 0.2));
 
         _s_close.clear();
 
@@ -303,7 +303,7 @@ public:
             _precalc__ta_sar_1[i] = _ta_sar_1.compute(bars[i].high, bars[i].low, bars[i].close);
         }
 
-        _ta_sar_1 = ta::SAR(0.02, 0.02, 0.2);
+        _ta_sar_1 = ta::SAR(get_input_double("SAR start", 0.02), get_input_double("SAR increment", 0.02), get_input_double("SAR max AF", 0.2));
         _s_close.clear();
 
         _use_precalc = true;

@@ -316,9 +316,9 @@ public:
         _precalc__ta_cmo_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_median_1 = ta::Median(27);
-        _ta_cmo_2 = ta::CMO(16);
-        _ta_atr_3 = ta::ATR(19);
+        _ta_median_1 = ta::Median(get_input_int("Median Length", 27));
+        _ta_cmo_2 = ta::CMO(get_input_int("CMO Length", 16));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 19));
 
 
         for (int i = 0; i < n; ++i) {
@@ -340,9 +340,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_median_1 = ta::Median(27);
-        _ta_cmo_2 = ta::CMO(16);
-        _ta_atr_3 = ta::ATR(19);
+        _ta_median_1 = ta::Median(get_input_int("Median Length", 27));
+        _ta_cmo_2 = ta::CMO(get_input_int("CMO Length", 16));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 19));
 
         _use_precalc = true;
     }

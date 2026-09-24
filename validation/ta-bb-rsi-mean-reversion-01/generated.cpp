@@ -301,8 +301,8 @@ public:
         _precalc__ta_bb_1.resize(n);
         _precalc__ta_rsi_2.resize(n);
 
-        _ta_bb_1 = ta::BB(20, 2.0);
-        _ta_rsi_2 = ta::RSI(14);
+        _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));
+        _ta_rsi_2 = ta::RSI(get_input_int("RSI Length", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -323,8 +323,8 @@ public:
             _precalc__ta_rsi_2[i] = _ta_rsi_2.compute(bars[i].close);
         }
 
-        _ta_bb_1 = ta::BB(20, 2.0);
-        _ta_rsi_2 = ta::RSI(14);
+        _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));
+        _ta_rsi_2 = ta::RSI(get_input_int("RSI Length", 14));
 
         _use_precalc = true;
     }

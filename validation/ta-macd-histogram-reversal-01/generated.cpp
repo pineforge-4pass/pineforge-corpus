@@ -285,7 +285,7 @@ public:
 
         _precalc__ta_macd_1.resize(n);
 
-        _ta_macd_1 = ta::MACD(12, 26, 9);
+        _ta_macd_1 = ta::MACD(get_input_int("Fast Length", 12), get_input_int("Slow Length", 26), get_input_int("Signal Length", 9));
 
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
@@ -310,7 +310,7 @@ public:
             _precalc__ta_macd_1[i] = _ta_macd_1.compute(src);
         }
 
-        _ta_macd_1 = ta::MACD(12, 26, 9);
+        _ta_macd_1 = ta::MACD(get_input_int("Fast Length", 12), get_input_int("Slow Length", 26), get_input_int("Signal Length", 9));
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
         _src_hl2_.clear(); _src_hlc3_.clear();

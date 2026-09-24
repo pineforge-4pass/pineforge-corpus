@@ -406,8 +406,8 @@ public:
         _precalc__ta_sum_1.resize(n);
         _precalc__ta_sma_2.resize(n);
 
-        _ta_sum_1 = math::Sum(14);
-        _ta_sma_2 = ta::SMA(400);
+        _ta_sum_1 = math::Sum(get_input_int("KAMA length", 14));
+        _ta_sma_2 = ta::SMA(get_input_int("Long SMA length", 400));
 
         _s_close.clear();
 
@@ -430,8 +430,8 @@ public:
             _precalc__ta_sma_2[i] = _ta_sma_2.compute(bars[i].close);
         }
 
-        _ta_sum_1 = math::Sum(14);
-        _ta_sma_2 = ta::SMA(400);
+        _ta_sum_1 = math::Sum(get_input_int("KAMA length", 14));
+        _ta_sma_2 = ta::SMA(get_input_int("Long SMA length", 400));
         _s_close.clear();
 
         _use_precalc = true;

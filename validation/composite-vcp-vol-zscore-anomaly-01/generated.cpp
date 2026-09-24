@@ -257,7 +257,7 @@ public:
         _precalc__ta_sma_1.resize(n);
         _precalc__ta_stdev_2.resize(n);
 
-        _ta_sma_1 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Volume MA Length", 20));
         _ta_stdev_2 = ta::StdDev(20);
 
 
@@ -279,7 +279,7 @@ public:
             _precalc__ta_stdev_2[i] = _ta_stdev_2.compute(bars[i].volume);
         }
 
-        _ta_sma_1 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Volume MA Length", 20));
         _ta_stdev_2 = ta::StdDev(20);
 
         _use_precalc = true;

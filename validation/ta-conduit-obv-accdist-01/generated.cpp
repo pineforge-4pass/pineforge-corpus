@@ -351,8 +351,8 @@ public:
 
         _ta_obv_1 = ta::OBV();
         _ta_accdist_2 = ta::AccDist();
-        _ta_ema_5 = ta::EMA(52);
-        _ta_atr_6 = ta::ATR(16);
+        _ta_ema_5 = ta::EMA(get_input_int("Price Filter Length", 52));
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Length", 16));
 
 
         for (int i = 0; i < n; ++i) {
@@ -377,8 +377,8 @@ public:
 
         _ta_obv_1 = ta::OBV();
         _ta_accdist_2 = ta::AccDist();
-        _ta_ema_5 = ta::EMA(52);
-        _ta_atr_6 = ta::ATR(16);
+        _ta_ema_5 = ta::EMA(get_input_int("Price Filter Length", 52));
+        _ta_atr_6 = ta::ATR(get_input_int("ATR Length", 16));
 
         _use_precalc = true;
     }

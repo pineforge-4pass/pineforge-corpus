@@ -27,6 +27,24 @@
 
 using namespace pineforge;
 
+#ifdef PF_KC_HAS_USE_TRUE_RANGE
+class _PFKC {
+    ta::KC impl_;
+public:
+    _PFKC(int length, double mult, bool use_true_range = true) : impl_(length, mult, use_true_range) {}
+    ta::KCResult compute(double src, double high, double low, double close) { return impl_.compute(src, high, low, close); }
+    ta::KCResult recompute(double src, double high, double low, double close) { return impl_.recompute(src, high, low, close); }
+};
+#else
+class _PFKC {
+    ta::KC impl_;
+public:
+    _PFKC(int length, double mult, bool = true) : impl_(length, mult) {}
+    ta::KCResult compute(double src, double high, double low, double close) { return impl_.compute(src, high, low, close); }
+    ta::KCResult recompute(double src, double high, double low, double close) { return impl_.recompute(src, high, low, close); }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -99,7 +117,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
-    ta::KC _ta_kc_1;
+    _PFKC _ta_kc_1;
     std::vector<ta::KCResult> _precalc__ta_kc_1;
     ta::EMA _ta_ema_2;
     std::vector<double> _precalc__ta_ema_2;
@@ -280,7 +298,7 @@ public:
             _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
-            _ta_kc_1 = ta::KC(get_input_int("Keltner Length", 24), get_input_double("Keltner Multiplier", 1.7));
+            _ta_kc_1 = _PFKC(get_input_int("Keltner Length", 24), get_input_double("Keltner Multiplier", 1.7));
             _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 57));
             _ta_initialized_ = true;
         }
@@ -308,8 +326,8 @@ public:
         _precalc__ta_kc_1.resize(n);
         _precalc__ta_ema_2.resize(n);
 
-        _ta_kc_1 = ta::KC(24, 1.7);
-        _ta_ema_2 = ta::EMA(57);
+        _ta_kc_1 = _PFKC(get_input_int("Keltner Length", 24), get_input_double("Keltner Multiplier", 1.7));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 57));
 
 
         for (int i = 0; i < n; ++i) {
@@ -330,8 +348,8 @@ public:
             _precalc__ta_ema_2[i] = _ta_ema_2.compute(bars[i].close);
         }
 
-        _ta_kc_1 = ta::KC(24, 1.7);
-        _ta_ema_2 = ta::EMA(57);
+        _ta_kc_1 = _PFKC(get_input_int("Keltner Length", 24), get_input_double("Keltner Multiplier", 1.7));
+        _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 57));
 
         _use_precalc = true;
     }

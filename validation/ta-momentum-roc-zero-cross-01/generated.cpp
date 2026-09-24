@@ -280,8 +280,8 @@ public:
         _precalc__ta_mom_1.resize(n);
         _precalc__ta_roc_2.resize(n);
 
-        _ta_mom_1 = ta::Mom(10);
-        _ta_roc_2 = ta::ROC(10);
+        _ta_mom_1 = ta::Mom(get_input_int("Momentum Length", 10));
+        _ta_roc_2 = ta::ROC(get_input_int("ROC Length", 10));
 
 
         for (int i = 0; i < n; ++i) {
@@ -302,8 +302,8 @@ public:
             _precalc__ta_roc_2[i] = _ta_roc_2.compute(bars[i].close);
         }
 
-        _ta_mom_1 = ta::Mom(10);
-        _ta_roc_2 = ta::ROC(10);
+        _ta_mom_1 = ta::Mom(get_input_int("Momentum Length", 10));
+        _ta_roc_2 = ta::ROC(get_input_int("ROC Length", 10));
 
         _use_precalc = true;
     }

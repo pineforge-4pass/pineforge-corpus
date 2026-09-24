@@ -312,9 +312,9 @@ public:
         _precalc__ta_sma_2.resize(n);
         _precalc__ta_sma_3.resize(n);
 
-        _ta_sma_1 = ta::SMA(10);
-        _ta_sma_2 = ta::SMA(20);
-        _ta_sma_3 = ta::SMA(50);
+        _ta_sma_1 = ta::SMA(get_input_int("MA 1 Length", 10));
+        _ta_sma_2 = ta::SMA(get_input_int("MA 2 Length", 20));
+        _ta_sma_3 = ta::SMA(get_input_int("MA 3 Length", 50));
 
 
         for (int i = 0; i < n; ++i) {
@@ -336,9 +336,9 @@ public:
             _precalc__ta_sma_3[i] = _ta_sma_3.compute(bars[i].close);
         }
 
-        _ta_sma_1 = ta::SMA(10);
-        _ta_sma_2 = ta::SMA(20);
-        _ta_sma_3 = ta::SMA(50);
+        _ta_sma_1 = ta::SMA(get_input_int("MA 1 Length", 10));
+        _ta_sma_2 = ta::SMA(get_input_int("MA 2 Length", 20));
+        _ta_sma_3 = ta::SMA(get_input_int("MA 3 Length", 50));
 
         _use_precalc = true;
     }

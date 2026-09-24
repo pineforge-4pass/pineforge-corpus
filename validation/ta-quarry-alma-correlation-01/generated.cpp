@@ -27,6 +27,24 @@
 
 using namespace pineforge;
 
+#ifdef PF_ALMA_HAS_FLOOR
+class _PFALMA {
+    ta::ALMA impl_;
+public:
+    _PFALMA(int length, double offset, double sigma, bool floor = false) : impl_(length, offset, sigma, floor) {}
+    double compute(double src) { return impl_.compute(src); }
+    double recompute(double src) { return impl_.recompute(src); }
+};
+#else
+class _PFALMA {
+    ta::ALMA impl_;
+public:
+    _PFALMA(int length, double offset, double sigma, bool = false) : impl_(length, offset, sigma) {}
+    double compute(double src) { return impl_.compute(src); }
+    double recompute(double src) { return impl_.recompute(src); }
+};
+#endif
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -99,7 +117,7 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
-    ta::ALMA _ta_alma_1;
+    _PFALMA _ta_alma_1;
     std::vector<double> _precalc__ta_alma_1;
     ta::Correlation _ta_correlation_2;
     std::vector<double> _precalc__ta_correlation_2;
@@ -300,7 +318,7 @@ public:
             _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
-            _ta_alma_1 = ta::ALMA(get_input_int("ALMA Length", 31), get_input_double("ALMA Offset", 0.72), get_input_double("ALMA Sigma", 5.4));
+            _ta_alma_1 = _PFALMA(get_input_int("ALMA Length", 31), get_input_double("ALMA Offset", 0.72), get_input_double("ALMA Sigma", 5.4));
             _ta_correlation_2 = ta::Correlation(get_input_int("Correlation Length", 23));
             _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 17));
             _ta_initialized_ = true;
@@ -327,9 +345,9 @@ public:
         _precalc__ta_correlation_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_alma_1 = ta::ALMA(31, 0.72, 5.4);
-        _ta_correlation_2 = ta::Correlation(23);
-        _ta_atr_3 = ta::ATR(17);
+        _ta_alma_1 = _PFALMA(get_input_int("ALMA Length", 31), get_input_double("ALMA Offset", 0.72), get_input_double("ALMA Sigma", 5.4));
+        _ta_correlation_2 = ta::Correlation(get_input_int("Correlation Length", 23));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 17));
 
 
         for (int i = 0; i < n; ++i) {
@@ -351,9 +369,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_alma_1 = ta::ALMA(31, 0.72, 5.4);
-        _ta_correlation_2 = ta::Correlation(23);
-        _ta_atr_3 = ta::ATR(17);
+        _ta_alma_1 = _PFALMA(get_input_int("ALMA Length", 31), get_input_double("ALMA Offset", 0.72), get_input_double("ALMA Sigma", 5.4));
+        _ta_correlation_2 = ta::Correlation(get_input_int("Correlation Length", 23));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 17));
 
         _use_precalc = true;
     }

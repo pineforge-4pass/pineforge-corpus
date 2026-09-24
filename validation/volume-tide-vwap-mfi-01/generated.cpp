@@ -312,8 +312,8 @@ public:
         _precalc__ta_atr_3.resize(n);
 
         _ta_vwap_1 = ta::VWAP();
-        _ta_mfi_2 = ta::MFI(17);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_mfi_2 = ta::MFI(get_input_int("MFI Length", 17));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
 
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
@@ -341,8 +341,8 @@ public:
         }
 
         _ta_vwap_1 = ta::VWAP();
-        _ta_mfi_2 = ta::MFI(17);
-        _ta_atr_3 = ta::ATR(18);
+        _ta_mfi_2 = ta::MFI(get_input_int("MFI Length", 17));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 18));
         _src_open_.clear(); _src_high_.clear(); _src_low_.clear();
         _src_close_.clear(); _src_volume_.clear();
         _src_hl2_.clear(); _src_hlc3_.clear();

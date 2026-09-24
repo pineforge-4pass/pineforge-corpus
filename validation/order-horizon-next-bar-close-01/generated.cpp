@@ -313,8 +313,8 @@ public:
         _precalc__ta_sma_1.resize(n);
         _precalc__ta_atr_2.resize(n);
 
-        _ta_sma_1 = ta::SMA(34);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_sma_1 = ta::SMA(get_input_int("Signal SMA", 34));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
 
 
         for (int i = 0; i < n; ++i) {
@@ -335,8 +335,8 @@ public:
             _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_sma_1 = ta::SMA(34);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_sma_1 = ta::SMA(get_input_int("Signal SMA", 34));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
 
         _use_precalc = true;
     }

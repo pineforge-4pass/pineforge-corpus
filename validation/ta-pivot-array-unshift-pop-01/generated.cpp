@@ -326,8 +326,8 @@ public:
         _precalc__ta_pivothigh_1.resize(n);
         _precalc__ta_pivotlow_2.resize(n);
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot Length", 5), get_input_int("Pivot Length", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot Length", 5), get_input_int("Pivot Length", 5));
 
         _s_close.clear();
 
@@ -350,8 +350,8 @@ public:
             _precalc__ta_pivotlow_2[i] = _ta_pivotlow_2.compute(bars[i].low);
         }
 
-        _ta_pivothigh_1 = ta::PivotHigh(5, 5);
-        _ta_pivotlow_2 = ta::PivotLow(5, 5);
+        _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot Length", 5), get_input_int("Pivot Length", 5));
+        _ta_pivotlow_2 = ta::PivotLow(get_input_int("Pivot Length", 5), get_input_int("Pivot Length", 5));
         _s_close.clear();
 
         _use_precalc = true;

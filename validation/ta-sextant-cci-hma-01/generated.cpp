@@ -328,9 +328,9 @@ public:
         _precalc__ta_hma_2.resize(n);
         _precalc__ta_atr_3.resize(n);
 
-        _ta_cci_1 = ta::CCI(21);
-        _ta_hma_2 = ta::HMA(34);
-        _ta_atr_3 = ta::ATR(15);
+        _ta_cci_1 = ta::CCI(get_input_int("CCI Length", 21));
+        _ta_hma_2 = ta::HMA(get_input_int("HMA Length", 34));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 15));
 
 
         for (int i = 0; i < n; ++i) {
@@ -352,9 +352,9 @@ public:
             _precalc__ta_atr_3[i] = _ta_atr_3.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_cci_1 = ta::CCI(21);
-        _ta_hma_2 = ta::HMA(34);
-        _ta_atr_3 = ta::ATR(15);
+        _ta_cci_1 = ta::CCI(get_input_int("CCI Length", 21));
+        _ta_hma_2 = ta::HMA(get_input_int("HMA Length", 34));
+        _ta_atr_3 = ta::ATR(get_input_int("ATR Length", 15));
 
         _use_precalc = true;
     }

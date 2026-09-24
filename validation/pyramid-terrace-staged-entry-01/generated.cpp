@@ -317,8 +317,8 @@ public:
         _precalc__ta_ema_1.resize(n);
         _precalc__ta_atr_2.resize(n);
 
-        _ta_ema_1 = ta::EMA(42);
-        _ta_atr_2 = ta::ATR(16);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA", 42));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 16));
 
 
         for (int i = 0; i < n; ++i) {
@@ -339,8 +339,8 @@ public:
             _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA(42);
-        _ta_atr_2 = ta::ATR(16);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA", 42));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 16));
 
         _use_precalc = true;
     }

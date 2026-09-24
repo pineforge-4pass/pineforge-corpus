@@ -441,8 +441,8 @@ public:
 
         _ta_roc_1 = ta::ROC(1);
         _ta_roc_2 = ta::ROC(1);
-        _ta_ema_4 = ta::EMA(58);
-        _ta_atr_5 = ta::ATR(19);
+        _ta_ema_4 = ta::EMA(get_input_int("Trend EMA Length", 58));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 19));
 
 
         for (int i = 0; i < n; ++i) {
@@ -467,8 +467,8 @@ public:
 
         _ta_roc_1 = ta::ROC(1);
         _ta_roc_2 = ta::ROC(1);
-        _ta_ema_4 = ta::EMA(58);
-        _ta_atr_5 = ta::ATR(19);
+        _ta_ema_4 = ta::EMA(get_input_int("Trend EMA Length", 58));
+        _ta_atr_5 = ta::ATR(get_input_int("ATR Length", 19));
 
         _use_precalc = true;
     }

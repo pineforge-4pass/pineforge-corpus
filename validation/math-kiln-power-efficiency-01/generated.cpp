@@ -325,8 +325,8 @@ public:
         _precalc__ta_ema_1.resize(n);
         _precalc__ta_atr_2.resize(n);
 
-        _ta_ema_1 = ta::EMA(43);
-        _ta_atr_2 = ta::ATR(18);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 43));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 18));
 
         _s_close.clear();
 
@@ -349,8 +349,8 @@ public:
             _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA(43);
-        _ta_atr_2 = ta::ATR(18);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 43));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 18));
         _s_close.clear();
 
         _use_precalc = true;

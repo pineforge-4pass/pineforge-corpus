@@ -289,8 +289,8 @@ public:
         _precalc__ta_linreg_1.resize(n);
         _precalc__ta_stdev_2.resize(n);
 
-        _ta_linreg_1 = ta::Linreg(50);
-        _ta_stdev_2 = ta::StdDev(50);
+        _ta_linreg_1 = ta::Linreg(get_input_int("Regression Length", 50));
+        _ta_stdev_2 = ta::StdDev(get_input_int("Regression Length", 50));
 
         _s_close.clear();
 
@@ -313,8 +313,8 @@ public:
             _precalc__ta_stdev_2[i] = _ta_stdev_2.compute(bars[i].close);
         }
 
-        _ta_linreg_1 = ta::Linreg(50);
-        _ta_stdev_2 = ta::StdDev(50);
+        _ta_linreg_1 = ta::Linreg(get_input_int("Regression Length", 50));
+        _ta_stdev_2 = ta::StdDev(get_input_int("Regression Length", 50));
         _s_close.clear();
 
         _use_precalc = true;

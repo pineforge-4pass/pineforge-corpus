@@ -307,8 +307,8 @@ public:
         _precalc__ta_sma_1.resize(n);
         _precalc__ta_atr_2.resize(n);
 
-        _ta_sma_1 = ta::SMA(20);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_sma_1 = ta::SMA(get_input_int("Volume MA Length", 20));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
 
         _s_close.clear();
 
@@ -331,8 +331,8 @@ public:
             _precalc__ta_atr_2[i] = _ta_atr_2.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_sma_1 = ta::SMA(20);
-        _ta_atr_2 = ta::ATR(14);
+        _ta_sma_1 = ta::SMA(get_input_int("Volume MA Length", 20));
+        _ta_atr_2 = ta::ATR(get_input_int("ATR Length", 14));
         _s_close.clear();
 
         _use_precalc = true;

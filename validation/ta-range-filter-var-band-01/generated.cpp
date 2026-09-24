@@ -319,7 +319,7 @@ public:
 
         _precalc__ta_ema_1.resize(n);
 
-        _ta_ema_1 = ta::EMA(50);
+        _ta_ema_1 = ta::EMA(get_input_int("Filter Length", 50));
 
 
         for (int i = 0; i < n; ++i) {
@@ -339,7 +339,7 @@ public:
             _precalc__ta_ema_1[i] = _ta_ema_1.compute((bars[i].high - bars[i].low));
         }
 
-        _ta_ema_1 = ta::EMA(50);
+        _ta_ema_1 = ta::EMA(get_input_int("Filter Length", 50));
 
         _use_precalc = true;
     }

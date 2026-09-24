@@ -276,8 +276,8 @@ public:
         _precalc__ta_sma_1.resize(n);
         _precalc__ta_sma_2.resize(n);
 
-        _ta_sma_1 = ta::SMA(5);
-        _ta_sma_2 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Fast SMA length", 5));
+        _ta_sma_2 = ta::SMA(get_input_int("Slow SMA length", 20));
 
 
         for (int i = 0; i < n; ++i) {
@@ -298,8 +298,8 @@ public:
             _precalc__ta_sma_2[i] = _ta_sma_2.compute(bars[i].close);
         }
 
-        _ta_sma_1 = ta::SMA(5);
-        _ta_sma_2 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Fast SMA length", 5));
+        _ta_sma_2 = ta::SMA(get_input_int("Slow SMA length", 20));
 
         _use_precalc = true;
     }

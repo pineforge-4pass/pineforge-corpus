@@ -301,7 +301,7 @@ public:
         _precalc__ta_ema_1.resize(n);
         _precalc__ta_rsi_2.resize(n);
 
-        _ta_ema_1 = ta::EMA(38);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 38));
         _ta_rsi_2 = ta::RSI(14);
 
 
@@ -323,7 +323,7 @@ public:
             _precalc__ta_rsi_2[i] = _ta_rsi_2.compute(bars[i].close);
         }
 
-        _ta_ema_1 = ta::EMA(38);
+        _ta_ema_1 = ta::EMA(get_input_int("Trend EMA Length", 38));
         _ta_rsi_2 = ta::RSI(14);
 
         _use_precalc = true;

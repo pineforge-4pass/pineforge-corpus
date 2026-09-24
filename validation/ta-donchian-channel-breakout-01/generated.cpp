@@ -310,10 +310,10 @@ public:
         _precalc__ta_highest_3.resize(n);
         _precalc__ta_lowest_4.resize(n);
 
-        _ta_highest_1 = ta::Highest(20);
-        _ta_lowest_2 = ta::Lowest(20);
-        _ta_highest_3 = ta::Highest(10);
-        _ta_lowest_4 = ta::Lowest(10);
+        _ta_highest_1 = ta::Highest(get_input_int("Entry Channel Length", 20));
+        _ta_lowest_2 = ta::Lowest(get_input_int("Entry Channel Length", 20));
+        _ta_highest_3 = ta::Highest(get_input_int("Exit Channel Length", 10));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Exit Channel Length", 10));
 
 
         for (int i = 0; i < n; ++i) {
@@ -336,10 +336,10 @@ public:
             _precalc__ta_lowest_4[i] = _ta_lowest_4.compute(bars[i].low);
         }
 
-        _ta_highest_1 = ta::Highest(20);
-        _ta_lowest_2 = ta::Lowest(20);
-        _ta_highest_3 = ta::Highest(10);
-        _ta_lowest_4 = ta::Lowest(10);
+        _ta_highest_1 = ta::Highest(get_input_int("Entry Channel Length", 20));
+        _ta_lowest_2 = ta::Lowest(get_input_int("Entry Channel Length", 20));
+        _ta_highest_3 = ta::Highest(get_input_int("Exit Channel Length", 10));
+        _ta_lowest_4 = ta::Lowest(get_input_int("Exit Channel Length", 10));
 
         _use_precalc = true;
     }

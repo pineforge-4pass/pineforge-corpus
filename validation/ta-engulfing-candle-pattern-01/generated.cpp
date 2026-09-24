@@ -336,7 +336,7 @@ public:
 
         _precalc__ta_sma_1.resize(n);
 
-        _ta_sma_1 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Trend MA Length", 20));
 
         _s_close.clear();
         _s_open.clear();
@@ -360,7 +360,7 @@ public:
             _precalc__ta_sma_1[i] = _ta_sma_1.compute(bars[i].close);
         }
 
-        _ta_sma_1 = ta::SMA(20);
+        _ta_sma_1 = ta::SMA(get_input_int("Trend MA Length", 20));
         _s_close.clear();
         _s_open.clear();
 

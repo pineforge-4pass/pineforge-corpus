@@ -312,8 +312,8 @@ public:
         _precalc__ta_tsi_1.resize(n);
         _precalc__ta_ema_3.resize(n);
 
-        _ta_tsi_1 = ta::TSI(14, 29);
-        _ta_ema_3 = ta::EMA(68);
+        _ta_tsi_1 = ta::TSI(get_input_int("TSI Short Length", 14), get_input_int("TSI Long Length", 29));
+        _ta_ema_3 = ta::EMA(get_input_int("Trend EMA Length", 68));
 
 
         for (int i = 0; i < n; ++i) {
@@ -334,8 +334,8 @@ public:
             _precalc__ta_ema_3[i] = _ta_ema_3.compute(bars[i].close);
         }
 
-        _ta_tsi_1 = ta::TSI(14, 29);
-        _ta_ema_3 = ta::EMA(68);
+        _ta_tsi_1 = ta::TSI(get_input_int("TSI Short Length", 14), get_input_int("TSI Long Length", 29));
+        _ta_ema_3 = ta::EMA(get_input_int("Trend EMA Length", 68));
 
         _use_precalc = true;
     }
