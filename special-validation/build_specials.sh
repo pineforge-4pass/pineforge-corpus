@@ -5,19 +5,31 @@
 # non-default instruments (licensed OHLCV, gitignored) or document an engine
 # limitation, and are reproduced on demand here.
 #
-# Prereq: engine built (build/lib/libpineforge.a) + each probe's local data
+# Prereq: engine configured + built in its build tree (build/lib/libpineforge.a
+# and the generated build/include/pineforge/version.h) + each probe's local data
 # (ohlcv_*.csv + tv_trades.csv) regenerated per its README (see make_feed.py).
+# Eigen: EIGEN3_INCLUDE_DIR, else the copy the engine's build fetched, else Homebrew's.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # corpus/special-validation
 ENGINE="$(cd "$HERE/../.." && pwd)"                     # engine root
-LIB="$ENGINE/build/lib/libpineforge.a"
-EIGEN="${EIGEN3_INCLUDE_DIR:-/opt/homebrew/include/eigen3}"
+BUILD="$ENGINE/build"
+LIB="$BUILD/lib/libpineforge.a"
+VERSION_H="$BUILD/include/pineforge/version.h"
+if [ -n "${EIGEN3_INCLUDE_DIR:-}" ]; then
+    EIGEN="$EIGEN3_INCLUDE_DIR"
+elif [ -d "$BUILD/_deps/eigen-src" ]; then
+    EIGEN="$BUILD/_deps/eigen-src"
+else
+    EIGEN=/opt/homebrew/include/eigen3
+fi
 [ -f "$LIB" ] || { echo "missing $LIB — build the engine first" >&2; exit 1; }
+[ -f "$VERSION_H" ] || { echo "missing $VERSION_H — configure the engine first" >&2; exit 1; }
+[ -f "$EIGEN/Eigen/Core" ] || { echo "no Eigen headers at $EIGEN — set EIGEN3_INCLUDE_DIR" >&2; exit 1; }
 for probe in "$HERE"/*/*/; do
     [ -f "$probe/generated.cpp" ] || continue
     name="$(basename "$probe")"
     clang++ -std=c++17 -O2 -ffp-contract=off -fPIC -shared \
-        -I"$ENGINE/include" -I"$EIGEN" \
+        -I"$ENGINE/include" -I"$BUILD/include" -I"$EIGEN" \
         "$probe/generated.cpp" -Wl,-force_load,"$LIB" \
         -o "$probe/strategy.dylib"
     if [ -f "$probe/tv_trades.csv" ]; then
