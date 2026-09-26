@@ -526,7 +526,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            risk = _pf_udt_Risk.create(_PFUdtRecord_Risk{.cooldown_bars = (int64_t)(5), .last_exit_bar = (int64_t)((-1000)), .max_drawdown_pct = 0.05});
+            risk = _pf_udt_Risk.create(_PFUdtRecord_Risk{.cooldown_bars = 5, .last_exit_bar = (-1000), .max_drawdown_pct = 0.05});
             _var_initialized = true;
         } else {
         }

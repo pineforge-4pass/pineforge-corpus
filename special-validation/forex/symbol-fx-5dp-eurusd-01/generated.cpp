@@ -239,11 +239,11 @@ public:
         slow = (history_advances_new_bar() ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close));
         longCond = (history_advances_new_bar() ? _ta_crossover_3.compute(fast, slow) : _ta_crossover_3.recompute(fast, slow));
         shortCond = (history_advances_new_bar() ? _ta_crossunder_4.compute(fast, slow) : _ta_crossunder_4.recompute(fast, slow));
-        if (longCond) {
+        if ([&](){ auto _pf_bool_v = (longCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_close(std::string("S"), std::string("close short"), na<double>(), na<double>(), false, 120259084307ULL);
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), std::string("sma cross up"));
         }
-        if (shortCond) {
+        if ([&](){ auto _pf_bool_v = (shortCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_close(std::string("L"), std::string("close long"), na<double>(), na<double>(), false, 133143986195ULL);
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), std::string("sma cross dn"));
         }

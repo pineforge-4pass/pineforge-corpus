@@ -520,22 +520,22 @@ public:
         if (!(is_na(ph))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_ph)) && !(is_na(last_ph_x)))) {
-                pf_line_new(_pf_lines_, (int64_t)(last_ph_x), (double)(last_ph), (int64_t)(cur_x), (double)(ph), XLoc::bar_index, false, false);
+                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_ph_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_ph), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(ph), XLoc::bar_index, false, false);
             }
             prev_ph_y = last_ph;
             prev_ph_x = last_ph_x;
             last_ph = ph;
-            last_ph_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_ph_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         if (!(is_na(pl))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_pl)) && !(is_na(last_pl_x)))) {
-                pf_line_new(_pf_lines_, (int64_t)(last_pl_x), (double)(last_pl), (int64_t)(cur_x), (double)(pl), XLoc::bar_index, false, false);
+                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_pl_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_pl), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(pl), XLoc::bar_index, false, false);
             }
             prev_pl_y = last_pl;
             prev_pl_x = last_pl_x;
             last_pl = pl;
-            last_pl_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_pl_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         ema_fast = (history_advances_new_bar() ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close));
         ema_mid = (history_advances_new_bar() ? _ta_ema_4.compute(current_bar_.close) : _ta_ema_4.recompute(current_bar_.close));

@@ -208,7 +208,7 @@ public:
     double rsiVal = 0.0;
     int h = 0;
     double d = 0.0;
-    double sample = 0.0;
+    bool sample = false;
     int hotCount = 0;
     bool entryCond = false;
     bool exitCond = false;
@@ -342,7 +342,7 @@ public:
         this->rsiVal = 0.0;
         this->h = 0;
         this->d = 0.0;
-        this->sample = 0.0;
+        this->sample = false;
         this->hotCount = 0;
         this->entryCond = false;
         this->exitCond = false;
@@ -361,14 +361,14 @@ public:
         } else {
         }
         rsiVal = (history_advances_new_bar() ? _ta_rsi_1.compute(current_bar_.close) : _ta_rsi_1.recompute(current_bar_.close));
-        h = pine_hour((int64_t)(current_bar_.timestamp), syminfo_.timezone);
-        d = (pine_dayofweek((int64_t)(current_bar_.timestamp), syminfo_.timezone) - 1);
+        h = ([&](){ int64_t _pf_calendar_ts = (current_bar_.timestamp); return pine_hour(is_na(_pf_calendar_ts) ? int64_t(0) : _pf_calendar_ts, syminfo_.timezone); }());
+        d = (([&](){ int64_t _pf_calendar_ts = (current_bar_.timestamp); return pine_dayofweek(is_na(_pf_calendar_ts) ? int64_t(0) : _pf_calendar_ts, syminfo_.timezone); }()) - 1);
         if ((((((!(is_na(rsiVal)) && ([&]{ auto _pna_l = (rsiVal); auto _pna_r = (60.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) && ([&]{ auto _pna_l = (h); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }())) && ([&]{ auto _pna_l = (h); auto _pna_r = (24); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }())) && ([&]{ auto _pna_l = (d); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }())) && ([&]{ auto _pna_l = (d); auto _pna_r = (7); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()))) {
-            mask.set((int)(h), (int)(d), true);
+            mask.set(([&](){ auto _pf_idx_v = (h); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()), ([&](){ auto _pf_idx_v = (d); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()), true);
         }
         mT = mask.transpose();
         mTT = mT.transpose();
-        sample = mTT.get((int)(((([&]{ auto _pna_l = (h); auto _pna_r = (24); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }())) ? (h) : (0))), (int)((((([&]{ auto _pna_l = (d); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (d); auto _pna_r = (7); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()))) ? (d) : (0))));
+        sample = [&](){ auto _pf_bool_v = (mTT.get(([&](){ auto _pf_idx_v = (((([&]{ auto _pna_l = (h); auto _pna_r = (24); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }())) ? (h) : (0))); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()), ([&](){ auto _pf_idx_v = ((((([&]{ auto _pna_l = (d); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (d); auto _pna_r = (7); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()))) ? (d) : (0))); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()))); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }();
         hotCount = 0;
         int _for_start_0 = (0);
         int _for_end_0 = (23);
@@ -384,7 +384,7 @@ public:
             if (_for_step_1 == 0) _for_step_1 = 1;
             const bool _for_down_1 = (_for_start_1 > _for_end_1);
             for (int j = _for_start_1; (_for_down_1 ? (j >= _for_end_1) : (j <= _for_end_1)); j += (_for_down_1 ? -_for_step_1 : _for_step_1), _for_end_1 = (6)) {
-                if (mTT.get((int)(i), (int)(j))) {
+                if ([&](){ auto _pf_bool_v = (mTT.get(([&](){ auto _pf_idx_v = (i); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()), ([&](){ auto _pf_idx_v = (j); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()))); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
                     hotCount += 1;
                 }
             }

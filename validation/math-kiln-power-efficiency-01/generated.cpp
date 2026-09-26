@@ -304,7 +304,7 @@ public:
         }
         trendLine = (history_advances_new_bar() ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));
         atrValue = (history_advances_new_bar() ? _ta_atr_2.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_2.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
-        displacement = std::abs((current_bar_.close - _s_close[efficiencyLength]));
+        displacement = std::abs((current_bar_.close - _s_close[([&](){ auto _pf_idx_v = (efficiencyLength); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
         pathProxy = ([&]() -> double { double _v0 = (double)((atrValue * efficiencyLength)); double _v1 = (double)(syminfo_.mintick); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
         efficiency = std::pow(((double)(displacement) / (double)(pathProxy)), 2);
         enterLong = ((history_advances_new_bar() ? _ta_crossover_3.compute(current_bar_.close, trendLine) : _ta_crossover_3.recompute(current_bar_.close, trendLine)) && ([&]{ auto _pna_l = (efficiency); auto _pna_r = (minimumEfficiency); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));

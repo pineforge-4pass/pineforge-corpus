@@ -354,14 +354,14 @@ public:
             _ta_initialized_ = true;
         }
         src = get_input_source("Source", _src_close_)[0];
-        fastMA = getMA_cs0(src, fastLen);
-        slowMA = getMA_cs1(src, slowLen);
+        fastMA = getMA_cs0(src, [&](){ auto _pf_v = (fastLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }());
+        slowMA = getMA_cs1(src, [&](){ auto _pf_v = (slowLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }());
         longCond = (history_advances_new_bar() ? _ta_crossover_6.compute(fastMA, slowMA) : _ta_crossover_6.recompute(fastMA, slowMA));
         shortCond = (history_advances_new_bar() ? _ta_crossunder_7.compute(fastMA, slowMA) : _ta_crossunder_7.recompute(fastMA, slowMA));
-        if (longCond) {
+        if ([&](){ auto _pf_bool_v = (longCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (shortCond) {
+        if ([&](){ auto _pf_bool_v = (shortCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }

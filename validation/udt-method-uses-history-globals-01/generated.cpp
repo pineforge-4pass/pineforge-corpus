@@ -533,13 +533,13 @@ public:
     }
 
     double _udt_Trend_changeRate(Trend self) {
-        double ref = _s_close[_pf_udt_Trend.read(self).lookback];
+        double ref = _s_close[([&](){ auto _pf_idx_v = (_pf_udt_Trend.read(self).lookback); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
         return ((([&]{ auto _pna_l = (ref); auto _pna_r = (0.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }())) ? (0.0) : (((double)((current_bar_.close - ref)) / (double)(ref))));
     }
 
     double _udt_Trend_swingRange(Trend self) {
-        double hi = _s_high[_pf_udt_Trend.read(self).lookback];
-        double lo = _s_low[_pf_udt_Trend.read(self).lookback];
+        double hi = _s_high[([&](){ auto _pf_idx_v = (_pf_udt_Trend.read(self).lookback); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
+        double lo = _s_low[([&](){ auto _pf_idx_v = (_pf_udt_Trend.read(self).lookback); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
         return (hi - lo);
     }
 
@@ -551,7 +551,7 @@ public:
         if (history_advances_new_bar()) _s_low.push(current_bar_.low);
         else _s_low.update(current_bar_.low);
         if (!_var_initialized) {
-            trend = _pf_udt_Trend.create(_PFUdtRecord_Trend{.lookback = (int64_t)(3)});
+            trend = _pf_udt_Trend.create(_PFUdtRecord_Trend{.lookback = 3});
             _var_initialized = true;
         } else {
         }

@@ -261,11 +261,11 @@ public:
         slowEma = (history_advances_new_bar() ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close));
         turnLong = (history_advances_new_bar() ? _ta_crossover_3.compute(fastEma, slowEma) : _ta_crossover_3.recompute(fastEma, slowEma));
         turnShort = (history_advances_new_bar() ? _ta_crossunder_4.compute(fastEma, slowEma) : _ta_crossunder_4.recompute(fastEma, slowEma));
-        if (turnLong) {
+        if ([&](){ auto _pf_bool_v = (turnLong); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Switchback Long"), true, na<double>(), na<double>(), na<double>(), "");
             strategy_close(std::string("Switchback Short"), std::string("Atomic prior-side close"), na<double>(), na<double>(), false, 115964117011ULL);
         }
-        if (turnShort) {
+        if ([&](){ auto _pf_bool_v = (turnShort); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Switchback Short"), false, na<double>(), na<double>(), na<double>(), "");
             strategy_close(std::string("Switchback Long"), std::string("Atomic prior-side close"), na<double>(), na<double>(), false, 133143986195ULL);
         }

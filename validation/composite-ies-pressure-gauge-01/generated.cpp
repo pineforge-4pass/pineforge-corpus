@@ -300,7 +300,7 @@ public:
         pressure_ratio = (history_advances_new_bar() ? _ta_ema_1.compute(raw_buy) : _ta_ema_1.recompute(raw_buy));
         if (history_advances_new_bar()) pressure_smooth.push((history_advances_new_bar() ? _ta_ema_2.compute(pressure_ratio) : _ta_ema_2.recompute(pressure_ratio)));
         else pressure_smooth.update((history_advances_new_bar() ? _ta_ema_2.compute(pressure_ratio) : _ta_ema_2.recompute(pressure_ratio)));
-        pressure_momentum = (pressure_smooth[0] - pressure_smooth[i_pressure_mom]);
+        pressure_momentum = (pressure_smooth[0] - pressure_smooth[([&](){ auto _pf_idx_v = (i_pressure_mom); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]);
         pressure_state = 0;
         if (([&]{ auto _pna_l = (pressure_smooth[0]); auto _pna_r = (i_pressure_high); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }())) {
             pressure_state = 2;

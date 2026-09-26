@@ -572,7 +572,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            stat = _pf_udt_Stat.create(_PFUdtRecord_Stat{.last = na<double>(), .mean = na<double>(), .sd = na<double>(), .n = (int64_t)(0)});
+            stat = _pf_udt_Stat.create(_PFUdtRecord_Stat{.last = na<double>(), .mean = na<double>(), .sd = na<double>(), .n = 0});
             _var_initialized = true;
         } else {
         }

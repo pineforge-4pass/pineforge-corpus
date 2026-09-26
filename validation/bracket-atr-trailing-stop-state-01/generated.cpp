@@ -289,12 +289,12 @@ public:
         maVal = (history_advances_new_bar() ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close));
         longEntry = (history_advances_new_bar() ? _ta_crossover_3.compute(current_bar_.close, maVal) : _ta_crossover_3.recompute(current_bar_.close, maVal));
         shortEntry = (history_advances_new_bar() ? _ta_crossunder_4.compute(current_bar_.close, maVal) : _ta_crossunder_4.recompute(current_bar_.close, maVal));
-        if (longEntry) {
+        if ([&](){ auto _pf_bool_v = (longEntry); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
             isLong = true;
             trailStop = (current_bar_.close - (atrVal * atrMult));
         }
-        if (shortEntry) {
+        if ([&](){ auto _pf_bool_v = (shortEntry); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
             isLong = false;
             trailStop = (current_bar_.close + (atrVal * atrMult));

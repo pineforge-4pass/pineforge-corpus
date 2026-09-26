@@ -119,7 +119,7 @@ public:
     int slowLength = 0;
     int atrLength = 0;
     double stopAtr = 0.0;
-    double wasInside = 0.0;
+    bool wasInside = false;
     bool sessionOpened = false;
     bool sessionClosed = false;
     double fastEma = 0.0;
@@ -277,7 +277,7 @@ public:
         this->slowLength = 0;
         this->atrLength = 0;
         this->stopAtr = 0.0;
-        this->wasInside = 0.0;
+        this->wasInside = false;
         this->sessionOpened = false;
         this->sessionClosed = false;
         this->fastEma = 0.0;

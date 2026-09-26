@@ -322,7 +322,7 @@ public:
         } else {
             score.update(score[0] - 1);
         }
-        longCond = (([&]{ auto _pna_l = (score[0]); auto _pna_r = (2); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (score[1]); auto _pna_r = (2); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));
+        longCond = (([&]{ auto _pna_l = (score[0]); auto _pna_r = (2); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (score[1]); auto _pna_r = (2); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l < _pna_r); }()));
         shortCond = (([&]{ auto _pna_l = (score[0]); auto _pna_r = ((-2)); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) || _pfc_eq); }()) && ([&]{ auto _pna_l = (score[1]); auto _pna_r = ((-2)); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         if (longCond) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");

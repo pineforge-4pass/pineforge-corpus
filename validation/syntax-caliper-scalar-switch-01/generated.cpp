@@ -307,13 +307,13 @@ public:
             _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
-            _ta_ema_1 = ta::EMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
-            _ta_sma_2 = ta::SMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+            _ta_ema_1 = ta::EMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
+            _ta_sma_2 = ta::SMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
             _ta_ema_3 = ta::EMA(get_input_int("Confirmation EMA", 113));
             _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 15));
             _ta_initialized_ = true;
         }
-        scaledLength = [&](){ double _pf_v = (double)(std::round((baseLength * lengthScale))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+        scaledLength = [&](){ auto _pf_v = (std::round((baseLength * lengthScale))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         emaFilter = (history_advances_new_bar() ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));
         smaFilter = (history_advances_new_bar() ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close));
         auto __switch_val_0 = filterMode;
@@ -351,8 +351,8 @@ public:
         _precalc__ta_ema_3.resize(n);
         _precalc__ta_atr_4.resize(n);
 
-        _ta_ema_1 = ta::EMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
-        _ta_sma_2 = ta::SMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_ema_1 = ta::EMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
+        _ta_sma_2 = ta::SMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
         _ta_ema_3 = ta::EMA(get_input_int("Confirmation EMA", 113));
         _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 15));
 
@@ -377,8 +377,8 @@ public:
             _precalc__ta_atr_4[i] = _ta_atr_4.compute(bars[i].high, bars[i].low, bars[i].close, (i > 0 ? bars[i - 1].close : na<double>()));
         }
 
-        _ta_ema_1 = ta::EMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
-        _ta_sma_2 = ta::SMA((int)([&](){ double _pf_v = (double)(std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()));
+        _ta_ema_1 = ta::EMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
+        _ta_sma_2 = ta::SMA([&](){ auto _pf_v = ([&](){ auto _pf_v = (std::round((get_input_int("Base Length", 29) * get_input_double("Length Scale", 1.35)))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }());
         _ta_ema_3 = ta::EMA(get_input_int("Confirmation EMA", 113));
         _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 15));
 

@@ -297,10 +297,10 @@ public:
         ready = !(is_na(proj));
         sDn = (history_advances_new_bar() ? _ta_crossunder_2.compute(current_bar_.close, ref) : _ta_crossunder_2.recompute(current_bar_.close, ref));
         sUp = (history_advances_new_bar() ? _ta_crossover_3.compute(current_bar_.close, ref) : _ta_crossover_3.recompute(current_bar_.close, ref));
-        if ((ready && sDn)) {
+        if ((ready && [&](){ auto _pf_bool_v = (sDn); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }())) {
             strategy_entry(std::string("S"), false, na<double>(), na<double>(), na<double>(), "");
         }
-        if (((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) && ready) && sUp)) {
+        if (((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) && ready) && [&](){ auto _pf_bool_v = (sUp); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }())) {
             strategy_close(std::string("S"), "", na<double>(), na<double>(), false, 94489280531ULL);
         }
     }

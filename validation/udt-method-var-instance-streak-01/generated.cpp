@@ -505,7 +505,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            c = _pf_udt_Counter.create(_PFUdtRecord_Counter{.green_streak = (int64_t)(0), .red_streak = (int64_t)(0), .total_greens = (int64_t)(0), .total_reds = (int64_t)(0)});
+            c = _pf_udt_Counter.create(_PFUdtRecord_Counter{.green_streak = 0, .red_streak = 0, .total_greens = 0, .total_reds = 0});
             _var_initialized = true;
         } else {
         }

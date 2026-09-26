@@ -533,7 +533,7 @@ public:
 
     int _udt_Ramp_tick(Ramp self) {
         int idx = (_pf_udt_Ramp.read(self).counter - 1);
-        bool greenBar = (([&]{ auto _pna_l = (idx); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (_s_close[idx]); auto _pna_r = (_s_open[idx]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
+        bool greenBar = (([&]{ auto _pna_l = (idx); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l >= _pna_r); }()) && ([&]{ auto _pna_l = (_s_close[([&](){ auto _pf_idx_v = (idx); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]); auto _pna_r = (_s_open[([&](){ auto _pf_idx_v = (idx); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         if (greenBar) {
             _pf_udt_Ramp.get(self).green_count = (_pf_udt_Ramp.read(self).green_count + 1);
         }
@@ -547,7 +547,7 @@ public:
         if (history_advances_new_bar()) _s_open.push(current_bar_.open);
         else _s_open.update(current_bar_.open);
         if (!_var_initialized) {
-            ramp = _pf_udt_Ramp.create(_PFUdtRecord_Ramp{.counter = (int64_t)(0), .green_count = (int64_t)(0)});
+            ramp = _pf_udt_Ramp.create(_PFUdtRecord_Ramp{.counter = 0, .green_count = 0});
             _var_initialized = true;
         } else {
         }

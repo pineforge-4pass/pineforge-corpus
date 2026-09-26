@@ -538,7 +538,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            c = _pf_udt_Counters.create(_PFUdtRecord_Counters{.bull_run = (int64_t)(0), .bear_run = (int64_t)(0), .flat_run = (int64_t)(0)});
+            c = _pf_udt_Counters.create(_PFUdtRecord_Counters{.bull_run = 0, .bear_run = 0, .flat_run = 0});
             _var_initialized = true;
         } else {
         }

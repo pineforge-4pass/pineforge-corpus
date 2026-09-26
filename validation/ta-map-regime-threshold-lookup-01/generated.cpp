@@ -309,7 +309,7 @@ public:
             _var_initialized = true;
         } else {
         }
-        if ((bar_index_ == 0)) {
+        if ([&](){ auto _pf_bool_v = ((bar_index_ == 0)); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             [&](auto&& __pf_map_receiver_0)->decltype(auto){ return [&](auto&& __pf_map_param_arg_0)->decltype(auto){ return [&](auto&& __pf_map_param_arg_1)->decltype(auto){ return __pf_map_receiver_0.put(__pf_map_param_arg_0, __pf_map_param_arg_1); }((1.5)); }((std::string("bullish_limit"))); }((myMap));
             [&](auto&& __pf_map_receiver_1)->decltype(auto){ return [&](auto&& __pf_map_param_arg_2)->decltype(auto){ return [&](auto&& __pf_map_param_arg_3)->decltype(auto){ return __pf_map_receiver_1.put(__pf_map_param_arg_2, __pf_map_param_arg_3); }(((-1.5))); }((std::string("bearish_limit"))); }((myMap));
         }

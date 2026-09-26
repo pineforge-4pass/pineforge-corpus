@@ -366,8 +366,8 @@ public:
         in_position = ([&]{ auto _pna_l = (pos_qty); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }());
         exit_dir = ((([&]{ auto _pna_l = (pos_dir); auto _pna_r = (0); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l > _pna_r); }())) ? (false) : (true));
         if (in_position) {
-            strategy_order(std::string("BracketTP"), exit_dir, pos_qty, tp_px, na<double>(), std::string("bracket97"), 2);
-            strategy_order(std::string("BracketSL"), exit_dir, pos_qty, na<double>(), sl_px, std::string("bracket97"), 2);
+            strategy_order(std::string("BracketTP"), [&](){ auto _pf_bool_v = (exit_dir); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }(), pos_qty, tp_px, na<double>(), std::string("bracket97"), 2);
+            strategy_order(std::string("BracketSL"), [&](){ auto _pf_bool_v = (exit_dir); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }(), pos_qty, na<double>(), sl_px, std::string("bracket97"), 2);
         } else {
             strategy_cancel(std::string("BracketTP"));
             strategy_cancel(std::string("BracketSL"));
