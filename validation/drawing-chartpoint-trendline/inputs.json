@@ -1,6 +1,5 @@
 {
   "_comment": "The tape was exported under TradingView's Pine v6 default initial_capital of the day, 1000000 (its Cumulative PnL % reads it); since 2026-09-24 an omitted initial_capital is 100000 and the generated constructor declares it, so the tape's capital is pinned here (engine lane TV-DEFAULTS).",
-  "ohlcv_start_ms": 1743379200000,
   "strategy_overrides": {
     "initial_capital": 1000000
   }
