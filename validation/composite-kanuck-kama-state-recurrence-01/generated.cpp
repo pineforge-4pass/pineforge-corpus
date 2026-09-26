@@ -297,7 +297,7 @@ public:
             _ta_sum_1 = math::Sum(get_input_int("KAMA length", 14));
             _ta_initialized_ = true;
         }
-        change_n = std::abs((current_bar_.close - _s_close[i_kama_len]));
+        change_n = std::abs((current_bar_.close - _s_close[([&](){ auto _pf_idx_v = (i_kama_len); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
         vol_sum = (history_advances_new_bar() ? _ta_sum_1.compute(std::abs((current_bar_.close - _s_close[1]))) : _ta_sum_1.recompute(std::abs((current_bar_.close - _s_close[1]))));
         er = ((([&]{ auto _pna_l = (vol_sum); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)(change_n) / (double)(vol_sum))) : (0.0));
         fast_sc = ((double)(2.0) / (double)((i_kama_fast + 1)));

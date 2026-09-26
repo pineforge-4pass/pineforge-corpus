@@ -545,7 +545,7 @@ public:
     CourierEnvelope buildEnvelope_cs0(double source, int centerLength, int rangeLength) {
         double centerValue = (history_advances_new_bar() ? _ta_ema_1.compute(source) : _ta_ema_1.recompute(source));
         double widthValue = (history_advances_new_bar() ? _ta_atr_2.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_2.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
-        return _pf_udt_CourierEnvelope.create(_PFUdtRecord_CourierEnvelope{.center = centerValue, .width = widthValue, .createdAt = (int64_t)(pine_bar_index())});
+        return _pf_udt_CourierEnvelope.create(_PFUdtRecord_CourierEnvelope{.center = centerValue, .width = widthValue, .createdAt = pine_bar_index()});
     }
 
     void on_source_bar(const Bar& bar) override {

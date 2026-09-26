@@ -276,7 +276,7 @@ public:
     }
 
     double calcEfficiencyRatio_cs0(const Series<double>& src, int64_t length) {
-        double direction = std::abs((src[0] - src[length]));
+        double direction = std::abs((src[0] - src[([&](){ auto _pf_idx_v = (length); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
         double volatilitySum = (history_advances_new_bar() ? _ta_sum_1.compute(std::abs((src[0] - src[1]))) : _ta_sum_1.recompute(std::abs((src[0] - src[1]))));
         double er = ((([&]{ auto _pna_l = (volatilitySum); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (!_pfc_eq); }())) ? (((double)(direction) / (double)(volatilitySum))) : (0));
         return er;
@@ -304,7 +304,7 @@ public:
             _ta_sum_1 = math::Sum(get_input_int("Length", 14));
             _ta_initialized_ = true;
         }
-        er = calcEfficiencyRatio_cs0(([&]() -> const Series<double>& { double _sv = ([&]() { auto _pf_series_raw = (current_bar_.close); return is_na(_pf_series_raw) ? na<double>() : static_cast<double>(_pf_series_raw); }()); _udf_series_arg_1.update(_sv); return _udf_series_arg_1; }()), len);
+        er = calcEfficiencyRatio_cs0(([&]() -> const Series<double>& { double _sv = ([&]() { auto _pf_series_raw = (current_bar_.close); return is_na(_pf_series_raw) ? na<double>() : static_cast<double>(_pf_series_raw); }()); _udf_series_arg_1.update(_sv); return _udf_series_arg_1; }()), [&](){ auto _pf_v = (len); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }());
         fastAlpha = ((double)(2.0) / (double)((fastLen + 1)));
         slowAlpha = ((double)(2.0) / (double)((slowLen + 1)));
         sc = std::pow(((er * (fastAlpha - slowAlpha)) + slowAlpha), 2);

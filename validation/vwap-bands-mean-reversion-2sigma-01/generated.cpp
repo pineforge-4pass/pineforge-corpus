@@ -277,10 +277,10 @@ public:
         double lower_band = _result__ta_vwap_anchored_bands_1.lower;
         long_condition = (history_advances_new_bar() ? _ta_crossunder_2.compute(current_bar_.close, lower_band) : _ta_crossunder_2.recompute(current_bar_.close, lower_band));
         exit_condition = (history_advances_new_bar() ? _ta_crossover_3.compute(current_bar_.close, vw) : _ta_crossover_3.recompute(current_bar_.close, vw));
-        if (long_condition) {
+        if ([&](){ auto _pf_bool_v = (long_condition); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (exit_condition) {
+        if ([&](){ auto _pf_bool_v = (exit_condition); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_close(std::string("long"), "", na<double>(), na<double>(), false, 98784247827ULL);
         }
     }

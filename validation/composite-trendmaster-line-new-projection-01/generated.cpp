@@ -344,22 +344,22 @@ public:
         if (!(is_na(ph))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_ph_y)) && !(is_na(last_ph_x)))) {
-                pf_line_new(_pf_lines_, (int64_t)(last_ph_x), (double)(last_ph_y), (int64_t)(cur_x), (double)(ph), XLoc::bar_index, false, false);
+                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_ph_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_ph_y), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(ph), XLoc::bar_index, false, false);
             }
             prev_ph_y = last_ph_y;
             prev_ph_x = last_ph_x;
             last_ph_y = ph;
-            last_ph_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_ph_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         if (!(is_na(pl))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_pl_y)) && !(is_na(last_pl_x)))) {
-                pf_line_new(_pf_lines_, (int64_t)(last_pl_x), (double)(last_pl_y), (int64_t)(cur_x), (double)(pl), XLoc::bar_index, false, false);
+                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_pl_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_pl_y), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(pl), XLoc::bar_index, false, false);
             }
             prev_pl_y = last_pl_y;
             prev_pl_x = last_pl_x;
             last_pl_y = pl;
-            last_pl_x = [&](){ double _pf_v = (double)(cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_pl_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         ref_lo = na<double>();
         if (((((!(is_na(prev_pl_y)) && !(is_na(prev_pl_x))) && !(is_na(last_pl_y))) && !(is_na(last_pl_x))) && ([&]{ auto _pna_l = (last_pl_x); auto _pna_r = (prev_pl_x); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l != _pna_r); }()))) {

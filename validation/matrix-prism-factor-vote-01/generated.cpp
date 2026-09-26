@@ -390,7 +390,7 @@ public:
             if (_for_step_1 == 0) _for_step_1 = 1;
             const bool _for_down_1 = (_for_start_1 > _for_end_1);
             for (int column = _for_start_1; (_for_down_1 ? (column >= _for_end_1) : (column <= _for_end_1)); column += (_for_down_1 ? -_for_step_1 : _for_step_1), _for_end_1 = (1)) {
-                voteScore += factorGrid.get((int)(row), (int)(column));
+                voteScore += factorGrid.get(([&](){ auto _pf_idx_v = (row); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()), ([&](){ auto _pf_idx_v = (column); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }()));
             }
         }
         if ((history_advances_new_bar() ? _ta_crossover_5.compute(voteScore, minimumScore) : _ta_crossover_5.recompute(voteScore, minimumScore))) {

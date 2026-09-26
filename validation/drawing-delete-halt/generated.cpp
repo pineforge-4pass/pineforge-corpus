@@ -273,11 +273,11 @@ public:
         level = pf_line_get_y2(_pf_lines_, lv);
         eUp = (history_advances_new_bar() ? _ta_crossover_2.compute(current_bar_.close, level) : _ta_crossover_2.recompute(current_bar_.close, level));
         eDn = (history_advances_new_bar() ? _ta_crossunder_3.compute(current_bar_.close, level) : _ta_crossunder_3.recompute(current_bar_.close, level));
-        if (eUp) {
+        if ([&](){ auto _pf_bool_v = (eUp); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("L"), true, na<double>(), na<double>(), na<double>(), "");
             entries += 1;
         }
-        if ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && eDn)) {
+        if ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && [&](){ auto _pf_bool_v = (eDn); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }())) {
             strategy_close(std::string("L"), "", na<double>(), na<double>(), false, 73014444051ULL);
         }
         if (([&]{ auto _pna_l = (entries); auto _pna_r = (5); return !is_na(_pna_l) && !is_na(_pna_r) && (_pna_l == _pna_r); }())) {

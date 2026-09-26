@@ -319,7 +319,7 @@ public:
             _ta_initialized_ = true;
         }
         deviationPercent = (get_input_double("Entry Deviation %", 2.3) * 0.01);
-        rawAnchor = ((([&]{ auto _pna_l = (pine_bar_index()); auto _pna_r = (lookback); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }())) ? (_s_close[lookback]) : (na<double>()));
+        rawAnchor = ((([&]{ auto _pna_l = (pine_bar_index()); auto _pna_r = (lookback); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }())) ? (_s_close[([&](){ auto _pf_idx_v = (lookback); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]) : (na<double>()));
         carriedAnchor = (is_na(rawAnchor) ? _prev_fixnan_1 : (_prev_fixnan_1 = rawAnchor));
         safeAnchor = ([&]{ auto _nz_v = (carriedAnchor); return is_na(_nz_v) ? (current_bar_.close) : _nz_v; }());
         smoothAnchor = (history_advances_new_bar() ? _ta_sma_1.compute(safeAnchor) : _ta_sma_1.recompute(safeAnchor));

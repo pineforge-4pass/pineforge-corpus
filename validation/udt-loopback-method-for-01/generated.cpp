@@ -589,7 +589,7 @@ public:
         if (_for_step_0 == 0) _for_step_0 = 1;
         const bool _for_down_0 = (_for_start_0 > _for_end_0);
         for (int horizon = _for_start_0; (_for_down_0 ? (horizon >= _for_end_0) : (horizon <= _for_end_0)); horizon += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = (horizonCount)) {
-            double historicalValue = _s_close[(horizon * horizonSpacing)];
+            double historicalValue = _s_close[([&](){ auto _pf_idx_v = ((horizon * horizonSpacing)); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
             voteSum += ((is_na(historicalValue)) ? (0.0) : (_udt_HorizonLedger_directionAgainst(ledger, historicalValue)));
         }
         averageVote = ((double)(voteSum) / (double)(horizonCount));

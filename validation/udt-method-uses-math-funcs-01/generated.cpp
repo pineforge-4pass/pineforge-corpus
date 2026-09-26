@@ -102,10 +102,10 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-struct Box {
+struct pf_safe_Box {
     int32_t __pf_id = -1;
 };
-inline bool is_na(const Box& _z) { return _z.__pf_id < 0; }
+inline bool is_na(const pf_safe_Box& _z) { return _z.__pf_id < 0; }
 
 template <typename _PFValue>
 struct _PFCheckpointTraits;
@@ -353,8 +353,8 @@ struct _PFCheckpointTraits<_PFUdtRecord_Box> {
 };
 
 template <>
-struct _PFCheckpointTraits<_PFUdtArena<Box, _PFUdtRecord_Box>> {
-    using arena_type = _PFUdtArena<Box, _PFUdtRecord_Box>;
+struct _PFCheckpointTraits<_PFUdtArena<pf_safe_Box, _PFUdtRecord_Box>> {
+    using arena_type = _PFUdtArena<pf_safe_Box, _PFUdtRecord_Box>;
     using snapshot_type = typename arena_type::Snapshot;
     static snapshot_type take(arena_type& value) {
         return value.snapshot();
@@ -367,7 +367,7 @@ struct _PFCheckpointTraits<_PFUdtArena<Box, _PFUdtRecord_Box>> {
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     _PFUdtUndoCoordinator _pf_udt_undo;
-    _PFUdtArena<Box, _PFUdtRecord_Box> _pf_udt_Box{&_pf_udt_undo};
+    _PFUdtArena<pf_safe_Box, _PFUdtRecord_Box> _pf_udt_pf_safe_Box{&_pf_udt_undo};
     ta::ATR _ta_atr_1;
     std::vector<double> _precalc__ta_atr_1;
     ta::EMA _ta_ema_2;
@@ -376,7 +376,7 @@ public:
     std::vector<double> _precalc__ta_ema_3;
     ta::Crossover _ta_crossover_4;
     bool _use_precalc = false;
-    Box bx;
+    pf_safe_Box bx;
     double atrVal = 0.0;
     double emaFast = 0.0;
     double emaSlow = 0.0;
@@ -386,7 +386,7 @@ public:
 
     struct _PFScriptState {
         _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::snapshot_type _pf_value_0;
-        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::snapshot_type _pf_value_1;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::snapshot_type _pf_value_1;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_atr_1)>::snapshot_type _pf_value_2;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::snapshot_type _pf_value_3;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::snapshot_type _pf_value_4;
@@ -406,7 +406,7 @@ public:
     void snapshot_script_state() override {
         _pf_script_state_checkpoint_.emplace(_PFScriptState{
             _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::take(_pf_udt_undo),
-            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::take(_pf_udt_Box),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::take(_pf_udt_pf_safe_Box),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_atr_1)>::take(_ta_atr_1),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::take(_ta_ema_2),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::take(_ta_ema_3),
@@ -424,7 +424,7 @@ public:
     void restore_script_state() override {
         if (!_pf_script_state_checkpoint_) return;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::restore(this->_pf_udt_undo, _pf_script_state_checkpoint_->_pf_value_0);
-        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::restore(this->_pf_udt_Box, _pf_script_state_checkpoint_->_pf_value_1);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::restore(this->_pf_udt_pf_safe_Box, _pf_script_state_checkpoint_->_pf_value_1);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_atr_1)>::restore(this->_ta_atr_1, _pf_script_state_checkpoint_->_pf_value_2);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::restore(this->_ta_ema_2, _pf_script_state_checkpoint_->_pf_value_3);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::restore(this->_ta_ema_3, _pf_script_state_checkpoint_->_pf_value_4);
@@ -499,7 +499,7 @@ public:
     void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
         _pf_script_state_checkpoint_.reset();
         this->_pf_udt_undo.reset_for_run();
-        this->_pf_udt_Box.reset_for_run();
+        this->_pf_udt_pf_safe_Box.reset_for_run();
         this->_ta_atr_1 = decltype(this->_ta_atr_1)(14);
         this->_precalc__ta_atr_1 = decltype(this->_precalc__ta_atr_1){};
         this->_ta_ema_2 = decltype(this->_ta_ema_2)(9);
@@ -518,21 +518,21 @@ public:
         if (allow_precalculation) precalculate(bars, n);
     }
 
-    double _udt_Box_clampedStop(Box self, double price, double atr) {
+    double _udt_Box_clampedStop(pf_safe_Box self, double price, double atr) {
         double raw = (std::abs(atr) * 1.5);
-        double clamped = ([&]() -> double { double _v0 = (double)(_pf_udt_Box.read(self).min_offset); double _v1 = (double)(([&]() -> double { double _v0 = (double)(_pf_udt_Box.read(self).max_offset); double _v1 = (double)(raw); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::min(_out, _v1); return _out; }())); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
+        double clamped = ([&]() -> double { double _v0 = (double)(_pf_udt_pf_safe_Box.read(self).min_offset); double _v1 = (double)(([&]() -> double { double _v0 = (double)(_pf_udt_pf_safe_Box.read(self).max_offset); double _v1 = (double)(raw); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::min(_out, _v1); return _out; }())); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
         return std::round((price - clamped));
     }
 
-    double _udt_Box_clampedLimit(Box self, double price, double atr) {
+    double _udt_Box_clampedLimit(pf_safe_Box self, double price, double atr) {
         double raw = (std::sqrt(std::abs(atr)) * 5.0);
-        double clamped = ([&]() -> double { double _v0 = (double)(_pf_udt_Box.read(self).min_offset); double _v1 = (double)(([&]() -> double { double _v0 = (double)(_pf_udt_Box.read(self).max_offset); double _v1 = (double)(raw); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::min(_out, _v1); return _out; }())); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
+        double clamped = ([&]() -> double { double _v0 = (double)(_pf_udt_pf_safe_Box.read(self).min_offset); double _v1 = (double)(([&]() -> double { double _v0 = (double)(_pf_udt_pf_safe_Box.read(self).max_offset); double _v1 = (double)(raw); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::min(_out, _v1); return _out; }())); if (is_na(_v0) || is_na(_v1)) return na<double>(); double _out = _v0; _out = std::max(_out, _v1); return _out; }());
         return std::round((price + clamped));
     }
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            bx = _pf_udt_Box.create(_PFUdtRecord_Box{.min_offset = 1.0, .max_offset = 50.0});
+            bx = _pf_udt_pf_safe_Box.create(_PFUdtRecord_Box{.min_offset = 1.0, .max_offset = 50.0});
             _var_initialized = true;
         } else {
         }

@@ -374,7 +374,7 @@ public:
             _ta_sma_2 = ta::SMA(get_input_int("Long SMA length", 400));
             _ta_initialized_ = true;
         }
-        change_n = std::abs((current_bar_.close - _s_close[i_kama_len]));
+        change_n = std::abs((current_bar_.close - _s_close[([&](){ auto _pf_idx_v = (i_kama_len); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
         vol_sum = (history_advances_new_bar() ? _ta_sum_1.compute(std::abs((current_bar_.close - _s_close[1]))) : _ta_sum_1.recompute(std::abs((current_bar_.close - _s_close[1]))));
         er = ((([&]{ auto _pna_l = (vol_sum); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)(change_n) / (double)(vol_sum))) : (0.0));
         fast_sc = ((double)(2.0) / (double)((i_kama_fast + 1)));
@@ -384,8 +384,8 @@ public:
         tick_counter += 1;
         gate = ([&]{ auto _pna_l = (std::fmod((double)(tick_counter), (double)(i_step))); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }());
         long_sma = (history_advances_new_bar() ? _ta_sma_2.compute(current_bar_.close) : _ta_sma_2.recompute(current_bar_.close));
-        deep_rsi = (history_advances_new_bar() ? _ta_rsi_3.compute(_s_close[i_rsi_offset]) : _ta_rsi_3.recompute(_s_close[i_rsi_offset]));
-        deep_close = _s_close[i_deep_lag];
+        deep_rsi = (history_advances_new_bar() ? _ta_rsi_3.compute(_s_close[([&](){ auto _pf_idx_v = (i_rsi_offset); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]) : _ta_rsi_3.recompute(_s_close[([&](){ auto _pf_idx_v = (i_rsi_offset); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
+        deep_close = _s_close[([&](){ auto _pf_idx_v = (i_deep_lag); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
         deep_ready = ((!(is_na(long_sma)) && !(is_na(deep_rsi))) && !(is_na(deep_close)));
         kama_up = (history_advances_new_bar() ? _ta_crossover_4.compute(current_bar_.close, kama[0]) : _ta_crossover_4.recompute(current_bar_.close, kama[0]));
         kama_down = (history_advances_new_bar() ? _ta_crossunder_5.compute(current_bar_.close, kama[0]) : _ta_crossunder_5.recompute(current_bar_.close, kama[0]));

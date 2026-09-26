@@ -535,7 +535,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            regime = _pf_udt_Regime.create(_PFUdtRecord_Regime{.bull = (int64_t)(0), .bear = (int64_t)(0), .flat = (int64_t)(0)});
+            regime = _pf_udt_Regime.create(_PFUdtRecord_Regime{.bull = 0, .bear = 0, .flat = 0});
             _var_initialized = true;
         } else {
         }

@@ -534,7 +534,7 @@ public:
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
         if (!_var_initialized) {
-            acc = _pf_udt_Acc.create(_PFUdtRecord_Acc{.total = 0.0, .n = (int64_t)(0)});
+            acc = _pf_udt_Acc.create(_PFUdtRecord_Acc{.total = 0.0, .n = 0});
             _var_initialized = true;
         } else {
         }
@@ -546,7 +546,7 @@ public:
         if (_for_step_0 == 0) _for_step_0 = 1;
         const bool _for_down_0 = (_for_start_0 > _for_end_0);
         for (int i = _for_start_0; (_for_down_0 ? (i >= _for_end_0) : (i <= _for_end_0)); i += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = (4)) {
-            double _t = _udt_Acc_add(acc, _s_close[i]);
+            double _t = _udt_Acc_add(acc, _s_close[([&](){ auto _pf_idx_v = (i); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]);
         }
         avg5 = _udt_Acc_mean(acc);
         emaSlow = (history_advances_new_bar() ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));

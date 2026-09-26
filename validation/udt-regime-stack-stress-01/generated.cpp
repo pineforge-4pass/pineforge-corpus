@@ -1091,15 +1091,15 @@ public:
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
         if (!_var_initialized) {
-            cfg = _pf_udt_LayerInputs.create(_PFUdtRecord_LayerInputs{.rsi_len = (int64_t)(rsiLen), .ma_len = (int64_t)(maLen), .bb_len = (int64_t)(bbLen), .bb_mult = bbMult});
+            cfg = _pf_udt_LayerInputs.create(_PFUdtRecord_LayerInputs{.rsi_len = [&](){ auto _pf_v = (rsiLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .ma_len = [&](){ auto _pf_v = (maLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .bb_len = [&](){ auto _pf_v = (bbLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .bb_mult = bbMult});
             gateMap = PineMap<std::string, double>::new_();
-            rsiL = _pf_udt_RsiLayer.create(_PFUdtRecord_RsiLayer{.value = na<double>(), .contrib = (int64_t)(0)});
-            trL = _pf_udt_TrendLayer.create(_PFUdtRecord_TrendLayer{.ema = na<double>(), .contrib = (int64_t)(0)});
-            bbL = _pf_udt_BbLayer.create(_PFUdtRecord_BbLayer{.mid = na<double>(), .upper = na<double>(), .lower = na<double>(), .contrib = (int64_t)(0)});
-            snap = _pf_udt_ScoreSnapshot.create(_PFUdtRecord_ScoreSnapshot{.rsi_c = (int64_t)(0), .trend_c = (int64_t)(0), .bb_c = (int64_t)(0)});
+            rsiL = _pf_udt_RsiLayer.create(_PFUdtRecord_RsiLayer{.value = na<double>(), .contrib = 0});
+            trL = _pf_udt_TrendLayer.create(_PFUdtRecord_TrendLayer{.ema = na<double>(), .contrib = 0});
+            bbL = _pf_udt_BbLayer.create(_PFUdtRecord_BbLayer{.mid = na<double>(), .upper = na<double>(), .lower = na<double>(), .contrib = 0});
+            snap = _pf_udt_ScoreSnapshot.create(_PFUdtRecord_ScoreSnapshot{.rsi_c = 0, .trend_c = 0, .bb_c = 0});
             vol = _pf_udt_VolContext.create(_PFUdtRecord_VolContext{.atr = na<double>(), .atr_ma = na<double>(), .ratio = 1.0});
             curBar = _pf_udt_OhlcBar.create(_PFUdtRecord_OhlcBar{.o = na<double>(), .h = na<double>(), .l = na<double>(), .c = na<double>()});
-            sess = _pf_udt_SessionScratch.create(_PFUdtRecord_SessionScratch{.in_session = true, .bar_streak = (int64_t)(0)});
+            sess = _pf_udt_SessionScratch.create(_PFUdtRecord_SessionScratch{.in_session = true, .bar_streak = 0});
             gates = _pf_udt_GateState.create(_PFUdtRecord_GateState{.vol_ok = true, .map_ok = true});
             _var_initialized = true;
         } else {
@@ -1118,7 +1118,7 @@ public:
             _ta_bb_3 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Mult", 2.0));
             _ta_initialized_ = true;
         }
-        if ((bar_index_ == 0)) {
+        if ([&](){ auto _pf_bool_v = ((bar_index_ == 0)); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             [&](auto&& __pf_map_receiver_0)->decltype(auto){ return [&](auto&& __pf_map_param_arg_0)->decltype(auto){ return [&](auto&& __pf_map_param_arg_1)->decltype(auto){ return __pf_map_receiver_0.put(__pf_map_param_arg_0, __pf_map_param_arg_1); }((2.0)); }((std::string("long"))); }((gateMap));
             [&](auto&& __pf_map_receiver_1)->decltype(auto){ return [&](auto&& __pf_map_param_arg_2)->decltype(auto){ return [&](auto&& __pf_map_param_arg_3)->decltype(auto){ return __pf_map_receiver_1.put(__pf_map_param_arg_2, __pf_map_param_arg_3); }(((-2.0))); }((std::string("short"))); }((gateMap));
             [&](auto&& __pf_map_receiver_2)->decltype(auto){ return [&](auto&& __pf_map_param_arg_4)->decltype(auto){ return [&](auto&& __pf_map_param_arg_5)->decltype(auto){ return __pf_map_receiver_2.put(__pf_map_param_arg_4, __pf_map_param_arg_5); }((0.0)); }((std::string("exit_long"))); }((gateMap));
@@ -1150,9 +1150,9 @@ public:
         atrVal = (history_advances_new_bar() ? _ta_atr_4.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_4.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
         atrMa = (history_advances_new_bar() ? _ta_sma_5.compute(atrVal) : _ta_sma_5.recompute(atrVal));
         atrRatio = ((([&]{ auto _pna_l = (atrMa); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (((double)(atrVal) / (double)(atrMa))) : (1.0));
-        _pf_udt_LayerInputs.get(cfg).rsi_len = rsiLen;
-        _pf_udt_LayerInputs.get(cfg).ma_len = maLen;
-        _pf_udt_LayerInputs.get(cfg).bb_len = bbLen;
+        _pf_udt_LayerInputs.get(cfg).rsi_len = [&](){ auto _pf_v = (rsiLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
+        _pf_udt_LayerInputs.get(cfg).ma_len = [&](){ auto _pf_v = (maLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
+        _pf_udt_LayerInputs.get(cfg).bb_len = [&](){ auto _pf_v = (bbLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
         _pf_udt_LayerInputs.get(cfg).bb_mult = bbMult;
         _pf_udt_RsiLayer.get(rsiL).value = rsiVal;
         _pf_udt_RsiLayer.get(rsiL).contrib = ((([&]{ auto _pna_l = (rsiVal); auto _pna_r = (50); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) ? (1) : (((([&]{ auto _pna_l = (rsiVal); auto _pna_r = (50); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }())) ? ((-1)) : (0))));
@@ -1172,9 +1172,9 @@ public:
         _pf_udt_GateState.get(gates).vol_ok = ([&]{ auto _pna_l = (_pf_udt_VolContext.read(vol).ratio); auto _pna_r = (25.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }());
         _pf_udt_GateState.get(gates).map_ok = ([&](auto&& __pf_map_receiver_12)->decltype(auto){ return [&](auto&& __pf_map_param_arg_16)->decltype(auto){ return __pf_map_receiver_12.contains(__pf_map_param_arg_16); }((std::string("long"))); }((gateMap)) && [&](auto&& __pf_map_receiver_13)->decltype(auto){ return [&](auto&& __pf_map_param_arg_17)->decltype(auto){ return __pf_map_receiver_13.contains(__pf_map_param_arg_17); }((std::string("short"))); }((gateMap)));
         score = ((_pf_udt_RsiLayer.read(rsiL).contrib + _pf_udt_TrendLayer.read(trL).contrib) + _pf_udt_BbLayer.read(bbL).contrib);
-        _pf_udt_ScoreSnapshot.get(snap).rsi_c = _pf_udt_RsiLayer.read(rsiL).contrib;
-        _pf_udt_ScoreSnapshot.get(snap).trend_c = _pf_udt_TrendLayer.read(trL).contrib;
-        _pf_udt_ScoreSnapshot.get(snap).bb_c = _pf_udt_BbLayer.read(bbL).contrib;
+        _pf_udt_ScoreSnapshot.get(snap).rsi_c = [&](){ auto _pf_v = (_pf_udt_RsiLayer.read(rsiL).contrib); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
+        _pf_udt_ScoreSnapshot.get(snap).trend_c = [&](){ auto _pf_v = (_pf_udt_TrendLayer.read(trL).contrib); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
+        _pf_udt_ScoreSnapshot.get(snap).bb_c = [&](){ auto _pf_v = (_pf_udt_BbLayer.read(bbL).contrib); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }();
         _pf_udt_SessionScratch.get(sess).in_session = true;
         _pf_udt_SessionScratch.get(sess).bar_streak = (((([&]{ auto _pna_l = (pine_bar_index()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (_s_close[1]); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }()))) ? ((_pf_udt_SessionScratch.read(sess).bar_streak + 1)) : (0));
         longCond = ((((_pf_udt_GateState.read(gates).vol_ok && _pf_udt_GateState.read(gates).map_ok) && ([&]{ auto _pna_l = (score); auto _pna_r = (thr_long); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }())) && !(is_na(prevScore))) && ([&]{ auto _pna_l = (prevScore); auto _pna_r = (thr_long); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));
@@ -1193,7 +1193,7 @@ public:
         if ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (score); auto _pna_r = (exitS); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()))) {
             strategy_close(std::string("Short"), "", na<double>(), na<double>(), false, 764504178707ULL);
         }
-        prevScore = [&](){ double _pf_v = (double)(score); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+        prevScore = [&](){ auto _pf_v = (score); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
     }
 
     void precalculate(const Bar* bars, int n) {

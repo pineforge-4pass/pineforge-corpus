@@ -264,10 +264,10 @@ public:
         double adxVal = _result__ta_dmi_1.adx;
         bullCross = (history_advances_new_bar() ? _ta_crossover_2.compute(diPlus, diMinus) : _ta_crossover_2.recompute(diPlus, diMinus));
         bearCross = (history_advances_new_bar() ? _ta_crossunder_3.compute(diPlus, diMinus) : _ta_crossunder_3.recompute(diPlus, diMinus));
-        if (bullCross) {
+        if ([&](){ auto _pf_bool_v = (bullCross); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (bearCross) {
+        if ([&](){ auto _pf_bool_v = (bearCross); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }

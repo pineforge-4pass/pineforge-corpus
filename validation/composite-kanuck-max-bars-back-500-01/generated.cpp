@@ -266,8 +266,8 @@ public:
             _ta_initialized_ = true;
         }
         long_sma = (history_advances_new_bar() ? _ta_sma_1.compute(current_bar_.close) : _ta_sma_1.recompute(current_bar_.close));
-        deep_rsi = (history_advances_new_bar() ? _ta_rsi_2.compute(_s_close[i_rsi_offset]) : _ta_rsi_2.recompute(_s_close[i_rsi_offset]));
-        deep_close = _s_close[i_deep_lag];
+        deep_rsi = (history_advances_new_bar() ? _ta_rsi_2.compute(_s_close[([&](){ auto _pf_idx_v = (i_rsi_offset); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]) : _ta_rsi_2.recompute(_s_close[([&](){ auto _pf_idx_v = (i_rsi_offset); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())]));
+        deep_close = _s_close[([&](){ auto _pf_idx_v = (i_deep_lag); using _pf_idx_t = std::decay_t<decltype(_pf_idx_v)>; if constexpr (std::is_same_v<_pf_idx_t, bool>) return (int)_pf_idx_v; else return is_na(_pf_idx_v) ? na<int>() : (int)_pf_idx_v; }())];
         deep_ready = ((!(is_na(long_sma)) && !(is_na(deep_rsi))) && !(is_na(deep_close)));
         long_trigger = (deep_ready && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (deep_close); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         short_trigger = (deep_ready && ([&]{ auto _pna_l = (current_bar_.close); auto _pna_r = (deep_close); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()));

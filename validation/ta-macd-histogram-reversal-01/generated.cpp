@@ -271,10 +271,10 @@ public:
         double histLine = _result__ta_macd_1.histogram;
         longCond = (history_advances_new_bar() ? _ta_crossover_2.compute(macdLine, signalLine) : _ta_crossover_2.recompute(macdLine, signalLine));
         shortCond = (history_advances_new_bar() ? _ta_crossunder_3.compute(macdLine, signalLine) : _ta_crossunder_3.recompute(macdLine, signalLine));
-        if (longCond) {
+        if ([&](){ auto _pf_bool_v = (longCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (shortCond) {
+        if ([&](){ auto _pf_bool_v = (shortCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
     }

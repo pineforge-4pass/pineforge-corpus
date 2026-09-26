@@ -501,7 +501,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            streak = _pf_udt_Streak.create(_PFUdtRecord_Streak{.count = (int64_t)(0), .reset_count = (int64_t)(0)});
+            streak = _pf_udt_Streak.create(_PFUdtRecord_Streak{.count = 0, .reset_count = 0});
             _var_initialized = true;
         } else {
         }

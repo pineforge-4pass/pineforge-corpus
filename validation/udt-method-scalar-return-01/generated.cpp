@@ -102,10 +102,10 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
-struct Box {
+struct pf_safe_Box {
     int32_t __pf_id = -1;
 };
-inline bool is_na(const Box& _z) { return _z.__pf_id < 0; }
+inline bool is_na(const pf_safe_Box& _z) { return _z.__pf_id < 0; }
 
 template <typename _PFValue>
 struct _PFCheckpointTraits;
@@ -353,8 +353,8 @@ struct _PFCheckpointTraits<_PFUdtRecord_Box> {
 };
 
 template <>
-struct _PFCheckpointTraits<_PFUdtArena<Box, _PFUdtRecord_Box>> {
-    using arena_type = _PFUdtArena<Box, _PFUdtRecord_Box>;
+struct _PFCheckpointTraits<_PFUdtArena<pf_safe_Box, _PFUdtRecord_Box>> {
+    using arena_type = _PFUdtArena<pf_safe_Box, _PFUdtRecord_Box>;
     using snapshot_type = typename arena_type::Snapshot;
     static snapshot_type take(arena_type& value) {
         return value.snapshot();
@@ -367,7 +367,7 @@ struct _PFCheckpointTraits<_PFUdtArena<Box, _PFUdtRecord_Box>> {
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     _PFUdtUndoCoordinator _pf_udt_undo;
-    _PFUdtArena<Box, _PFUdtRecord_Box> _pf_udt_Box{&_pf_udt_undo};
+    _PFUdtArena<pf_safe_Box, _PFUdtRecord_Box> _pf_udt_pf_safe_Box{&_pf_udt_undo};
     ta::RSI _ta_rsi_1;
     std::vector<double> _precalc__ta_rsi_1;
     ta::EMA _ta_ema_2;
@@ -377,7 +377,7 @@ public:
     ta::Crossover _ta_crossover_4;
     ta::Crossunder _ta_crossunder_5;
     bool _use_precalc = false;
-    Box b;
+    pf_safe_Box b;
     double rsiVal = 0.0;
     double emaFast = 0.0;
     double emaSlow = 0.0;
@@ -389,7 +389,7 @@ public:
 
     struct _PFScriptState {
         _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::snapshot_type _pf_value_0;
-        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::snapshot_type _pf_value_1;
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::snapshot_type _pf_value_1;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::snapshot_type _pf_value_2;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::snapshot_type _pf_value_3;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::snapshot_type _pf_value_4;
@@ -412,7 +412,7 @@ public:
     void snapshot_script_state() override {
         _pf_script_state_checkpoint_.emplace(_PFScriptState{
             _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::take(_pf_udt_undo),
-            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::take(_pf_udt_Box),
+            _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::take(_pf_udt_pf_safe_Box),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::take(_ta_rsi_1),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::take(_ta_ema_2),
             _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::take(_ta_ema_3),
@@ -433,7 +433,7 @@ public:
     void restore_script_state() override {
         if (!_pf_script_state_checkpoint_) return;
         _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_undo)>::restore(this->_pf_udt_undo, _pf_script_state_checkpoint_->_pf_value_0);
-        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_Box)>::restore(this->_pf_udt_Box, _pf_script_state_checkpoint_->_pf_value_1);
+        _PFCheckpointTraits<decltype(GeneratedStrategy::_pf_udt_pf_safe_Box)>::restore(this->_pf_udt_pf_safe_Box, _pf_script_state_checkpoint_->_pf_value_1);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_rsi_1)>::restore(this->_ta_rsi_1, _pf_script_state_checkpoint_->_pf_value_2);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_2)>::restore(this->_ta_ema_2, _pf_script_state_checkpoint_->_pf_value_3);
         _PFCheckpointTraits<decltype(GeneratedStrategy::_ta_ema_3)>::restore(this->_ta_ema_3, _pf_script_state_checkpoint_->_pf_value_4);
@@ -511,7 +511,7 @@ public:
     void prepare_script_run(const Bar* bars, int n, bool allow_precalculation) override {
         _pf_script_state_checkpoint_.reset();
         this->_pf_udt_undo.reset_for_run();
-        this->_pf_udt_Box.reset_for_run();
+        this->_pf_udt_pf_safe_Box.reset_for_run();
         this->_ta_rsi_1 = decltype(this->_ta_rsi_1)(14);
         this->_precalc__ta_rsi_1 = decltype(this->_precalc__ta_rsi_1){};
         this->_ta_ema_2 = decltype(this->_ta_ema_2)(9);
@@ -533,20 +533,20 @@ public:
         if (allow_precalculation) precalculate(bars, n);
     }
 
-    double _udt_Box_score(Box self) {
-        return (_pf_udt_Box.read(self).k * (_pf_udt_Box.read(self).bias - 50.0));
+    double _udt_Box_score(pf_safe_Box self) {
+        return (_pf_udt_pf_safe_Box.read(self).k * (_pf_udt_pf_safe_Box.read(self).bias - 50.0));
     }
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            b = _pf_udt_Box.create(_PFUdtRecord_Box{.k = 1.0, .bias = 50.0});
+            b = _pf_udt_pf_safe_Box.create(_PFUdtRecord_Box{.k = 1.0, .bias = 50.0});
             _var_initialized = true;
         } else {
         }
         rsiVal = (history_advances_new_bar() ? _ta_rsi_1.compute(current_bar_.close) : _ta_rsi_1.recompute(current_bar_.close));
         emaFast = (history_advances_new_bar() ? _ta_ema_2.compute(current_bar_.close) : _ta_ema_2.recompute(current_bar_.close));
         emaSlow = (history_advances_new_bar() ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close));
-        _pf_udt_Box.get(b).bias = rsiVal;
+        _pf_udt_pf_safe_Box.get(b).bias = rsiVal;
         entryCond = ((history_advances_new_bar() ? _ta_crossover_4.compute(emaFast, emaSlow) : _ta_crossover_4.recompute(emaFast, emaSlow)) && ([&]{ auto _pna_l = (_udt_Box_score(b)); auto _pna_r = (5.0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()));
         exitCond = (history_advances_new_bar() ? _ta_crossunder_5.compute(emaFast, emaSlow) : _ta_crossunder_5.recompute(emaFast, emaSlow));
         if ((entryCond && ([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && (_pfc_eq); }()))) {

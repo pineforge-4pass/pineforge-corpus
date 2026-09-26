@@ -261,10 +261,10 @@ public:
         cciVal = (history_advances_new_bar() ? _ta_cci_1.compute(current_bar_.close) : _ta_cci_1.recompute(current_bar_.close));
         longCond = (history_advances_new_bar() ? _ta_crossover_2.compute(cciVal, osLevel) : _ta_crossover_2.recompute(cciVal, osLevel));
         shortCond = (history_advances_new_bar() ? _ta_crossunder_3.compute(cciVal, obLevel) : _ta_crossunder_3.recompute(cciVal, obLevel));
-        if (longCond) {
+        if ([&](){ auto _pf_bool_v = (longCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if (shortCond) {
+        if ([&](){ auto _pf_bool_v = (shortCond); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Short"), false, na<double>(), na<double>(), na<double>(), "");
         }
         if ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }()) && (history_advances_new_bar() ? _ta_crossunder_4.compute(cciVal, 0) : _ta_crossunder_4.recompute(cciVal, 0)))) {

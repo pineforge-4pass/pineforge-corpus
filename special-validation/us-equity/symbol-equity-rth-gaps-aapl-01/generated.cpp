@@ -97,6 +97,41 @@ static inline std::string _pf_derive_country(const std::string& tickerid) {
 }
 // --- end syminfo derivation helpers ---
 
+
+struct _PFSessionMarket {
+    std::string session_key;
+    std::string tz_key;
+    bool parsed = false;
+    std::optional<native_calendar::SessionCalendar> calendar;
+    std::optional<native_calendar::NativeSessionDay> day;
+
+    bool operator()(const std::string& session, const std::string& tz,
+                    const std::string& chart_tf, int64_t bar_ms) {
+        if (tf_is_daily_or_higher(chart_tf)) return true;
+        if (!parsed || session_key != session || tz_key != tz) {
+            parsed = false;
+            day.reset();
+            calendar = native_calendar::parse_session(
+                session.empty() ? std::string_view("24x7") : std::string_view(session),
+                tz.empty() ? std::string_view("UTC") : std::string_view(tz));
+            session_key = session;
+            tz_key = tz;
+            parsed = true;
+        }
+        if (!calendar) return pine_session_ismarket(session, tz, bar_ms);
+        if (day && day->holds(bar_ms)) return day->in_session_at(bar_ms);
+        try {
+            auto found = native_calendar::session_day_at(*calendar, bar_ms);
+            if (!found) return false;
+            const bool in_market = found->in_session_at(bar_ms);
+            if (found->holds(bar_ms)) day = std::move(found);
+            return in_market;
+        } catch (...) {
+            return false;
+        }
+    }
+};
+
 class GeneratedStrategy : public pineforge::source::PineStrategyHost {
 public:
     ta::RSI _ta_rsi_1;
@@ -149,6 +184,7 @@ public:
         snapshot_script_state();
     }
 
+    mutable _PFSessionMarket _pf_session_market_;
     explicit GeneratedStrategy() : _ta_rsi_1(14) {
 #if defined(PINEFORGE_HAS_EXPLICIT_PINE_EXECUTION_ADAPTER_V1)
         pineforge::source::PineStrategyHost::attach_pine_execution_adapter();
@@ -219,11 +255,11 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         rsiVal = (history_advances_new_bar() ? _ta_rsi_1.compute(current_bar_.close) : _ta_rsi_1.recompute(current_bar_.close));
-        inRth = pine_session_ismarket(syminfo_.session, syminfo_.timezone, current_bar_.timestamp);
-        if ((inRth && (history_advances_new_bar() ? _ta_crossover_2.compute(rsiVal, 30) : _ta_crossover_2.recompute(rsiVal, 30)))) {
+        inRth = _pf_session_market_(syminfo_.session, syminfo_.timezone, script_tf_, current_bar_.timestamp);
+        if (([&](){ auto _pf_bool_v = (inRth); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }() && (history_advances_new_bar() ? _ta_crossover_2.compute(rsiVal, 30) : _ta_crossover_2.recompute(rsiVal, 30)))) {
             strategy_entry(std::string("Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
-        if ((inRth && (history_advances_new_bar() ? _ta_crossunder_3.compute(rsiVal, 70) : _ta_crossunder_3.recompute(rsiVal, 70)))) {
+        if (([&](){ auto _pf_bool_v = (inRth); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }() && (history_advances_new_bar() ? _ta_crossunder_3.compute(rsiVal, 70) : _ta_crossunder_3.recompute(rsiVal, 70)))) {
             strategy_close(std::string("Long"), "", na<double>(), na<double>(), false, 146028888083ULL);
         }
     }

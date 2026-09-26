@@ -319,7 +319,7 @@ public:
         atrValue = (history_advances_new_bar() ? _ta_atr_3.compute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()) : _ta_atr_3.recompute(current_bar_.high, current_bar_.low, current_bar_.close, prev_chart_close()));
         longSignal = (history_advances_new_bar() ? _ta_crossover_4.compute(fastEma, slowEma) : _ta_crossover_4.recompute(fastEma, slowEma));
         shortSignal = (allowShort && (history_advances_new_bar() ? _ta_crossunder_5.compute(fastEma, slowEma) : _ta_crossunder_5.recompute(fastEma, slowEma)));
-        if (longSignal) {
+        if ([&](){ auto _pf_bool_v = (longSignal); using _pf_bool_t = std::decay_t<decltype(_pf_bool_v)>; if constexpr (std::is_same_v<_pf_bool_t, bool>) { return _pf_bool_v; } else if constexpr (std::is_floating_point_v<_pf_bool_t> || std::is_integral_v<_pf_bool_t>) { return is_na(_pf_bool_v) ? false : (_pf_bool_v != 0); } else { return static_cast<bool>(_pf_bool_v); } }()) {
             strategy_entry(std::string("Aurora Long"), true, na<double>(), na<double>(), na<double>(), "");
         }
         if (shortSignal) {

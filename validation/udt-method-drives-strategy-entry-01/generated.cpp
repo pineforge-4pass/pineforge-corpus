@@ -545,7 +545,7 @@ public:
 
     void on_source_bar(const Bar& bar) override {
         if (!_var_initialized) {
-            sig = _pf_udt_Signal.create(_PFUdtRecord_Signal{.last_long_bar = (int64_t)((-1000)), .last_short_bar = (int64_t)((-1000)), .debounce = (int64_t)(5)});
+            sig = _pf_udt_Signal.create(_PFUdtRecord_Signal{.last_long_bar = (-1000), .last_short_bar = (-1000), .debounce = 5});
             _var_initialized = true;
         } else {
         }
