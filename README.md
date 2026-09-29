@@ -21,11 +21,12 @@ predates the gate):
   within the resolved thresholds; see [Parity thresholds](#parity-thresholds)).
   The gate pins its headline verbatim:
   `Verified 312 strategies — excellent=311, strong=0, moderate=0, weak=0, minimal=0, anomaly=1, engine_only=0, missing=0`.
-- **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` — where
-  TradingView's broker emulator exhibits non-deterministic accept/reject behaviour
-  at the exact 1× equity margin boundary. The engine is deterministic and correct
-  per Pine semantics; the write-up is the `notes` field of that probe's
-  `inputs.json`.
+- **1** declared anomaly — `anomaly-equity-mirror-strategy-equity-01` declares
+  `expected_tier: anomaly` in its `inputs.json`, so the gate reports it as
+  `anomaly`, not as a failure. Its `notes` field records the original diagnosis
+  (TradingView broker behaviour at the exact 1× equity margin boundary); the
+  engine README on `main` reports the probe as matching on the maintainers'
+  baseline, so the diagnosis is under review.
 - **0** strong / moderate / weak / minimal / missing.
 - **431,244** TradingView trades in the committed `tv_trades.csv` files (311
   probes; `analyzer-self-test-multi-mode-01` keeps its four per-mode TradingView
@@ -68,8 +69,8 @@ table the engine's sweep emits. The copy committed here is the 2026-08-13 one
 
 Each probe directory ships this core artifact tuple in git. 122 of the 312 probes
 also carry an `inputs.json` (probe metadata: the timezone of the TradingView
-export, timeframes and input overrides, and for the documented anomaly its
-expected tier); the other 190 have none.
+export, timeframes and input overrides, and, for the declared anomaly, its
+`expected_tier`); the other 190 have none.
 
 | File                | Source                       | Role                                                       |
 | ------------------- | ---------------------------- | ---------------------------------------------------------- |
@@ -164,7 +165,7 @@ Paths are relative to this repository's root, which the engine checks out as its
 │   ├── enum-*                   1 probe  — enum type and input selection
 │   ├── risk-*                   1 probe  — risk gates / limits
 │   ├── volume-*                 1 probe  — volume-flow behavior
-│   ├── anomaly-*                1 probe  — documented TV non-determinism
+│   ├── anomaly-*                1 probe  — declared anomaly (expected_tier: anomaly)
 │   └── symbol-specified/       (excluded from sweep) 5 stock probes pending pineforge-data
 ├── draft-probes/               staged probes pending TV capture (excluded from sweep; own README)
 ├── special-validation/         separate-instrument probes (feeds git-ignored; own README + build_specials.sh)
@@ -242,7 +243,7 @@ The 33 categories (with probe counts):
 | `enum`      |     1 | Enum type and input selection                              |
 | `risk`      |     1 | risk gates / limits                                        |
 | `volume`    |     1 | Volume-flow behavior                                       |
-| `anomaly`   |     1 | Documented TV non-determinism                              |
+| `anomaly`   |     1 | `strategy.equity` mirror at 1× equity (declared anomaly)   |
 
 (The `symbol-specified/` subtree — 5 stock probes needing per-symbol OHLCV
 and SymInfo overrides — is excluded from the default sweep pending
@@ -319,6 +320,9 @@ Trade number,Type,Date and time,Signal,Price USDT,Size (qty),Size (value),Net Pn
 1,Entry long,2025-04-03 00:45,Anvil Long,1902.21,3.9396,7493.946516,-266.67853,-3.56,11.78640073,213.67694,...,21
 ```
 
+That 17-column header, ending with `Duration (bars)`, is the one in 305 of the 311
+tapes; the six `drawing-*` tapes have 15 columns and end with `Cumulative PnL %`.
+
 `engine_trades.csv` (PineForge's mirrored format, fewer columns —
 PineForge does not currently emit TV's "Signal" tag or percent-of-position
 excursions):
@@ -386,13 +390,13 @@ on TV's magnifier zero-PnL trades.
 | `moderate`    | Some dimensions exceed the strong envelope but trades still align meaningfully. Investigate. |
 | `weak`        | Significant divergence. Real bug or probe-design issue. |
 | `minimal`     | Probe produces zero engine trades or zero TV trades — nothing to compare. |
-| `anomaly`     | Engine output is correct per Pine spec; TV is non-deterministic on this probe. Documented per-probe via `inputs.json::expected_tier: "anomaly"` plus a `notes` field with the deep-analysis write-up. Excluded from headline excellent count. Currently 1 probe (`anomaly-equity-mirror-strategy-equity-01`). |
+| `anomaly`     | Declared per probe via `inputs.json` `expected_tier`; applied only when the measured result is below excellent. The probe's `notes` field records the diagnosis it was declared on. Excluded from headline excellent count. Currently 1 probe (`anomaly-equity-mirror-strategy-equity-01`). |
 | `engine_only` | Engine produces correct trades that intentionally diverge from TV (e.g., engine fires a bar TV's broker emulator silently drops). Documented per-probe via `inputs.json::validation_overrides::expect_tv_match: false` plus an `expect_tv_match_reason` write-up. Currently 0 probes. |
 | `missing`     | Required artefact (TV CSV or engine CSV) absent. Should never appear in committed state. |
 
 The `anomaly` and `engine_only` overrides only fire when the computed
 tier would be below `excellent` — a future engine fix that lifts a
-documented divergence to bit-for-bit match still reports as `excellent`,
+declared divergence to bit-for-bit match still reports as `excellent`,
 not silently masked.
 
 ## Publishing posture
