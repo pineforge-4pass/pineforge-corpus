@@ -49,7 +49,7 @@ This corpus is licensed under the Apache License, Version 2.0
 The compiled per-probe artefacts (`strategy.dylib` / `strategy.so` /
 `strategy.dll`) remain platform-specific build outputs and are not
 shipped; reproducers compile them locally via `cmake --build build
---target corpus_strategies`. See `corpus/.gitignore`.
+--target corpus_strategies` (from the engine checkout). See `.gitignore`.
 
 ## Trademarks
 
@@ -67,10 +67,10 @@ above).
 
 ## Reproducibility
 
-The headline parity figure documented in `validation_report.md` is
+The headline parity figure (see the README's "Headline parity") is
 reproducible from the PineForge-authored artefacts in this tree plus
 the public engine runtime — **without** the `tv_trades.csv` reference
 files: `strategy.pine` + `generated.cpp` + public OHLCV regenerate
 `engine_trades.csv`, which you can diff against a TradingView export you
-produce yourself. See the project root `README.md` for the full
-reproducer instructions.
+produce yourself. See "Reproducing parity locally" in this repository's
+`README.md` for the reproducer instructions.

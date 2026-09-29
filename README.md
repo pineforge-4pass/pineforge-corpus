@@ -1,49 +1,75 @@
 # PineForge validation corpus
 
 The corpus is PineForge's reproducibility kit for the parity claim in the
-project README. Every probe is a hand-written, clean-room PineScript v6
-strategy paired with TradingView's exported trade list and PineForge's own
-trade list, so a third party can diff the two CSVs and confirm engine
-behaviour matches TradingView on the same bar feed.
+[engine README](https://github.com/pineforge-4pass/pineforge-engine#readme). Every
+probe is a hand-written, clean-room PineScript v6 strategy paired with
+TradingView's exported trade list and PineForge's own trade list, so a third party
+can diff the two CSVs and confirm engine behaviour matches TradingView on the same
+bar feed.
 
 ## Headline parity
 
-- **312** verified strategies, all under `corpus/validation/`.
-- **~430,000 trades** total across the suite — summing the per-row TV /
-  engine counts in [`validation_report.md`](validation_report.md):
-  TV 429,704; engine 429,709 (`+5` ≈ 0.001 % over TV).
-- **307** excellent (bit-for-bit or within the resolved thresholds on every
-  parity dimension).
-- **4** strong, retained as visible pre-existing research cases rather than
-  being hidden or admitted as excellent.
-- **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` —
-  where TradingView's broker emulator exhibits non-deterministic
-  accept/reject behaviour at the exact 1× equity margin boundary. Engine
-  is deterministic and correct; full write-up lives in
-  `pineforge-utils/parity-anomalies/tv-margin-boundary.md`.
-- **0** moderate / weak / minimal / missing.
+Measured by the engine's parity gate
+([`scripts/check_corpus_parity.sh`](https://github.com/pineforge-4pass/pineforge-engine/blob/main/scripts/check_corpus_parity.sh)),
+which builds every probe's `generated.cpp`, re-runs it, and grades the result
+against `tv_trades.csv` with `scripts/verify_corpus.py`. On engine `main`
+(`35db01c`, 2026-09-29 — not yet released; the latest engine release, v0.13.1,
+predates the gate):
 
-Beyond this public corpus, the engine is also validated on a **closed test
-set** of **415 community-shared TradingView scripts** (kept private under
-TradingView's Terms of Service — not redistributable): **396/396 excellent
-(100%)** across **~520k trades**, with **19 TV-side anomalies** discovered
-and documented during that research. Combined with the public corpus this
-totals **~950k trades** verified trade-for-trade against TradingView.
+- **312** probes under `validation/`, in 33 categories.
+- **311** excellent (exact trade-count parity and every other gated dimension
+  within the resolved thresholds; see [Parity thresholds](#parity-thresholds)).
+  The gate pins its headline verbatim:
+  `Verified 312 strategies — excellent=311, strong=0, moderate=0, weak=0, minimal=0, anomaly=1, engine_only=0, missing=0`.
+- **1** documented anomaly — `anomaly-equity-mirror-strategy-equity-01` — where
+  TradingView's broker emulator exhibits non-deterministic accept/reject behaviour
+  at the exact 1× equity margin boundary. The engine is deterministic and correct
+  per Pine semantics; the write-up is the `notes` field of that probe's
+  `inputs.json`.
+- **0** strong / moderate / weak / minimal / missing.
+- **431,244** TradingView trades in the committed `tv_trades.csv` files (311
+  probes; `analyzer-self-test-multi-mode-01` keeps its four per-mode TradingView
+  tapes in `trades-*.csv`).
+
+**The files committed here lag that measurement.** The `engine_trades.csv` tapes
+and `validation_report.{md,html,pdf}` come from earlier engine builds, so they
+are not the oracle: none of the 312 committed tapes is byte-identical to what
+the current engine produces (it now appends an `Engine range-end` column and
+prints `Qty` at full precision). Judged as committed, the tapes read 307 excellent
+/ 4 strong / 1 anomaly (`verify_corpus.py --all` over this tree), and the
+committed report, generated 2026-08-13 by engine `a7cb5b6`, reads 309 / 2 / 1. The
+engine's gate therefore re-runs everything and compares each fresh tape with a
+pinned sha256 (`scripts/corpus_parity_baseline.txt` in the engine repo); re-running
+is how you get the figures above.
+
+Beyond this public corpus, the engine is graded on a much larger private set of
+community-shared TradingView scripts (private under TradingView's Terms of Service
+— not redistributable). The engine's parity baseline of 2026-09-29 (engine `main`)
+covers 8,006 probes: 7,989 are graded — **7,905 excellent (98.95 %) and 84 strong
+(1.05 %), none below strong, no engine errors** — and 17 are excluded as
+TradingView-side defects. 309 of this corpus's 312 probes belong to that population
+(the three left out are `analyzer-self-test-multi-mode-01`,
+`bracket-rivet-calc-on-fill-01` and `order-switchback-all-in-reversal-01`).
 
 The 60 PineForge-owned additions introduced across the 282- and 312-probe
 expansions are all independently authored, source-bound to actual
 private-editor TradingView exports, and graded excellent by the native Corpus
 verifier. No non-excellent candidate from either expansion is present in this
 public tree. Their ownership, coverage tags, artifact hashes, and native
-results are bound in [`owned_strategies.json`](owned_strategies.json).
+results are bound in [`owned_strategies.json`](owned_strategies.json), which was
+re-derived on 2026-09-26 by the same gate.
 
-The canonical, regenerated-each-sweep disposition table is
 [`validation_report.md`](validation_report.md) (rendered as
-`validation_report.html` and `validation_report.pdf`).
+`validation_report.html` and `validation_report.pdf`) is the per-probe disposition
+table the engine's sweep emits. The copy committed here is the 2026-08-13 one
+(see above): regenerate it with `scripts/run_corpus.sh` before citing it.
 
 ## Artifact tuple
 
-Each probe directory ships this core artifact tuple in git:
+Each probe directory ships this core artifact tuple in git. 122 of the 312 probes
+also carry an `inputs.json` (probe metadata: the timezone of the TradingView
+export, timeframes and input overrides, and for the documented anomaly its
+expected tier); the other 190 have none.
 
 | File                | Source                       | Role                                                       |
 | ------------------- | ---------------------------- | ---------------------------------------------------------- |
@@ -52,18 +78,25 @@ Each probe directory ships this core artifact tuple in git:
 | `tv_trades.csv`     | TradingView export           | TV broker emulator's trade list for `strategy.pine`        |
 | `engine_trades.csv` | PineForge                    | Engine's trade list for the same script (TV-format CSV)    |
 
+The one exception is `analyzer-self-test-multi-mode-01`: it has four TradingView
+tapes, `trades-<mode>.csv`, and its `inputs.json` names the one to grade
+(`tv_trades_csv`).
+
 `generated.cpp` is the transpiler output of our own clean-room
 PineScript and ships under the same Apache-2.0 license as
 `strategy.pine`. It is included in-tree so public users can rebuild
 without needing access to the separate, source-available `pineforge-codegen`
-transpiler — `cmake --build build --target corpus_strategies` compiles
+transpiler — in the engine checkout, configured with
+`-DPINEFORGE_BUILD_CORPUS_STRATEGIES=ON` and this repository mounted as `corpus/`,
+`cmake --build build --target corpus_strategies` compiles
 each `generated.cpp` into a per-strategy shared library. The compiled
 `strategy.dylib` / `.so` / `.dll` are platform-specific build artefacts
 and remain ignored.
 
 ## Reference OHLCV
 
-The corpus ships exactly **one** feed (stored via Git LFS):
+The corpus ships exactly **one** feed (stored via Git LFS, so install `git-lfs`
+before cloning or run `git lfs pull`):
 
 - `data/ohlcv_ETH-USDT-USDT_1m.csv` — Binance ETH-USDT-USDT perp
   1-minute bars spanning more than six years from 2020-01-01 00:00 UTC
@@ -93,8 +126,11 @@ ticks from chart bars and need no extra feed.
 
 ## Layout
 
+Paths are relative to this repository's root, which the engine checks out as its
+`corpus/` submodule.
+
 ```
-corpus/
+.
 ├── validation/                312 probes — surface-driven probe family
 │   ├── ta-*                    73 probes — TA built-in math (rsi, macd, sma, ...)
 │   ├── composite-*             53 probes — multi-surface integration (community-style)
@@ -137,10 +173,13 @@ corpus/
 ├── NOTICE                      attribution
 ├── LEGAL.md                    provenance / trademarks
 ├── README.md                   this file
-├── CMakeLists.txt              per-strategy .so build glob
+├── CLAUDE.md                   guardrails for AI agents working in this repository
+├── CMakeLists.txt              per-strategy .so build glob (used from the engine checkout)
 ├── .gitignore                  ignores compiled strategy libs, data/derived/, .omc/
+├── .gitattributes              Git LFS for data/ohlcv_*.csv; no line-ending conversion for the tapes
 ├── owned_strategies.json       ownership, coverage, hashes, and Excellent evidence for 60 additions
-├── validation_report.md        canonical parity disposition, regenerated each sweep
+├── run_manifest.json           sha256 of every committed engine_trades.csv, minted 2026-08-13 by engine a7cb5b6
+├── validation_report.md        per-probe parity disposition; the committed copy lags (see above)
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
@@ -211,16 +250,11 @@ pineforge-data integration; it is not counted in the 312.)
 
 ## Where the numbers come from
 
-The headline figure is produced by the verifier sweep that emits
-[`validation_report.md`](validation_report.md). That report is the
-authoritative disposition for every probe — tier, profile, per-dimension
-deltas, anomaly verdicts.
-
-The full pipeline (build + run + verify across the whole tree) is one
-command:
+The engine's parity gate runs the whole pipeline (build + run + grade across the
+tree), and its stages are also available on their own:
 
 ```bash
-JOBS=8 scripts/run_corpus.sh
+JOBS=8 scripts/run_corpus.sh              # from the engine checkout: build, run, verify, write the report
 ```
 
 That script:
@@ -234,43 +268,55 @@ That script:
    `engine_trades.csv` next to the probe.
 4. Runs `scripts/verify_corpus.py --all` to produce the report.
 
+`scripts/check_corpus_parity.sh` wraps it and adds the byte-identity check against
+the pinned baseline; the engine's CI runs it nightly.
+
 ## Reproducing parity locally
 
 No transpiler access required — `generated.cpp` ships in-tree.
 
 ```bash
-# 1. Clone the engine and pull this corpus submodule
+# 1. Clone the engine and pull this corpus submodule (needs git-lfs, CMake and a C++17 compiler)
 git clone https://github.com/pineforge-4pass/pineforge-engine.git
 cd pineforge-engine
+git lfs install
 git submodule update --init corpus
 
-# 2. Build all per-strategy .so files, run them, and verify
-JOBS=8 scripts/run_corpus.sh
+# 2. Build all per-strategy .so files, run them, and check parity against the pinned baseline
+JOBS=8 ./scripts/check_corpus_parity.sh            # all 312 probes
+JOBS=8 ./scripts/check_corpus_parity.sh --subset   # 54 probes, a few minutes
 ```
+
+The gate prints `TradingView parity holds` and exits 0 when every fresh tape hashes
+to its pinned value and the verifier headline matches the one quoted above.
 
 You need the engine repo, this corpus, and a C++17 compiler. The engine
 is deterministic given a fixed bar feed, the shipped `generated.cpp`,
-and a fixed runtime build. If a probe's rebuilt `engine_trades.csv`
-disagrees with the committed copy, that is a bug — please open an issue.
+and a fixed runtime build. The submodule checkout is the corpus commit the engine
+pins, whose `engine_trades.csv` files are older than the engine's output (see
+above): a fresh run therefore differs from them, and the engine's baseline, not the
+committed tape, is what a run is judged against. If a fresh run disagrees with that
+baseline, that is a bug — please open an issue.
 
 ## CSV format
 
-Both `tv_trades.csv` and `engine_trades.csv` use TradingView's row layout:
+`tv_trades.csv` and `engine_trades.csv` use TradingView's row layout:
 
-- **Two rows per trade**, sharing the same `Trade #`. The exit row is
-  emitted before the entry row (TV convention; PineForge mirrors it for
-  direct diff).
-- **Reverse-chronological by trade number** (newest first).
+- **Two rows per trade**, sharing the same `Trade #`. The exit row comes
+  before the entry row (TV convention; PineForge mirrors it for direct diff).
+- **Order by trade number differs**: `tv_trades.csv` is oldest first, and
+  `engine_trades.csv` is newest first (reverse-chronological).
 - **Time format**: `YYYY-MM-DD HH:MM`. Engine CSVs are UTC. TradingView
   exports use the chart's wall-clock timezone; this corpus defaults to
   UTC+8 unless a probe `inputs.json` overrides `tv_trades_csv_tz`.
 
-`tv_trades.csv` (TradingView's actual export):
+`tv_trades.csv` (TradingView's actual export; the first column is headed
+`Trade number` and the first line starts with a byte-order mark):
 
 ```
-Trade #,Type,Date and time,Signal,Price USDT,Position size (qty),...
-14,Exit long,2026-04-27 20:30,TPSL,2291.52,1,2291.52,...
-14,Entry long,2026-04-27 20:15,…,2289.7,1,2289.7,…
+Trade number,Type,Date and time,Signal,Price USDT,Size (qty),Size (value),Net PnL USDT,Return %,Commission USDT,Favorable excursion USDT,...,Duration (bars)
+1,Exit long,2025-04-03 06:00,Anvil Costed Bracket,1837.51,3.9396,7493.946516,-266.67853,-3.56,11.78640073,213.67694,...,21
+1,Entry long,2025-04-03 00:45,Anvil Long,1902.21,3.9396,7493.946516,-266.67853,-3.56,11.78640073,213.67694,...,21
 ```
 
 `engine_trades.csv` (PineForge's mirrored format, fewer columns —
@@ -278,10 +324,14 @@ PineForge does not currently emit TV's "Signal" tag or percent-of-position
 excursions):
 
 ```
-Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,Favorable excursion USD,Adverse excursion USD,Cumulative PnL
-14,Exit long,2026-04-27 20:30,2291.520000,1,1.820000,0.0795,2.250000,-0.160000,-38.120000
-14,Entry long,2026-04-27 20:15,2289.700000,1,1.820000,0.0795,2.250000,-0.160000,-38.120000
+Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,Favorable excursion USD,Adverse excursion USD,Cumulative PnL,Engine entry incarnation
+325,Exit long,2026-05-04 13:00,2334.140000,3.13888,30.246485,0.4152,239.319100,-45.628774,-2763.685302,
+325,Entry long,2026-05-03 11:45,2320.780000,3.13888,30.246485,0.4152,239.319100,-45.628774,-2763.685302,16635
 ```
+
+The tapes committed here have those 11 columns. The current engine also appends
+an `Engine range-end` column (marking a position still open at the end of the
+range) and prints `Qty` at full precision.
 
 `Net PnL` and `Net PnL %` are per-trade. `Cumulative PnL` is the
 engine-side running total. The excursion columns use TV's names and sign
@@ -293,8 +343,8 @@ accessors stay positive per the Pine v6 spec.
 
 ## Parity thresholds
 
-The verifier (`scripts/verify_corpus.py`) applies one of two threshold
-profiles per probe and emits a tier label:
+The verifier (`scripts/verify_corpus.py` in the engine repo) applies one of two
+threshold profiles per probe and emits a tier label:
 
 ### Profiles
 
