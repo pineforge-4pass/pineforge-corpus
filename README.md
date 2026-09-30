@@ -32,24 +32,24 @@ against `tv_trades.csv` with `scripts/verify_corpus.py`. At engine `35db01c`
   tapes in `trades-*.csv`).
 
 **The files committed here lag that measurement.** The `engine_trades.csv` tapes
-and `validation_report.{md,html,pdf}` come from earlier engine builds, so they
-are not the oracle: none of the 312 committed tapes is byte-identical to what
-the current engine produces (it now appends an `Engine range-end` column and
-prints `Qty` at full precision). Judged as committed, the tapes read 307 excellent
-/ 4 strong / 1 anomaly (`verify_corpus.py --all` over this tree), and the
-committed report, generated 2026-08-13 by engine `a7cb5b6`, reads 309 / 2 / 1. The
+and `validation_report.{md,html,pdf}` (generated 2026-08-13 by engine `a7cb5b6`)
+come from engine builds older than v1.0.0, so they are not the oracle and the
+tiers they give as committed are not the current grades: none of the 312
+committed tapes is byte-identical to what the current engine produces (it now
+appends an `Engine range-end` column and prints `Qty` at full precision). The
 engine's gate therefore re-runs everything and compares each fresh tape with a
 pinned sha256 (`scripts/corpus_parity_baseline.txt` in the engine repo); re-running
-is how you get the figures above.
+is how you get the figures above. The engine README on `main` (`6b45f510`) gives
+the same figures for this corpus: 311 excellent and 1 declared anomaly.
 
 Beyond this public corpus, the engine is graded on a much larger private set of
 community-shared TradingView scripts (private under TradingView's Terms of Service
 — not redistributable). The engine's parity baseline of 2026-09-29 (engine
 `35db01c`; engine v1.0.0 changed no grade) covers 8,006 probes: 7,989 are
 graded — **7,905 excellent (98.95 %) and 84 strong
-(1.05 %), none below strong, no engine errors** — and 17 are excluded as
-TradingView-side defects. 309 of this corpus's 312 probes belong to that population
-(the three left out are `analyzer-self-test-multi-mode-01`,
+(1.05 %), none below strong** — and 17 are excluded as
+TradingView-side defects. 309 of this corpus's 312 probes belong to that population,
+all 309 excellent there (the three left out are `analyzer-self-test-multi-mode-01`,
 `bracket-rivet-calc-on-fill-01` and `order-switchback-all-in-reversal-01`).
 
 The 60 PineForge-owned additions introduced across the 282- and 312-probe
