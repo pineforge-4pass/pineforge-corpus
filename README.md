@@ -12,9 +12,8 @@ bar feed.
 Measured by the engine's parity gate
 ([`scripts/check_corpus_parity.sh`](https://github.com/pineforge-4pass/pineforge-engine/blob/main/scripts/check_corpus_parity.sh)),
 which builds every probe's `generated.cpp`, re-runs it, and grades the result
-against `tv_trades.csv` with `scripts/verify_corpus.py`. On engine `main`
-(`35db01c`, 2026-09-29 — not yet released; the latest engine release, v0.13.1,
-predates the gate):
+against `tv_trades.csv` with `scripts/verify_corpus.py`. At engine `35db01c`
+(2026-09-29; engine v1.0.0, released 2026-09-30, includes that commit):
 
 - **312** probes under `validation/`, in 33 categories.
 - **311** excellent (exact trade-count parity and every other gated dimension
@@ -45,8 +44,9 @@ is how you get the figures above.
 
 Beyond this public corpus, the engine is graded on a much larger private set of
 community-shared TradingView scripts (private under TradingView's Terms of Service
-— not redistributable). The engine's parity baseline of 2026-09-29 (engine `main`)
-covers 8,006 probes: 7,989 are graded — **7,905 excellent (98.95 %) and 84 strong
+— not redistributable). The engine's parity baseline of 2026-09-29 (engine
+`35db01c`; engine v1.0.0 changed no grade) covers 8,006 probes: 7,989 are
+graded — **7,905 excellent (98.95 %) and 84 strong
 (1.05 %), none below strong, no engine errors** — and 17 are excluded as
 TradingView-side defects. 309 of this corpus's 312 probes belong to that population
 (the three left out are `analyzer-self-test-multi-mode-01`,
