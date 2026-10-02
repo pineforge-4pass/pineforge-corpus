@@ -299,11 +299,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            returnDeque = std::vector<double>();
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             sampleCount = get_input_int("Deque Samples", 17);
             minimumPositiveShare = get_input_double("Minimum Positive Share", 0.64);
@@ -311,6 +306,11 @@ public:
             atrLength = get_input_int("ATR Length", 17);
             maximumAtrLoss = get_input_double("Maximum ATR Loss", 2.4);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            returnDeque = std::vector<double>();
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 49));

@@ -309,16 +309,16 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_pivot = get_input_int("Pivot strength", 5);
             i_rr = get_input_double("Reward:risk ratio", 2.0);
             i_fast = get_input_int("Fast EMA", 5);
             i_slow = get_input_int("Slow EMA", 13);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));

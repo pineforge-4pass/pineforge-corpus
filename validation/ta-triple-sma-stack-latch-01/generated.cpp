@@ -267,15 +267,15 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             ma1Len = get_input_int("MA 1 Length", 10);
             ma2Len = get_input_int("MA 2 Length", 20);
             ma3Len = get_input_int("MA 3 Length", 50);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_sma_1 = ta::SMA(get_input_int("MA 1 Length", 10));

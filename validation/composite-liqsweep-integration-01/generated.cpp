@@ -290,6 +290,11 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            i_left = get_input_int("Pivot left bars", 5);
+            i_right = get_input_int("Pivot right bars", 5);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             wait_long.push(0);
             wait_short.push(0);
@@ -299,11 +304,6 @@ public:
             else wait_long.update(wait_long[0]);
             if (history_advances_new_bar()) wait_short.push(wait_short[0]);
             else wait_short.update(wait_short[0]);
-        }
-        if (!_inputs_initialized_) {
-            i_left = get_input_int("Pivot left bars", 5);
-            i_right = get_input_int("Pivot right bars", 5);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot left bars", 5), get_input_int("Pivot right bars", 5));

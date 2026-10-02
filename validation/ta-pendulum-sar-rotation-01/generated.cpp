@@ -284,10 +284,6 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _strat_position_size.push(signed_position_size());
         else _strat_position_size.update(signed_position_size());
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             sarStart = get_input_double("SAR Start", 0.018);
             sarIncrement = get_input_double("SAR Increment", 0.021);
@@ -295,6 +291,10 @@ public:
             trendLength = get_input_int("Trend EMA Length", 73);
             maximumHoldBars = get_input_int("Maximum Hold Bars", 96);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_sar_1 = ta::SAR(get_input_double("SAR Start", 0.018), get_input_double("SAR Increment", 0.021), get_input_double("SAR Maximum", 0.19));

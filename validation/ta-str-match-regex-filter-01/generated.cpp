@@ -249,7 +249,7 @@ public:
             rules = get_input_string("Rule Set", std::string("MACD=LONG,RSI>50"));
             _inputs_initialized_ = true;
         }
-        lrules = [&](){ std::string s=rules; std::transform(s.begin(),s.end(),s.begin(),::tolower); return s; }();
+        lrules = [&](){ std::string __pf_s=rules; std::transform(__pf_s.begin(),__pf_s.end(),__pf_s.begin(),::tolower); return __pf_s; }();
         useRsi = false;
         useMacd = false;
         if ((pine_str_match(lrules, std::string("rsi>50")) != std::string(""))) {

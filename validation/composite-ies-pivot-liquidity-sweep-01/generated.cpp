@@ -250,14 +250,14 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_swing_left = get_input_int("Swing Left Bars", 10);
             i_swing_right = get_input_int("Swing Right Bars", 5);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Swing Left Bars", 10), get_input_int("Swing Right Bars", 5));

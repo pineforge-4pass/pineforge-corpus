@@ -326,10 +326,6 @@ public:
         else _s_close.update(current_bar_.close);
         if (history_advances_new_bar()) _strat_position_size.push(signed_position_size());
         else _strat_position_size.update(signed_position_size());
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             channelLength = get_input_int("Channel Length", 28);
             bandWidth = get_input_double("Band Width", 1.25);
@@ -337,6 +333,10 @@ public:
             stopAtr = get_input_double("Stop ATR", 2.4);
             maximumHoldBars = get_input_int("Maximum Hold Bars", 160);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_stdev_1 = ta::StdDev(get_input_int("Channel Length", 28));

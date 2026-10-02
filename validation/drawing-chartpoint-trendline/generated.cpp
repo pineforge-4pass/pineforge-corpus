@@ -28,6 +28,45 @@
 
 using namespace pineforge;
 
+// TradingView's drawing lifetime. A deleted or collected drawing reads like a
+// na handle: every getter returns na, every setter does nothing and na() is
+// true. A new line, box or label that makes its kind's live count reach
+// max_<kind>_count + 6 deletes the oldest drawings of that kind that no var,
+// varip or history-read variable holds, until max_<kind>_count remain; one
+// held only by an array, a map, an object field, a local or a plain non-var
+// variable is collectable. Linefills are never collected.
+constexpr int _PF_DRAWING_UNBOUNDED = 2147483647;
+template <class T> struct _PFDrawingArg { using type = T; };
+template <class R, class Rec, class H, class... A>
+inline R _pf_drawing_get(R (*get)(DrawingArena<Rec>&, H, A...),
+                         typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                         typename _PFDrawingArg<H>::type h,
+                         typename _PFDrawingArg<A>::type... args) {
+    return arena.alive(h.id) ? get(arena, h, args...) : na<R>();
+}
+template <class Rec, class H, class... A>
+inline void _pf_drawing_set(void (*set)(DrawingArena<Rec>&, H, A...),
+                            typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                            typename _PFDrawingArg<H>::type h,
+                            typename _PFDrawingArg<A>::type... args) {
+    if (arena.alive(h.id)) set(arena, h, args...);
+}
+template <class Rec, class H>
+inline bool _pf_drawing_na(const DrawingArena<Rec>& arena, H h) {
+    return !arena.alive(h.id);
+}
+template <class Rec>
+inline void _pf_collect_drawings(DrawingArena<Rec>& arena, int keep,
+                                 const int32_t* pins, std::size_t pin_count) {
+    const std::size_t excess = arena.order().size() - static_cast<std::size_t>(keep);
+    std::vector<int32_t> doomed;
+    for (int32_t id : arena.order()) {
+        if (doomed.size() == excess) break;
+        if (std::find(pins, pins + pin_count, id) == pins + pin_count) doomed.push_back(id);
+    }
+    for (int32_t id : doomed) arena.erase(id);
+}
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -114,10 +153,10 @@ public:
     bool ready = false;
     bool sDn = false;
     bool sUp = false;
-    DrawingArena<LineRec> _pf_lines_{50};
-    DrawingArena<BoxRec> _pf_boxes_{50};
-    DrawingArena<LabelRec> _pf_labels_{50};
-    DrawingArena<LinefillRec> _pf_linefills_{50};
+    DrawingArena<LineRec> _pf_lines_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<BoxRec> _pf_boxes_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LabelRec> _pf_labels_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LinefillRec> _pf_linefills_{_PF_DRAWING_UNBOUNDED};
     bool _var_initialized = false;
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
@@ -205,6 +244,7 @@ public:
         pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
 #endif
         pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 100000.0;
         cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
         cfg.default_qty_value = 1.0;
         cfg.pyramiding = 0;
@@ -264,14 +304,39 @@ public:
         this->ready = false;
         this->sDn = false;
         this->sUp = false;
-        this->_pf_lines_ = decltype(this->_pf_lines_){50};
-        this->_pf_boxes_ = decltype(this->_pf_boxes_){50};
-        this->_pf_labels_ = decltype(this->_pf_labels_){50};
-        this->_pf_linefills_ = decltype(this->_pf_linefills_){50};
+        this->_pf_lines_ = decltype(this->_pf_lines_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_boxes_ = decltype(this->_pf_boxes_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_labels_ = decltype(this->_pf_labels_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_linefills_ = decltype(this->_pf_linefills_){_PF_DRAWING_UNBOUNDED};
         this->_var_initialized = false;
         this->_ta_initialized_ = false;
         this->_inputs_initialized_ = false;
         if (allow_precalculation) precalculate(bars, n);
+    }
+
+    Line _pf_collect_lines_(Line _pf_new) {
+        if ((int)this->_pf_lines_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id, this->trend.id};
+            _pf_collect_drawings(this->_pf_lines_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+    Box _pf_collect_boxes_(Box _pf_new) {
+        if ((int)this->_pf_boxes_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_boxes_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+    Label _pf_collect_labels_(Label _pf_new) {
+        if ((int)this->_pf_labels_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_labels_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
     }
 
     void on_source_bar(const Bar& bar) override {
@@ -285,13 +350,13 @@ public:
         if ((!(is_na(base[0])) && !(is_na(base[2])))) {
             p1 = ChartPoint{ .index=(int64_t)((pine_bar_index() - 2)), .time=na<int64_t>(), .price=(base[2]) };
             p2 = ChartPoint{ .index=(int64_t)(pine_bar_index()), .time=na<int64_t>(), .price=(base[0]) };
-            if (is_na(trend)) {
-                trend = pf_line_new_pts(_pf_lines_, p1, p2, XLoc::bar_index);
+            if (_pf_drawing_na(_pf_lines_, trend)) {
+                trend = _pf_collect_lines_(pf_line_new_pts(_pf_lines_, p1, p2, XLoc::bar_index));
             } else {
-                pf_line_set_first_point(_pf_lines_, trend, p1);
-                pf_line_set_second_point(_pf_lines_, trend, p2);
+                _pf_drawing_set(pf_line_set_first_point, _pf_lines_, trend, p1);
+                _pf_drawing_set(pf_line_set_second_point, _pf_lines_, trend, p2);
             }
-            proj = pf_line_get_price(_pf_lines_, trend, (int64_t)((pine_bar_index() - 1)));
+            proj = _pf_drawing_get(pf_line_get_price, _pf_lines_, trend, (int64_t)((pine_bar_index() - 1)));
         }
         ref = ([&]{ auto _nz_v = (proj); return is_na(_nz_v) ? (current_bar_.close) : _nz_v; }());
         ready = !(is_na(proj));

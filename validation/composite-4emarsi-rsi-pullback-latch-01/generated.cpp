@@ -263,10 +263,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_rsi_len = get_input_int("RSI length", 14);
             i_dip_lo = get_input_double("Long pullback band", 40);
@@ -274,6 +270,10 @@ public:
             i_dip_hi = get_input_double("Short pullback band", 60);
             i_pop_hi = get_input_double("Short recovery line", 50);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_rsi_1 = ta::RSI(get_input_int("RSI length", 14));

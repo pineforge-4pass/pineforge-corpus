@@ -329,17 +329,17 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            regimeWeight = PineMap<std::string, double>::new_();
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             centerLength = get_input_int("Center EMA", 33);
             atrLength = get_input_int("ATR Length", 18);
             expansionPct = get_input_double("Expansion ATR %", 1.8);
             stopAtr = get_input_double("Base Stop ATR", 2.6);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            regimeWeight = PineMap<std::string, double>::new_();
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Center EMA", 33));

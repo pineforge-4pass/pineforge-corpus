@@ -352,13 +352,6 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
-        if (!_var_initialized) {
-            kama.push(na<double>());
-            _var_initialized = true;
-        } else {
-            if (history_advances_new_bar()) kama.push(kama[0]);
-            else kama.update(kama[0]);
-        }
         if (!_inputs_initialized_) {
             i_kama_len = get_input_int("KAMA length", 14);
             i_kama_fast = get_input_int("KAMA fast end", 2);
@@ -368,6 +361,13 @@ public:
             i_rsi_offset = get_input_int("RSI source offset", 200);
             i_deep_lag = get_input_int("Close-reference lag", 450);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            kama.push(na<double>());
+            _var_initialized = true;
+        } else {
+            if (history_advances_new_bar()) kama.push(kama[0]);
+            else kama.update(kama[0]);
         }
         if (!_ta_initialized_) {
             _ta_sum_1 = math::Sum(get_input_int("KAMA length", 14));

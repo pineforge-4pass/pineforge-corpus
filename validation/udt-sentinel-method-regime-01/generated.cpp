@@ -576,11 +576,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            state = _pf_udt_RegimeState.create(_PFUdtRecord_RegimeState{.center = na<double>(), .strength = 0.0, .bullish = false});
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             emaLength = get_input_int("Center EMA", 36);
             rsiLength = get_input_int("Strength RSI", 15);
@@ -588,6 +583,11 @@ public:
             atrLength = get_input_int("ATR Length", 14);
             stopAtr = get_input_double("Stop ATR", 2.1);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            state = _pf_udt_RegimeState.create(_PFUdtRecord_RegimeState{.center = na<double>(), .strength = 0.0, .bullish = false});
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Center EMA", 36));

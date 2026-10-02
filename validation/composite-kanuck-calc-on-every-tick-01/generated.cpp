@@ -265,15 +265,15 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_step = get_input_int("Tick-counter modulo step", 3);
             i_fast = get_input_int("EMA fast length", 8);
             i_slow = get_input_int("EMA slow length", 21);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("EMA fast length", 8));

@@ -314,16 +314,16 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             bbLen = get_input_int("BB Length", 20);
             bbMult = get_input_double("BB Multiplier", 2.0);
             kcLen = get_input_int("KC Length", 20);
             kcMult = get_input_double("KC Multiplier", 1.5);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_bb_1 = ta::BB(get_input_int("BB Length", 20), get_input_double("BB Multiplier", 2.0));

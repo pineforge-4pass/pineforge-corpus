@@ -311,11 +311,6 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
-        if (!_var_initialized) {
-            returns = std::vector<double>();
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             sampleCount = get_input_int("Return Samples", 8);
             rankLength = get_input_int("Rank Window", 55);
@@ -325,6 +320,11 @@ public:
             atrLength = get_input_int("ATR Length", 17);
             stopAtr = get_input_double("Stop ATR", 2.4);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            returns = std::vector<double>();
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_percentrank_1 = ta::PercentRank(get_input_int("Rank Window", 55));

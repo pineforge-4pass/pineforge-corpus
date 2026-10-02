@@ -346,11 +346,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            factorGrid = PineMatrix::new_(2, 2, 0.0);
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             fastLength = get_input_int("Fast EMA", 16);
             slowLength = get_input_int("Slow EMA", 44);
@@ -359,6 +354,11 @@ public:
             atrLength = get_input_int("ATR Length", 19);
             stopAtr = get_input_double("Stop ATR", 2.2);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            factorGrid = PineMatrix::new_(2, 2, 0.0);
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Fast EMA", 16));

@@ -290,16 +290,16 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_fast_ema = get_input_int("Fast EMA", 9);
             i_slow_ema = get_input_int("Slow EMA", 21);
             i_cooldown = get_input_int("Cooldown bars", 15);
             i_max_trades = get_input_int("Max trades / day", 3);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_2 = ta::EMA(get_input_int("Fast EMA", 9));

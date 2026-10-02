@@ -277,15 +277,15 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_fast = get_input_int("EMA fast", 21);
             i_mid = get_input_int("EMA mid", 55);
             i_slow = get_input_int("EMA slow", 200);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("EMA fast", 21));

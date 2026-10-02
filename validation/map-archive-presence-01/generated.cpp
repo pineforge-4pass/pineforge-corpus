@@ -351,11 +351,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            thresholdArchive = PineMap<std::string, double>::new_();
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             regimeChoice = get_input_string("Regime Key", std::string("balanced"));
             fallbackRsi = get_input_double("Fallback RSI", 63.0);
@@ -363,6 +358,11 @@ public:
             atrLength = get_input_int("ATR Length", 18);
             maximumAtrLoss = get_input_double("Maximum ATR Loss", 2.3);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            thresholdArchive = PineMap<std::string, double>::new_();
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_2 = ta::EMA(get_input_int("Trend EMA Length", 46));

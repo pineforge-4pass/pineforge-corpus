@@ -322,6 +322,14 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            i_q = get_input_double("Process variance Q", 0.001);
+            i_r = get_input_double("Measurement variance R", 0.1);
+            i_band_len = get_input_int("Band EMA length", 20);
+            i_atr_len = get_input_int("ATR length", 14);
+            i_atr_mult = get_input_double("ATR multiplier", 1.5);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             x.push(na<double>());
             p.push(1);
@@ -331,14 +339,6 @@ public:
             else x.update(x[0]);
             if (history_advances_new_bar()) p.push(p[0]);
             else p.update(p[0]);
-        }
-        if (!_inputs_initialized_) {
-            i_q = get_input_double("Process variance Q", 0.001);
-            i_r = get_input_double("Measurement variance R", 0.1);
-            i_band_len = get_input_int("Band EMA length", 20);
-            i_atr_len = get_input_int("ATR length", 14);
-            i_atr_mult = get_input_double("ATR multiplier", 1.5);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Band EMA length", 20));

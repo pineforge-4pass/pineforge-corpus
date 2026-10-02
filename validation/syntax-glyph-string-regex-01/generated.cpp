@@ -335,7 +335,7 @@ public:
             _ta_atr_4 = ta::ATR(get_input_int("ATR Length", 16));
             _ta_initialized_ = true;
         }
-        normalized = [&](){ std::string s=configuration; std::transform(s.begin(),s.end(),s.begin(),::tolower); return s; }();
+        normalized = [&](){ std::string __pf_s=configuration; std::transform(__pf_s.begin(),__pf_s.end(),__pf_s.begin(),::tolower); return __pf_s; }();
         trendRulePresent = (pine_str_match(normalized, std::string("trend:[a-z]+")) != std::string(""));
         confirmationRequested = (pine_str_match(normalized, std::string("trend:confirmed")) != std::string(""));
         guardedRisk = (pine_str_match(normalized, std::string("risk:guarded")) != std::string(""));
