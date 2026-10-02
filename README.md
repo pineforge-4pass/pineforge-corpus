@@ -47,7 +47,7 @@ engine `5718c5dc` and corpus `d53f949`, which is `e7a0f8f` before its rebase
 onto `main` (same tapes and C++). The engine's gate still re-runs every probe
 and compares each fresh tape's sha256 with the baseline, not with the committed
 file.
-The engine README on `main` (`6b45f510`) gives the same figures for this corpus:
+The engine README at v1.0.1 (`d1d18867`) gives the same figures for this corpus:
 311 excellent and 1 declared anomaly.
 
 Beyond this public corpus, the engine is graded on a much larger private set of
