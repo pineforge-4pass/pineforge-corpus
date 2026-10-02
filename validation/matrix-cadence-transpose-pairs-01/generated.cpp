@@ -405,11 +405,6 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
-        if (!_var_initialized) {
-            factorRows = PineMatrix::new_(2, 3, 0.0);
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             shortHorizon = get_input_int("Short Horizon", 6);
             mediumHorizon = get_input_int("Medium Horizon", 18);
@@ -419,6 +414,11 @@ public:
             atrLength = get_input_int("ATR Length", 16);
             maximumAtrLoss = get_input_double("Maximum ATR Loss", 2.4);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            factorRows = PineMatrix::new_(2, 3, 0.0);
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_sma_1 = ta::SMA(get_input_int("Short Horizon", 6));

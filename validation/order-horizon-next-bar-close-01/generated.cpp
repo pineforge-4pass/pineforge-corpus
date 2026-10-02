@@ -269,16 +269,16 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _strat_position_size.push(signed_position_size());
         else _strat_position_size.update(signed_position_size());
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             signalLength = get_input_int("Signal SMA", 34);
             holdBars = get_input_int("Hold Bars", 11);
             atrLength = get_input_int("ATR Length", 14);
             stopAtr = get_input_double("Stop ATR", 2.2);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_sma_1 = ta::SMA(get_input_int("Signal SMA", 34));

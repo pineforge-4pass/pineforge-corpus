@@ -366,10 +366,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_xs = get_input_int("EMA xs length", 8);
             i_s = get_input_int("EMA s length", 21);
@@ -382,6 +378,10 @@ public:
             i_pop_hi = get_input_double("Short recovery line", 48);
             i_expiry_bars = get_input_int("Forced exit after N bars", 8);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("EMA xs length", 8));

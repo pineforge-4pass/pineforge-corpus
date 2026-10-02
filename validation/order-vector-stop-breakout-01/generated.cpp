@@ -290,10 +290,6 @@ public:
         if (history_advances_new_bar() && bar_index_ == 0) _hist_call_1.clear();
         if (history_advances_new_bar()) _strat_position_size.push(signed_position_size());
         else _strat_position_size.update(signed_position_size());
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             breakoutLength = get_input_int("Breakout Length", 28);
             atrLength = get_input_int("ATR Length", 15);
@@ -302,6 +298,10 @@ public:
             stopAtr = get_input_double("Stop ATR", 2.0);
             maxBars = get_input_int("Maximum Hold Bars", 72);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 15));

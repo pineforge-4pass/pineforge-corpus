@@ -386,11 +386,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            correlationMatrix = PineMatrix::new_(2, 2, 0.0);
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             covarianceLength = get_input_int("Covariance Length", 26);
             trendLength = get_input_int("Trend EMA Length", 58);
@@ -398,6 +393,11 @@ public:
             atrLength = get_input_int("ATR Length", 19);
             maximumAtrLoss = get_input_double("Maximum ATR Loss", 2.6);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            correlationMatrix = PineMatrix::new_(2, 2, 0.0);
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_correlation_3 = ta::Correlation(get_input_int("Covariance Length", 26));

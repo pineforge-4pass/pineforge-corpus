@@ -238,14 +238,14 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_factor = get_input_double("Supertrend factor", 3.0);
             i_atr_len = get_input_int("Supertrend ATR length", 10);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_supertrend_1 = ta::Supertrend(get_input_double("Supertrend factor", 3.0), get_input_int("Supertrend ATR length", 10));

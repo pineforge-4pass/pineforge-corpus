@@ -287,18 +287,18 @@ public:
         if (history_advances_new_bar()) _udf_series_arg_1.push(_udf_series_arg_1.current());
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
+        if (!_inputs_initialized_) {
+            len = get_input_int("Length", 14);
+            fastLen = get_input_int("Fast Alpha Period", 2);
+            slowLen = get_input_int("Slow Alpha Period", 30);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             kama.push(current_bar_.close);
             _var_initialized = true;
         } else {
             if (history_advances_new_bar()) kama.push(kama[0]);
             else kama.update(kama[0]);
-        }
-        if (!_inputs_initialized_) {
-            len = get_input_int("Length", 14);
-            fastLen = get_input_int("Fast Alpha Period", 2);
-            slowLen = get_input_int("Slow Alpha Period", 30);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_sum_1 = math::Sum(get_input_int("Length", 14));

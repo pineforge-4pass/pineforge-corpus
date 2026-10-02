@@ -270,15 +270,15 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             atrLen = get_input_int("ATR Length", 14);
             atrMult = get_input_double("ATR Multiplier", 2.0);
             maLen = get_input_int("MA Length", 20);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 14));

@@ -263,17 +263,17 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            filterLen = get_input_int("Filter Length", 50);
+            filterMult = get_input_double("Range Multiplier", 2.5);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             filterDir.push(0);
             _var_initialized = true;
         } else {
             if (history_advances_new_bar()) filterDir.push(filterDir[0]);
             else filterDir.update(filterDir[0]);
-        }
-        if (!_inputs_initialized_) {
-            filterLen = get_input_int("Filter Length", 50);
-            filterMult = get_input_double("Range Multiplier", 2.5);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Filter Length", 50));

@@ -585,13 +585,6 @@ public:
         else _s_low.update(current_bar_.low);
         if (history_advances_new_bar()) _s_open.push(current_bar_.open);
         else _s_open.update(current_bar_.open);
-        if (!_var_initialized) {
-            z_top = std::vector<double>();
-            z_bot = std::vector<double>();
-            z_isb = std::vector<bool>();
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_pivot = get_input_int("Pivot strength", 5);
             i_fvg_atr = get_input_double("FVG min size (atr fraction)", 0.3);
@@ -604,6 +597,13 @@ public:
             i_session = get_input_string("Active session", std::string("0800-1600"));
             i_tz = get_input_string("Timezone", std::string("America/New_York"));
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            z_top = std::vector<double>();
+            z_bot = std::vector<double>();
+            z_isb = std::vector<bool>();
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_pivothigh_2 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
@@ -650,12 +650,12 @@ public:
         in_bear_fvg = false;
         if (([&]{ auto _pna_l = ((double)z_top.size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) {
             int _for_start_0 = (0);
-            int _for_end_0 = [&](){ auto _pf_v = ((((double)z_top.size() - 1))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            int _for_end_0 = [&](){ auto _pf_v = ((((double)z_top.size() - 1))); if constexpr (std::is_floating_point_v<decltype(_pf_v)>) return (_pf_v >= -2147483648.0 && _pf_v < 2147483648.0) ? (int)_pf_v : na<int>(); else return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
             int _for_step_0 = (1);
             if (!is_na(_for_step_0) && _for_step_0 < 0) _for_step_0 = -_for_step_0;
             if (_for_step_0 == 0) _for_step_0 = 1;
             const bool _for_down_0 = (_for_start_0 > _for_end_0);
-            for (int k = _for_start_0; !is_na(_for_start_0) && !is_na(_for_end_0) && !is_na(_for_step_0) && (_for_down_0 ? (k >= _for_end_0) : (k <= _for_end_0)); k += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = [&](){ auto _pf_v = ((((double)z_top.size() - 1))); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()) {
+            for (int k = _for_start_0; !is_na(_for_start_0) && !is_na(_for_end_0) && !is_na(_for_step_0) && (_for_down_0 ? (k >= _for_end_0) : (k <= _for_end_0)); k += (_for_down_0 ? -_for_step_0 : _for_step_0), _for_end_0 = [&](){ auto _pf_v = ((((double)z_top.size() - 1))); if constexpr (std::is_floating_point_v<decltype(_pf_v)>) return (_pf_v >= -2147483648.0 && _pf_v < 2147483648.0) ? (int)_pf_v : na<int>(); else return is_na(_pf_v) ? na<int>() : (int)_pf_v; }()) {
                 double t = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_top));
                 double b = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_bot));
                 bool s = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((k)); }((z_isb));

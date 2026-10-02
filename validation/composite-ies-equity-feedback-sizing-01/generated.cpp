@@ -305,10 +305,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_risk_pct = get_input_double("Risk Per Trade %", 1.0);
             i_atr_stop_mult = get_input_double("ATR Stop Multiplier", 2.0);
@@ -318,6 +314,10 @@ public:
             i_neutral_mult = get_input_double("Neutral Size Mult", 1.0);
             i_quality_mult = get_input_double("Quality Mult (fixed)", 1.15);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         auto _result__ta_dmi_1 = (history_advances_new_bar() ? _ta_dmi_1.compute(current_bar_.high, current_bar_.low, current_bar_.close) : _ta_dmi_1.recompute(current_bar_.high, current_bar_.low, current_bar_.close));
         double plus_di = _result__ta_dmi_1.diplus;

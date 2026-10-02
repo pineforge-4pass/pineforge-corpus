@@ -1090,6 +1090,14 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _s_close.push(current_bar_.close);
         else _s_close.update(current_bar_.close);
+        if (!_inputs_initialized_) {
+            rsiLen = get_input_int("RSI Length", 14);
+            maLen = get_input_int("MA Length", 20);
+            bbLen = get_input_int("BB Length", 20);
+            bbMult = get_input_double("BB Mult", 2.0);
+            profile = get_input_int("Stress profile", Aggression_balanced);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             cfg = _pf_udt_LayerInputs.create(_PFUdtRecord_LayerInputs{.rsi_len = [&](){ auto _pf_v = (rsiLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .ma_len = [&](){ auto _pf_v = (maLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .bb_len = [&](){ auto _pf_v = (bbLen); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), .bb_mult = bbMult});
             gateMap = PineMap<std::string, double>::new_();
@@ -1103,14 +1111,6 @@ public:
             gates = _pf_udt_GateState.create(_PFUdtRecord_GateState{.vol_ok = true, .map_ok = true});
             _var_initialized = true;
         } else {
-        }
-        if (!_inputs_initialized_) {
-            rsiLen = get_input_int("RSI Length", 14);
-            maLen = get_input_int("MA Length", 20);
-            bbLen = get_input_int("BB Length", 20);
-            bbMult = get_input_double("BB Mult", 2.0);
-            profile = get_input_int("Stress profile", Aggression_balanced);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_rsi_1 = ta::RSI(get_input_int("RSI Length", 14));
@@ -1193,7 +1193,7 @@ public:
         if ((([&]{ auto _pna_l = (signed_position_size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l < _pfc_r) && !_pfc_eq); }()) && ([&]{ auto _pna_l = (score); auto _pna_r = (exitS); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) || _pfc_eq); }()))) {
             strategy_close(std::string("Short"), "", na<double>(), na<double>(), false, 764504178707ULL);
         }
-        prevScore = [&](){ auto _pf_v = (score); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+        prevScore = [&](){ auto _pf_v = (score); if constexpr (std::is_floating_point_v<decltype(_pf_v)>) return (_pf_v >= -2147483648.0 && _pf_v < 2147483648.0) ? (int)_pf_v : na<int>(); else return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
     }
 
     void precalculate(const Bar* bars, int n) {

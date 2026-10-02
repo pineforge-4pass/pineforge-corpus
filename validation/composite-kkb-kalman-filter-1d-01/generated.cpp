@@ -251,6 +251,11 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            i_q = get_input_double("Process variance Q", 0.001);
+            i_r = get_input_double("Measurement variance R", 0.1);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             x.push(na<double>());
             p.push(1);
@@ -260,11 +265,6 @@ public:
             else x.update(x[0]);
             if (history_advances_new_bar()) p.push(p[0]);
             else p.update(p[0]);
-        }
-        if (!_inputs_initialized_) {
-            i_q = get_input_double("Process variance Q", 0.001);
-            i_r = get_input_double("Measurement variance R", 0.1);
-            _inputs_initialized_ = true;
         }
         x_pred = ([&]{ auto _nz_v = (x[1]); return is_na(_nz_v) ? (current_bar_.close) : _nz_v; }());
         p_pred = (([&]{ auto _nz_v = (p[1]); return is_na(_nz_v) ? (1.0) : _nz_v; }()) + i_q);

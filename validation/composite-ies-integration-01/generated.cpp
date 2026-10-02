@@ -664,10 +664,6 @@ public:
         else _s_high.update(current_bar_.high);
         if (history_advances_new_bar()) _s_low.push(current_bar_.low);
         else _s_low.update(current_bar_.low);
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_adx_len = get_input_int("ADX period", 14);
             i_adx_trend = get_input_double("ADX trend threshold", 25);
@@ -690,6 +686,10 @@ public:
             i_press_thr = get_input_double("Pressure mom thresh", 0.05);
             i_cooldown = get_input_int("Cooldown bars", 8);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_rma_2 = ta::RMA(get_input_int("ADX period", 14));

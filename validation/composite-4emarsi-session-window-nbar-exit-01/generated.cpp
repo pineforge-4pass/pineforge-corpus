@@ -270,14 +270,14 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_expiry_bars = get_input_int("Forced exit after N bars", 8);
             i_session = get_input_string("Entry session (UTC)", std::string("1000-2200"));
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         in_window = !(is_na(pine_time(current_bar_.timestamp, script_tf_, i_session, std::string("UTC"), script_tf_ PF_PINE_TIME_SESSION_DAY_ARGS(syminfo_.timezone, syminfo_.session))));
         fast = (history_advances_new_bar() ? _ta_ema_1.compute(current_bar_.close) : _ta_ema_1.recompute(current_bar_.close));

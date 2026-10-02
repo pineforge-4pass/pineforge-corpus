@@ -272,18 +272,18 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
+        if (!_inputs_initialized_) {
+            atrLen = get_input_int("ATR Length", 22);
+            atrMult = get_input_double("ATR Multiplier", 3.0);
+            lookback = get_input_int("Lookback", 22);
+            _inputs_initialized_ = true;
+        }
         if (!_var_initialized) {
             direction.push(0);
             _var_initialized = true;
         } else {
             if (history_advances_new_bar()) direction.push(direction[0]);
             else direction.update(direction[0]);
-        }
-        if (!_inputs_initialized_) {
-            atrLen = get_input_int("ATR Length", 22);
-            atrMult = get_input_double("ATR Multiplier", 3.0);
-            lookback = get_input_int("Lookback", 22);
-            _inputs_initialized_ = true;
         }
         if (!_ta_initialized_) {
             _ta_atr_1 = ta::ATR(get_input_int("ATR Length", 22));

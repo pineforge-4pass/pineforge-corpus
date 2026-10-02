@@ -28,6 +28,45 @@
 
 using namespace pineforge;
 
+// TradingView's drawing lifetime. A deleted or collected drawing reads like a
+// na handle: every getter returns na, every setter does nothing and na() is
+// true. A new line, box or label that makes its kind's live count reach
+// max_<kind>_count + 6 deletes the oldest drawings of that kind that no var,
+// varip or history-read variable holds, until max_<kind>_count remain; one
+// held only by an array, a map, an object field, a local or a plain non-var
+// variable is collectable. Linefills are never collected.
+constexpr int _PF_DRAWING_UNBOUNDED = 2147483647;
+template <class T> struct _PFDrawingArg { using type = T; };
+template <class R, class Rec, class H, class... A>
+inline R _pf_drawing_get(R (*get)(DrawingArena<Rec>&, H, A...),
+                         typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                         typename _PFDrawingArg<H>::type h,
+                         typename _PFDrawingArg<A>::type... args) {
+    return arena.alive(h.id) ? get(arena, h, args...) : na<R>();
+}
+template <class Rec, class H, class... A>
+inline void _pf_drawing_set(void (*set)(DrawingArena<Rec>&, H, A...),
+                            typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                            typename _PFDrawingArg<H>::type h,
+                            typename _PFDrawingArg<A>::type... args) {
+    if (arena.alive(h.id)) set(arena, h, args...);
+}
+template <class Rec, class H>
+inline bool _pf_drawing_na(const DrawingArena<Rec>& arena, H h) {
+    return !arena.alive(h.id);
+}
+template <class Rec>
+inline void _pf_collect_drawings(DrawingArena<Rec>& arena, int keep,
+                                 const int32_t* pins, std::size_t pin_count) {
+    const std::size_t excess = arena.order().size() - static_cast<std::size_t>(keep);
+    std::vector<int32_t> doomed;
+    for (int32_t id : arena.order()) {
+        if (doomed.size() == excess) break;
+        if (std::find(pins, pins + pin_count, id) == pins + pin_count) doomed.push_back(id);
+    }
+    for (int32_t id : doomed) arena.erase(id);
+}
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -160,10 +199,10 @@ public:
     double entry_px = 0.0;
     double sl_px = 0.0;
     double tp_px = 0.0;
-    DrawingArena<LineRec> _pf_lines_{500};
-    DrawingArena<BoxRec> _pf_boxes_{50};
-    DrawingArena<LabelRec> _pf_labels_{50};
-    DrawingArena<LinefillRec> _pf_linefills_{50};
+    DrawingArena<LineRec> _pf_lines_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<BoxRec> _pf_boxes_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LabelRec> _pf_labels_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LinefillRec> _pf_linefills_{_PF_DRAWING_UNBOUNDED};
     bool _var_initialized = false;
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
@@ -477,21 +516,42 @@ public:
         this->entry_px = 0.0;
         this->sl_px = 0.0;
         this->tp_px = 0.0;
-        this->_pf_lines_ = decltype(this->_pf_lines_){500};
-        this->_pf_boxes_ = decltype(this->_pf_boxes_){50};
-        this->_pf_labels_ = decltype(this->_pf_labels_){50};
-        this->_pf_linefills_ = decltype(this->_pf_linefills_){50};
+        this->_pf_lines_ = decltype(this->_pf_lines_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_boxes_ = decltype(this->_pf_boxes_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_labels_ = decltype(this->_pf_labels_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_linefills_ = decltype(this->_pf_linefills_){_PF_DRAWING_UNBOUNDED};
         this->_var_initialized = false;
         this->_ta_initialized_ = false;
         this->_inputs_initialized_ = false;
         if (allow_precalculation) precalculate(bars, n);
     }
 
-    void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
+    Line _pf_collect_lines_(Line _pf_new) {
+        if ((int)this->_pf_lines_.order().size() >= 506) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_lines_, 500, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
         }
+        return _pf_new;
+    }
+    Box _pf_collect_boxes_(Box _pf_new) {
+        if ((int)this->_pf_boxes_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_boxes_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+    Label _pf_collect_labels_(Label _pf_new) {
+        if ((int)this->_pf_labels_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_labels_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+
+    void on_source_bar(const Bar& bar) override {
         if (!_inputs_initialized_) {
             i_pivot = get_input_int("Pivot strength", 5);
             i_ema_fast = get_input_int("EMA fast", 21);
@@ -503,6 +563,10 @@ public:
             i_break_len = get_input_int("Breakout window", 20);
             i_rr = get_input_double("Reward:risk ratio", 2.0);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_pivothigh_1 = ta::PivotHigh(get_input_int("Pivot strength", 5), get_input_int("Pivot strength", 5));
@@ -520,22 +584,22 @@ public:
         if (!(is_na(ph))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_ph)) && !(is_na(last_ph_x)))) {
-                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_ph_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_ph), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(ph), XLoc::bar_index, false, false);
+                _pf_collect_lines_(pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_ph_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_ph), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(ph), XLoc::bar_index, false, false));
             }
             prev_ph_y = last_ph;
             prev_ph_x = last_ph_x;
             last_ph = ph;
-            last_ph_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_ph_x = [&](){ auto _pf_v = (cur_x); if constexpr (std::is_floating_point_v<decltype(_pf_v)>) return (_pf_v >= -2147483648.0 && _pf_v < 2147483648.0) ? (int)_pf_v : na<int>(); else return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         if (!(is_na(pl))) {
             cur_x = (pine_bar_index() - i_pivot);
             if ((!(is_na(last_pl)) && !(is_na(last_pl_x)))) {
-                pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_pl_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_pl), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(pl), XLoc::bar_index, false, false);
+                _pf_collect_lines_(pf_line_new(_pf_lines_, [&](){ auto _pf_v = (last_pl_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(last_pl), [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int64_t>() : (int64_t)_pf_v; }(), (double)(pl), XLoc::bar_index, false, false));
             }
             prev_pl_y = last_pl;
             prev_pl_x = last_pl_x;
             last_pl = pl;
-            last_pl_x = [&](){ auto _pf_v = (cur_x); return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
+            last_pl_x = [&](){ auto _pf_v = (cur_x); if constexpr (std::is_floating_point_v<decltype(_pf_v)>) return (_pf_v >= -2147483648.0 && _pf_v < 2147483648.0) ? (int)_pf_v : na<int>(); else return is_na(_pf_v) ? na<int>() : (int)_pf_v; }();
         }
         ema_fast = (history_advances_new_bar() ? _ta_ema_3.compute(current_bar_.close) : _ta_ema_3.recompute(current_bar_.close));
         ema_mid = (history_advances_new_bar() ? _ta_ema_4.compute(current_bar_.close) : _ta_ema_4.recompute(current_bar_.close));

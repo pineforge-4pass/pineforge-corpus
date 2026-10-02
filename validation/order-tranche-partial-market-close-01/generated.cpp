@@ -294,10 +294,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             fastLength = get_input_int("Fast EMA Length", 19);
             slowLength = get_input_int("Slow EMA Length", 58);
@@ -305,6 +301,10 @@ public:
             trancheAtr = get_input_double("First Tranche ATR", 1.3);
             maximumAtrLoss = get_input_double("Maximum ATR Loss", 2.4);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Fast EMA Length", 19));

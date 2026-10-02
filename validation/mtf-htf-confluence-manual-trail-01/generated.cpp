@@ -350,10 +350,6 @@ public:
     }
 
     void on_source_bar(const Bar& bar) override {
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             i_htf = get_input_string("Higher Timeframe", std::string("60"));
             i_htf_ema = get_input_int("HTF EMA Length", 20);
@@ -364,6 +360,10 @@ public:
             i_tp_mult = get_input_double("Take-profit ATR mult", 4.0);
             i_trail_mult = get_input_double("Manual Trail ATR mult", 2.0);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Fast EMA Length", 9));

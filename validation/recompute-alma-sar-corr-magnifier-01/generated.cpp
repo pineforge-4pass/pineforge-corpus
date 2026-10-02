@@ -360,4 +360,7 @@ extern "C" {
         if (!s) return;
         static_cast<GeneratedStrategy*>(s)->set_magnifier_volume_weighted(on != 0);
     }
+    int strategy_declares_bar_magnifier(void) {
+        return 1;
+    }
 }

@@ -306,10 +306,6 @@ public:
     void on_source_bar(const Bar& bar) override {
         if (history_advances_new_bar()) _strat_position_size.push(signed_position_size());
         else _strat_position_size.update(signed_position_size());
-        if (!_var_initialized) {
-            _var_initialized = true;
-        } else {
-        }
         if (!_inputs_initialized_) {
             fastLength = get_input_int("Fast EMA Length", 20);
             slowLength = get_input_int("Slow EMA Length", 61);
@@ -320,6 +316,10 @@ public:
             narrowStopAtr = get_input_double("Revised Stop ATR", 1.4);
             narrowTargetAtr = get_input_double("Revised Target ATR", 2.4);
             _inputs_initialized_ = true;
+        }
+        if (!_var_initialized) {
+            _var_initialized = true;
+        } else {
         }
         if (!_ta_initialized_) {
             _ta_ema_1 = ta::EMA(get_input_int("Fast EMA Length", 20));

@@ -33,6 +33,45 @@
 
 using namespace pineforge;
 
+// TradingView's drawing lifetime. A deleted or collected drawing reads like a
+// na handle: every getter returns na, every setter does nothing and na() is
+// true. A new line, box or label that makes its kind's live count reach
+// max_<kind>_count + 6 deletes the oldest drawings of that kind that no var,
+// varip or history-read variable holds, until max_<kind>_count remain; one
+// held only by an array, a map, an object field, a local or a plain non-var
+// variable is collectable. Linefills are never collected.
+constexpr int _PF_DRAWING_UNBOUNDED = 2147483647;
+template <class T> struct _PFDrawingArg { using type = T; };
+template <class R, class Rec, class H, class... A>
+inline R _pf_drawing_get(R (*get)(DrawingArena<Rec>&, H, A...),
+                         typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                         typename _PFDrawingArg<H>::type h,
+                         typename _PFDrawingArg<A>::type... args) {
+    return arena.alive(h.id) ? get(arena, h, args...) : na<R>();
+}
+template <class Rec, class H, class... A>
+inline void _pf_drawing_set(void (*set)(DrawingArena<Rec>&, H, A...),
+                            typename _PFDrawingArg<DrawingArena<Rec>&>::type arena,
+                            typename _PFDrawingArg<H>::type h,
+                            typename _PFDrawingArg<A>::type... args) {
+    if (arena.alive(h.id)) set(arena, h, args...);
+}
+template <class Rec, class H>
+inline bool _pf_drawing_na(const DrawingArena<Rec>& arena, H h) {
+    return !arena.alive(h.id);
+}
+template <class Rec>
+inline void _pf_collect_drawings(DrawingArena<Rec>& arena, int keep,
+                                 const int32_t* pins, std::size_t pin_count) {
+    const std::size_t excess = arena.order().size() - static_cast<std::size_t>(keep);
+    std::vector<int32_t> doomed;
+    for (int32_t id : arena.order()) {
+        if (doomed.size() == excess) break;
+        if (std::find(pins, pins + pin_count, id) == pins + pin_count) doomed.push_back(id);
+    }
+    for (int32_t id : doomed) arena.erase(id);
+}
+
 // --- syminfo derivation helpers (PineForge G2) ---
 static inline std::string _pf_derive_prefix(const std::string& tickerid) {
     std::size_t colon = tickerid.find(':');
@@ -380,10 +419,10 @@ public:
     bool ready = false;
     bool eUp = false;
     bool eDn = false;
-    DrawingArena<LineRec> _pf_lines_{50};
-    DrawingArena<BoxRec> _pf_boxes_{50};
-    DrawingArena<LabelRec> _pf_labels_{50};
-    DrawingArena<LinefillRec> _pf_linefills_{50};
+    DrawingArena<LineRec> _pf_lines_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<BoxRec> _pf_boxes_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LabelRec> _pf_labels_{_PF_DRAWING_UNBOUNDED};
+    DrawingArena<LinefillRec> _pf_linefills_{_PF_DRAWING_UNBOUNDED};
     bool _var_initialized = false;
     bool _ta_initialized_ = false;
     bool _inputs_initialized_ = false;
@@ -480,6 +519,7 @@ public:
         pineforge::source::PineStrategyHost::enable_pine_intraday_cap();
 #endif
         pineforge::source::PineStrategyConfig cfg{};
+        cfg.initial_capital = 100000.0;
         cfg.default_qty_type = static_cast<int>(QtyType::FIXED);
         cfg.default_qty_value = 1.0;
         cfg.pyramiding = 0;
@@ -542,14 +582,39 @@ public:
         this->ready = false;
         this->eUp = false;
         this->eDn = false;
-        this->_pf_lines_ = decltype(this->_pf_lines_){50};
-        this->_pf_boxes_ = decltype(this->_pf_boxes_){50};
-        this->_pf_labels_ = decltype(this->_pf_labels_){50};
-        this->_pf_linefills_ = decltype(this->_pf_linefills_){50};
+        this->_pf_lines_ = decltype(this->_pf_lines_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_boxes_ = decltype(this->_pf_boxes_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_labels_ = decltype(this->_pf_labels_){_PF_DRAWING_UNBOUNDED};
+        this->_pf_linefills_ = decltype(this->_pf_linefills_){_PF_DRAWING_UNBOUNDED};
         this->_var_initialized = false;
         this->_ta_initialized_ = false;
         this->_inputs_initialized_ = false;
         if (allow_precalculation) precalculate(bars, n);
+    }
+
+    Line _pf_collect_lines_(Line _pf_new) {
+        if ((int)this->_pf_lines_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id, this->alias.id};
+            _pf_collect_drawings(this->_pf_lines_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+    Box _pf_collect_boxes_(Box _pf_new) {
+        if ((int)this->_pf_boxes_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_boxes_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
+    }
+    Label _pf_collect_labels_(Label _pf_new) {
+        if ((int)this->_pf_labels_.order().size() >= 56) {
+            const int32_t _pf_held[] = {_pf_new.id};
+            _pf_collect_drawings(this->_pf_labels_, 50, _pf_held,
+                                 sizeof(_pf_held) / sizeof(_pf_held[0]));
+        }
+        return _pf_new;
     }
 
     void on_source_bar(const Bar& bar) override {
@@ -559,16 +624,16 @@ public:
         } else {
         }
         target = (history_advances_new_bar() ? _ta_sma_1.compute(current_bar_.close) : _ta_sma_1.recompute(current_bar_.close));
-        if (is_na(alias)) {
-            l = pf_line_new(_pf_lines_, (int64_t)(pine_bar_index()), (double)(target), (int64_t)(pine_bar_index()), (double)(target), XLoc::bar_index, false, false);
+        if (_pf_drawing_na(_pf_lines_, alias)) {
+            l = _pf_collect_lines_(pf_line_new(_pf_lines_, (int64_t)(pine_bar_index()), (double)(target), (int64_t)(pine_bar_index()), (double)(target), XLoc::bar_index, false, false));
             _pf_udt_Store.get(s).lines.push_back(l);
             alias = l;
         }
         lvl = na<double>();
         if (([&]{ auto _pna_l = ((double)_pf_udt_Store.get(s).lines.size()); auto _pna_r = (0); double _pfc_l = static_cast<double>(_pna_l); double _pfc_r = static_cast<double>(_pna_r); bool _pfc_eq = (_pfc_l == _pfc_r) || (std::isfinite(_pfc_l) && std::isfinite(_pfc_r) && std::fabs(_pfc_l - _pfc_r) <= 1e-10); return !is_na(_pna_l) && !is_na(_pna_r) && ((_pfc_l > _pfc_r) && !_pfc_eq); }())) {
             e = [&](auto&& __pf_array)->decltype(auto){ return [&](auto&& __pf_raw_index_value)->decltype(auto){ using __pf_raw_index_type=std::decay_t<decltype(__pf_raw_index_value)>; if constexpr(!std::is_same_v<__pf_raw_index_type,bool>) { if(is_na(__pf_raw_index_value)) pine_runtime_error(std::string("Index na is out of bounds. Array size is ")+std::to_string((int64_t)__pf_array.size())); } if constexpr(std::is_floating_point_v<__pf_raw_index_type>) { if(!std::isfinite(__pf_raw_index_value)) { std::string __pf_raw_index_text=__pf_raw_index_value>0?"inf":"-inf"; pine_runtime_error(std::string("Index ")+__pf_raw_index_text+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } long double __pf_raw_index_wide=(long double)__pf_raw_index_value; if(__pf_raw_index_wide<(long double)std::numeric_limits<int64_t>::min()||__pf_raw_index_wide>(long double)std::numeric_limits<int64_t>::max()) pine_runtime_error(std::string("Index ")+std::to_string((double)__pf_raw_index_value)+" is out of bounds. Array size is "+std::to_string((int64_t)__pf_array.size())); } int64_t __pf_raw_index=(int64_t)__pf_raw_index_value; int64_t __pf_array_size=(int64_t)__pf_array.size(); int64_t __pf_array_index=__pf_raw_index<0?__pf_raw_index+__pf_array_size:__pf_raw_index; if(__pf_array_index<0||__pf_array_index>=__pf_array_size) pine_runtime_error(std::string("Index ")+std::to_string(__pf_raw_index)+" is out of bounds. Array size is "+std::to_string(__pf_array_size)); if constexpr(std::is_lvalue_reference_v<decltype(__pf_array)>) return (__pf_array[(size_t)__pf_array_index]); else { using __pf_array_value_type=typename std::decay_t<decltype(__pf_array)>::value_type; return __pf_array_value_type(__pf_array[(size_t)__pf_array_index]); } }((0)); }((_pf_udt_Store.get(s).lines));
-            pf_line_set_y2(_pf_lines_, e, (double)(target));
-            lvl = pf_line_get_y2(_pf_lines_, alias);
+            _pf_drawing_set(pf_line_set_y2, _pf_lines_, e, (double)(target));
+            lvl = _pf_drawing_get(pf_line_get_y2, _pf_lines_, alias);
         }
         ref = ([&]{ auto _nz_v = (lvl); return is_na(_nz_v) ? (current_bar_.close) : _nz_v; }());
         ready = !(is_na(lvl));
