@@ -31,16 +31,24 @@ against `tv_trades.csv` with `scripts/verify_corpus.py`. At engine `35db01c`
   probes; `analyzer-self-test-multi-mode-01` keeps its four per-mode TradingView
   tapes in `trades-*.csv`).
 
-**The files committed here lag that measurement.** The `engine_trades.csv` tapes
-and `validation_report.{md,html,pdf}` (generated 2026-08-13 by engine `a7cb5b6`)
-come from engine builds older than v1.0.0, so they are not the oracle and the
-tiers they give as committed are not the current grades: none of the 312
-committed tapes is byte-identical to what the current engine produces (it now
-appends an `Engine range-end` column and prints `Qty` at full precision). The
-engine's gate therefore re-runs everything and compares each fresh tape with a
-pinned sha256 (`scripts/corpus_parity_baseline.txt` in the engine repo); re-running
-is how you get the figures above. The engine README on `main` (`6b45f510`) gives
-the same figures for this corpus: 311 excellent and 1 declared anomaly.
+**The tapes and report committed here come from the 1.0.1 release.** The 312
+probes' `generated.cpp` files are what codegen 1.0.1 emits, and their
+`engine_trades.csv` tapes are what engine v1.0.1 produces from them. `e7a0f8f`
+(2026-10-02) committed all 312 tapes, replacing ones engine `a7cb5b6` wrote on
+2026-08-13, and the 80 `generated.cpp` files whose text codegen 1.0.1 changed;
+the other 232 were already its output. Engine v1.0.1 changed only documentation
+and the version number on top of v1.0.0, so its runtime is v1.0.0's
+(`5718c5dc`). Each tape matches the sha256 that engine v1.0.1's
+`scripts/corpus_parity_baseline.txt` pins for it (the gate hashes the file's
+text with its CRLF line endings read as LF, so `shasum -a 256` on the file gives
+another value). `validation_report.{md,html,pdf}` were regenerated from these
+tapes the same day (`a35c7c4`) and give the headline above; their header names
+engine `5718c5dc` and corpus `d53f949`, which is `e7a0f8f` before its rebase
+onto `main` (same tapes and C++). The engine's gate still re-runs every probe
+and compares each fresh tape's sha256 with the baseline, not with the committed
+file.
+The engine README on `main` (`6b45f510`) gives the same figures for this corpus:
+311 excellent and 1 declared anomaly.
 
 Beyond this public corpus, the engine is graded on a much larger private set of
 community-shared TradingView scripts (private under TradingView's Terms of Service
@@ -58,12 +66,12 @@ private-editor TradingView exports, and graded excellent by the native Corpus
 verifier. No non-excellent candidate from either expansion is present in this
 public tree. Their ownership, coverage tags, artifact hashes, and native
 results are bound in [`owned_strategies.json`](owned_strategies.json), which was
-re-derived on 2026-09-26 by the same gate.
+re-derived on 2026-10-02 by the same gate.
 
 [`validation_report.md`](validation_report.md) (rendered as
 `validation_report.html` and `validation_report.pdf`) is the per-probe disposition
-table the engine's sweep emits. The copy committed here is the 2026-08-13 one
-(see above): regenerate it with `scripts/run_corpus.sh` before citing it.
+table the engine's sweep emits. The copy committed here is the 2026-10-02 one
+(see above), regenerated from the committed tapes.
 
 ## Artifact tuple
 
@@ -179,8 +187,9 @@ Paths are relative to this repository's root, which the engine checks out as its
 ├── .gitignore                  ignores compiled strategy libs, data/derived/, .omc/
 ├── .gitattributes              Git LFS for data/ohlcv_*.csv; no line-ending conversion for the tapes
 ├── owned_strategies.json       ownership, coverage, hashes, and Excellent evidence for 60 additions
-├── run_manifest.json           sha256 of every committed engine_trades.csv, minted 2026-08-13 by engine a7cb5b6
-├── validation_report.md        per-probe parity disposition; the committed copy lags (see above)
+├── run_manifest.json           sha256 of the earlier engine_trades.csv tapes, minted 2026-08-13 by engine a7cb5b6;
+│                               not re-minted for the 1.0.1 tapes, so it matches none of the committed ones
+├── validation_report.md        per-probe parity disposition, regenerated 2026-10-02 from the committed tapes
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
@@ -294,10 +303,14 @@ to its pinned value and the verifier headline matches the one quoted above.
 You need the engine repo, this corpus, and a C++17 compiler. The engine
 is deterministic given a fixed bar feed, the shipped `generated.cpp`,
 and a fixed runtime build. The submodule checkout is the corpus commit the engine
-pins, whose `engine_trades.csv` files are older than the engine's output (see
-above): a fresh run therefore differs from them, and the engine's baseline, not the
-committed tape, is what a run is judged against. If a fresh run disagrees with that
-baseline, that is a bug — please open an issue.
+pins. Engine v1.0.1, like v1.0.0, pins `b40aa8e`, a commit whose
+`engine_trades.csv` files are the earlier tapes (see above) and whose
+`generated.cpp` files are codegen `a4259656`'s output. 80 of those differ from
+the ones on `main`, but the gate runs that `e7a0f8f` records got the same tapes
+from both. A fresh run therefore differs from `b40aa8e`'s tapes, while the tapes
+on this repository's `main` match the engine's baseline. That baseline, not the
+committed tape, is what a run is judged against. If a fresh run disagrees with
+that baseline, that is a bug — please open an issue.
 
 ## CSV format
 
@@ -328,14 +341,16 @@ PineForge does not currently emit TV's "Signal" tag or percent-of-position
 excursions):
 
 ```
-Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,Favorable excursion USD,Adverse excursion USD,Cumulative PnL,Engine entry incarnation
-325,Exit long,2026-05-04 13:00,2334.140000,3.13888,30.246485,0.4152,239.319100,-45.628774,-2763.685302,
-325,Entry long,2026-05-03 11:45,2320.780000,3.13888,30.246485,0.4152,239.319100,-45.628774,-2763.685302,16635
+Trade #,Type,Date and time,Price,Qty,Net PnL,Net PnL %,Favorable excursion USD,Adverse excursion USD,Cumulative PnL,Engine entry incarnation,Engine range-end
+325,Exit long,2026-05-04 00:00,2316.970000,3.13888382,-23.605034,-0.3240,107.077924,-29.902966,-2817.536822,,open
+325,Entry long,2026-05-03 11:45,2320.780000,3.13888382,-23.605034,-0.3240,107.077924,-29.902966,-2817.536822,1756,
 ```
 
-The tapes committed here have those 11 columns. The current engine also appends
-an `Engine range-end` column (marking a position still open at the end of the
-range) and prints `Qty` at full precision.
+All 312 tapes committed here have those 12 columns. `Engine range-end` reads
+`open` on the exit row of a position still open at the end of the range, and is
+empty on every other row; 131 of the 312 tapes have such a row, always their
+newest trade, like trade 325 of `analyzer-anvil-percent-costs-01` above. `Qty` is
+printed to eight decimal places with trailing zeros trimmed.
 
 `Net PnL` and `Net PnL %` are per-trade. `Cumulative PnL` is the
 engine-side running total. The excursion columns use TV's names and sign
