@@ -17,7 +17,7 @@ against `tv_trades.csv` with `scripts/verify_corpus.py`. At engine `35db01c`
 
 - **312** probes under `validation/`, in 33 categories.
 - **311** excellent (exact trade-count parity and every other gated dimension
-  within the resolved thresholds; see [Parity thresholds](#parity-thresholds)).
+  within the resolved thresholds, and, where TradingView shows two or more distinct entry Signals at one exact time, price and direction, the engine shows as many distinct entries there (distinct-entry identity); see [Parity thresholds](#parity-thresholds)).
   The gate pins its headline verbatim:
   `Verified 312 strategies — excellent=311, strong=0, moderate=0, weak=0, minimal=0, anomaly=1, engine_only=0, missing=0`.
 - **1** declared anomaly — `anomaly-equity-mirror-strategy-equity-01` declares
@@ -400,7 +400,7 @@ on TV's magnifier zero-PnL trades.
 
 | Tier          | Meaning |
 | ------------- | ------- |
-| `excellent`   | All gated dimensions (absolute count parity, coverage, entry, exit, P&L) pass the resolved profile. Bit-for-bit or within strict-profile thresholds. |
+| `excellent`   | All gated dimensions (absolute count parity, coverage, entry, exit, P&L) pass the resolved profile, and, where TradingView shows two or more distinct entry Signals at one exact time, price and direction, the engine shows as many distinct entries there (distinct-entry identity). Bit-for-bit or within strict-profile thresholds. |
 | `strong`      | Dimensions pass a relaxed envelope (count <6%, entry 10×, exit 50×, P&L 100%, coverage ≥95%) — close but not excellent. Used as a pass-with-caveat tier. |
 | `moderate`    | Some dimensions exceed the strong envelope but trades still align meaningfully. Investigate. |
 | `weak`        | Significant divergence. Real bug or probe-design issue. |
