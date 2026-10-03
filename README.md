@@ -52,9 +52,9 @@ The engine README at v1.0.1 (`d1d18867`) gives the same figures for this corpus:
 
 Beyond this public corpus, the engine is graded on a much larger private set of
 community-shared TradingView scripts (private under TradingView's Terms of Service
-— not redistributable). **Measured <!-- pf:scoreboard.date -->2026-10-03<!-- /pf -->** on main engine `<!-- pf:scoreboard.engineCommit|short -->a744bee8<!-- /pf -->` with codegen-oss `<!-- pf:scoreboard.codegenCommit|short -->8b42cd4a<!-- /pf -->` (baseline `<!-- pf:scoreboard.id -->pineforge-parity-baseline-20261003-engine-a744bee8<!-- /pf -->`, snapshot `<!-- pf:scoreboard.snapshotSha256|short -->37c78b3d<!-- /pf -->`) covers <!-- pf:scoreboard.population|int -->8,006<!-- /pf --> probes:
-<!-- pf:scoreboard.graded|int -->7,989<!-- /pf --> are graded — **<!-- pf:scoreboard.excellent|int -->7,946<!-- /pf --> excellent (<!-- pf:scoreboard.excellentPct|pct -->99.46<!-- /pf --> %)
-and <!-- pf:scoreboard.strong|int -->43<!-- /pf --> strong (<!-- pf:scoreboard.strongPct|pct -->0.54<!-- /pf --> %), <!-- pf:scoreboard.belowStrong|int -->0<!-- /pf --> below strong** —
+— not redistributable). **Measured <!-- pf:scoreboard.date -->2026-10-03<!-- /pf -->** on main engine `<!-- pf:scoreboard.engineCommit|short -->8d47fa2d<!-- /pf -->` with codegen-oss `<!-- pf:scoreboard.codegenCommit|short -->8b42cd4a<!-- /pf -->` (baseline `<!-- pf:scoreboard.id -->pineforge-parity-baseline-20261003-engine-8d47fa2d<!-- /pf -->`, snapshot `<!-- pf:scoreboard.snapshotSha256|short -->88718b41<!-- /pf -->`) covers <!-- pf:scoreboard.population|int -->8,006<!-- /pf --> probes:
+<!-- pf:scoreboard.graded|int -->7,989<!-- /pf --> are graded — **<!-- pf:scoreboard.excellent|int -->7,949<!-- /pf --> excellent (<!-- pf:scoreboard.excellentPct|pct -->99.50<!-- /pf --> %)
+and <!-- pf:scoreboard.strong|int -->40<!-- /pf --> strong (<!-- pf:scoreboard.strongPct|pct -->0.50<!-- /pf --> %), <!-- pf:scoreboard.belowStrong|int -->0<!-- /pf --> below strong** —
 and <!-- pf:scoreboard.anomaliesExcluded|int -->17<!-- /pf --> are excluded as TradingView-side defects. <!-- pf:scoreboard.corpusProbes|int -->309<!-- /pf --> of
 this corpus's 312 probes belong to that population, <!-- pf:scoreboard.scopes.corpus.excellent|int -->309<!-- /pf --> excellent there
 (the three left out are `analyzer-self-test-multi-mode-01`,
@@ -62,7 +62,7 @@ this corpus's 312 probes belong to that population, <!-- pf:scoreboard.scopes.co
 
 Release **1.0.1 still grades <!-- pf:releases[1.0.1].scoreboard.excellent|int -->7,905<!-- /pf --> excellent / <!-- pf:releases[1.0.1].scoreboard.strong|int -->84<!-- /pf --> strong until the next release**, on <!-- pf:releases[1.0.1].scoreboard.graded|int -->7,989<!-- /pf --> probes (baseline `<!-- pf:releases[1.0.1].scoreboard.id -->pineforge-parity-baseline-20261001-codegen-67892cda<!-- /pf -->`, <!-- pf:releases[1.0.1].scoreboard.date -->2026-10-01<!-- /pf -->). A main scoreboard advance does not change release results.
 
-The quantities above render from the public [facts tokens](https://github.com/pineforge-4pass/pineforge-release/blob/7238bb3d1a30c68cc857197cadf883bce29680f0/facts/facts.json). Maintain them with `lab facts render --repo . --facts <local facts file or pinned raw URL>`; `lab facts check` with the same inputs reports drift. Grades are registry-derived; the authored-script and closed-trade inventory is explicitly sourced to a historical public README for the identical population, not to registry row or slug totals.
+The quantities above render from the public [facts tokens](https://github.com/pineforge-4pass/pineforge-release/blob/d70c5cabbfcbf14c59c6b4fc3bb86d5833ffdc5c/facts/facts.json). Maintain them with `lab facts render --repo . --facts <local facts file or pinned raw URL>`; `lab facts check` with the same inputs reports drift. Grades are registry-derived; the authored-script and closed-trade inventory is explicitly sourced to a historical public README for the identical population, not to registry row or slug totals.
 
 The 60 PineForge-owned additions introduced across the 282- and 312-probe
 expansions are all independently authored, source-bound to actual
