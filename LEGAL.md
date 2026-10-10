@@ -15,9 +15,8 @@ This corpus is licensed under the Apache License, Version 2.0
   rewrites.
 
 - **TradingView "List of Trades" CSV exports** (`tv_trades.csv`) —
-  emitted by TradingView's broker emulator running our own clean-room
-  `strategy.pine` files on the reference OHLCV feed, exported manually
-  (no scraping, no API, no automated extraction). Included as
+  produced by running our own clean-room `strategy.pine` files in a
+  TradingView account and exporting the strategy report. Included as
   **factual parity reference records**. Our position: these are
   factual outcomes of our **own** strategies (facts are not
   copyrightable). We do **not** Apache-relicense TradingView's export
