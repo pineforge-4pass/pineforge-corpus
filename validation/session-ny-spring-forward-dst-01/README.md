@@ -12,5 +12,5 @@ P1 (X8, Pine#7, C++#12): session-time + DST behavior, `pine_tz::ScopedTimezone` 
 ## TV capture notes
 - 15m chart, ETH-USDT-USDT.
 - The corpus window MUST include a US spring-forward weekend (second Sunday of March).
-- Manual TradingView export → `tv_trades.csv`.
+- TradingView strategy report → `tv_trades.csv`.
 - Any drift in entry timestamps by exactly 1 hour around the DST boundary indicates tz-db or `ScopedTimezone` divergence.

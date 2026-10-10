@@ -10,7 +10,7 @@ Cross-confirmed P0 (X7): typed matrix dispatch — `matrix.new<bool>` bool-proxy
 
 ## TV capture notes
 - 15m chart, ETH-USDT-USDT, same window as `data/ohlcv_ETH-USDT-USDT_15m.csv`.
-- Manual TradingView export → `tv_trades.csv` in this folder.
+- TradingView strategy report → `tv_trades.csv` in this folder.
 - Watch for any first-bar mask init drift between Pine and PineForge.
 
 ## ohlcv_start_ms requirement

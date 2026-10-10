@@ -6,8 +6,8 @@
   strategy names or author handles, account-operational workflow, or private
   tooling in any doc, probe, or commit message. Every probe here is
   clean-room authored (see `LEGAL.md`).
-- **Ground truth is immutable.** `tv_trades.csv` files are captured TV
-  exports — never regenerate, hand-edit, or relocate them.
+- **Ground truth is immutable.** `tv_trades.csv` files are TradingView
+  strategy reports — never regenerate, hand-edit, or relocate them.
 - `engine_trades.csv` and `validation_report.md` are regenerated ONLY via the
   engine repo's `scripts/run_corpus.sh`; regenerate the report in the same
   change as any `engine_trades.csv` refresh. Never cite the committed report

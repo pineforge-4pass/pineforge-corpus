@@ -16,7 +16,7 @@
 // suggested a drop; that was a contrived-feed artifact, disproven here.)
 //
 // TV setup: 15m chart, ETH-USDT-USDT (Binance), same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Manual TV capture -> tv_trades.csv to
+// data/ohlcv_ETH-USDT-USDT_15m.csv. TradingView strategy report -> tv_trades.csv to
 // confirm engine<->TV parity for this pattern.
 //@version=6
 strategy("PF poc exit-while-flat true", shorttitle="POC_EWF_true", overlay=true,
