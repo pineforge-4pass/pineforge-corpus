@@ -128,10 +128,7 @@ corpus/
 │   ├── enum-*                   1 probe  — enum type and input selection
 │   ├── risk-*                   1 probe  — risk gates / limits
 │   ├── volume-*                 1 probe  — volume-flow behavior
-│   ├── anomaly-*                1 probe  — documented TV non-determinism
-│   └── symbol-specified/       (excluded from sweep) 5 stock probes pending pineforge-data
-├── draft-probes/               staged probes pending TV capture (excluded from sweep; own README)
-├── special-validation/         separate-instrument probes (feeds git-ignored; own README + build_specials.sh)
+│   └── anomaly-*                1 probe  — documented TV non-determinism
 ├── data/                       reference OHLCV (committed 1m feed; 15m derived locally into data/derived/)
 ├── LICENSE                     Apache-2.0
 ├── NOTICE                      attribution
@@ -204,10 +201,6 @@ The 33 categories (with probe counts):
 | `risk`      |     1 | risk gates / limits                                        |
 | `volume`    |     1 | Volume-flow behavior                                       |
 | `anomaly`   |     1 | Documented TV non-determinism                              |
-
-(The `symbol-specified/` subtree — 5 stock probes needing per-symbol OHLCV
-and SymInfo overrides — is excluded from the default sweep pending
-pineforge-data integration; it is not counted in the 312.)
 
 ## Where the numbers come from
 
