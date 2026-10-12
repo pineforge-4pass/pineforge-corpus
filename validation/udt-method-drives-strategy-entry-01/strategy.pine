@@ -17,6 +17,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF UDT probe 14 - method drives entry", shorttitle="UDT_p14_ENT", overlay=true,
      initial_capital=1000000,

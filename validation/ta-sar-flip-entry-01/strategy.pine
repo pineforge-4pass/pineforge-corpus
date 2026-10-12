@@ -24,6 +24,7 @@
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full
 // window matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy
 // properties: leave defaults from script header.
+//
 //@version=6
 strategy("PF probe 101 - parabolic sar flip", shorttitle="PF_p101_SAR",
      overlay=true, initial_capital=1000000,

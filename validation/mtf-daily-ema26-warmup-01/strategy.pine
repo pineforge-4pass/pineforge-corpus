@@ -17,6 +17,7 @@
 // ~26 daily bars of the dataset. After warmup the two should agree exactly.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF MTF probe 09 - daily EMA warmup", shorttitle="MTF_p09_DEMA", overlay=true,
      initial_capital=1000000,

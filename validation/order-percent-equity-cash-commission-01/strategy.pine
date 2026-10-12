@@ -6,6 +6,7 @@
 //
 // Purpose: isolate default_qty_type=strategy.percent_of_equity and cash_per_order commission.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF TV golden 45 - commission sizing", shorttitle="PF_G45_SIZE", overlay=true,
      initial_capital=1000000,

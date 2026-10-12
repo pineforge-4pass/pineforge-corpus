@@ -6,6 +6,7 @@
 //
 // Purpose: compare strategy.close(..., immediately=true) with ordinary strategy.close().
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF TV golden 42 - close immediate", shorttitle="PF_G42_CLOSE", overlay=true,
      initial_capital=1000000,

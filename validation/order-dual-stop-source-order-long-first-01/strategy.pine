@@ -7,6 +7,7 @@
 // Purpose: test whether source order affects dual stop priority when both
 // stops are close to price. Long stop is submitted before short stop.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 84 - dual stop long first", shorttitle="PF_P84_LONGFIRST", overlay=true,
      initial_capital=1000000,

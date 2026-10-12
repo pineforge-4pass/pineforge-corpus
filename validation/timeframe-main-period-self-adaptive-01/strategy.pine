@@ -4,7 +4,9 @@
 //
 // Parity probe: timeframe.main_period gates entries on 15-minute chart
 //
+//
 //   Symbol: ETHUSDT.P (Binance USDT-M Perpetual)  TF: 15m  Range: 2024-01-01..2024-06-01
+//
 //
 // Purpose: verify timeframe.main_period returns the chart's timeframe string
 //          (e.g. "15" for a 15-minute chart). Strategy gates entries on the

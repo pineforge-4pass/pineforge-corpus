@@ -6,6 +6,7 @@
 //
 // Purpose: isolate farther long/short stop competition from probe 80.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 82 - dual stop far only", shorttitle="PF_P82_FAR", overlay=true,
      initial_capital=1000000,

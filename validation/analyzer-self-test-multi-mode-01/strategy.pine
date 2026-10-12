@@ -10,6 +10,9 @@
 // PineForge analyzer — run on the SAME symbol + timeframe + date range as repo OHLCV.
 //
 //
+//
+//
+//
 // Modes (input):
 //   clock_pulse — periodic 1-bar long trades (bar index + timestamp ruler vs engine)
 //   htf_60_roll   — ta.change(D-60 close) entries (HTF close alignment)

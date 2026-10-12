@@ -7,6 +7,7 @@
 // Purpose: isolate request.security state across 60m, 240m, and D contexts,
 // without the large community strategy filters.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 54 - MTF roll state", shorttitle="PF_P54_MTF", overlay=true,
      initial_capital=1000000,

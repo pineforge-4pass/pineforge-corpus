@@ -1,4 +1,6 @@
+//
 //   Symbol: ETHUSDT.P (Binance USDT-M Perpetual)  TF: 15m  Range: 2024-01-01..2024-06-01
+//
 
 //@version=6
 strategy("VWAP Bands Breakout 1σ", overlay=true,

@@ -7,6 +7,7 @@
 // Purpose: compare source-order behavior when strategy.entry and strategy.close
 // for the same id are issued in the same Pine execution pass.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 68 - entry close same pass", shorttitle="PF_P68_ENTCLOSE", overlay=true,
      initial_capital=1000000,

@@ -6,6 +6,7 @@
 //
 // Purpose: isolate warmup behavior for history references, nz(), fixnan(), and chained series.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF TV golden 49 - na nz history", shorttitle="PF_G49_NA", overlay=true,
      initial_capital=1000000,

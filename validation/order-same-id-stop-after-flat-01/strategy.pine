@@ -7,6 +7,7 @@
 // Purpose: isolate rebuilding a same-id stop entry after a prior position with
 // the same id was closed.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 75 - stop after flat", shorttitle="PF_P75_AFTERFLAT", overlay=true,
      initial_capital=1000000,

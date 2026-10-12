@@ -25,6 +25,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("MTF probe 11 - HTF bracket manual trail", shorttitle="MTF_p11",
      overlay=true, initial_capital=1000000,

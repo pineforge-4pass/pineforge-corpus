@@ -41,6 +41,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF UDT probe 18 - method calls method", shorttitle="UDT_p18_M2M", overlay=true,
      initial_capital=1000000,

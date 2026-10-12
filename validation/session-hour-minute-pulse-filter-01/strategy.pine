@@ -7,6 +7,7 @@
 // Purpose: isolate hour/minute gating and TV chart/feed timezone alignment.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
 // Use the exchange/chart timezone that makes Pine hour/minute match the OHLCV timestamps.
+//
 //@version=6
 strategy("PF TV golden 48 - time filter", shorttitle="PF_G48_TIME", overlay=true,
      initial_capital=1000000,

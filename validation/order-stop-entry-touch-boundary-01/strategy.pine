@@ -7,6 +7,7 @@
 // Purpose: isolate whether stop entries are considered filled when the stop
 // price is exactly at or one tick beyond recent high/low boundaries.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 53 - stop touch boundary", shorttitle="PF_P53_TOUCH", overlay=true,
      initial_capital=1000000,

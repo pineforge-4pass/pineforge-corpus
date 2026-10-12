@@ -26,6 +26,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF UDT probe 17 - tuple return", shorttitle="UDT_p17_TUP", overlay=true,
      initial_capital=1000000,

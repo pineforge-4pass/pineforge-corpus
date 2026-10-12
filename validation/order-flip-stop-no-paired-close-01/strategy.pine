@@ -19,6 +19,7 @@
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv. Properties dialog: Pyramiding=1,
 // Order size = 1 contract.
+//
 //@version=6
 strategy("PF probe 92 - flip stop no paired close", shorttitle="PF_P92_NOCLOSE", overlay=true,
      initial_capital=1000000,

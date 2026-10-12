@@ -8,6 +8,7 @@
 // the opposite id, matching the order-lifecycle shape in parabolic-asr/52 while
 // removing EMA/SAR state.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 63 - dual stop cancel rotation", shorttitle="PF_P63_DUALCANCEL", overlay=true,
      initial_capital=1000000,

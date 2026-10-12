@@ -18,6 +18,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF UDT probe 02 - mutating self", shorttitle="UDT_p02_MUT", overlay=true,
      initial_capital=1000000,

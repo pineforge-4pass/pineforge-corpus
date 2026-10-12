@@ -30,6 +30,7 @@
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full
 // window matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy
 // "Properties" → leave defaults from the script header.
+//
 //@version=6
 strategy("PF probe 97 - tp/sl gap reversal oca", shorttitle="PF_p97_TPSL_OCA",
      overlay=true, initial_capital=1000000,

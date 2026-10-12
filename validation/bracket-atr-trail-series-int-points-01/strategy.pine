@@ -23,6 +23,7 @@
 // atr capture inside strategy.exit.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 91 - atr trail fixed entry",
      shorttitle="PF_P91_ATRTRAIL", overlay=true,

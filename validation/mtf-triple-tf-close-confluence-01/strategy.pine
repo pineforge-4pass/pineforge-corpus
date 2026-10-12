@@ -13,6 +13,7 @@
 // the multi-feed layout itself rather than to a derived TA expression.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF MTF probe 07 - triple TF close", shorttitle="MTF_p07_3TF", overlay=true,
      initial_capital=1000000,

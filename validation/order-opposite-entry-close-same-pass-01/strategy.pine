@@ -7,6 +7,7 @@
 // Purpose: isolate source-order behavior when an opposite strategy.entry and
 // strategy.close target the current position in the same pass.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 72 - opposite entry close", shorttitle="PF_P72_OPPCLOSE", overlay=true,
      initial_capital=1000000,

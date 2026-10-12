@@ -7,6 +7,7 @@
 // Purpose: isolate how strategy.close(id) reports trades when multiple entries
 // with the same id have accumulated under pyramiding.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 60 - pyramiding close id", shorttitle="PF_P60_PYRCLOSE", overlay=true,
      initial_capital=1000000,

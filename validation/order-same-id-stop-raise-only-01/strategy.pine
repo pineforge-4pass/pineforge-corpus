@@ -7,6 +7,7 @@
 // Purpose: isolate repeated strategy.entry calls with the same id where a stop
 // order is only moved farther in the same direction before it fills.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
+//
 //@version=6
 strategy("PF probe 61 - same id stop raise", shorttitle="PF_P61_STOPRAISE", overlay=true,
      initial_capital=1000000,

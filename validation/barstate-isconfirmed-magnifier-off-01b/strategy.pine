@@ -13,6 +13,7 @@
 // (barstate.isconfirmed). Exit on opposite cross also confirmed.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, magnifier OFF.
+//
 //@version=6
 strategy("PF barstate-magnifier probe 01b - isconfirmed OFF", shorttitle="BSM_01b_OFF", overlay=true,
      initial_capital=1000000, use_bar_magnifier=false,
