@@ -16,7 +16,9 @@
 // stop at exactly the bar midpoint (open+high)/2. Whether the stop
 // fires before close depends on volume-weighted tick density.
 //
-// TV setup: 15m chart, ETH-USDT-USDT, magnifier ON.
+// TV setup: 15m chart, ETH-USDT-USDT, magnifier ON, as the
+// volume-weighted-OFF baseline; the volume-weighted ON run is
+// harness-only.
 //@version=6
 strategy("PF magnifier dist probe 07 - volume weighted ON", shorttitle="MAG_VWT", overlay=true,
      initial_capital=1000000, use_bar_magnifier=true,
