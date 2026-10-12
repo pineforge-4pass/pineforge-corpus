@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // © PineForge contributors 2026
 //
-// IES probe 01 — manual ADX/DI chain + ATR-ratio regime classification
+// IES probe 01 — ADX/DI chain + ATR-ratio regime classification
 //
 // Purpose: isolate the IES integration probe family's bespoke regime detector.
 // That family does NOT use the built-in `ta.dmi`; instead it rolls its own
@@ -25,7 +25,7 @@
 // numerical edge to chase.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 01 - adx regime", shorttitle="IES_p01_REG", overlay=true,
      initial_capital=1000000,

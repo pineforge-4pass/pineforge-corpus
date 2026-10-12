@@ -8,10 +8,7 @@
 // input.string mode selector, used to spot-check engine timing per-shape.
 //
 // PineForge analyzer — run on the SAME symbol + timeframe + date range as repo OHLCV.
-// Export List of trades → compare with scripts/diff_tv_vs_engine.py or validate_detailed_report.py
 //
-// Multiple mode exports: name files trades-<mode>.csv and set inputs.json "Analysis mode" +
-// "tv_trades_csv" to match, OR run: uv run python scripts/diff_pineforge_analyzer_modes.py
 //
 // Modes (input):
 //   clock_pulse — periodic 1-bar long trades (bar index + timestamp ruler vs engine)
@@ -20,7 +17,7 @@
 //   bar_stair     — close > close[1] > close[2] (Series [k] chain smoke test)
 //
 // Chart: match PineForge input_tf (e.g. 15m for ETHUSDT 15m CSV). Commission/slippage 0.
-// TV “List of trades” naive times: if you export with chart/sessions in UTC+8, set inputs.json
+// chart/sessions in UTC+8, set inputs.json
 // tv_trades_csv_tz to "utc_plus_8" (repo default for parity tooling).
 //
 // clock_pulse: UTC 00:15 entry / 00:30 exit (15m) — aligns with TV labels 08:15/08:30 when

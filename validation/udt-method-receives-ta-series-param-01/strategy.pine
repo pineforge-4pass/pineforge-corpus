@@ -14,8 +14,7 @@
 // a multi-criteria condition and returns bool; entry uses it directly.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 12 - ta param", shorttitle="UDT_p12_TAP", overlay=true,
      initial_capital=1000000,

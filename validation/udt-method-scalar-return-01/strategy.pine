@@ -18,8 +18,7 @@
 // differs from a plain crossover baseline.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 01 - scalar return", shorttitle="UDT_p01_SCAL", overlay=true,
      initial_capital=1000000,

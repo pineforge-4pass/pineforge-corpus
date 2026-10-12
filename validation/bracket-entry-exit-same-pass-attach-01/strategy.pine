@@ -7,7 +7,6 @@
 // Purpose: determine whether a price-based strategy.exit can attach to a
 // strategy.entry created earlier in the same Pine execution pass.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 71 - entry exit same pass", shorttitle="PF_P71_ENTEXIT", overlay=true,
      initial_capital=1000000,

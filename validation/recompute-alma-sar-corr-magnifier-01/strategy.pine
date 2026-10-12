@@ -15,7 +15,6 @@
 // Exit on SAR flip back above close.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, magnifier ON in TV settings.
-// Export trades to trades.csv.
 //@version=6
 strategy("PF TA recompute probe 02 - untested classes", shorttitle="TArec_p02_UNT", overlay=true,
      initial_capital=1000000, use_bar_magnifier=true,

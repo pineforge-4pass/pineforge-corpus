@@ -18,8 +18,7 @@
 // validation/88's "exit set once at entry" shape but through methods.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 15 - exit prices via method", shorttitle="UDT_p15_EXP", overlay=true,
      initial_capital=1000000,

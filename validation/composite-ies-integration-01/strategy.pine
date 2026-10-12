@@ -10,7 +10,7 @@
 // a single strategy so that engine/TV agreement on the COMPONENT probes
 // can be cross-checked against agreement on a representative composition.
 // The four numerical layers are:
-//   (1) regime — manual ADX / DI / ATR-ratio chain (probe 01).
+//   (1) regime — ADX / DI / ATR-ratio chain (probe 01).
 //   (2) bias   — 21/55/200 EMA stack with a 0–70 bias score (probe 02).
 //   (3) momentum — RSI(14) + RSI[3] direction + MACD histogram + memory
 //                  gives a 0–3 score per side (probe 03).
@@ -29,8 +29,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full
 // window matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy
-// properties: leave defaults from script header. Export "List of
-// trades" → tv_trades.csv.
+// properties: leave defaults from script header.
 //@version=6
 strategy("PF IES probe 09 - integration", shorttitle="IES_p09_INT",
      overlay=true, initial_capital=1000000,
@@ -68,7 +67,7 @@ float i_press_thr   = input.float(0.05,"Pressure mom thresh",  minval=0.01,maxva
 int   i_cooldown    = input.int(8,    "Cooldown bars",         minval=0,  maxval=200)
 
 // =====================================================================
-// layer 1 — regime (manual ADX + ATR-ratio classification)
+// layer 1 — regime (ADX + ATR-ratio classification)
 // =====================================================================
 f_adx_chain(int len) =>
     float tr_v   = ta.tr(true)

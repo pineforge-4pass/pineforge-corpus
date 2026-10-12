@@ -8,7 +8,6 @@
 // closer to probe 58 than probe 76 because positions are explicitly closed,
 // but it avoids four-bar repeated modification windows.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 77 - stale stop after close", shorttitle="PF_P77_STALESTOP", overlay=true,
      initial_capital=1000000,

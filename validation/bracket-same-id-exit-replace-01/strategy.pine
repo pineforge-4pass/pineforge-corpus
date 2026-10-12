@@ -7,7 +7,6 @@
 // Purpose: determine whether repeated strategy.exit calls with the same id
 // replace the pending bracket or create multiple exits.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 67 - same id exit replace", shorttitle="PF_P67_EXITREPL", overlay=true,
      initial_capital=1000000,

@@ -19,7 +19,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full window
 // matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy properties:
-// leave defaults from script header. Export "List of trades" → tv_trades.csv.
+// leave defaults from script header.
 //@version=6
 strategy("PF probe kanuck-probe-01-kama-state", shorttitle="PF_kan01_KAMA",
      overlay=true, initial_capital=1000000,
@@ -32,7 +32,7 @@ int i_kama_len  = input.int(14, "KAMA length",   minval=2)
 int i_kama_fast = input.int(2,  "KAMA fast end", minval=1)
 int i_kama_slow = input.int(30, "KAMA slow end", minval=2)
 
-// ---- KAMA (manual recurrence; v6 has no ta.kama built-in) ----------
+// ---- KAMA (recurrence; v6 has no ta.kama built-in) ----------
 float change_n  = math.abs(close - close[i_kama_len])
 float vol_sum   = math.sum(math.abs(close - close[1]), i_kama_len)
 float er        = vol_sum > 0 ? change_n / vol_sum : 0.0

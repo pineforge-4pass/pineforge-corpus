@@ -7,7 +7,6 @@
 // Purpose: compare source-order behavior for strategy.entry(... stop=...) and
 // strategy.cancel(id) in the same Pine execution pass.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 69 - entry cancel same pass", shorttitle="PF_P69_ENTCANCEL", overlay=true,
      initial_capital=1000000,

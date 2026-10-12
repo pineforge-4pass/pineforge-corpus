@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // © PineForge contributors 2026
 //
-// VCP probe 06 — manual ADX regime detection
+// VCP probe 06 — ADX regime detection
 //
 // Purpose: isolate the regime-filter half of the VCP integration probe
 // family. That family does NOT use ``ta.dmi`` — it builds DI/ADX BY HAND
 // from ``ta.change(high)`` /
 // ``ta.change(low)`` plus a chain of ``ta.rma`` smoothings on plusDM /
-// minusDM / true range / dx. That manual chain is a likely source of
+// minusDM / true range / dx. That chain is a likely source of
 // TV/engine drift because:
 //   (1) ``ta.change(high)`` produces ``na`` on bar 0; the plusDM /
 //       minusDM ternaries explicitly carry the ``na`` (``na(upMove) ?
@@ -22,7 +22,7 @@
 // ``regime.trend = plusDI > minusDI ? 1 : -1`` and uses both to gate
 // long/short entries via ``regimeAllowsLong`` / ``regimeAllowsShort``.
 //
-// This probe routes a trivial entry/exit through ONLY VCP's manual
+// This probe routes a trivial entry/exit through ONLY VCP's
 // ADX. Any TV/engine drift here is attributable to the
 // ``ta.rma``-of-``ta.tr`` / DI / DX / ADX chain at length 14, NOT
 // to other VCP filters.
@@ -32,8 +32,7 @@
 // rising-edge). Close the long when the regime exits "trending bull".
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("VCP probe 06 - adx regime", shorttitle="VCP_p06",
      overlay=true, initial_capital=1000000,
@@ -44,7 +43,7 @@ strategy("VCP probe 06 - adx regime", shorttitle="VCP_p06",
 // ---- ATR for the volatility ratio (literal 14, matches VCP) -------
 float atrVal = ta.atr(14)
 
-// ---- Manual ADX — IDENTICAL formula to VCP lines 419-428 ----------
+// ---- ADX — IDENTICAL formula to VCP lines 419-428 ----------
 int adxLen = 14
 float upMove   = ta.change(high)
 float downMove = -ta.change(low)

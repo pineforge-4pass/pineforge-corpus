@@ -26,7 +26,7 @@
 // number of trades equal to the number of detected sweeps.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 06 - pivot sweep", shorttitle="IES_p06_SWP", overlay=true,
      initial_capital=1000000,

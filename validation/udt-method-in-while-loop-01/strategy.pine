@@ -19,8 +19,7 @@
 // real momentum filter that meaningfully narrows the trade list.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 08 - method in while", shorttitle="UDT_p08_WHL", overlay=true,
      initial_capital=1000000,

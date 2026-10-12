@@ -7,7 +7,6 @@
 // Purpose: isolate whether setup bars at minute == 0 behave differently from
 // the 15/30/45 minute bars used by probe 61.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 73 - minute zero stop", shorttitle="PF_P73_MIN0", overlay=true,
      initial_capital=1000000,

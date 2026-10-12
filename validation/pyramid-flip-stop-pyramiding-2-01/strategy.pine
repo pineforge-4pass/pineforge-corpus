@@ -20,7 +20,7 @@
 // ``pyramiding=2``.
 //
 // TV setup: 15m chart, ETH-USDT-USDT. Properties dialog: Pyramiding=2,
-// Order size = 1 contract. Export trades.csv.
+// Order size = 1 contract.
 //@version=6
 strategy("PF probe 93 - flip stop pyramiding 2", shorttitle="PF_P93_PYR2", overlay=true,
      initial_capital=1000000,

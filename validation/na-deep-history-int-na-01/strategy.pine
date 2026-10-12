@@ -17,7 +17,7 @@
 // AND non-na session id; exit on cross-down of 70.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to tv_trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF na-chain probe 01 - deep history int na", shorttitle="NA_p01_INT", overlay=true,
      initial_capital=1000000,

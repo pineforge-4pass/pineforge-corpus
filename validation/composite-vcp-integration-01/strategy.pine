@@ -17,7 +17,7 @@
 //   (3) RSI div     — smoothed RSI(14)→EMA(3) with 5-bar memory (probe 03).
 //   (4) vol z       — (volume - sma) / stdev anomaly threshold (probe 04).
 //   (5) cum delta   — candle-position buy/sell volume + 10-bar sum (probe 05).
-//   (6) ADX regime  — manual DI/ADX chain via ta.rma (probe 06).
+//   (6) ADX regime  — DI/ADX chain via ta.rma (probe 06).
 //   (7) session     — NY 0800-1600 with DST-aware tz (probe 07).
 // Long entry requires (a) confirmed pivot LOW carried as breakout level
 // AND close > carried pivot HIGH, (b) currently inside a bull FVG zone,
@@ -34,8 +34,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full
 // window matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy
-// properties: leave defaults from script header. Export "List of
-// trades" → tv_trades.csv.
+// properties: leave defaults from script header.
 //@version=6
 strategy("VCP probe 08 - integration", shorttitle="VCP_p08_INT",
      overlay=true, initial_capital=1000000,
@@ -147,7 +146,7 @@ bool  cd_up    = cum_d > 0
 bool  cd_dn    = cum_d < 0
 
 // =====================================================================
-// layer 6 — manual ADX regime (matches probe 06)
+// layer 6 — ADX regime (matches probe 06)
 // =====================================================================
 float up_mv   = ta.change(high)
 float dn_mv   = -ta.change(low)

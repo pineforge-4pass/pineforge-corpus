@@ -40,8 +40,7 @@
 // is typically below 60 at the moment of a fresh crossover up).
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 19 - array of UDT method", shorttitle="UDT_p19_AUDT", overlay=true,
      initial_capital=1000000,

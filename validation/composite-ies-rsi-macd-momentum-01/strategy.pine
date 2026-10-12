@@ -25,7 +25,7 @@
 // strategy.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 03 - rsi+macd momentum", shorttitle="IES_p03_MOM", overlay=true,
      initial_capital=1000000,

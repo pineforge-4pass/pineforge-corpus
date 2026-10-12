@@ -24,8 +24,7 @@
 // Both are computed with the EXACT VCP pivot signature.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("VCP probe 01 - pivot strength 5", shorttitle="VCP_p01",
      overlay=true, initial_capital=1000000,

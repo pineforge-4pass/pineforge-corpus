@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 // © PineForge contributors 2026
 //
-// MTF probe 11 — HTF confluence gate with MANUAL TRAILING stop
+// MTF probe 11 — HTF confluence gate with TRAILING stop
 //
 // Purpose: companion to mtf-probe-10. Keeps the exact same HTF confluence
-// gate so any drift between probe 10 and probe 11 isolates the manual
+// gate so any drift between probe 10 and probe 11 isolates the
 // trailing-stop / per-bar strategy.exit re-issue pattern that VCP uses.
 //
 // The trailing implementation matches VCP's:
@@ -21,11 +21,10 @@
 // with a different stop.
 //
 // Trade shape: long-only, pyramiding=1. Same entry signal as probe 10.
-// Exit via a static TP and a per-bar manual trail.
+// Exit via a static TP and a per-bar trail.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("MTF probe 11 - HTF bracket manual trail", shorttitle="MTF_p11",
      overlay=true, initial_capital=1000000,
@@ -56,7 +55,7 @@ float htfEma   = request.security(syminfo.tickerid, i_htf,
      _htfEmaSeries, barmerge.gaps_off, barmerge.lookahead_off)
 bool  htfBull  = not na(htfClose) and not na(htfEma) and htfClose > htfEma
 
-// ---- entry + per-bar manual trailing ------------------------------
+// ---- entry + per-bar trailing ------------------------------
 bool longSig = ta.crossover(emaFast, emaSlow) and htfBull
 
 var float entryTP   = na
@@ -67,7 +66,7 @@ if longSig and strategy.position_size == 0 and not na(atrVal)
     trailStop := close - atrVal * i_stop_mult
     strategy.entry("L", strategy.long, qty=1, comment="entry long")
 
-// Manual trailing — ratchet trailStop higher each bar and re-issue
+// trailing — ratchet trailStop higher each bar and re-issue
 // the strategy.exit so the engine pending-order replaces in place.
 if strategy.position_size > 0 and not na(atrVal)
     float candidate = close - atrVal * i_trail_mult

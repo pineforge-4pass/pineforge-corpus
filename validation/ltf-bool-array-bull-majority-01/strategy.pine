@@ -15,7 +15,7 @@
 // ETH-USDT 15m window.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export trade list to tv_trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF lower-tf probe 02 - bool array", shorttitle="LTF_p02_BOOL", overlay=true,
      initial_capital=1000000,

@@ -16,8 +16,7 @@
 // counter to prevent flip-flopping in the same direction within 5 bars.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 14 - method drives entry", shorttitle="UDT_p14_ENT", overlay=true,
      initial_capital=1000000,

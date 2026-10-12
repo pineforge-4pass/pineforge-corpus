@@ -6,7 +6,6 @@
 //
 // Purpose: isolate strategy.exit(..., qty_percent=50) and remaining-position handling.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF TV golden 41 - partial qty percent", shorttitle="PF_G41_PARTIAL", overlay=true,
      initial_capital=1000000,

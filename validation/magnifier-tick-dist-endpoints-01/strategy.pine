@@ -18,7 +18,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, magnifier ON. For ENDPOINTS the
 // TV export is the parity baseline; for the other 5 the harness
-// override produces the comparison. Export trades to trades.csv.
+// override produces the comparison.
 //@version=6
 strategy("PF magnifier dist probe 01-endpoints ENDPOINTS", shorttitle="MAG_END", overlay=true,
      initial_capital=1000000, use_bar_magnifier=true,

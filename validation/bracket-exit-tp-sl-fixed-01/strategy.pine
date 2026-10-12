@@ -6,7 +6,6 @@
 //
 // Purpose: isolate strategy.exit(limit, stop) on a simple periodic long entry.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF TV golden 40 - bracket TP/SL", shorttitle="PF_G40_BRACKET", overlay=true,
      initial_capital=1000000,

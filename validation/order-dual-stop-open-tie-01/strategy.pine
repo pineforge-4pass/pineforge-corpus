@@ -7,7 +7,6 @@
 // Purpose: isolate dual stop entries whose trigger levels are both effectively
 // marketable on the next bar open. This tests open-phase/source-order behavior.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 83 - dual stop open tie", shorttitle="PF_P83_OPENTIE", overlay=true,
      initial_capital=1000000,

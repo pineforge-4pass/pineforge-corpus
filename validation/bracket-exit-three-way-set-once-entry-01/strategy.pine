@@ -16,7 +16,6 @@
 // probe 50 covers.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 88 - 3-way exit set once", shorttitle="PF_P88_EX3SET", overlay=true,
      initial_capital=1000000,

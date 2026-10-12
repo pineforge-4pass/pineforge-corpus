@@ -22,7 +22,6 @@
 // small-trail edge case or something deeper about activation handling.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 89 - trail_points 8 + far stop/limit",
      shorttitle="PF_P89_TRAIL8", overlay=true,

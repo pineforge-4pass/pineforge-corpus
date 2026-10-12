@@ -8,7 +8,6 @@
 // and no stop/limit siblings. Uses larger tick distances than probe 51 to avoid
 // tiny activation noise and focus on the activation/offset path.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 56 - trailing activation path", shorttitle="PF_P56_TRAILPATH", overlay=true,
      initial_capital=1000000,

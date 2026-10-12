@@ -14,8 +14,7 @@
 // Trade shape: long-only RSI(14) cross-up through 50; mid-bar
 // protective stop at (open+high)/2. Exit on RSI cross-down through 50.
 //
-// TV setup: 15m chart, ETH-USDT-USDT, magnifier ON. Export trades to
-// trades.csv.
+// TV setup: 15m chart, ETH-USDT-USDT, magnifier ON.
 //@version=6
 strategy("PF magnifier dist probe 08a - ENDPOINTS RSI cross", shorttitle="MAG_08a_END", overlay=true,
      initial_capital=1000000, use_bar_magnifier=true,

@@ -22,7 +22,7 @@
 // 21/55/200 ordering are the most likely numerical edges in this layer.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 02 - three-ema bias", shorttitle="IES_p02_BIAS", overlay=true,
      initial_capital=1000000,

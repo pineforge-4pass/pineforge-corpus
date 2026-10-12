@@ -6,7 +6,6 @@
 //
 // Purpose: isolate strategy.order exits with shared oca_name and strategy.oca.reduce.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF TV golden 44 - OCA reduce", shorttitle="PF_G44_OCA", overlay=true,
      initial_capital=1000000,

@@ -7,7 +7,6 @@
 // Purpose: determine how TV resolves a same-pass same-id entry + close when an
 // existing position with that id is already open.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 65 - same id entry close", shorttitle="PF_P65_ENTCLOSE", overlay=true,
      initial_capital=1000000,

@@ -26,8 +26,7 @@
 // is touched.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("VCP probe 02 - fvg zones", shorttitle="VCP_p02",
      overlay=true, initial_capital=1000000,

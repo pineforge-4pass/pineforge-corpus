@@ -7,7 +7,6 @@
 // Purpose: isolate the Parabolic SAR pattern of placing one stop entry and
 // cancelling the opposite pending id on confirmed bars.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 52 - stop entry cancel", shorttitle="PF_P52_CANCEL", overlay=true,
      initial_capital=1000000,

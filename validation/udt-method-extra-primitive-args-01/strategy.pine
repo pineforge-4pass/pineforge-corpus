@@ -14,8 +14,7 @@
 // scaled by the method's ``mult`` and ``flip`` parameters.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 03 - extra args", shorttitle="UDT_p03_ARGS", overlay=true,
      initial_capital=1000000,

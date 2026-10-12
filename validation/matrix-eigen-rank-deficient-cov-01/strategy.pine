@@ -20,7 +20,7 @@
 // path is evaluated every bar.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to tv_trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF typed-matrix probe 02 - eigen rank deficient", shorttitle="TM_p02_EIG", overlay=true,
      initial_capital=1000000,

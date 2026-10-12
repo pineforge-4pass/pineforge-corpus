@@ -25,7 +25,7 @@
 // the opposite pending id every bar. NO ``strategy.close`` calls.
 //
 // TV setup: 15m chart, ETH-USDT-USDT. Properties dialog: Pyramiding=1,
-// Order size = 1 contract. Export trades.csv.
+// Order size = 1 contract.
 //@version=6
 strategy("PF probe 94 - stop entry cancel no regime close", shorttitle="PF_P94_NORC", overlay=true,
      initial_capital=1000000,

@@ -31,7 +31,7 @@
 // will show up as extra/missing trades vs TV.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 07 - cooldown + daily cap", shorttitle="IES_p07_COOL", overlay=true,
      initial_capital=1000000,

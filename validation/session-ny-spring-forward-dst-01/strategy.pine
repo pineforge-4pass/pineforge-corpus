@@ -18,8 +18,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
 // data/ohlcv_ETH-USDT-USDT_15m.csv. The window must include the second
-// Sunday of March for spring-forward coverage. Export trade list to
-// tv_trades.csv.
+// Sunday of March for spring-forward coverage.
 //@version=6
 strategy("PF session-dst probe 01 - NY spring forward", shorttitle="SDST_p01_NY", overlay=true,
      initial_capital=1000000,

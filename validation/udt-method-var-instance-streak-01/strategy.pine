@@ -14,8 +14,7 @@
 // up bars). Exit on first red bar.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 16 - var instance streak", shorttitle="UDT_p16_VAR", overlay=true,
      initial_capital=1000000,

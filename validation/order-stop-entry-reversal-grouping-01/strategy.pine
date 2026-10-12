@@ -7,7 +7,6 @@
 // Purpose: isolate stop-entry reversals after a small pyramided position. This
 // separates reversal/report grouping from the larger cancel-opposite probe.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 57 - stop reversal grouping", shorttitle="PF_P57_STOPREV", overlay=true,
      initial_capital=1000000,

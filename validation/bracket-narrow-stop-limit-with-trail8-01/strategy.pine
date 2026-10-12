@@ -19,7 +19,6 @@
 // only the trail's activation level is actually crossed.
 //
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 90 - narrow stop/limit + trail8",
      shorttitle="PF_P90_NARROW", overlay=true,

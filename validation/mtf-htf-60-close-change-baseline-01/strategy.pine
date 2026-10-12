@@ -23,7 +23,7 @@
 // • Symbol: **same** as OHLCV (e.g. ETHUSDT perpetual on Binance if that is your feed).
 // • Strategy settings: **Initial capital** 1e6, **Order size** fixed **1** contract/share,
 //   **Commission** 0%, **Slippage** 0, **Pyramiding** 1 (below).
-// • Deep backtest: on. Export **List of trades** CSV after running.
+// • Deep backtest: on.
 //
 // What each trade is
 // ------------------

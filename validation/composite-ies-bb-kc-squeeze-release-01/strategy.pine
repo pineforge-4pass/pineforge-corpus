@@ -24,7 +24,7 @@
 // leaving exit logic trivial.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 05 - bb/kc squeeze", shorttitle="IES_p05_SQZ", overlay=true,
      initial_capital=1000000,

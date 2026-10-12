@@ -18,7 +18,7 @@
 //
 // TV setup: 15m chart, ETH-USDT-USDT (Binance USDT-M Perpetual). Full
 // window matching corpus/data/ohlcv_ETH-USDT-USDT_15m.csv. Strategy
-// properties: leave defaults. Export "List of trades" → tv_trades.csv.
+// properties: leave defaults.
 //@version=6
 strategy("PF probe 97a - tp/sl bracket isolate", shorttitle="PF_p97a_BRK",
      overlay=true, initial_capital=1000000,

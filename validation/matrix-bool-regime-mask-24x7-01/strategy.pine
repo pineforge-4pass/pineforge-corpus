@@ -18,8 +18,7 @@
 // ETH-USDT-USDT window.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to tv_trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF typed-matrix probe 01 - bool regime mask", shorttitle="TM_p01_BOOL", overlay=true,
      initial_capital=1000000,

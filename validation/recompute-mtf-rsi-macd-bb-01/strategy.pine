@@ -18,7 +18,7 @@
 // and pins the consensus bar.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export trades to trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF TA recompute probe 01 - MTF RSI MACD BB", shorttitle="TArec_p01_MTF", overlay=true,
      initial_capital=1000000, use_bar_magnifier=false,

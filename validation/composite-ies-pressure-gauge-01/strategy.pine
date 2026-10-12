@@ -25,7 +25,7 @@
 // the rising edge of pressure_bull, exits on rising edge of pressure_bear.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export "List of trades" → trades.csv.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF IES probe 04 - pressure gauge", shorttitle="IES_p04_PRESS", overlay=true,
      initial_capital=1000000,

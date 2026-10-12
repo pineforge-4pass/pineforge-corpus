@@ -7,7 +7,6 @@
 // Purpose: compare source-order behavior when a price-based strategy.exit and
 // market strategy.close target the same open entry in the same pass.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 70 - exit close same pass", shorttitle="PF_P70_EXITCLOSE", overlay=true,
      initial_capital=1000000,

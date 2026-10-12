@@ -8,7 +8,6 @@
 // expected TradingView path is O -> L -> H -> C. Short stop should win if path
 // priority controls dual stop arbitration.
 // TV setup: 15m chart, same symbol/window as data/ohlcv_ETH-USDT-USDT_15m.csv.
-// Export TradingView "List of trades" to trades.csv in this folder.
 //@version=6
 strategy("PF probe 86 - dual stop low first", shorttitle="PF_P86_LOWPATH", overlay=true,
      initial_capital=1000000,

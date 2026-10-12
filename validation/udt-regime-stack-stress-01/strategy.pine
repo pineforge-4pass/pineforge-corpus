@@ -10,7 +10,7 @@
 // UDT-heavy validation strategy for PineForge.
 //
 // Mirrors logic in validation/30-multi-indicator-score (RSI + EMA + BB score, same entries/exits)
-// so you can export trades.csv from TradingView with identical inputs and compare bar-for-bar.
+// with identical inputs.
 //
 // PineForge note (2026):
 // - Mutate var UDTs with per-field `:=` (`rsiL.contrib := ...`). Whole-struct reassignment

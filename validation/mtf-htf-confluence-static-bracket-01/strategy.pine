@@ -11,10 +11,10 @@
 // calls. This probe keeps ONLY the HTF confluence half — the bracket
 // exit is set ONCE at entry and never touched again — so any TV/engine
 // drift here is attributable to MTF state evaluation timing alone.
-// The companion probe (mtf-probe-11-htf-bracket-manual-trail) keeps the
-// same HTF gate but adds the per-bar manual trailing stop. Compare the
+// The companion probe keeps the
+// same HTF gate but adds the per-bar trailing stop. Compare the
 // two: if probe 10 matches and probe 11 doesn't, the gap is in the
-// manual-trail pattern; if both fail, the gap is in HTF confluence.
+// trail pattern; if both fail, the gap is in HTF confluence.
 //
 // Trade shape: long-only, pyramiding=1. Enter when 15m EMA(9) crosses
 // above EMA(21) AND the 1H htf close is above its 1H EMA(20). Exit
@@ -24,8 +24,7 @@
 // can't be confused by per-bar recomputation.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("MTF probe 10 - HTF bracket static", shorttitle="MTF_p10",
      overlay=true, initial_capital=1000000,

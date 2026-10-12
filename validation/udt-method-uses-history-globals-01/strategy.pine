@@ -10,9 +10,9 @@
 // method (not just inline). The history offset is driven by a UDT
 // field (``self.lookback``) so the call site exercises both UDT
 // member access AND series history within a single expression.
-// Pine treats UDT field history (``self.x[1]``) as not supported in
-// PineForge — this probe deliberately uses GLOBAL series history,
-// which is supported.
+// TradingView refuses a history reference on a UDT field (``self.x[1]``)
+// with compile error CE10290, so this probe uses GLOBAL series history
+// (``close[N]``, ``high[N]``), which TradingView accepts.
 //
 // Naming note: TradingView's CE10236 requires the first method
 // argument (``self``) to be referenced in the body — otherwise
@@ -25,8 +25,7 @@
 // changeRate > 1% and EMA cross.
 //
 // TV setup: 15m chart, ETH-USDT-USDT, same window as
-// data/ohlcv_ETH-USDT-USDT_15m.csv. Export the trade list to trades.csv
-// in this folder.
+// data/ohlcv_ETH-USDT-USDT_15m.csv.
 //@version=6
 strategy("PF UDT probe 11 - history in method", shorttitle="UDT_p11_HIST", overlay=true,
      initial_capital=1000000,

@@ -11,9 +11,9 @@
 //
 // Strict TV↔engine parity checklist:
 // - Use the same symbol feed as data/ohlcv_ETH-USDT-USDT_15m.csv (Binance USDT-M ETH).
-// - Match chart date range to the OHLCV file; TV “List of trades” must cover that window.
-// - Set validate_detailed_report / inputs.json: tv_trades_csv_tz = "utc" if chart TZ was UTC
-//   when exporting trades, else "utc_plus_8" (default). Mismatch causes ±8h pairing errors.
+// - Match chart date range to the OHLCV file.
+// - Set inputs.json: tv_trades_csv_tz = "utc" if chart TZ was UTC
+//   else "utc_plus_8" (default). Mismatch causes ±8h pairing errors.
 //@version=6
 strategy("PF MTF probe 04 — D high[1] break", shorttitle="MTF_p04", overlay=true,
      initial_capital=1000000,
