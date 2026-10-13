@@ -8,11 +8,11 @@ behaviour matches TradingView on the same bar feed.
 
 ## Headline parity
 
-- **312** verified strategies, all under `corpus/validation/`.
+- **316** verified strategies, all under `corpus/validation/`.
 - **~430,000 trades** total across the suite — summing the per-row TV /
   engine counts in [`validation_report.md`](validation_report.md):
   TV 429,704; engine 429,709 (`+5` ≈ 0.001 % over TV).
-- **307** excellent (bit-for-bit or within the resolved thresholds on every
+- **311** excellent (bit-for-bit or within the resolved thresholds on every
   parity dimension).
 - **4** strong, retained as visible pre-existing research cases rather than
   being hidden or admitted as excellent.
@@ -95,7 +95,7 @@ ticks from chart bars and need no extra feed.
 
 ```
 corpus/
-├── validation/                312 probes — surface-driven probe family
+├── validation/                316 probes — surface-driven probe family
 │   ├── ta-*                    73 probes — TA built-in math (rsi, macd, sma, ...)
 │   ├── composite-*             53 probes — multi-surface integration (community-style)
 │   ├── order-*                 48 probes — entry/exit/cancel placement
@@ -113,6 +113,7 @@ corpus/
 │   ├── na-*                     3 probes — na propagation
 │   ├── oca-*                    3 probes — OCA group cancel/reduce/none
 │   ├── array-*                  2 probes — array lifecycle and iteration
+│   ├── hist-*                   2 probes — object and drawing history semantics
 │   ├── input-*                  2 probes — input.source runtime override / subscript
 │   ├── ltf-*                    2 probes — request.security_lower_tf arrays
 │   ├── map-*                    2 probes — map collection behavior
@@ -121,6 +122,7 @@ corpus/
 │   ├── stats-*                  2 probes — performance stats / reporting
 │   ├── syntax-*                 2 probes — scalar and switch semantics
 │   ├── timeframe-*              2 probes — chart/input timeframe handling
+│   ├── uobj-*                   2 probes — int-to-float object field coercion
 │   ├── vwap-*                   2 probes — VWAP band pricing / fills
 │   ├── bands-*                  1 probe  — statistical-band behavior
 │   ├── calendar-*               1 probe  — calendar filters
@@ -141,7 +143,7 @@ corpus/
 └── validation_report.{html,pdf}   rendered from .md
 ```
 
-Total: **312** probes.
+Total: **316** probes.
 
 ## Naming convention
 
@@ -151,7 +153,7 @@ Every probe directory follows:
 <category>-<descriptive-slug>-NN[a-z]?
 ```
 
-- **`<category>`** — one of the 33 surface categories below. The category
+- **`<category>`** — one of the 35 surface categories below. The category
   is the engine surface or PineScript feature the probe is built to
   exercise.
 - **`<descriptive-slug>`** — kebab-case description of the specific
@@ -164,7 +166,7 @@ Every probe directory follows:
   `barstate-isconfirmed-magnifier-on-01a` vs
   `…-magnifier-off-01b`).
 
-The 33 categories (with probe counts):
+The 35 categories (with probe counts):
 
 | Category    | Count | Surface exercised                                          |
 | ----------- | ----: | ---------------------------------------------------------- |
@@ -185,6 +187,7 @@ The 33 categories (with probe counts):
 | `magnifier` |     3 | `bar_magnifier` sub-bar walks                              |
 | `na`        |     3 | `na` propagation                                           |
 | `array`     |     2 | Array lifecycle and iteration                              |
+| `hist`      |     2 | Object and drawing history semantics                       |
 | `ltf`       |     2 | `request.security_lower_tf` arrays                         |
 | `input`     |     2 | `input.source` runtime override / subscript                |
 | `map`       |     2 | Map collection behavior                                    |
@@ -193,6 +196,7 @@ The 33 categories (with probe counts):
 | `stats`     |     2 | Performance stats / reporting                              |
 | `syntax`    |     2 | Scalar and switch semantics                                |
 | `timeframe` |     2 | Chart/input timeframe handling                             |
+| `uobj`      |     2 | Int-to-float object field coercion                         |
 | `vwap`      |     2 | VWAP band pricing / fills                                  |
 | `bands`     |     1 | Statistical-band behavior                                  |
 | `calendar`  |     1 | Calendar filters                                           |

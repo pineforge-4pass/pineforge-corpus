@@ -1,0 +1,30 @@
+//@version=6
+// This Pine Script® code is licensed under Apache-2.0
+// SPDX-License-Identifier: Apache-2.0
+// © PineForge contributors 2026
+//
+// uobj-assign-float-01
+//
+// Int values assigned to float fields of an object keep their number, including the bar index, and
+// an int na assigned to a field leaves it na.
+//
+// Chart: BINANCE:ETHUSDT.P, 15m, 2025-04-01 to 2025-04-08 UTC, fixed quantity 1.
+// Graded on the corpus trade pipeline and on exit-Signal equality with TradingView's trade list;
+// the claim rests on the exit-Signal equality.
+strategy("UASSIGN float", overlay = true, default_qty_type = strategy.fixed, default_qty_value = 1)
+type Cell
+    float v = 0.0
+    float w = 0.0
+c = Cell.new()
+int iv = bar_index * 2
+if bar_index % 3 == 0
+    iv := na
+c.v := iv
+c.w := bar_index
+n1 = na(c.v) ? "na" : str.tostring(c.v - bar_index * 2)
+w1 = str.tostring(c.w - bar_index)
+mn = minute(time, "UTC")
+if mn == 0 or mn == 30
+    strategy.entry("L", strategy.long)
+if mn == 15 or mn == 45
+    strategy.close("L", comment = n1 + "|" + w1)
