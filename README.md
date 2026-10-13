@@ -11,7 +11,7 @@ behaviour matches TradingView on the same bar feed.
 - **316** verified strategies, all under `corpus/validation/`.
 - **~430,000 trades** total across the suite — summing the per-row TV /
   engine counts in [`validation_report.md`](validation_report.md):
-  TV 429,704; engine 429,709 (`+5` ≈ 0.001 % over TV).
+  TV 431,056; engine 431,057 (`+1` ≈ 0.0002 % over TV).
 - **311** excellent (bit-for-bit or within the resolved thresholds on every
   parity dimension).
 - **4** strong, retained as visible pre-existing research cases rather than
