@@ -502,7 +502,10 @@ public:
         cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
         cfg.commission_value = 0.0;
         cfg.slippage = 0;
-        configure_pine_strategy(cfg);
+#if defined(PINEFORGE_HAS_TRADE_HISTORY_POLICY_V1)
+        this->set_trade_history_streamable(true);
+#endif
+        this->configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -976,9 +979,12 @@ extern "C" {
         if (required) *required = 0;
         return ::pineforge::checked_settings::boundary(error, error_capacity, [&] {
             ::pineforge::checked_settings::require(s != nullptr, "null strategy");
-            ::pineforge::checked_settings::receipt("{\"calls\":[{\"call\":\"entry\",\"comment\":\"literal\",\"context\":\"straight\",\"direction\":\"long\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"literal\",\"qty_type\":\"absent\",\"site\":0,\"stop\":\"absent\"},{\"call\":\"close\",\"comment\":\"literal\",\"context\":\"straight\",\"id\":\"literal\",\"immediately\":\"absent\",\"qty\":\"absent\",\"qty_percent\":\"absent\",\"site\":1,\"target\":\"long\"}],\"entry_ids\":{\"long\":1,\"multi_site\":0,\"shared\":0,\"short\":0},\"host_reads\":[\"StreamPhase\",\"_src_close_\",\"_src_high_\",\"_src_hl2_\",\"_src_hlc3_\",\"_src_hlcc4_\",\"_src_low_\",\"_src_ohlc4_\",\"_src_open_\",\"_src_series_active_\",\"_src_volume_\",\"commit_script_state\",\"config_\",\"configure_pine_strategy\",\"current_bar_\",\"fill_report\",\"history_advances_new_bar\",\"inputs_\",\"last_error\",\"last_error_\",\"on_source_bar\",\"override_\",\"prepare_script_run\",\"restore_script_state\",\"run\",\"script_bars_processed\",\"set_input\",\"set_magnifier_volume_weighted\",\"set_strategy_override\",\"signed_position_size\",\"snapshot_script_state\",\"strategy_close\",\"strategy_entry\",\"stream_phase_\"],\"process_orders_on_close\":false,\"settings\":{\"close_entries_rule\":\"FIFO\",\"commission_type\":\"percent\",\"commission_value\":0.0,\"default_qty_type\":\"fixed\",\"default_qty_value\":1.0,\"initial_capital\":1000000.0,\"margin_long\":100.0,\"margin_short\":100.0,\"pyramiding\":1,\"slippage\":0},\"unmodeled\":[],\"version\":1}", json, capacity, required);
+            ::pineforge::checked_settings::receipt("{\"calls\":[{\"call\":\"entry\",\"comment\":\"literal\",\"context\":\"straight\",\"direction\":\"long\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"literal\",\"qty_type\":\"absent\",\"site\":0,\"stop\":\"absent\"},{\"call\":\"close\",\"comment\":\"literal\",\"context\":\"straight\",\"id\":\"literal\",\"immediately\":\"absent\",\"qty\":\"absent\",\"qty_percent\":\"absent\",\"site\":1,\"target\":\"long\"}],\"entry_ids\":{\"long\":1,\"multi_site\":0,\"shared\":0,\"short\":0},\"host_reads\":[\"StreamPhase\",\"_src_close_\",\"_src_high_\",\"_src_hl2_\",\"_src_hlc3_\",\"_src_hlcc4_\",\"_src_low_\",\"_src_ohlc4_\",\"_src_open_\",\"_src_series_active_\",\"_src_volume_\",\"commit_script_state\",\"config_\",\"configure_pine_strategy\",\"current_bar_\",\"fill_report\",\"history_advances_new_bar\",\"inputs_\",\"last_error\",\"last_error_\",\"on_source_bar\",\"override_\",\"prepare_script_run\",\"restore_script_state\",\"run\",\"script_bars_processed\",\"set_input\",\"set_magnifier_volume_weighted\",\"set_strategy_override\",\"set_trade_history_streamable\",\"signed_position_size\",\"snapshot_script_state\",\"strategy_close\",\"strategy_entry\",\"stream_phase_\"],\"process_orders_on_close\":false,\"settings\":{\"close_entries_rule\":\"FIFO\",\"commission_type\":\"percent\",\"commission_value\":0.0,\"default_qty_type\":\"fixed\",\"default_qty_value\":1.0,\"initial_capital\":1000000.0,\"margin_long\":100.0,\"margin_short\":100.0,\"pyramiding\":1,\"slippage\":0},\"unmodeled\":[],\"version\":1}", json, capacity, required);
         });
     }
 #endif
 #endif
+    int strategy_reads_trade_history(void) {
+        return 0;
+    }
 }

@@ -258,7 +258,10 @@ public:
         cfg.commission_value = 0.0;
         cfg.slippage = 0;
         cfg.src_series_active = true;
-        configure_pine_strategy(cfg);
+#if defined(PINEFORGE_HAS_TRADE_HISTORY_POLICY_V1)
+        this->set_trade_history_streamable(true);
+#endif
+        this->configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -520,44 +523,44 @@ public:
         (void)bars; (void)n; (void)allow_precalculation;
     }
 
-    double getMA_cs0(double source, int64_t length) {
+    double getMA_cs0(double pf_safe_source, int64_t length) {
         double _func_ret = 0.0;
         auto __switch_val_0 = maType;
         if (__switch_val_0 == std::string("EMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_ema_1.compute(source) : _ta_ema_1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_ema_1.compute(pf_safe_source) : _ta_ema_1.recompute(pf_safe_source));
         }
         else if (__switch_val_0 == std::string("SMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_sma_2.compute(source) : _ta_sma_2.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_2.compute(pf_safe_source) : _ta_sma_2.recompute(pf_safe_source));
         }
         else if (__switch_val_0 == std::string("WMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_wma_3.compute(source) : _ta_wma_3.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_wma_3.compute(pf_safe_source) : _ta_wma_3.recompute(pf_safe_source));
         }
         else if (__switch_val_0 == std::string("HMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_hma_4.compute(source) : _ta_hma_4.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_hma_4.compute(pf_safe_source) : _ta_hma_4.recompute(pf_safe_source));
         }
         else {
-            _func_ret = (history_advances_new_bar() ? _ta_sma_5.compute(source) : _ta_sma_5.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_5.compute(pf_safe_source) : _ta_sma_5.recompute(pf_safe_source));
         }
         return _func_ret;
     }
 
-    double getMA_cs1(double source, int64_t length) {
+    double getMA_cs1(double pf_safe_source, int64_t length) {
         double _func_ret = 0.0;
         auto __switch_val_1 = maType;
         if (__switch_val_1 == std::string("EMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_ema_1_cs1.compute(source) : _ta_ema_1_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_ema_1_cs1.compute(pf_safe_source) : _ta_ema_1_cs1.recompute(pf_safe_source));
         }
         else if (__switch_val_1 == std::string("SMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_sma_2_cs1.compute(source) : _ta_sma_2_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_2_cs1.compute(pf_safe_source) : _ta_sma_2_cs1.recompute(pf_safe_source));
         }
         else if (__switch_val_1 == std::string("WMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_wma_3_cs1.compute(source) : _ta_wma_3_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_wma_3_cs1.compute(pf_safe_source) : _ta_wma_3_cs1.recompute(pf_safe_source));
         }
         else if (__switch_val_1 == std::string("HMA")) {
-            _func_ret = (history_advances_new_bar() ? _ta_hma_4_cs1.compute(source) : _ta_hma_4_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_hma_4_cs1.compute(pf_safe_source) : _ta_hma_4_cs1.recompute(pf_safe_source));
         }
         else {
-            _func_ret = (history_advances_new_bar() ? _ta_sma_5_cs1.compute(source) : _ta_sma_5_cs1.recompute(source));
+            _func_ret = (history_advances_new_bar() ? _ta_sma_5_cs1.compute(pf_safe_source) : _ta_sma_5_cs1.recompute(pf_safe_source));
         }
         return _func_ret;
     }
@@ -743,9 +746,12 @@ extern "C" {
         if (required) *required = 0;
         return ::pineforge::checked_settings::boundary(error, error_capacity, [&] {
             ::pineforge::checked_settings::require(s != nullptr, "null strategy");
-            ::pineforge::checked_settings::receipt("{\"calls\":[{\"call\":\"entry\",\"comment\":\"absent\",\"context\":\"straight\",\"direction\":\"long\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"absent\",\"qty_type\":\"absent\",\"site\":0,\"stop\":\"absent\"},{\"call\":\"entry\",\"comment\":\"absent\",\"context\":\"straight\",\"direction\":\"short\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"absent\",\"qty_type\":\"absent\",\"site\":1,\"stop\":\"absent\"}],\"entry_ids\":{\"long\":1,\"multi_site\":0,\"shared\":0,\"short\":1},\"host_reads\":[\"StreamPhase\",\"_src_close_\",\"commit_script_state\",\"config_\",\"configure_pine_strategy\",\"fill_report\",\"get_input_int\",\"get_input_source\",\"get_input_string\",\"history_advances_new_bar\",\"inputs_\",\"last_error\",\"last_error_\",\"on_source_bar\",\"override_\",\"prepare_script_run\",\"restore_script_state\",\"run\",\"script_bars_processed\",\"set_input\",\"set_magnifier_volume_weighted\",\"set_strategy_override\",\"snapshot_script_state\",\"strategy_entry\",\"stream_phase_\"],\"process_orders_on_close\":false,\"settings\":{\"close_entries_rule\":\"FIFO\",\"commission_type\":\"percent\",\"commission_value\":0.0,\"default_qty_type\":\"fixed\",\"default_qty_value\":1.0,\"initial_capital\":1000000.0,\"margin_long\":100.0,\"margin_short\":100.0,\"pyramiding\":1,\"slippage\":0},\"unmodeled\":[],\"version\":1}", json, capacity, required);
+            ::pineforge::checked_settings::receipt("{\"calls\":[{\"call\":\"entry\",\"comment\":\"absent\",\"context\":\"straight\",\"direction\":\"long\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"absent\",\"qty_type\":\"absent\",\"site\":0,\"stop\":\"absent\"},{\"call\":\"entry\",\"comment\":\"absent\",\"context\":\"straight\",\"direction\":\"short\",\"id\":\"literal\",\"limit\":\"absent\",\"oca_name\":\"absent\",\"oca_type\":\"absent\",\"qty\":\"absent\",\"qty_type\":\"absent\",\"site\":1,\"stop\":\"absent\"}],\"entry_ids\":{\"long\":1,\"multi_site\":0,\"shared\":0,\"short\":1},\"host_reads\":[\"StreamPhase\",\"_src_close_\",\"commit_script_state\",\"config_\",\"configure_pine_strategy\",\"fill_report\",\"get_input_int\",\"get_input_source\",\"get_input_string\",\"history_advances_new_bar\",\"inputs_\",\"last_error\",\"last_error_\",\"on_source_bar\",\"override_\",\"prepare_script_run\",\"restore_script_state\",\"run\",\"script_bars_processed\",\"set_input\",\"set_magnifier_volume_weighted\",\"set_strategy_override\",\"set_trade_history_streamable\",\"snapshot_script_state\",\"strategy_entry\",\"stream_phase_\"],\"process_orders_on_close\":false,\"settings\":{\"close_entries_rule\":\"FIFO\",\"commission_type\":\"percent\",\"commission_value\":0.0,\"default_qty_type\":\"fixed\",\"default_qty_value\":1.0,\"initial_capital\":1000000.0,\"margin_long\":100.0,\"margin_short\":100.0,\"pyramiding\":1,\"slippage\":0},\"unmodeled\":[],\"version\":1}", json, capacity, required);
         });
     }
 #endif
 #endif
+    int strategy_reads_trade_history(void) {
+        return 0;
+    }
 }

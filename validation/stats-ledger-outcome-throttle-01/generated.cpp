@@ -262,7 +262,7 @@ public:
         cfg.slippage = 1;
         cfg.margin_long = 100.0;
         cfg.margin_short = 100.0;
-        configure_pine_strategy(cfg);
+        this->configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -762,4 +762,7 @@ extern "C" {
     }
 #endif
 #endif
+    int strategy_reads_trade_history(void) {
+        return 1;
+    }
 }

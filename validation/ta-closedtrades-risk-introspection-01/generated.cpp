@@ -207,7 +207,7 @@ public:
         cfg.commission_type = static_cast<int>(CommissionType::PERCENT);
         cfg.commission_value = 0.0;
         cfg.slippage = 0;
-        configure_pine_strategy(cfg);
+        this->configure_pine_strategy(cfg);
     }
 
     void set_strategy_override(const std::string& key, const std::string& value) {
@@ -664,4 +664,7 @@ extern "C" {
     }
 #endif
 #endif
+    int strategy_reads_trade_history(void) {
+        return 1;
+    }
 }
