@@ -296,16 +296,16 @@ profiles per probe and emits a tier label:
 | Absolute trade-count parity | Δ == 0 |     Δ == 0 |
 | Coverage (matched / all closed TV trades) | ≥99% | ≥99% |
 | Entry-price p90 delta      |   0.01% |      0.01% |
-| Exit-price p90 delta       |   0.01% |      0.05% |
-| Per-trade P&L p90 delta    |   1.0%  |       100% |
+| Exit-price p90 delta       |   0.01% |      0.02% |
+| Per-trade P&L p90 delta    |   1.0%  |       1.0% |
 
-PRODUCTION relaxes the exit-price tolerance (5×) and the per-trade P&L
-tolerance (~100× — its 100% gate catches only catastrophic divergence)
-to absorb sub-bar broker-side fill drift on trailing exits. The verifier
-auto-selects PRODUCTION for probes whose `strategy.pine` uses any
-`trail_*` parameter on `strategy.exit` (plain stop/limit exits stay
-STRICT); an `inputs.json` `parity_profile` override wins over
-auto-detection.
+PRODUCTION keeps the count and entry limits at the STRICT values, relaxes only
+the exit-price tolerance to 0.02% (2× the strict 0.01%), and keeps the
+per-trade P&L tolerance at the strict 1.0%. The exit and P&L gates are graded
+per strategy at the 90th percentile, not every trade. The verifier auto-selects
+PRODUCTION for probes whose `strategy.pine` uses any `trail_*` parameter on
+`strategy.exit` (plain stop/limit exits stay STRICT); an `inputs.json`
+`parity_profile` override wins over auto-detection.
 
 Excursion metrics (MAE/MFE) are **report-only diagnostics**, not gates:
 they pin TV's excursion conventions (sign, total-USD scaling, exit-fill
