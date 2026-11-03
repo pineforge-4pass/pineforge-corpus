@@ -1,4 +1,9 @@
 {
-  "_comment": "EMA(200) warmup depth must match the TradingView chart history used for this export. Trim to 2025-04-01 00:00 UTC.",
-  "ohlcv_start_ms": 1743465600000
+  "_comment": "EMA(200) warmup depth must match the TradingView chart history used for this export. The TV export's series origin is 2025-03-31 00:00 UTC: with ta.ema seeded as TradingView seeds it at a series origin (na until 200 bars, then the SMA of the first 200 closes), the engine reproduces every trade of the export when the feed starts at that origin.",
+  "ohlcv_start_ms": 1743379200000,
+  "runtime_overrides": {
+    "syminfo_metadata": {
+      "chart_ema_na_warmup": 1
+    }
+  }
 }

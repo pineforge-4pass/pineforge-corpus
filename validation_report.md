@@ -1,6 +1,6 @@
 # PineForge Corpus Validation Report
 
-**Generated:** 2026-10-02 (UTC) — engine `5718c5dc`, corpus `d53f949`
+**Generated:** 2026-11-03 (UTC) — engine `d129cc03`, corpus `7ad36e2`
 
 All probes live under `corpus/validation/`; categories below are derived
 from each slug's leading hyphen-token (e.g. `ta-...`, `composite-...`).
@@ -109,7 +109,7 @@ trades (PnL excludes scratch trades with `|tv_pnl| < $0.01`).
 | [`cap-max-intraday-filled-orders-isolate-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/cap-max-intraday-filled-orders-isolate-01/) | `cap` | excellent | `strict` | 1958 | 1958 | 1958 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`cap-risk-gates-allow-max-intraday-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/cap-risk-gates-allow-max-intraday-01/) | `cap` | excellent | `strict` | 732 | 732 | 732 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`composite-4emarsi-integration-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-integration-01/) | `composite` | excellent | `strict` | 335 | 335 | 335 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
-| [`composite-4emarsi-quad-ema-stack-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-quad-ema-stack-01/) | `composite` | excellent | `strict` | 224 | 224 | 223 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
+| [`composite-4emarsi-quad-ema-stack-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-quad-ema-stack-01/) | `composite` | excellent | `strict` | 224 | 224 | 224 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`composite-4emarsi-rsi-pullback-latch-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-rsi-pullback-latch-01/) | `composite` | excellent | `strict` | 816 | 816 | 816 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`composite-4emarsi-session-window-nbar-exit-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-4emarsi-session-window-nbar-exit-01/) | `composite` | excellent | `strict` | 744 | 744 | 744 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
 | [`composite-boscurv-integration-01`](https://github.com/pineforge-4pass/pineforge-corpus/tree/main/validation/composite-boscurv-integration-01/) | `composite` | excellent | `strict` | 1026 | 1026 | 1026 | 0.0000% | 0.0000% | 0.0000% | 0.0000% |
