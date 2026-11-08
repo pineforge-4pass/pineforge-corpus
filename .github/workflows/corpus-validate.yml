@@ -1,0 +1,92 @@
+name: Corpus validation
+
+on:
+  pull_request:
+  push:
+    branches: [main, engine-line]
+
+permissions:
+  contents: read
+
+jobs:
+  authz:
+    name: authz
+    runs-on: ubuntu-24.04
+    permissions: {contents: read}
+    steps:
+      - name: Only our own pull requests and our own events run CI
+        env:
+          EVENT: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          HEAD_IS_FORK: ${{ github.event.pull_request.head.repo.fork }}
+          ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          GH_TOKEN: ${{ github.token }}
+          ALLOWED_BOTS: "dependabot[bot] pineforge-app[bot]"
+        run: |
+          set -eu
+          fail() { echo "::error title=authz::$1"; echo "authz: REFUSED: $1" >> "$GITHUB_STEP_SUMMARY"; exit 1; }
+          case "$EVENT" in
+            push) ;;
+            pull_request)
+              [ "$HEAD_REPO" = "$REPO" ] || fail "pull request from another repository (${HEAD_REPO:-unknown})"
+              [ "$HEAD_IS_FORK" = "false" ] || fail "pull request from a fork"
+              case "$ASSOCIATION" in
+                OWNER|MEMBER|COLLABORATOR) ;;
+                *)
+                  case " $ALLOWED_BOTS " in
+                    *" $PR_AUTHOR "*) ;;
+                    *)
+                      perm=$(gh api "repos/$REPO/collaborators/$PR_AUTHOR/permission" --jq .permission 2>/dev/null) || fail "author permission lookup failed"
+                      case "$perm" in admin|maintain|write) ;; *) fail "author ${PR_AUTHOR:-unknown} has permission '$perm', not write, and is not an allowlisted bot" ;; esac ;;
+                  esac ;;
+              esac ;;
+            *) fail "event $EVENT does not run CI" ;;
+          esac
+          echo "authz: allowed ($EVENT${PR_AUTHOR:+ by $PR_AUTHOR})" >> "$GITHUB_STEP_SUMMARY"
+
+  corpus-validate:
+    name: corpus-validate
+    needs: [authz]
+    runs-on: ubuntu-24.04
+    permissions: {contents: read}
+    steps:
+      - name: Check out the event corpus commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: corpus
+          lfs: true
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Require the exact event commit
+        env:
+          CORPUS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -eu
+          test "$(git -C corpus rev-parse HEAD)" = "$CORPUS_SHA"
+      - name: Check out the public engine
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: pineforge-4pass/pineforge-engine
+          ref: main
+          path: engine
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Record the engine commit
+        run: git -C engine rev-parse HEAD
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libeigen3-dev tzdata-legacy git-lfs
+      - name: Validate corpus records, build and probe headers
+        run: |
+          python3 -B engine/scripts/validate_corpus_sha.py \
+            --corpus "$GITHUB_WORKSPACE/corpus" --engine "$GITHUB_WORKSPACE/engine" \
+            --work "$RUNNER_TEMP/corpus-validation" --jobs 8

@@ -347,3 +347,14 @@ records of running each script on TV's broker emulator, included only for
 parity verification. OHLCV is public market data from Binance USDT-M
 futures. See [`LEGAL.md`](LEGAL.md) for the full provenance and trademark
 notes.
+
+## File digest manifest
+
+`file_digests.json` records the SHA-256 of every tracked corpus file except itself.
+It records what the corpus held when it was written and detects any tracked file
+change made without rewriting the manifest; each deliberate change is visible
+in the manifest diff. It is not a signature and cannot prevent a deliberate rewrite.
+Every change to a tracked file needs the manifest rewritten on a clean checkout:
+run `python3 <engine checkout>/scripts/write_corpus_file_digests.py --corpus .`
+after committing the changed files, then commit the manifest with the update.
+The corpus workflow fails until the manifest matches every tracked file.
