@@ -11,5 +11,5 @@ Cross-confirmed P0 (X7, C++#1/#2): `matrix.eigenvalues()` on rank-deficient cova
 
 ## TV capture notes
 - 15m chart, ETH-USDT-USDT, same window as `data/ohlcv_ETH-USDT-USDT_15m.csv`.
-- TradingView strategy report → `tv_trades.csv`.
+- Manual TradingView export → `tv_trades.csv`.
 - Compare entry comments: TV vs PineForge should both pick `L_fb` (fallback) on identical bars. Any `L_eig` entry is a NaN-handling divergence.

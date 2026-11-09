@@ -11,5 +11,5 @@ Cross-confirmed P1 (X9, Pine#5, C++#14): `na` propagation past `max_bars_back`, 
 
 ## TV capture notes
 - 15m chart, ETH-USDT-USDT, window must extend long enough to exercise the 500-bar history depth.
-- TradingView strategy report → `tv_trades.csv`.
+- Manual TradingView export → `tv_trades.csv`.
 - Any divergence in the first ~500 bars points at `max_bars_back` priming differences.

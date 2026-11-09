@@ -31,24 +31,37 @@ against `tv_trades.csv` with `scripts/verify_corpus.py`. At engine `35db01c`
   probes; `analyzer-self-test-multi-mode-01` keeps its four per-mode TradingView
   tapes in `trades-*.csv`).
 
-**The tapes and report committed here come from the 1.0.1 release.** The 312
-probes' `generated.cpp` files are what codegen 1.0.1 emits, and their
-`engine_trades.csv` tapes are what engine v1.0.1 produces from them. `e7a0f8f`
-(2026-10-02) committed all 312 tapes, replacing ones engine `a7cb5b6` wrote on
-2026-08-13, and the 80 `generated.cpp` files whose text codegen 1.0.1 changed;
-the other 232 were already its output. Engine v1.0.1 changed only documentation
-and the version number on top of v1.0.0, so its runtime is v1.0.0's
-(`5718c5dc`). Each tape matches the sha256 that engine v1.0.1's
-`scripts/corpus_parity_baseline.txt` pins for it (the gate hashes the file's
-text with its CRLF line endings read as LF, so `shasum -a 256` on the file gives
-another value). `validation_report.{md,html,pdf}` were regenerated from these
-tapes the same day (`a35c7c4`) and give the headline above; their header names
-engine `5718c5dc` and corpus `d53f949`, which is `e7a0f8f` before its rebase
-onto `main` (same tapes and C++). The engine's gate still re-runs every probe
-and compares each fresh tape's sha256 with the baseline, not with the committed
-file.
-The engine README at v1.0.1 (`d1d18867`) gives the same figures for this corpus:
-311 excellent and 1 declared anomaly.
+**The committed tapes are the ones `main` carries, and the engine reproduces them.** All 312 `engine_trades.csv` tapes have the 12-column header that ends `Engine range-end`. 311 of them are unchanged since `e7a0f8f` (2026-10-02); the tape of `composite-4emarsi-quad-ema-stack-01` was rewritten by `adef1c6` (2026-11-03), after that probe's series origin changed. The `generated.cpp` files are what codegen 1.7.0 (`89b48cb6e2fe`) emits, the files that the engine pins. The engine writes the committed tapes from them: 311 tapes match the sha256 that the engine's `scripts/corpus_parity_baseline.txt` pins at `e1d29cb95` (the gate hashes the file's text with its CRLF line endings read as LF, so `shasum -a 256` on the file gives another value), and the tape of the quad-ema probe is the file that the engine's `scripts/run_strategy.py` writes on this tree. `run_manifest.json` records the sha256 of the 312 tapes, the engine commit that reproduces them (`e1d29cb95`), the sha256 of the grading rubric `scripts/verify_corpus.py` at that commit, and when the digests were written.
+
+`validation_report.md` is the report of the 2026-11-03 run (engine `d129cc03`, corpus `7ad36e2`); it gives the headline above, and so does `scripts/regen_validation_report.py` over the committed tapes. `validation_report.html` and `validation_report.pdf` were last rendered on 2026-10-02 (`a35c7c4`); the header of the HTML names engine `5718c5dc` and corpus `d53f949`. The engine's gate re-runs every probe and compares each fresh tape's sha256 with the baseline, not with the committed file. The engine README states the same headline: 311 excellent and 1 declared anomaly.
+
+Each statement can be checked from an engine checkout whose `corpus/` is this repository (`<engine>` is that checkout; `adef1c6` is the head of `main` at the merge):
+
+```sh
+cd <engine>
+# no tape differs from main's; 311 are unchanged since e7a0f8f (one file changed: the quad-ema tape)
+git -C corpus diff --stat adef1c6 HEAD -- 'validation/*/engine_trades.csv'
+git -C corpus diff --stat e7a0f8f adef1c6 -- 'validation/*/engine_trades.csv'
+# one header line, 312 tapes
+head -qn1 corpus/validation/*/engine_trades.csv | tr -d '\r' | sort | uniq -c
+# 311 of 312 tapes match the baseline that the engine pins at e1d29cb95 (run it in a checkout of that commit)
+python3 -c "import hashlib,pathlib;b=[l.split() for l in open('scripts/corpus_parity_baseline.txt') if l.strip() and l[0]!='#'];print(sum(hashlib.sha256(pathlib.Path('corpus',p).read_text().encode()).hexdigest()==d for d,p in b),'of',len(b))"
+# the recorded digests, engine commit and file digests are consistent: ends with RESULT valid
+python3 scripts/validate_corpus_sha.py --corpus corpus --engine . --records-only
+# the recorded rubric digest is the sha256 of scripts/verify_corpus.py at the recorded engine commit: both lines show the same 64 hex digits
+git show e1d29cb95:scripts/verify_corpus.py | shasum -a 256
+grep rubricSha256 corpus/run_manifest.json
+# the report of 2026-11-03, the renderings of 2026-10-02, and the headline over the committed tapes
+sed -n 3p corpus/validation_report.md
+git -C corpus log -1 --format='%h %as' -- validation_report.html validation_report.pdf
+grep -a -A1 'Generated' corpus/validation_report.html | head -n 3
+python3 scripts/regen_validation_report.py --output regenerated_report.md
+# the quad-ema tape is what the engine writes: build the probe, run it, and the tracked file does not change
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPINEFORGE_BUILD_TESTS=OFF -DPINEFORGE_BUILD_TUTORIAL=OFF -DPINEFORGE_BUILD_CORPUS_STRATEGIES=ON
+cmake --build build --target strategy_validation_composite_4emarsi_quad_ema_stack_01
+PINEFORGE_REPORT_SINK=0 python3 scripts/run_strategy.py corpus/validation/composite-4emarsi-quad-ema-stack-01 --so-name strategy.so
+git -C corpus status --short
+```
 
 Beyond this public corpus, the engine is graded on a much larger private set of
 community-shared TradingView scripts (private under TradingView's Terms of Service
@@ -68,13 +81,13 @@ expansions are all independently authored, source-bound to actual
 private-editor TradingView exports, and graded excellent by the native Corpus
 verifier. No non-excellent candidate from either expansion is present in this
 public tree. Their ownership, coverage tags, artifact hashes, and native
-results are bound in [`owned_strategies.json`](owned_strategies.json), which was
-re-derived on 2026-10-02 by the same gate.
+results are bound in [`owned_strategies.json`](owned_strategies.json); the engine's
+corpus validator checks every recorded hash against the committed file.
 
 [`validation_report.md`](validation_report.md) (rendered as
 `validation_report.html` and `validation_report.pdf`) is the per-probe disposition
-table the engine's sweep emits. The copy committed here is the 2026-10-02 one
-(see above), regenerated from the committed tapes.
+table the engine's sweep emits. The `.md` copy committed here is the report of the
+2026-11-03 run; the `.html` and `.pdf` renderings are the 2026-10-02 ones (see above).
 
 ## Artifact tuple
 
@@ -176,8 +189,7 @@ Paths are relative to this repository's root, which the engine checks out as its
 │   ├── enum-*                   1 probe  — enum type and input selection
 │   ├── risk-*                   1 probe  — risk gates / limits
 │   ├── volume-*                 1 probe  — volume-flow behavior
-│   ├── anomaly-*                1 probe  — declared anomaly (expected_tier: anomaly)
-│   └── symbol-specified/       (excluded from sweep) 5 stock probes pending pineforge-data
+│   └── anomaly-*                1 probe  — declared anomaly (expected_tier: anomaly)
 ├── draft-probes/               staged probes pending TV capture (excluded from sweep; own README)
 ├── special-validation/         separate-instrument probes (feeds git-ignored; own README + build_specials.sh)
 ├── data/                       reference OHLCV (committed 1m feed; 15m derived locally into data/derived/)
@@ -190,10 +202,10 @@ Paths are relative to this repository's root, which the engine checks out as its
 ├── .gitignore                  ignores compiled strategy libs, data/derived/, .omc/
 ├── .gitattributes              Git LFS for data/ohlcv_*.csv; no line-ending conversion for the tapes
 ├── owned_strategies.json       ownership, coverage, hashes, and Excellent evidence for 60 additions
-├── run_manifest.json           sha256 of the earlier engine_trades.csv tapes, minted 2026-08-13 by engine a7cb5b6;
-│                               not re-minted for the 1.0.1 tapes, so it matches none of the committed ones
-├── validation_report.md        per-probe parity disposition, regenerated 2026-10-02 from the committed tapes
-└── validation_report.{html,pdf}   rendered from .md
+├── run_manifest.json           sha256 of the 312 committed engine_trades.csv tapes, the engine commit that reproduces them
+│                               (e1d29cb95), the sha256 of its grading rubric scripts/verify_corpus.py, and when the digests were written
+├── validation_report.md        per-probe parity disposition: the report of the 2026-11-03 run (engine d129cc03, corpus 7ad36e2)
+└── validation_report.{html,pdf}   renderings of the 2026-10-02 report (engine 5718c5dc, corpus d53f949)
 ```
 
 Total: **312** probes.
@@ -257,10 +269,6 @@ The 33 categories (with probe counts):
 | `volume`    |     1 | Volume-flow behavior                                       |
 | `anomaly`   |     1 | `strategy.equity` mirror at 1× equity (declared anomaly)   |
 
-(The `symbol-specified/` subtree — 5 stock probes needing per-symbol OHLCV
-and SymInfo overrides — is excluded from the default sweep pending
-pineforge-data integration; it is not counted in the 312.)
-
 ## Where the numbers come from
 
 The engine's parity gate runs the whole pipeline (build + run + grade across the
@@ -306,14 +314,11 @@ to its pinned value and the verifier headline matches the one quoted above.
 You need the engine repo, this corpus, and a C++17 compiler. The engine
 is deterministic given a fixed bar feed, the shipped `generated.cpp`,
 and a fixed runtime build. The submodule checkout is the corpus commit the engine
-pins. Engine v1.0.1, like v1.0.0, pins `b40aa8e`, a commit whose
-`engine_trades.csv` files are the earlier tapes (see above) and whose
-`generated.cpp` files are codegen `a4259656`'s output. 80 of those differ from
-the ones on `main`, but the gate runs that `e7a0f8f` records got the same tapes
-from both. A fresh run therefore differs from `b40aa8e`'s tapes, while the tapes
-on this repository's `main` match the engine's baseline. That baseline, not the
-committed tape, is what a run is judged against. If a fresh run disagrees with
-that baseline, that is a bug — please open an issue.
+pins. A fresh run is judged against the engine's baseline
+(`scripts/corpus_parity_baseline.txt`), which pins the tapes that the engine writes
+from the committed `generated.cpp` files; the committed tapes are those tapes for
+311 of the 312 probes (see above). If a fresh run disagrees with that baseline,
+that is a bug — please open an issue.
 
 ## CSV format
 
@@ -426,3 +431,14 @@ records of running each script on TV's broker emulator, included only for
 parity verification. OHLCV is public market data from Binance USDT-M
 futures. See [`LEGAL.md`](LEGAL.md) for the full provenance and trademark
 notes.
+
+## File digest manifest
+
+`file_digests.json` records the SHA-256 of every tracked corpus file except itself.
+It records what the corpus held when it was written and detects any tracked file
+change made without rewriting the manifest; each deliberate change is visible
+in the manifest diff. It is not a signature and cannot prevent a deliberate rewrite.
+Every change to a tracked file needs the manifest rewritten on a clean checkout:
+run `python3 <engine checkout>/scripts/write_corpus_file_digests.py --corpus .`
+after committing the changed files, then commit the manifest with the update.
+The corpus workflow fails until the manifest matches every tracked file.
