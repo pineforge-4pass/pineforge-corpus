@@ -1,0 +1,28 @@
+{
+  "strategy": "mtf-triple-tf-macd-hist-confluence-01",
+  "symbol": "BINANCE:ETHUSDT.P",
+  "interval": "15",
+  "from": "2020-01-01",
+  "to": "2026-04-01",
+  "deepBacktesting": true,
+  "trades": 152,
+  "tvTradesCsv": "tv_trades.csv",
+  "sourceArtifactHash": "743182d8ed677a5b3a3a9dc456aa20282ba0e11a5bc02a332185fea37cdda849",
+  "tvTradesCsvHash": "b99833bb6349d89a3ef9273a38675375e84a3e585b666c40ac32963c4277b6e9",
+  "backtestedAt": "2026-11-16T06:15:53.969Z",
+  "referenceCapture": {
+    "sourceRepository": "pineforge-4pass/pineforge-corpus",
+    "sourceCommit": "8425ca820c4b7272db24d659a64d88e8e05b6407",
+    "sourcePath": "validation/mtf-triple-tf-macd-hist-confluence-01/strategy.pine",
+    "csvRows": 304,
+    "nativePerformance": {
+      "totalTrades": 151,
+      "totalOpenTrades": 1
+    },
+    "terminalTrade": "The complete CSV retains the terminal range-end mark as returned. The native performance counters distinguish 151 closed trades and one open position.",
+    "sourceMetricsSha256": "c768bf33852e8f21ca872f5e88d8624cb21ec2465a7dbfca4ae443272ca505d3",
+    "sourceMetadataSha256": "2886b09c52f9b41f4468269397bf76967fc709ef78072bbeb22f4dab7977fdce",
+    "previousTvTradesCsvSha256": "2be297e4916769e3975025b529656ef6d92c58cbf0cdd72af1e0b0c4b38e77ab",
+    "issue": "https://github.com/pineforge-4pass/pineforge-engine/issues/883"
+  }
+}
