@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           repository: pineforge-4pass/pineforge-engine
-          # Engine v1.14.0. Move this pin only together with a reference correction.
+          # Engine v1.14.0. Move this pin deliberately, in the change that adapts the corpus to the newer engine.
           ref: 665fc4ddc024951dd1c911ad5de9839a5c91e2e4
           path: engine
           fetch-depth: 1
