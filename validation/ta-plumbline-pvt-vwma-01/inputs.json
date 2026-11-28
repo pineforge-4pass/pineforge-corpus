@@ -3,5 +3,6 @@
   "tv_trades_csv_tz": "asia_taipei",
   "ohlcv_csv": "../../data/derived/ohlcv_ETH-USDT-USDT_15m.csv",
   "input_tf": "15",
-  "script_tf": "15"
+  "script_tf": "15",
+  "ohlcv_start_ms": 1743379200000
 }
